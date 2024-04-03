@@ -1,0 +1,25 @@
+@import "../../../Variables.scss";
+
+.main {
+    background-image: url('/assets/mobile.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 588px;
+    height: 587px;
+    position: relative;
+}
+
+.content {
+    width: 222px;
+    overflow-y: scroll;
+    display: flex;
+    z-index: $global-z-index-1;
+    background: white;
+    position: absolute;
+    height: 483px;
+    bottom: 53px;
+    left: 184px;
+    scrollbar-width: none;
+    border-radius: 30px;
+}

@@ -1,0 +1,46 @@
+.aboutUs {
+    text-align: center;
+    padding: 10px;
+    font-family: var(--font-family-body);
+    background-color: var(--color-background);
+    color: var(--color-text);
+
+    h2 {
+        font-size: 45px;
+        font-weight: 700;
+        margin: 0;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .team-members {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 25px;
+    }
+
+    .team-member {
+        margin: 10px;
+        background-color: #fff;
+        padding: 20px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+
+
+        img {
+            max-height: 200px;
+            max-width: 200px;
+            border-radius: 50%;
+        }
+
+        h3,
+        p {
+            margin: 10px 0;
+            text-align: justify;
+        }
+    }
+}

@@ -1,0 +1,50 @@
+@import "../../Variables.scss";
+
+.list {
+    background-color: none;
+
+    &-dragging {
+        background-color: beige;
+    }
+}
+
+.item {
+    background-color: none;
+    position: relative;
+    background-color: #f0f0f0;
+
+    &-wrapper {
+        display: flex;
+    }
+
+    &-dragging,
+    &-interacting {
+        border: 3px dashed blue;
+    }
+
+    &-helper {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        z-index: $global-z-index-3;
+
+        &-button {
+            background-color: white;
+            border: 1px dotted #e4c7c7;
+            padding: 4px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &-icon {
+            width: 15px;
+            height: 15px;
+
+            &-down {
+                transform: rotate(180deg);
+            }
+        }
+    }
+}

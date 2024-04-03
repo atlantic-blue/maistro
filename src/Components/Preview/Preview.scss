@@ -1,0 +1,30 @@
+.preview {
+    position: fixed;
+    bottom: 55px;
+    right: 9px;
+    max-width: 200px;
+    max-height: 183px;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.head {
+    display: flex;
+    &-button {
+        border: none;
+        margin-left: auto;
+        background-color: white;
+
+        &-icon {
+            width: 15px;
+            height: 15px;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

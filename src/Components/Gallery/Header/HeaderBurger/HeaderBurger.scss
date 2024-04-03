@@ -1,0 +1,76 @@
+@import "../../../../Variables.scss";
+
+.header-burger {
+    position: relative;
+    background-color: var(--color-primary);
+    font-family: var(--font-family-body);
+
+    &-container {
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 40px;
+        align-items: center;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .menu-toggle {
+        display: none;
+        margin-left: auto;
+        cursor: pointer;
+
+        .hamburger,
+        .hamburger::before,
+        .hamburger::after {
+            content: '';
+            display: block;
+            background-color: #333;
+            height: 2px;
+            width: 25px;
+            transition: all 0.3s ease-in-out;
+            margin: 5px 0;
+        }
+
+        &.open .hamburger {
+            transform: rotate(45deg);
+        }
+
+        &.open .hamburger::before {
+            opacity: 0;
+        }
+
+        &.open .hamburger::after {
+            transform: rotate(-90deg);
+            margin-top: -8px;
+        }
+    }
+
+    nav .open {
+        z-index: $global-z-index-2;
+
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: var(--color-primary);
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    &-navigation {
+        display: block !important;
+    }
+
+    @media (max-width: 768px) {
+        .menu-toggle {
+            display: block;
+        }
+
+        nav {
+            display: none;
+        }
+    }
+}

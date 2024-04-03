@@ -1,0 +1,78 @@
+.main {
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.selection {
+    display: flex;
+    margin-bottom: 5px;
+
+    &-option {
+        margin: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        font-size: 8px;
+    }
+
+    &-color {
+        height: 50px;
+        width: 50px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.button {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid gray;
+
+    &-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: #E8F0FF;
+        ;
+    }
+}
+
+.history {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .palette {
+        &-colour {
+            width: 25px;
+            height: 50px;
+        }
+    }
+}
+
+.palette {
+    display: flex;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid gray;
+    border-radius: 15px;
+
+    &-colour {
+        width: 50px;
+        height: 100px;
+    }
+}

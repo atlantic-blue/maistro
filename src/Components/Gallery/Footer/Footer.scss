@@ -1,0 +1,36 @@
+.footer {
+    padding: 20px;
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    font-family: var(--font-family-body);
+    text-shadow: 1px 1px 0px #000;
+    text-align: center;
+
+    .footer-navigation {
+        .footer-navigation-list {
+            list-style-type: none;
+            padding: 0;
+
+            .footer-navigation-item {
+                display: inline-block;
+                margin: 0 15px;
+
+                a {
+                    color: #fff;
+                    text-shadow: 1px 1px 0px #000;
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+
+                    &:hover {
+                        color: var(--color-secondary);
+                    }
+                }
+            }
+        }
+    }
+
+    .footer-info {
+        margin-top: 20px;
+        font-size: 0.9rem;
+    }
+}

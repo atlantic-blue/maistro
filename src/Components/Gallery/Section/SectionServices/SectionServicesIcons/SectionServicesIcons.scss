@@ -1,0 +1,26 @@
+.servicesIcons {
+    text-align: center;
+    padding: 50px;
+    background-color: #f8f8f8;
+
+    .servicesList {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .serviceItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .name {
+            font-size: 16px;
+        }
+    }
+}

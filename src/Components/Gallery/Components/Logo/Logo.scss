@@ -1,0 +1,19 @@
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3px;
+
+    &-img {
+        width: 90px;
+        height: auto;
+    }
+
+    &-slogan {
+        font-size: 1rem;
+        font-weight: bold;
+        padding-left: 5px;
+        color: var(--color-text);
+    }
+}

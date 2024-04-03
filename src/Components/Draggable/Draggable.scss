@@ -1,0 +1,37 @@
+.draggable-widget {
+    position: absolute;
+    // width: 100px;
+    // height: 100px;
+    // background-color: #007bff;
+    // color: white;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // cursor: pointer;
+    // user-select: none;
+}
+
+.container {
+    position: relative;
+}
+
+.header {
+    display: flex;
+}
+
+.button {
+    margin-left: auto;
+    position: relative;
+
+    &-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.body {
+    display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+    // align-items: center;
+}

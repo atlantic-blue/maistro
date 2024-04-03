@@ -1,0 +1,57 @@
+@import "../../../../Variables.scss";
+
+.menu {
+    padding: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #DFE5EB;
+    background-color: #F3F3F3;
+    z-index: $global-z-index-4;
+}
+
+.link {
+    list-style: none;
+    padding: 10px;
+    margin: 0 10px;
+
+    &-isActive {
+        svg {
+            fill: #FF9900;
+        }
+
+        a,
+        span {
+            color: #FF9900;
+        }
+    }
+
+    a,
+    span {
+        color: #7c6161;
+        text-decoration: none;
+    }
+
+    &-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 15px;
+    }
+
+    &-icon {
+        fill: #7c6161;
+        padding: 2px;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .1);
+    }
+}

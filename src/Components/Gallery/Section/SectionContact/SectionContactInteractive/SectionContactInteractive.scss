@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 50px;
+    gap: 20px;
+
+    .formContainer,
+    .contactForm {
+        flex: 1;
+    }
+
+    .faq {
+        cursor: pointer;
+        margin-bottom: 15px;
+    }
+
+    input,
+    textarea,
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

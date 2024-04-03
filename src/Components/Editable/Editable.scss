@@ -1,0 +1,70 @@
+@import "../../Variables.scss";
+
+.editableContent {
+    position: relative;
+
+    &-isEditable {
+        cursor: text;
+        border: 3px dashed blue;
+    }
+}
+
+.buttonSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: center;
+    border-bottom: 1px solid #cccccc;
+
+    position: sticky;
+    top: 0px;
+    background: white;
+    z-index: $global-z-index-4;
+    /* Ensure it's above other content */
+    border-bottom: 1px solid #ccc;
+    /* Optional: add a border for better visual separation */
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Optional: add shadow for depth */
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: 1px solid gray;
+    z-index: $global-z-index-3;
+
+
+    align-items: center;
+    background: 0 0;
+    border: 0;
+    border-radius: 3px;
+    box-shadow: none;
+    color: #222f3e;
+    display: flex;
+    flex: 0 0 auto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    height: 28px;
+    justify-content: center;
+    margin: 5px 1px 6px 0;
+    outline: 0;
+    overflow: hidden;
+    padding: 0 4px;
+    text-transform: none;
+    width: auto;
+    cursor: pointer;
+
+    &-text {
+        padding: 0 3px;
+        font-size: 15px;
+    }
+
+    &-icon {
+        width: 15px;
+        height: 15px;
+    }
+}

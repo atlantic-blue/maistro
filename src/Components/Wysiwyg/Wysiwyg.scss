@@ -1,0 +1,78 @@
+@import "../../Variables.scss";
+
+.wysiwyg {
+    background-color: #F9FBFD;
+
+    position: relative;
+}
+
+.toolbar {
+    padding-left: 10px;
+    display: flex;
+    background-color: #EDF2FA;
+    flex-wrap: wrap;
+    justify-content: start;
+
+
+    position: sticky;
+    top: 40px;
+    background: white;
+    z-index: $global-z-index-4;
+    /* Ensure it's above other content */
+    border-bottom: 1px solid #ccc;
+    /* Optional: add a border for better visual separation */
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Optional: add shadow for depth */
+
+    &-group {
+        display: flex;
+        padding-right: 10px;
+    }
+
+    .button {
+        align-items: center;
+        background: 0 0;
+        border: 0;
+        border-radius: 3px;
+        box-shadow: none;
+        color: #222f3e;
+        display: flex;
+        flex: 0 0 auto;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        height: 28px;
+        justify-content: center;
+        margin: 5px 1px 6px 0;
+        outline: 0;
+        overflow: hidden;
+        padding: 0 4px;
+        text-transform: none;
+        width: auto;
+        cursor: pointer;
+
+        label {
+            cursor: pointer;
+        }
+
+        &:hover {
+            background-color: aqua;
+        }
+
+        &-icon {
+            display: block;
+            fill: #222f3e;
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+.editor {
+    padding: 10px;
+
+    overflow: auto;
+
+    overflow: scroll;
+}

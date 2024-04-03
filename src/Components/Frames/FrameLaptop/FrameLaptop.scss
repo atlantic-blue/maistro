@@ -1,0 +1,33 @@
+@import "../../../Variables.scss";
+
+$width: 371px;
+$height: 270px;
+
+.main {
+    background-image: url('/assets/laptop.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    max-width: $width;
+    max-height: $height;
+    width: $width;
+    height: $height;
+    position: relative;
+    background-color: #F0EEED;
+}
+
+.content {
+    height: calc(#{$height} - 25%);
+    width: calc(#{$width} - 18.5%);
+
+    left: calc(#{$width} - 91%);
+    bottom: calc(#{$height} - 80%);
+
+    overflow-y: scroll;
+    display: flex;
+    z-index: $global-z-index-1;
+    background: white;
+    position: absolute;
+
+    scrollbar-width: none;
+}

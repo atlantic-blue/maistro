@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.display {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    text-align: justify;
+
+    h2 {
+        text-align: center;
+        margin-bottom: 2px;
+    }
+}
+
+.form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    &-section {
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+
+        label {
+            font-weight: 700;
+        }
+
+        select {
+            border-radius: 5px;
+        }
+    }
+}

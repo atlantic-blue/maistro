@@ -1,0 +1,37 @@
+.menu {
+    &-item {
+        background-color: white;
+        border: 1px solid gray;
+
+        &-title {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            background-color: #f3f1fb;
+            color: #000624;
+            padding: 10px;
+            font-weight: bold;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            &-icon {
+                width: 15px;
+                height: 15px;
+
+                path {
+                    fill: #6F56F9;
+                }
+            }
+        }
+
+        &-body {
+            background-color: white;
+            overflow: scroll;
+            height: 59vh;
+        }
+    }
+}

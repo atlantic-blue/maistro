@@ -1,0 +1,72 @@
+@import "../../../../Variables.scss";
+
+.section {
+    position: relative;
+    padding-right: 10px;
+}
+
+.grid {
+    position: absolute;
+    z-index: $global-z-index-4;
+    padding: 4px;
+    background-color: white;
+    border: 2px solid #cccccc;
+    width: 102px;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+
+    &-colour {
+        border: 1px solid #ff9a001c;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        transition: transform .15s, box-shadow .15s;
+
+        &:hover,
+        &:active {
+            box-shadow: 0 0 0 1px rgba(127, 127, 127, .3) inset;
+            transform: scale(.8);
+        }
+    }
+}
+
+.colourPicker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    input {
+        width: 25px;
+        height: 25px;
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    &-icon {
+        cursor: pointer;
+        width: 25px;
+        height: 25px;
+    }
+}
+
+.crossed {
+    background:
+        linear-gradient(to top left,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0) calc(50% - 0.8px),
+            #eb3030 50%,
+            rgba(0, 0, 0, 0) calc(50% + 0.8px),
+            rgba(0, 0, 0, 0) 100%),
+        linear-gradient(to top right,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0) calc(50% - 0.8px),
+            #eb3030 50%,
+            rgba(0, 0, 0, 0) calc(50% + 0.8px),
+            rgba(0, 0, 0, 0) 100%);
+    transform: scale(.7);
+}

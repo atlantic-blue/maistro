@@ -1,0 +1,15 @@
+.aboutUs {
+    text-align: center;
+    padding: 50px;
+    font-family: var(--font-family-body);
+    background-color: var(--color-background);
+    color: var(--color-text);
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 1.2rem;
+    }
+}

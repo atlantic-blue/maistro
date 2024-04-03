@@ -1,0 +1,20 @@
+.main {
+    position: relative;
+    border: 1px dotted gray;
+}
+
+.view {
+    position: relative;
+}
+
+.frames {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #F0EEED;
+    border: 2px solid green;
+}
+
+.miscellaneous {
+    display: flex;
+}

@@ -1,0 +1,33 @@
+.tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    &-menu {
+        color: white;
+        background-color: #6b6a6a;
+        border-top: 1px solid gray;
+        border-bottom: 1px solid gray;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+
+        &-tab {
+            margin: 5px;
+            color: white;
+            background-color: #6b6a6a;
+            border: none;
+            cursor: pointer;
+
+            &--active {
+                border-bottom: 2px solid white;
+            }
+        }
+    }
+}
+
+.tab {
+    position: relative;
+}

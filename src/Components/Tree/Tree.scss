@@ -1,0 +1,39 @@
+.tree {
+    position: relative;
+    margin-left: 6px;
+    display: flex;
+    flex-direction: row;
+
+    padding: 3px 5px 3px 20px;
+    border-left: 2px dotted rgb(235, 235, 235);
+
+    &-isNested {
+        flex-direction: column;
+    }
+
+    .icon {
+        cursor: pointer;
+        width: 15px;
+        height: 15px;
+
+        &-showMore {
+            fill: green
+        }
+    }
+
+    .key {
+        color: rgb(0, 43, 54);
+        margin-right: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+    }
+
+    .value {
+        color: rgb(203, 75, 22);
+    }
+
+    .delimiter {
+        margin: 0 3px;
+    }
+}

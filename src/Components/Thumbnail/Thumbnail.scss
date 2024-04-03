@@ -1,0 +1,43 @@
+.thumbnail {
+    background-color: white;
+    border-radius: 8px;
+}
+
+.view {
+    overflow: scroll;
+}
+
+// TODO DELETE
+// @mixin thumbnail($item-width, $item-height, $scale) {
+//     .thumbnail {
+//         width: $item-width;
+//         height: $item-height;
+//         overflow: hidden;
+//         background-color: white;
+//     }
+
+//     .view {
+//         overflow: scroll;
+//         /* Scale down the content */
+//         transform: scale($scale);
+//         /* Align the scaled content to the top-left corner */
+//         transform-origin: 0 0;
+//         /* Adjust the container size to fit the scaled content */
+//         width: calc($item-width * (1/$scale));
+//         /* Actual size needed to display the scaled content correctly */
+//         height: calc($item-height * (1/$scale));
+//         border: 1px solid gray;
+//     }
+// }
+
+// @media screen and (max-width: 400px) {
+//     @include thumbnail($item-width: 65vw,
+//         $item-height: 175px,
+//         $scale: 0.5);
+// }
+
+// @media screen and (min-width: 401px) {
+//     @include thumbnail($item-width: 300px,
+//         $item-height: 200px,
+//         $scale: 0.5);
+// }

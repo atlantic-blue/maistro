@@ -1,0 +1,21 @@
+@import "../../../Variables.scss";
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    padding-bottom: $global-menu-height-withPadding;
+    background-color: #bdbdbd;
+    min-height: 100vh;
+}
+
+.sitemap {
+    padding: 20px;
+
+    ul {
+        a {
+            text-decoration: none;
+        }
+    }
+}

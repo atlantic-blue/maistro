@@ -1,0 +1,12 @@
+@import "../../../Variables.scss";
+
+.templates {
+    position: relative;
+    padding-bottom: $global-menu-height-withPadding;
+
+    &-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

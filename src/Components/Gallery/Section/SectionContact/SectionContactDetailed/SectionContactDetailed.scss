@@ -1,0 +1,19 @@
+.container {
+    text-align: center;
+    padding: 50px;
+    background-color: #f0f0f0;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        max-width: 500px;
+        margin: 0 auto;
+
+        input,
+        select,
+        textarea,
+        button {
+            margin-bottom: 15px;
+        }
+    }
+}

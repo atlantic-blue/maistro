@@ -1,0 +1,12 @@
+.navigation-link {
+    a {
+        color: #fff;
+        text-shadow: 1px 1px 0px #000;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: var(--color-secondary);
+        }
+    }
+}

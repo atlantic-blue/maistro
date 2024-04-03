@@ -1,0 +1,43 @@
+@import "../../../../Variables.scss";
+
+.header-sticky+section {
+    margin-top: -100px;
+}
+
+.header-sticky {
+    position: sticky;
+    top: 0;
+    z-index: $global-z-index-2;
+
+    transition: background-color 0.3s;
+    background-color: transparent;
+    font-family: var(--font-family-body);
+
+    container-type: inline-size;
+    container-name: headerSticky;
+
+    @container headerSticky (max-width: 600px) {
+        .header-sticky {
+            &-container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    }
+
+    &-container {
+        color: #fff;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 10px;
+        padding: 1rem 2rem;
+        align-items: center;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    &.scrolled {
+        background-color: var(--color-primary);
+    }
+}

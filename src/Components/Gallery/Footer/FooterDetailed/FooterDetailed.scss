@@ -1,0 +1,24 @@
+.detailedFooter {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background-color: #e0e0e0;
+    color: #333;
+
+    .section {
+        h3 {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+    }
+}
