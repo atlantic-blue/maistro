@@ -1,0 +1,89 @@
+@import "../../../../Variables.scss";
+
+.menu {
+    padding: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    border: 1px solid #DFE5EB;
+    background-color: #F3F3F3;
+    z-index: $global-z-index-4;
+
+    &-content {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        max-width: 600px;
+        padding: 10px;
+        margin: auto;
+    }
+}
+
+.linkStroke {
+    list-style: none;
+
+    &-isActive {
+        svg {
+            stroke: #FF9900;
+        }
+    }
+
+    &-icon {
+        stroke: #7c6161;
+        stroke-width: 2px;
+
+        width: 40px;
+        height: 40px;
+
+        padding: 2px;
+
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .1);
+    }
+}
+
+.link {
+    list-style: none;
+    font-size: 10px;
+
+    &-isActive {
+        svg {
+            fill: #FF9900;
+        }
+
+        a,
+        span {
+            color: #FF9900;
+        }
+    }
+
+    a,
+    span {
+        color: #7c6161;
+        text-decoration: none;
+    }
+
+    &-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 15px;
+    }
+
+    &-icon {
+        width: 40px;
+        height: 40px;
+        stroke-width: 2px;
+
+        fill: #7c6161;
+        padding: 2px;
+
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .1);
+    }
+}

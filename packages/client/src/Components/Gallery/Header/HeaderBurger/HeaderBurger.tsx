@@ -1,0 +1,88 @@
+import React, { useState } from 'react';
+import { set } from "lodash"
+
+import { ContentStruct, ContentCategory } from '../../../../types';
+
+import Nav from '../../Components/Nav/Nav';
+import Logo from '../../Components/Logo/Logo';
+
+import { HeaderProps } from '../HeaderTypes';
+
+import * as styles from "./HeaderBurger.scss";
+import classNames from 'classnames';
+
+const HeaderBurger: React.FC<HeaderProps> = (props) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const onChange = (id: string, content: string) => {
+        set({ ...props }, id, content)
+    }
+
+    return (
+        <nav className={styles.headerBurger}>
+            <div className={styles.headerBurgerContainer}>
+                <Logo
+                    imgUrl={props.logo.url}
+                    slogan={props.logo.slogan}
+                    edit={props.edit}
+                    onChange={onChange}
+                />
+                <div className={`${styles.menuToggle} ${isMenuOpen ? styles.open : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    <div className={styles.hamburger}></div>
+                </div>
+                <Nav
+                    edit={props.edit}
+                    links={props.links}
+                    onChange={onChange}
+                    classNames={{
+                        navigation: classNames({
+                            [styles.headerBurgerNavigation]: isMenuOpen
+                        }),
+                        navigationList: classNames({
+                            [styles.open]: isMenuOpen
+                        })
+                    }}
+                />
+            </div>
+        </nav>
+    );
+};
+
+export const HeaderBurgerItem: ContentStruct<HeaderProps> = {
+    id: "HeaderBurgerItem",
+    Component: HeaderBurger,
+    categories: [ContentCategory.HEADER],
+    description: "With a transparent background that blends into the website's hero section or background image, this navigation style offers a seamless integration. Best used on visually rich websites where the navigation should complement the background imagery",
+    props: {
+        logo: {
+            url: "/assets/pages/generic/logo.png",
+            slogan: "Empowering Your Vision"
+        },
+        links: {
+            home: {
+                href: "#home",
+                value: "Home",
+            },
+            about: {
+                href: "#about",
+                value: "About",
+            },
+            services: {
+                href: "#services",
+                value: "Services",
+            },
+            contact: {
+                href: "#contact",
+                value: "Contact",
+            }
+        },
+    },
+    // TODO
+    assets: {
+        images: {
+            logo: "/assets/pages/generic/logo.png"
+        }
+    }
+}
+
+export default HeaderBurger;

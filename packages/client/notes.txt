@@ -1,0 +1,15 @@
+# styles
+- background colour 
+- h1,h2 titles
+- buttons (hover styles)
+- navigation, footer link contrasts
+
+# logic
+- dynamic content
+
+# Security and Compliance Considerations
+- GDPR, CCPA
+
+Features:
+- add item
+- edit content
