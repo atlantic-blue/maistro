@@ -12,6 +12,10 @@ resource "aws_acm_certificate" "www_certificate" {
   lifecycle {
     create_before_destroy = true
   }
+
+  subject_alternative_names = [
+    "*.${var.domain_name}"
+  ]
 }
 
 resource "aws_route53_record" "www_cert_dns" {
