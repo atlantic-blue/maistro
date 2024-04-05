@@ -1,8 +1,14 @@
 import { Project } from "../../Store/Project";
 
 import { postPage } from './postPage';
+import env from "../../env"
 
-const postProjects = (userId: string, project: Project) => {
+interface PostProjectsInput {
+    userId: string
+    project: Project
+}
+
+const postProject = ({ userId, project }: PostProjectsInput, url = env.api.baseURL, request = fetch) => {
     const pages = project.getPages()
 
     return Promise.all(Object.values(pages).map(page => {
@@ -11,11 +17,13 @@ const postProjects = (userId: string, project: Project) => {
                 userId,
                 projectId: project.getId(),
                 page
-            }, ""
+            },
+            url,
+            request
         )
     }))
 }
 
 export {
-    postProjects
+    postProject
 }

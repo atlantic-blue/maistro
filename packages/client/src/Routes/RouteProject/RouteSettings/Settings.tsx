@@ -12,9 +12,15 @@ import IconBin from "../../../Components/Icons/Bin/Bin";
 import { Project } from "../../../Store/Project";
 import { appRoutes } from "../../router";
 
+import SubmitProject from "./Components/SubmitProject/SubmitProject";
+
 import * as styles from "./Settings.scss"
 
-const PageSettings: React.FC = () => {
+interface PageSettingsProps {
+    postProject: () => Promise<void>
+}
+
+const PageSettings: React.FC<PageSettingsProps> = () => {
     const navigate = useNavigate();
 
     const { projects } = React.useContext(ProjectsContext)
@@ -34,19 +40,16 @@ const PageSettings: React.FC = () => {
         navigate(appRoutes.getProjectsRoute())
     }
 
-    const onPublishProjectClick = (project: Project) => {
-        
-    }
-
     return (
         <Helmet>
             <div className={styles.content}>
                 <div className={styles.section}>
                     <SettingsMetadata project={project} />
 
-                    <button className={styles.buttonCta} onClick={() => onPublishProjectClick(project)}>
-                        Publish
-                    </button>
+                    <SubmitProject
+                        project={project}
+                        userId="TOD"
+                    />
                 </div>
                 <div className={styles.section}>
                     <div className={styles.title}>

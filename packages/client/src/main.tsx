@@ -1,8 +1,9 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import Projects from './Projects'
+
+import App from './App'
 
 const container = document.getElementById('main') as HTMLElement
 const root = createRoot(container)
 
-root.render(<Projects />)
+root.render(<App />)
