@@ -17,4 +17,6 @@ locals {
   hosting_bucket_name          = "ab-maistro-hosting"
   hosting_cloudfront_origin_id = "s3-${local.hosting_bucket_name}${local.enviroment_delimiter}"
   hosting_domain_name          = "hosting.${var.domain_name}"
+
+  api_bucket_name          = "ab-maistro-api"
 }
