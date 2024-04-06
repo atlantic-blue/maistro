@@ -2,13 +2,13 @@ locals {
   tags = {
     application = "maistro"
     environment = "${var.environment}"
-    git_repo    = "github.com/atlantic-blue/${local.project_repo}"
+    git_repo    = "github.com/atlantic-blue/${local.project_name}"
     managed_by  = "Terrafrom"
   }
 
   enviroment_delimiter = var.environment == "production" ? "" : "-${var.environment}"
 
-  project_repo = "maistro"
+  project_name = "maistro"
 
   www_bucket_name          = "ab-website-builder"
   www_cloudfront_origin_id = "s3-${local.www_bucket_name}${local.enviroment_delimiter}"
@@ -19,4 +19,5 @@ locals {
   hosting_domain_name          = "hosting.${var.domain_name}"
 
   api_bucket_name          = "ab-maistro-api"
+  api_domain_name          = "api.${var.domain_name}"
 }
