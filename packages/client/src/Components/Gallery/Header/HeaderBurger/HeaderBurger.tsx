@@ -3,8 +3,12 @@ import { set } from "lodash"
 
 import { ContentStruct, ContentCategory } from '../../../../types';
 
-import Nav from '../../Components/Nav/Nav';
-import Logo from '../../Components/Logo/Logo';
+import Logo from "../../Components/Logo/Logo"
+import * as LogoStyles from "../../Components/Logo/Logo.scss"
+
+import Nav from "../../Components/Nav/Nav"
+import * as NavStyles from "../../Components/Nav/Nav.scss"
+import * as NavLinkStyles from "../../Components/NavLlink/NavLink.scss"
 
 import { HeaderProps } from '../HeaderTypes';
 
@@ -53,6 +57,12 @@ export const HeaderBurgerItem: ContentStruct<HeaderProps> = {
     Component: HeaderBurger,
     categories: [ContentCategory.HEADER],
     description: "With a transparent background that blends into the website's hero section or background image, this navigation style offers a seamless integration. Best used on visually rich websites where the navigation should complement the background imagery",
+    classNames: [
+        ...Object.values(styles),
+        ...Object.values(LogoStyles),
+        ...Object.values(NavStyles),
+        ...Object.values(NavLinkStyles),
+    ],
     props: {
         logo: {
             url: "/assets/pages/generic/logo.png",

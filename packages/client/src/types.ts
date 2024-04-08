@@ -36,10 +36,11 @@ export interface PageStruct {
 export interface ContentStruct {
     id: string
     description: string
-    Component: React.FC | string
     categories: ContentCategory[]
+
+    classNames: string[]
     props: any
-    assets: any
+    Component: React.FC | string
 }
 
 /**

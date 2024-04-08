@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { ProjectMessageType } from '../../types';
-
-import { Project } from '../../Store/Project';
-
 import * as styles from "./FontScheme.scss"
 
 interface FamilyFont {
@@ -58,6 +54,12 @@ const familyFont: Record<string, FamilyFont> = {
     },
 }
 
+export const getFontFamilyHref = (fontFamily: string) => {
+    return (
+        `https://fonts.googleapis.com/css2?family=${fontFamily}:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap`
+    )
+}
+
 const createFontLoader = () => {
     const downloaded: FamilyFont[] = []
     return (fontFamily: FamilyFont) => {
@@ -66,8 +68,9 @@ const createFontLoader = () => {
         }
 
         const link = document.createElement('link');
-        link.href = `https://fonts.googleapis.com/css2?family=${fontFamily.family}:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap`;
+        link.href = getFontFamilyHref(fontFamily.family);
         link.rel = 'stylesheet';
+        link.crossOrigin = "anonymous"
 
         document.head.appendChild(link);
         downloaded.push(fontFamily)

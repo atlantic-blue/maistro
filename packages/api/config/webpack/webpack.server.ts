@@ -49,6 +49,7 @@ const createDefaultWebpackConfig = (): Configuration => {
 
 const createMultipleWebpackConfigs = [
     "ping",
+    "upload"
 ].map(api => {
 
     return ({

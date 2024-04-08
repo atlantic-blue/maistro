@@ -33,7 +33,7 @@ const RoutesEditPage: React.FC = () => {
             Component: () => <div>Edit me!</div>,
             categories: [],
             props: {},
-            assets: {}
+            classNames: []
         })
 
         page.event$.next({

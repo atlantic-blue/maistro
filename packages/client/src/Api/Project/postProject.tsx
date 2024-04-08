@@ -1,6 +1,8 @@
+import { renderToString } from 'react-dom/server';
+
 import { Project } from "../../Store/Project";
 
-import { postPage } from './postPage';
+import { postFile } from './postFile';
 import env from "../../env"
 
 interface PostProjectsInput {
@@ -8,15 +10,20 @@ interface PostProjectsInput {
     project: Project
 }
 
-const postProject = ({ userId, project }: PostProjectsInput, url = env.api.baseURL, request = fetch) => {
+const postProject = (
+    { userId, project }: PostProjectsInput,
+    url = env.api.upload,
+    request = fetch
+) => {
     const pages = project.getPages()
 
     return Promise.all(Object.values(pages).map(page => {
-        return postPage(
+        return postFile(
             {
                 userId,
                 projectId: project.getId(),
-                page
+                fileName: `${page.getPath()}.html`,
+                fileContent: `<!DOCTYPE html>${renderToString(page.getHtml())}`
             },
             url,
             request

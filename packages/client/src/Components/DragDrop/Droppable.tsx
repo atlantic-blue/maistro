@@ -44,6 +44,7 @@ const DroppableComponent: React.FC = () => {
         })
     }
 
+    // TODO what if page isn't available?
     return (
         <>
             <Droppable droppableId={COMPONENT_ID}>

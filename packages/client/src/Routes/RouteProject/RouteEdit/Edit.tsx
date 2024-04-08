@@ -2,8 +2,6 @@ import React from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 import TemplateView from "../../../Components/TemplateView/TemplateView"
-import ColorScheme from "../../../Components/ColourScheme/ColourScheme";
-import FontDesign from "../../../Components/FontScheme/FontScheme";
 import { ProjectsContext } from "../../../Projects";
 import { ProjectMessageType } from "../../../types";
 import Page from "../../../Store/Page";
@@ -12,8 +10,6 @@ import { appRoutes } from "../../router";
 
 import Helmet from "../Components/Helmet/Helmet"
 
-import EditMenuItem from "../../../Components/EditMenuItem/EditMenuItem";
-import EditMenuTabs from "../../../Components/EditMenuTabs/EditMenuTabs";
 import Metadata from "./Components/Metadata/Metadata";
 import IconBin from "../../../Components/Icons/Bin/Bin";
 

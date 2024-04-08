@@ -3,8 +3,11 @@ import { set } from "lodash"
 
 import { ContentStruct, ContentCategory } from '../../../../types';
 
-import Logo from '../../Components/Logo/Logo';
+import Logo from "../../Components/Logo/Logo"
+import * as LogoStyles from "../../Components/Logo/Logo.scss"
+
 import NavNested from '../../Components/NavNested/NavNested';
+import * as NavNestedStyles from '../../Components/NavNested/NavNested.scss'
 
 import { HeaderProps } from '../HeaderTypes';
 
@@ -39,6 +42,11 @@ export const HeaderDropDownItem: ContentStruct<HeaderProps> = {
     description: "Places the logo centrally with navigation links on either side, creating a balanced, symmetrical layout. Perfect for brands emphasizing their logo or for sites with equal navigation weight on both sides of their branding.",
     Component: HeaderDropdown,
     categories: [ContentCategory.HEADER],
+    classNames: [
+        ...Object.values(styles),
+        ...Object.values(LogoStyles),
+        ...Object.values(NavNestedStyles),
+    ],
     props: {
         logo: {
             url: "/assets/pages/generic/logo.png",

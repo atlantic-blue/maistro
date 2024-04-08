@@ -2,7 +2,7 @@ import * as uuid from "uuid"
 import { Subject, Subscription } from "rxjs"
 import { faker } from '@faker-js/faker';
 
-import { ColourScheme, FontScheme, PageStruct, ProjectEvent, ProjectMessageType, ProjectStruct } from "../types"
+import { ColourScheme, FontScheme, PageMessageType, PageStruct, ProjectEvent, ProjectMessageType, ProjectStruct } from "../types"
 import { defaultColorScheme, defaultFontScheme } from "../PageContext"
 import Page from "./Page"
 
@@ -31,7 +31,7 @@ export class Project implements IProject {
     private id = `${Date.now()}`
     private title = `Untitled-${faker.animal.bird().replace(" ", "-")}`
     private pages: Record<string, Page> = {}
-    private subscription: Subscription
+    private subscriptions: Subscription[] = []
     private colourScheme: ColourScheme = defaultColorScheme
     private fontScheme: FontScheme = defaultFontScheme
 
@@ -39,7 +39,7 @@ export class Project implements IProject {
 
     constructor(project: ProjectStruct) {
         this.setProject(project)
-        this.subscription = this.createSubscriptions()
+        this.subscriptions = [this.createSubscriptions()]
     }
 
     private createSubscriptions() {
@@ -71,7 +71,7 @@ export class Project implements IProject {
     }
 
     public unsubscribe(): void {
-        this.subscription.unsubscribe()
+        this.subscriptions.map(s => s.unsubscribe())
     }
 
     public getProjectStructure(): ProjectStruct {
@@ -109,12 +109,32 @@ export class Project implements IProject {
         const page = new Page(pageStruct)
 
         // Reactively update pages content child -> parent
-        page.event$.subscribe(() => {
-            this.event$.next({
-                type: ProjectMessageType.SET_PAGE,
-                data: page.getPageStructure(),
+        this.subscriptions.push(
+            page.event$.subscribe(() => {
+                this.event$.next({
+                    type: ProjectMessageType.SET_PAGE,
+                    data: page.getPageStructure(),
+                })
             })
-        })
+        )
+
+        this.subscriptions.push(
+            this.event$.subscribe((event) => {
+                if (event.type === ProjectMessageType.SET_COLOUR_SCHEME) {
+                    page.event$.next({
+                        type: PageMessageType.SET_COLOUR_SCHEME,
+                        data: event.data
+                    })
+                }
+
+                if (event.type === ProjectMessageType.SET_FONT_SCHEME) {
+                    page.event$.next({
+                        type: PageMessageType.SET_FONT_SCHEME,
+                        data: event.data
+                    })
+                }
+            })
+        )
 
         this.pages[id] = page
     }

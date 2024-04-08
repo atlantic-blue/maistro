@@ -50,7 +50,8 @@ export const SectionHeroSlidesItem: ContentStruct = {
     id: "SectionHeroSlides",
     Component: SectionHeroSlides,
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
-    description: "Showcases multiple items or messages through a transitioning slideshow, perfect for highlighting various aspects of a service or product."
+    description: "Showcases multiple items or messages through a transitioning slideshow, perfect for highlighting various aspects of a service or product.",
+    classNames: Object.values(styles),
 }
 
 export default SectionHeroSlides;

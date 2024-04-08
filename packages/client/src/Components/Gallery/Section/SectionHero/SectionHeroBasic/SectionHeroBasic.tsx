@@ -42,11 +42,12 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
 };
 
 
-export const SectionHeroBasicItem: ContentStruct<SectionHeroProps> = {
+export const SectionHeroBasicItem: ContentStruct = {
     id: "SectionHeroBasic",
     description: "A clean and straightforward hero component, focusing on core messaging with a clear call to action",
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     Component: SectionHeroBasic,
+    classNames: Object.values(styles),
     props: {
         title: "Landing Page.",
         content: "Discover our services and offerings.",

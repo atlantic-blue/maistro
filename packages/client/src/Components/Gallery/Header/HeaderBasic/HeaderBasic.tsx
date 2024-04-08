@@ -1,12 +1,13 @@
 import React from "react"
-import { renderToString } from 'react-dom/server';
-
-import { faker } from '@faker-js/faker';
 
 import { ContentStruct, ContentCategory } from "../../../../types"
 
 import Logo from "../../Components/Logo/Logo"
+import * as LogoStyles from "../../Components/Logo/Logo.scss"
+
 import Nav from "../../Components/Nav/Nav"
+import * as NavStyles from "../../Components/Nav/Nav.scss"
+import * as NavLinkStyles from "../../Components/NavLlink/NavLink.scss"
 
 import { HeaderProps } from "../HeaderTypes"
 
@@ -34,11 +35,17 @@ const HeaderBasic: React.FC<HeaderProps> = (props) => {
     )
 }
 
-export const HeaderBasicItem: ContentStruct<HeaderProps> = {
+export const HeaderBasicItem: ContentStruct = {
     id: "HeaderBasic",
     description: "A simple, straightforward navigation bar with clear, bold links and a distinct logo area. Suitable for minimalist or traditional website designs",
     categories: [ContentCategory.HEADER],
     Component: HeaderBasic,
+    classNames: [
+        ...Object.values(styles),
+        ...Object.values(LogoStyles),
+        ...Object.values(NavStyles),
+        ...Object.values(NavLinkStyles),
+    ],
     props: {
         logo: {
             url: "/assets/pages/generic/logo.png",

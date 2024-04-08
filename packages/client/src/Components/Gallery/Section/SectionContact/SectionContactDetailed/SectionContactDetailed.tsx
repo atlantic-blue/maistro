@@ -41,6 +41,7 @@ export const SectionContactDetailedItem: ContentStruct = {
     description: "A detailed contact form for comprehensive inquiries.",
     Component: SectionContactDetailed,
     categories: [ContentCategory.CONTACT],
+    classNames: Object.values(styles),
 };
 
 export default SectionContactDetailed;

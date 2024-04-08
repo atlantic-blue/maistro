@@ -40,6 +40,7 @@ export const SectionHeroVideoItem: ContentStruct<SectionHeroVideoProps> = {
     Component: SectionHeroVideo,
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     description: "Creates an engaging and immersive experience with a background video, ideal for dynamic content presentation.",
+    classNames: Object.values(styles),
     props: {
         videoURL: "/assets/hero-video.mp4",
         title: "Immerse Yourself in Our World",

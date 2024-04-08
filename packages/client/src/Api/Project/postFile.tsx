@@ -1,34 +1,37 @@
 import { renderToString } from 'react-dom/server';
 
+import env from '../../env';
 import PageStore from '../../Store/Page';
 
-interface PostPageInput {
+interface PostFileInput {
     userId: string,
     projectId: string,
-    page: PageStore
+    fileName: string,
+    fileContent: string,
 }
 
-const postPage = ({
+const postFile = ({
     userId,
     projectId,
-    page,
-}: PostPageInput, url: string, request = fetch) => {
+    fileName,
+    fileContent,
+}: PostFileInput,
+    url = env.api.upload,
+    request = fetch) => {
     return request(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            metadata: {
-                userId: userId,
-                projectId: projectId,
-                pageName: page.getPath(),
-            },
-            html: renderToString(page.getHtml())
+            userId,
+            projectId,
+            fileName,
+            fileContent,
         })
     })
 }
 
 export {
-    postPage
+    postFile
 }

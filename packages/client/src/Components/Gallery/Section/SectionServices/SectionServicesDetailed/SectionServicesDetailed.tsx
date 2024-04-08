@@ -49,6 +49,7 @@ export const SectionServicesDetailedItem: ContentStruct = {
     Component: SectionServicesDetailed,
     categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
     description: "Offers a detailed overview of each service, ideal for businesses wanting to provide comprehensive information about what they offer.",
+    classNames: Object.values(styles),
 }
 
 export default SectionServicesDetailed;

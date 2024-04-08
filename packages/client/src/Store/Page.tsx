@@ -1,7 +1,6 @@
 import React from "react"
 import { Subject, Subscription } from "rxjs";
 import { faker } from '@faker-js/faker';
-import { renderToString } from 'react-dom/server';
 
 import { defaultColorScheme, defaultFontScheme } from "../PageContext";
 import {
@@ -10,10 +9,14 @@ import {
     PageStruct,
     PageEvent,
     PageMessageType,
+    ColourPalette,
+    FontFamily,
 } from "../types";
 
 import PageContent from "./PageContent";
 import Html from "../Components/Html/Html";
+import { getFontFamilyHref } from "../Components/FontScheme/FontScheme";
+import { resetCss } from "./utils/cssStyles";
 
 interface IPage {
     getHtml(): React.ReactNode
@@ -29,8 +32,14 @@ interface IPage {
     getPath(): string
     setPath(path: string): void
 
+    setTitle(title: string): void
+    getTitle(): string
+
     getDescription(): string
     setDescription(description: string): void
+
+    setKeyWords(keyWords: string[]): void
+    getKeyWords(): string
 
     getContent(): PageContent[]
     setContent(content: PageContent[]): void
@@ -45,8 +54,9 @@ interface IPage {
 class PageStore implements IPage {
     private id = `${Date.now()}`
     private title = `Untitled-${Date.now()}`
-    private path = `/path-${faker.color.human().replace(" ", "-")}`
+    private path = `path-${faker.color.human().replace(" ", "-")}`
     private description = "I am a Page description, edit me!"
+    private keywords = ""
     private content: PageContent[] = []
     private contentActive: PageContent | null = null
     private colourScheme: ColourScheme = defaultColorScheme
@@ -158,6 +168,13 @@ class PageStore implements IPage {
         this.description = description
     }
 
+    public getKeyWords(): string {
+        return this.keywords
+    }
+
+    public setKeyWords(keywords: string[]) {
+        this.keywords = keywords.join(", ")
+    }
 
     public getContent(): PageContent[] {
         return this.content
@@ -208,7 +225,38 @@ class PageStore implements IPage {
     }
 
     public setPath(path: string) {
-        this.path = path
+        this.path = path.replace("/", "").replace(" ", "-")
+    }
+
+    // HTML PAGE
+    public getFontFamilyLinks() {
+        return (
+            Object.values(this.fontScheme).map(fontfamily => {
+                return (
+                    <link
+                        href={getFontFamilyHref(fontfamily.family)}
+                        rel="stylesheet"
+                    />
+                )
+            })
+        )
+    }
+
+    public getCss() {
+        return (
+            this.getContent().map(content => {
+                const styles = content.getStylesFromClassNames()
+                if (!styles) {
+                    return null
+                }
+
+                return (
+                    <style>
+                        {content.getStylesFromClassNames()}
+                    </style>
+                )
+            })
+        )
     }
 
     public getHtmlBody(): React.JSX.Element {
@@ -228,11 +276,42 @@ class PageStore implements IPage {
         return (
             <Html
                 htmlAttributes={{
-                    lang: "eng"
+                    lang: "eng",
+                    style: {
+                        [ColourPalette.ACCENT]: this.getColourScheme().accent,
+                        [ColourPalette.BACKGROUND]: this.getColourScheme().background,
+                        [ColourPalette.NEUTRAL]: this.getColourScheme().neutral,
+                        [ColourPalette.PRIMARY]: this.getColourScheme().primary,
+                        [ColourPalette.SECONDARY]: this.getColourScheme().secondary,
+                        [ColourPalette.TEXT]: this.getColourScheme().text,
+
+                        [FontFamily.BODY]: this.getFontScheme().body.css,
+                        [FontFamily.HEADING]: this.getFontScheme().heading.css,
+                    }
                 }}
             >
+                <head>
+                    <meta charSet="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+                    <title>{this.getTitle()}</title>
+                    <link rel="icon" type="image/x-icon" href="/TODO/favicon.png"></link>
+                    <meta name="description" content={this.getDescription()} />
+                    <meta name="keywords" content={this.getKeyWords()} />
+                    <meta name="author" content="https://maistro.website" />
+
+                    <style>
+                        {resetCss()}
+                    </style>
+                    {this.getCss()}
+                    {this.getFontFamilyLinks()}
+                </head>
                 <body>
-                    {this.getHtmlBody()}
+                    <main id="main">
+                        {this.getHtmlBody()}
+                    </main>
+
                 </body>
             </Html>
         )

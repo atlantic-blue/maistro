@@ -15,6 +15,7 @@ export const FooterSimpleItem: ContentStruct = {
     description: "A minimalistic footer with copyright information.",
     Component: FooterSimple,
     categories: [ContentCategory.FOOTER],
+    classNames: Object.values(styles),
 };
 
 export default FooterSimple;

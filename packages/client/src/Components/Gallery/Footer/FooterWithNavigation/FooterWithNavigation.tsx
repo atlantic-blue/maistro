@@ -23,6 +23,7 @@ export const FooterWithNavigationItem: ContentStruct = {
     description: "A footer featuring a simple navigation menu and copyright text.",
     Component: FooterWithNavigation,
     categories: [ContentCategory.FOOTER],
+    classNames: Object.values(styles),
 };
 
 export default FooterWithNavigation;

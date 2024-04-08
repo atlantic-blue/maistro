@@ -4,6 +4,7 @@ import parse from 'html-react-parser'
 import { Subject, Subscription } from "rxjs"
 
 import { ContentCategory, ContentStruct, PageContentEvent, PageContentMessageType } from "../types"
+import { getCssTextByClassName } from "./utils/cssStyles";
 
 interface IPageContent {
     getContentStructure(): ContentStruct
@@ -15,22 +16,26 @@ interface IPageContent {
     getDescription(): string
     setDescription(description: string): void
 
-    getComponent(): React.FC
-    setComponent(Component: React.FC): void
+    getCategories(): ContentCategory[]
+    setCategories(categories: ContentCategory[]): void
+
+    getClassNames(): string[]
+    setClassNames(styles: string[]): void
 
     getProps(): void
     setProps(props: unknown): void
 
-    getCategories(): ContentCategory[]
-    setCategories(categories: ContentCategory[]): void
+    getComponent(): React.FC
+    setComponent(Component: React.FC): void
 }
 
 class PageContent implements IPageContent {
     private id: string = ""
     private description: string = ""
-    private Component: React.FC = () => (<></>)
     private categories: ContentCategory[] = []
-    private props?: any // TODO
+    private classNames: string[] = []
+    private props?: any // TODO what type is this?
+    private Component: React.FC = () => (<></>)
 
     private subscription: Subscription
     public event$ = new Subject<PageContentEvent>()
@@ -69,20 +74,21 @@ class PageContent implements IPageContent {
             id: this.getId(),
             description: this.getDescription(),
             categories: this.getCategories(),
-            Component: renderToString(<this.Component {...this.props} />),
+
+            classNames: this.getClassNames(),
             props: this.getProps(),
-            assets: {
-                // TODO
-            }
+            Component: renderToString(<this.Component {...this.props} />),
         }
     }
 
     public setContent = (content: ContentStruct) => {
         this.setId(content.id)
         this.setDescription(content.description)
-        this.setComponent(content.Component)
         this.setCategories(content.categories)
+
+        this.setClassNames(content.classNames)
         this.setProps(content.props)
+        this.setComponent(content.Component)
     }
 
     public getId(): string {
@@ -91,6 +97,35 @@ class PageContent implements IPageContent {
 
     public setId(id: string): void {
         this.id = id
+    }
+
+    public setClassNames(classNames: string[]) {
+        this.classNames = classNames
+
+    }
+
+    public getClassNames(): string[] {
+        return this.classNames
+    }
+
+    public getStylesFromClassNames(): string[] {
+        const classNames = this.classNames
+        if (!classNames) {
+            // TODO app level warning
+            console.warn("content doesn't have any styles", this)
+            return []
+        }
+
+        return classNames.map(className => {
+            const cssRule = getCssTextByClassName(`.${className}`)
+            return cssRule.reduce((styles, next) => {
+                if (!next) {
+                    return styles
+                }
+
+                return styles.concat(next)
+            }, "")
+        }).filter(Boolean)
     }
 
     public getDescription(): string {

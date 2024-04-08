@@ -30,7 +30,8 @@ export const SectionServicesIconsItem: ContentStruct = {
     id: "SectionServicesIcons",
     Component: SectionServicesIcons,
     categories: [ContentCategory.TEXT, ContentCategory.SERVICES],
-    description: "A visually appealing way to showcase services with relevant icons, making each service easily identifiable at a glance."
+    description: "A visually appealing way to showcase services with relevant icons, making each service easily identifiable at a glance.",
+    classNames: Object.values(styles),
 }
 
 export default SectionServicesIcons;

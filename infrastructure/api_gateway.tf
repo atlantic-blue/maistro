@@ -1,6 +1,23 @@
 resource "aws_apigatewayv2_api" "api" {
   name          = "${local.project_name}-api"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = [
+      "*"
+    ]
+    allow_methods = [
+      "HEAD",
+      "OPTIONS",
+      "GET",
+      "POST",
+    ]
+    allow_headers = [
+      "Content-Type",
+      "Authorization",
+    ]
+  }
+
   tags = {
     application = "${lookup(local.tags, "application")}"
     environment = "${lookup(local.tags, "environment")}"

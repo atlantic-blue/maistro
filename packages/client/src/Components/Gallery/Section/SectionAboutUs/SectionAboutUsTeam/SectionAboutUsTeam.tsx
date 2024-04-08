@@ -34,6 +34,7 @@ export const SectionAboutUsTeamItem: ContentStruct = {
     Component: SectionAboutUsTeam,
     categories: [ContentCategory.TEXT, ContentCategory.ABOUT],
     description: "",
+    classNames: Object.values(styles),
 }
 
 export default SectionAboutUsTeam;
