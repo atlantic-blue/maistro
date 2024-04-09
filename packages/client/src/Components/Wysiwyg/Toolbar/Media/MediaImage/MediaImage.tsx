@@ -5,10 +5,16 @@ import useClickOutside from "../../../../../Utils/Hooks/UseClickOutside"
 import IconImage from "../../../../Icons/Image/Image"
 import { Command } from "../../../Wysiwyg.types"
 import ToolbarJustify from "../../Justify/Justify"
-import EditableImage from "../../../../Editable/EditableImage/EditableImage"
+import EditableImage, { uploadImage } from "../../../../Editable/EditableImage/EditableImage"
 
 import * as styles from "../Media.scss"
 import * as wysiwygStyles from "../../../Wysiwyg.scss"
+import { PageContext } from "../../../../../PageContext"
+import { ProjectsContext } from "../../../../../Projects"
+import { useParams } from "react-router"
+import { ProjectMessageType } from "../../../../../types"
+import { postFile } from "../../../../../Api/Project/postFile"
+import { convertFileToBase64 } from "../../../../../Utils/toBase64"
 
 interface ToolbarToolbarMediaImageProps {
     editorRef: React.MutableRefObject<HTMLDivElement | null>
@@ -18,6 +24,10 @@ interface ToolbarToolbarMediaImageProps {
 const TOOLBAR_MEDIA_IMAGE = "ToolbarMedia-image"
 
 const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
+    const { projects } = React.useContext(ProjectsContext)
+    const { projectId } = useParams()
+    const project = projects.getProjectById(projectId || "")
+
     const ref = React.useRef(null)
     const [currentMedia, setCurrentMedia] = React.useState<HTMLImageElement | null>(null)
 
@@ -52,16 +62,30 @@ const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
         return currentMedia
     }
 
-    const onInsertImage: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const onInsertImage: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
         if (!event?.target?.files) {
             return
         }
 
         const file = event?.target?.files[0];
-        const objectUrl = URL.createObjectURL(file);
+        const src = await uploadImage({
+            file,
+            userId: "TOD",
+            projectId: project.getId(),
+        })
+
+        project.event$.next({
+            type: ProjectMessageType.SET_ASSET,
+            data: {
+                id: file.name,
+                src: src,
+                description: "",
+                contentType: file.type
+            }
+        })
 
         const img = document.createElement('img');
-        img.src = objectUrl
+        img.src = src
         img.className = styles.media;
 
         const div = document.createElement('div');
@@ -123,6 +147,7 @@ const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
                     <div className={styles.optionsContainer}>
                         <div className={styles.optionsPreview}>
                             <EditableImage
+                                projectId={project.getId()}
                                 className={styles.optionsPreviewImg}
                                 defaultImage={currentMedia.src}
                                 onChange={onImageChange}

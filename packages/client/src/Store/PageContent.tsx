@@ -1,10 +1,10 @@
 import React from "react"
+import { Subject, Subscription } from "rxjs"
 import { renderToString } from 'react-dom/server';
 import parse from 'html-react-parser'
-import { Subject, Subscription } from "rxjs"
 
-import { ContentCategory, ContentStruct, PageContentEvent, PageContentMessageType } from "../types"
 import { getCssTextByClassName } from "./utils/cssStyles";
+import { ContentCategory, ContentStruct, PageContentEvent, PageContentMessageType } from "../types"
 
 interface IPageContent {
     getContentStructure(): ContentStruct

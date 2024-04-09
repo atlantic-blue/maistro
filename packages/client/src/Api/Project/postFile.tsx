@@ -1,23 +1,24 @@
-import { renderToString } from 'react-dom/server';
-
 import env from '../../env';
-import PageStore from '../../Store/Page';
 
 interface PostFileInput {
     userId: string,
     projectId: string,
     fileName: string,
     fileContent: string,
+    fileType: string
 }
 
-const postFile = ({
-    userId,
-    projectId,
-    fileName,
-    fileContent,
-}: PostFileInput,
+const postFile = (
+    {
+        userId,
+        projectId,
+        fileName,
+        fileContent,
+        fileType,
+    }: PostFileInput,
     url = env.api.upload,
-    request = fetch) => {
+    request = fetch,
+): Promise<{ key: string, message: string }> => {
     return request(url, {
         method: "POST",
         headers: {
@@ -28,8 +29,9 @@ const postFile = ({
             projectId,
             fileName,
             fileContent,
+            fileType,
         })
-    })
+    }).then(response => response.json())
 }
 
 export {

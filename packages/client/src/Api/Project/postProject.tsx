@@ -23,7 +23,8 @@ const postProject = (
                 userId,
                 projectId: project.getId(),
                 fileName: `${page.getPath()}.html`,
-                fileContent: `<!DOCTYPE html>${renderToString(page.getHtml())}`
+                fileContent: `<!DOCTYPE html>${renderToString(page.getHtml())}`,
+                fileType: "text/html",
             },
             url,
             request

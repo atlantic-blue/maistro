@@ -2,9 +2,20 @@ import * as uuid from "uuid"
 import { Subject, Subscription } from "rxjs"
 import { faker } from '@faker-js/faker';
 
-import { ColourScheme, FontScheme, PageMessageType, PageStruct, ProjectEvent, ProjectMessageType, ProjectStruct } from "../types"
+import {
+    ColourScheme,
+    FontScheme,
+    PageMessageType,
+    PageStruct,
+    ProjectAssetStruct,
+    ProjectEvent,
+    ProjectMessageType,
+    ProjectStruct,
+} from "../types"
 import { defaultColorScheme, defaultFontScheme } from "../PageContext"
+
 import Page from "./Page"
+import { ProjectAsset } from "./ProjectAsset";
 
 interface IProject {
     setId(id: string): void
@@ -18,13 +29,17 @@ interface IProject {
     getPageByPathname(pathname: string): Page
 
     deletePage(id: string): void
-    unsubscribe(): void
+
+    setAsset(id: string, asset: ProjectAssetStruct): void
+    getAssetById(id: string): ProjectAsset
 
     getColourScheme(): ColourScheme
     setColourScheme(colourScheme: ColourScheme): void
 
     getFontScheme(): FontScheme
     setFontScheme(fontScheme: FontScheme): void
+
+    unsubscribe(): void
 }
 
 export class Project implements IProject {
@@ -34,6 +49,7 @@ export class Project implements IProject {
     private subscriptions: Subscription[] = []
     private colourScheme: ColourScheme = defaultColorScheme
     private fontScheme: FontScheme = defaultFontScheme
+    private assets: Record<string, ProjectAsset> = {}
 
     public event$ = new Subject<ProjectEvent>()
 
@@ -44,16 +60,24 @@ export class Project implements IProject {
 
     private createSubscriptions() {
         return this.event$.subscribe(event => {
-            if (event.type === ProjectMessageType.SET_PAGE) {
-                this.setPage(event.data.id, event.data)
-            }
-
             if (event.type === ProjectMessageType.READ_PAGE) {
                 this.getPageById(event.data)
             }
 
+            if (event.type === ProjectMessageType.SET_PAGE) {
+                this.setPage(event.data.id, event.data)
+            }
+
             if (event.type === ProjectMessageType.DELETE_PAGE) {
                 this.deletePage(event.data)
+            }
+
+            if (event.type === ProjectMessageType.SET_ASSET) {
+                this.setAsset(event.data.id, event.data)
+            }
+
+            if (event.type === ProjectMessageType.DELETE_ASSET) {
+                this.deleteAsset(event.data)
             }
 
             if (event.type === ProjectMessageType.SET_COLOUR_SCHEME) {
@@ -85,7 +109,11 @@ export class Project implements IProject {
                     acc[pageKey] = this.getPageById(pageKey).getPageStructure()
                     return acc
                 }, {}),
-
+            assets: Object.keys(this.getAssets())
+                .reduce<Record<string, ProjectAssetStruct>>((acc, assetKey) => {
+                    acc[assetKey] = this.getAssetById(assetKey).getAssetStructure()
+                    return acc
+                }, {}),
         }
     }
 
@@ -99,12 +127,20 @@ export class Project implements IProject {
         this.setColourScheme(projectStruct.colourScheme)
         this.setFontScheme(projectStruct.fontScheme)
 
-        Object.keys(projectStruct.pages).map(pageKey => {
+        Object.keys(projectStruct.assets || {}).map(asset => {
+            const assetStruct = projectStruct.assets[asset]
+            this.setAsset(assetStruct.id, assetStruct)
+        })
+
+        Object.keys(projectStruct.pages || {}).map(pageKey => {
             const pageStruct = projectStruct.pages[pageKey]
             this.setPage(pageStruct.id, pageStruct)
         })
     }
 
+    /**
+     * Pages
+     */
     public setPage(id: string, pageStruct: PageStruct): void {
         const page = new Page(pageStruct)
 
@@ -118,6 +154,7 @@ export class Project implements IProject {
             })
         )
 
+        // Reactively update pages content parent -> child
         this.subscriptions.push(
             this.event$.subscribe((event) => {
                 if (event.type === ProjectMessageType.SET_COLOUR_SCHEME) {
@@ -160,6 +197,41 @@ export class Project implements IProject {
         delete this.pages[id]
     }
 
+    /**
+     * Asset
+     */
+    public setAsset(id: string, assetStruct: ProjectAssetStruct): void {
+        const asset = new ProjectAsset(assetStruct)
+
+        // Reactively update pages content child -> parent
+        this.subscriptions.push(
+            asset.event$.subscribe(() => {
+                this.event$.next({
+                    type: ProjectMessageType.SET_ASSET,
+                    data: asset.getAssetStructure(),
+                })
+            })
+        )
+
+        this.assets[id] = asset
+    }
+
+    public assetPage(id: string): void {
+        delete this.assets[id]
+    }
+
+    public getAssets(): Record<string, ProjectAsset> {
+        return this.assets
+    }
+
+    public getAssetById(id: string): ProjectAsset {
+        return this.assets[id]
+    }
+
+    public deleteAsset(id: string): void {
+        delete this.assets[id]
+    }
+
     getId(): string {
         return this.id
     }
@@ -197,9 +269,9 @@ export class Project implements IProject {
             id: uuid.v4(),
             title: `Untitled-${faker.animal.bird().replace(" ", "-")}`,
             pages: {},
+            assets: {},
             colourScheme: defaultColorScheme,
             fontScheme: defaultFontScheme,
         })
     }
-
 }

@@ -32,16 +32,9 @@ const SubmitProject: React.FC<SubmitProjectProps> = ({
 
     const onPublish = () => {
         refetch()
-            .then(result => {
-                if (!result.data) {
-                    return
-                }
-
-                return result.data[0].json()
-            })
-            .then(data => {
+            .then(response => {
                 // TODO needs a link to the index.html of that project instead
-                setViewLink(`https://hosting.maistro.website/${data.key}`)
+                setViewLink(`https://hosting.maistro.website/${response.data[0].key}`)
             })
     }
 

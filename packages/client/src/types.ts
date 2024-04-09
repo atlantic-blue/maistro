@@ -1,4 +1,5 @@
 import React from "react"
+
 import PageContent from "./Store/PageContent"
 import { Project } from "./Store/Project"
 import { Projects } from "./Store/Projects"
@@ -14,10 +15,18 @@ export enum ContentCategory {
     CONTACT = "CONTACT"
 }
 
+export interface ProjectAssetStruct {
+    id: string
+    description: string
+    src: string
+    contentType: string
+}
+
 export interface ProjectStruct {
     id: string
     title: string
     pages: Record<string, PageStruct>
+    assets: Record<string, ProjectAssetStruct>
     colourScheme: ColourScheme
     fontScheme: FontScheme
 }
@@ -202,11 +211,36 @@ export type PageEvent = {
     type: PageMessageType.NOTIFY_CONTENT_UPDATED
 }
 
+export enum ProjectAssetMessageType {
+    SET_ID = "SET_ID",
+    SET_DESCRIPTION = "SET_DESCRIPTION",
+    SET_SRC = "SET_SRC",
+    SET_EXTENSION = "SET_EXTENSION",
+}
+
+export type ProjectAssetEvent = {
+    type: ProjectAssetMessageType.SET_ID
+    data: string
+} | {
+    type: ProjectAssetMessageType.SET_DESCRIPTION
+    data: string
+} | {
+    type: ProjectAssetMessageType.SET_SRC
+    data: string
+} | {
+    type: ProjectAssetMessageType.SET_EXTENSION
+    data: string
+}
+
 export enum ProjectMessageType {
     SET_TITLE = "SET_TITLE",
+
     SET_PAGE = "SET_PAGE",
-    READ_PAGE = "READ_PAGE",
+    READ_PAGE = "READ_PAGE", // TODO do we need this?
     DELETE_PAGE = "DELETE_PAGE",
+
+    SET_ASSET = "SET_ASSET",
+    DELETE_ASSET = "DELETE_ASSET",
 
     SET_COLOUR_SCHEME = "SET_COLOUR_SCHEME",
     SET_FONT_SCHEME = "SET_FONT_SCHEME",
@@ -220,6 +254,12 @@ export type ProjectEvent = {
     data: string
 } | {
     type: ProjectMessageType.DELETE_PAGE
+    data: string
+} | {
+    type: ProjectMessageType.SET_ASSET
+    data: ProjectAssetStruct
+} | {
+    type: ProjectMessageType.DELETE_ASSET
     data: string
 } | {
     type: ProjectMessageType.SET_COLOUR_SCHEME
