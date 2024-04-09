@@ -4,16 +4,22 @@ interface Env {
         ping: string
         upload: string
     }
+    hosting: {
+        baseUrl: string
+    }
 }
 
 const createEnv = (): Env => {
-    const baseUrl = process.env.URL_API_BASE_URL || "https://api.maistro.website/v1"
+    const apiBaseUrl = process.env.URL_API_BASE_URL || ""
 
     return {
         api: {
-            baseUrl,
-            ping: `${baseUrl}/ping`,
-            upload: `${baseUrl}/upload`,
+            baseUrl: apiBaseUrl,
+            ping: `${apiBaseUrl}/ping`,
+            upload: `${apiBaseUrl}/upload`,
+        },
+        hosting: {
+            baseUrl: process.env.URL_HOSTING_BASE_URL || ""
         }
     }
 }

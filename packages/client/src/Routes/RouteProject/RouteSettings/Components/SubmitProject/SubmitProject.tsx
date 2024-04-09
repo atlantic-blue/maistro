@@ -6,6 +6,7 @@ import { Project } from "../../../../../Store/Project"
 import { postProject } from "../../../../../Api/Project/postProject"
 
 import * as styles from "./SubmitProject.scss"
+import env from "../../../../../env"
 
 interface SubmitProjectProps {
     project: Project,
@@ -33,8 +34,12 @@ const SubmitProject: React.FC<SubmitProjectProps> = ({
     const onPublish = () => {
         refetch()
             .then(response => {
+                if (!response.data) {
+                    // TODO app level message
+                    return
+                }
                 // TODO needs a link to the index.html of that project instead
-                setViewLink(`https://hosting.maistro.website/${response.data[0].key}`)
+                setViewLink(`${env.hosting.baseUrl}/${response.data[0].key}`)
             })
     }
 

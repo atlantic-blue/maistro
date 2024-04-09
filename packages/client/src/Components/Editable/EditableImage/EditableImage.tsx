@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { postFile } from '../../../Api/Project/postFile';
 import { convertFileToBase64 } from '../../../Utils/toBase64';
+import env from '../../../env';
 
 interface EditableImageProps {
     defaultImage: string
@@ -30,7 +31,7 @@ export const uploadImage = async ({
             fileType: file.type,
         })
 
-        const baseUrl = "https://hosting.maistro.website"
+        const baseUrl = env.hosting.baseUrl
         const src = `${baseUrl}/${key}`
 
         return src
