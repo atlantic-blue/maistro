@@ -4,9 +4,13 @@ import { ContentStruct, ContentCategory } from '../../../../types';
 
 import * as styles from './FooterSimple.scss';
 
-const FooterSimple = () => (
+interface FooterSimpleProps {
+    name: string
+}
+
+const FooterSimple: React.FC<FooterSimpleProps> = (props) => (
     <footer className={styles.simpleFooter}>
-        <p>© {new Date().getFullYear()} {/*TODO Your Company Name. */} All rights reserved.</p>
+        <p>© {new Date().getFullYear()} {props.name}. All rights reserved.</p>
     </footer>
 );
 
@@ -16,6 +20,9 @@ export const FooterSimpleItem: ContentStruct = {
     Component: FooterSimple,
     categories: [ContentCategory.FOOTER],
     classNames: Object.values(styles),
+    props: {
+        name: "Maistro"
+    }
 };
 
 export default FooterSimple;

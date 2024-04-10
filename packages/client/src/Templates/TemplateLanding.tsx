@@ -9,9 +9,10 @@ export const CreateTemplateLanding = (): PageStruct[] => {
     return [
         {
             id: uuid.v4(),
+            title: "Generic Landing Page",
+            description: "Generic Landing Page",
             path: `/${faker.word.adjective()}`,
             contentActive: null,
-            description: "Generic Landing Page",
             content: [
                 SectionHeroBasicItem
             ],

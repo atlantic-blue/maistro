@@ -4,6 +4,7 @@ import PageContent from "./Store/PageContent"
 import { Project } from "./Store/Project"
 import { Projects } from "./Store/Projects"
 import Page from "./Store/Page"
+import { User } from "./Store/User"
 
 export enum ContentCategory {
     HEADER = "HEADER",
@@ -13,6 +14,13 @@ export enum ContentCategory {
     SERVICES = "SERVICES",
     TEXT = "TEXT",
     CONTACT = "CONTACT"
+}
+
+export interface UserStruct {
+    id: string
+    avatar: string
+    email: string
+    name: string
 }
 
 export interface ProjectAssetStruct {
@@ -288,6 +296,7 @@ export type ProjectsEvent = {
 
 export interface ProjectsState {
     projects: Projects
+    user: User
 }
 
 export interface ProjectState {
@@ -301,3 +310,8 @@ export interface PageState {
 export interface PageContentState {
     pageContent: PageContent
 }
+
+export interface AppState {
+    user: unknown
+}
+

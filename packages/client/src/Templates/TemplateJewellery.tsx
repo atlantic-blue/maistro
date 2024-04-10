@@ -14,6 +14,7 @@ import { SectionHeroVideoItem } from "../Components/Gallery/Section/SectionHero/
 export const CreateTemplateJewellery = (): PageStruct[] => {
     return [
         {
+            title: "Jewellery Page",
             id: uuid.v4(),
             path: `/${faker.word.adjective()}`,
             description: "A Jewellery e-commerce page",
@@ -45,6 +46,7 @@ export const CreateTemplateJewellery = (): PageStruct[] => {
         },
 
         {
+            title: "Jewellery Page",
             id: uuid.v4(),
             path: `/${faker.word.adjective()}`,
             description: "A Jewellery e-commerce page",

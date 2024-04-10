@@ -14,7 +14,7 @@ import RouteProjectHeader from "../Components/Header/Header";
 
 const RouteGallery: React.FC = () => {
     const navigate = useNavigate();
-    const { projects } = React.useContext(ProjectsContext)
+    const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
@@ -56,7 +56,7 @@ const RouteGallery: React.FC = () => {
 
     return (
         <Helmet>
-            <RouteProjectHeader />
+            <RouteProjectHeader user={user} />
             <div className={styles.templates}>
                 <div className={styles.templatesContent}>
                     <TemplateViewNew

@@ -8,13 +8,14 @@ import { appRoutes } from "../../router";
 import Helmet from "../Components/Helmet/Helmet"
 
 import TemplateView from "../../../Components/TemplateView/TemplateView";
-import * as styles from "./Preview.scss"
 import Page from "../../../Store/Page";
 import Metadata from "../RouteEdit/Components/Metadata/Metadata";
+import RouteProjectHeader from "../Components/Header/Header";
+import * as styles from "./Preview.scss"
 
 const RoutesPreview: React.FC = () => {
     const navigate = useNavigate();
-    const { projects } = React.useContext(ProjectsContext)
+    const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
@@ -33,6 +34,7 @@ const RoutesPreview: React.FC = () => {
 
     return (
         <Helmet>
+            <RouteProjectHeader user={user} />
             <div className={styles.content}>
                 {Object.keys(project.getPages()).length < 1 && (
                     <div className={styles.page}>

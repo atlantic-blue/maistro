@@ -1,5 +1,4 @@
 import React from 'react';
-import { set } from "lodash"
 
 import { ContentStruct, ContentCategory } from '../../../../types';
 
@@ -14,23 +13,15 @@ import { HeaderProps } from '../HeaderTypes';
 import * as styles from "./HeaderDropdown.scss"
 
 const HeaderDropdown: React.FC<HeaderProps> = (props) => {
-    const onChange = (id: string, content: string) => {
-        set({ ...props }, id, content)
-    }
-
     return (
         <nav className={styles.headDropdown}>
             <div className={styles.headDropdownContainer}>
                 <Logo
                     imgUrl={props.logo.url}
                     slogan={props.logo.slogan}
-                    edit={props.edit}
-                    onChange={onChange}
                 />
                 <NavNested
-                    edit={props.edit}
                     links={props.links}
-                    onChange={(id, content) => onChange(`links.${id}`, content)}
                 />
             </div>
         </nav>

@@ -7,10 +7,12 @@ import { CreateTemplateRetreats } from "./TemplateRetreats"
 import { CreateTemplateJewellery } from "./TemplateJewellery"
 import { CreateTemplateLanding } from "./TemplateLanding"
 import { CreateTemplateMaistro } from "./TemplateMaistro"
+import { CreateTemplateLogin } from "./TemplateLogin"
 
 const GetTemplates = (): Array<PageStruct[]> => {
     return [
         CreateTemplateLanding(),
+        CreateTemplateLogin(),
         CreateTemplateMaistro(),
         CreateTemplateRetreats(),
         CreateTemplateJewellery(),

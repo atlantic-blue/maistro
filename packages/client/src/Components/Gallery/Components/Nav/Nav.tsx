@@ -1,7 +1,7 @@
 import React from "react"
 
 import * as styles from "./Nav.scss"
-import NavLink from "../NavLlink/NavLlink"
+import NavLink from "../NavLink/NavLink"
 import classNames from "classnames";
 
 export interface Link {
@@ -11,9 +11,7 @@ export interface Link {
 }
 
 interface NavProps {
-    edit?: boolean
     links: Record<string, Link>
-    onChange: (id: string, content: string) => void
     classNames?: {
         navigation: string
         navigationList: string
@@ -31,10 +29,8 @@ const Nav: React.FC<NavProps> = (props) => {
                         return (
                             <NavLink
                                 key={props.links[link].href}
-                                edit={props.edit}
                                 href={props.links[link].href}
                                 value={props.links[link].value}
-                                onChange={content => props.onChange(`links.${link}.value`, content)}
                             />
                         )
                     })

@@ -7,6 +7,7 @@ import { postProject } from "../../../../../Api/Project/postProject"
 
 import * as styles from "./SubmitProject.scss"
 import env from "../../../../../env"
+import classNames from "classnames"
 
 interface SubmitProjectProps {
     project: Project,
@@ -43,32 +44,32 @@ const SubmitProject: React.FC<SubmitProjectProps> = ({
             })
     }
 
+    const onSeeProject = () => {
+        if (!viewLink) {
+            return
+        }
+
+        window.open(viewLink, "_blank");
+    }
+
     return (
-        <div>
+        <div className={styles.content}>
             {isError &&
                 (
-                    <div className={styles.error}>
+                    <div className={styles.errorMessage}>
                         Failed to publish Page
                     </div>
                 )
             }
 
-            {isLoading && (
-                <div className={styles.loading}>
-                    Publishing...
-                </div>
-            )}
-
-            <button className={styles.button} onClick={onPublish}>
-                Publish
+            <button className={classNames(styles.button, {
+                [styles.loading]: isLoading,
+                [styles.success]: viewLink,
+                [styles.error]: isError,
+            })} onClick={viewLink ? onSeeProject : onPublish}>
+                {isLoading ? "Publishing..." : viewLink ? "See Project" : "Publish"}
             </button>
 
-            {viewLink && (
-                <div className={styles.link}>
-                    <a href={viewLink}
-                    >See Project</a>
-                </div>
-            )}
         </div>
     )
 }

@@ -8,6 +8,7 @@ import { defaultColorScheme, defaultFontScheme } from "../PageContext"
 export const CreateTemplateNew = (): PageStruct[] => {
     return [
         {
+            title: "New Template",
             id: uuid.v4(),
             contentActive: null,
             path: `/${faker.word.adjective()}`,

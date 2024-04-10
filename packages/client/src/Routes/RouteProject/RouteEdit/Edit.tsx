@@ -14,12 +14,13 @@ import Metadata from "./Components/Metadata/Metadata";
 import IconBin from "../../../Components/Icons/Bin/Bin";
 
 import * as styles from "./Edit.scss"
+import RouteProjectHeader from "../Components/Header/Header";
 
 const PageEdit: React.FC = () => {
     const [key, setKey] = React.useState("")
     const navigate = useNavigate();
 
-    const { projects } = React.useContext(ProjectsContext)
+    const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
@@ -46,6 +47,7 @@ const PageEdit: React.FC = () => {
 
     return (
         <Helmet key={key}>
+            <RouteProjectHeader user={user} />
             <div className={styles.content}>
                 {Object.keys(project.getPages()).length < 1 && (
                     <div className={styles.page}>

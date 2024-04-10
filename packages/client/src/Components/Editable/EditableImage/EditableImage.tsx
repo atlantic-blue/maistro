@@ -10,6 +10,7 @@ interface EditableImageProps {
 
     // TODO remove
     projectId: string
+    userId: string
 }
 
 export const uploadImage = async ({
@@ -53,7 +54,7 @@ const EditableImage: React.FC<EditableImageProps> = (props) => {
         const file = event.target.files[0]
         const src = await uploadImage({
             file,
-            userId: "TOD",
+            userId: props.userId,
             projectId: props.projectId,
         })
 

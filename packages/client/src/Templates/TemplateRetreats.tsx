@@ -14,6 +14,7 @@ import { defaultFontScheme } from "../PageContext"
 export const CreateTemplateRetreats = (): PageStruct[] => {
     return [
         {
+            title: "Colombian Retreats",
             id: uuid.v4(),
             path: `/${faker.word.adjective()}`,
             contentActive: null,

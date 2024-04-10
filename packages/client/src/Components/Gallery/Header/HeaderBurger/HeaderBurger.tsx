@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { set } from "lodash"
 
 import { ContentStruct, ContentCategory } from '../../../../types';
 
@@ -8,7 +7,7 @@ import * as LogoStyles from "../../Components/Logo/Logo.scss"
 
 import Nav from "../../Components/Nav/Nav"
 import * as NavStyles from "../../Components/Nav/Nav.scss"
-import * as NavLinkStyles from "../../Components/NavLlink/NavLink.scss"
+import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
 
 import { HeaderProps } from '../HeaderTypes';
 
@@ -18,26 +17,18 @@ import classNames from 'classnames';
 const HeaderBurger: React.FC<HeaderProps> = (props) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const onChange = (id: string, content: string) => {
-        set({ ...props }, id, content)
-    }
-
     return (
         <nav className={styles.headerBurger}>
             <div className={styles.headerBurgerContainer}>
                 <Logo
                     imgUrl={props.logo.url}
                     slogan={props.logo.slogan}
-                    edit={props.edit}
-                    onChange={onChange}
                 />
                 <div className={`${styles.menuToggle} ${isMenuOpen ? styles.open : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     <div className={styles.hamburger}></div>
                 </div>
                 <Nav
-                    edit={props.edit}
                     links={props.links}
-                    onChange={onChange}
                     classNames={{
                         navigation: classNames({
                             [styles.headerBurgerNavigation]: isMenuOpen
@@ -52,7 +43,7 @@ const HeaderBurger: React.FC<HeaderProps> = (props) => {
     );
 };
 
-export const HeaderBurgerItem: ContentStruct<HeaderProps> = {
+export const HeaderBurgerItem: ContentStruct = {
     id: "HeaderBurgerItem",
     Component: HeaderBurger,
     categories: [ContentCategory.HEADER],
@@ -87,12 +78,6 @@ export const HeaderBurgerItem: ContentStruct<HeaderProps> = {
             }
         },
     },
-    // TODO
-    assets: {
-        images: {
-            logo: "/assets/pages/generic/logo.png"
-        }
-    }
 }
 
 export default HeaderBurger;

@@ -12,6 +12,26 @@
     }
 }
 
+.header {
+    &-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    &-text {
+        padding: 0 5px;
+        font-size: 12px;
+    }
+}
+
 .section {
     padding: 10px;
     border-radius: 8px;

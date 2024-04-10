@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 
 import { HeaderBurgerLink, HeaderProps } from '../../Header/HeaderTypes';
-import EditableContent from '../../../Editable/EditableContent/EditableContent';
 
 import * as styles from "./NavNested.scss"
 
 interface LinkProps {
     id: string
-    edit?: boolean
     link?: HeaderBurgerLink
-    onChange: (id: string, content: string) => void
 }
 
 const Link: React.FC<LinkProps> = (props) => {
@@ -34,34 +31,16 @@ const Link: React.FC<LinkProps> = (props) => {
             onMouseLeave={onMouseLeave}
         >
             <a href={props.link.href}>
-                {props.edit ? (
-                    <EditableContent
-                        onContentChange={content => {
-                            let id = props.id
-                            if (props.link?.links) {
-                                id = id.replace("links", "value")
-                            }
-
-                            return props.onChange(id, content)
-                        }}
-                    >
-                        {props.link.value}
-                    </EditableContent>
-                ) : props.link.value
-                }
+                {props.link.value}
             </a>
             {isDropdownVisible && props.link.links && (
                 <ul className={styles.dropdown}>
                     <NestedNav
-                        edit={props.edit}
                         prevId={props.id}
                         classnames={{
                             navLinks: styles.navLinksNested
                         }}
                         links={props.link.links}
-                        onChange={(id, content) => {
-                            return props.onChange(id, content)
-                        }}
                     />
                 </ul>
             )}
@@ -70,9 +49,7 @@ const Link: React.FC<LinkProps> = (props) => {
 }
 
 interface NestedNavProps {
-    edit?: boolean
     links?: HeaderProps["links"]
-    onChange: (id: string, content: string) => void
     classnames?: {
         navLinks: string
     }
@@ -98,10 +75,6 @@ const NestedNav: React.FC<NestedNavProps> = (props) => {
                             key={link}
                             id={nextId}
                             link={nextLink}
-                            edit={props.edit}
-                            onChange={(id, content) => {
-                                return props.onChange(id, content)
-                            }}
                         />
                     )
                 })}

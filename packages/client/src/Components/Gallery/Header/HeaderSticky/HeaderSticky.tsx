@@ -9,7 +9,7 @@ import * as LogoStyles from "../../Components/Logo/Logo.scss"
 
 import Nav from "../../Components/Nav/Nav"
 import * as NavStyles from "../../Components/Nav/Nav.scss"
-import * as NavLinkStyles from "../../Components/NavLlink/NavLink.scss"
+import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
 
 import { set } from 'lodash';
 import * as styles from "./HeaderSticky.scss"
@@ -41,13 +41,9 @@ const HeaderSticky: React.FC<HeaderProps> = (props) => {
                 <Logo
                     imgUrl={props.logo.url}
                     slogan={props.logo.slogan}
-                    edit={props.edit}
-                    onChange={onChange}
                 />
                 <Nav
-                    edit={props.edit}
                     links={props.links}
-                    onChange={onChange}
                 />
             </div>
         </nav>

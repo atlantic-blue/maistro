@@ -10,24 +10,14 @@ import Thumbnail from "../../Components/Thumbnail/Thumbnail"
 
 import { appRoutes } from "../router"
 
-import * as styles from "./Projects.scss"
 import ProjectOptions from "./Components/ProjectOptions/ProjectOptions"
-import { CreateTemplateMaistro } from "../../Templates/TemplateMaistro"
-import Button from "../../Components/Gallery/Components/Button/Button"
+import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
-const RoutesProjectHeader = () => {
-    const Header = CreateTemplateMaistro()[0].content[0].Component
-    const headerProps = CreateTemplateMaistro()[0].content[0].props
-
-    return (
-        <Header {...headerProps} />
-    )
-}
+import * as styles from "./Projects.scss"
 
 const RoutesProjects: React.FC = () => {
-    const { projects } = React.useContext(ProjectsContext)
+    const { projects, user } = React.useContext(ProjectsContext)
     const navigate = useNavigate();
-
 
     const onNewProjectClick = () => {
         const newProject = Project.createEmptyProject()
@@ -43,7 +33,7 @@ const RoutesProjects: React.FC = () => {
 
     return (
         <div className={styles.projects}>
-            <RoutesProjectHeader />
+            <RouteProjectHeader user={user} />
             <div className={styles.projectsContent}>
                 <div
                     className={classNames(styles.section, styles.sectionEmpty)}

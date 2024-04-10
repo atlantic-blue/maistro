@@ -24,7 +24,7 @@ interface ToolbarToolbarMediaImageProps {
 const TOOLBAR_MEDIA_IMAGE = "ToolbarMedia-image"
 
 const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
-    const { projects } = React.useContext(ProjectsContext)
+    const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
@@ -70,7 +70,7 @@ const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
         const file = event?.target?.files[0];
         const src = await uploadImage({
             file,
-            userId: "TOD",
+            userId: user.getId(),
             projectId: project.getId(),
         })
 
@@ -148,6 +148,7 @@ const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
                         <div className={styles.optionsPreview}>
                             <EditableImage
                                 projectId={project.getId()}
+                                userId={user.getId()}
                                 className={styles.optionsPreviewImg}
                                 defaultImage={currentMedia.src}
                                 onChange={onImageChange}

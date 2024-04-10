@@ -27,7 +27,7 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
 
                 <Button
                     link={props.buttonLink}
-                    text={props.buttonText}
+                    children={props.buttonText}
                 />
 
             </div>

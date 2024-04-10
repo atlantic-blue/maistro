@@ -26,16 +26,19 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
                         />
                     </div>
                 </div>
-                <p className={styles.text}>
+                <div className={styles.text}>
                     {props.content}
-                </p>
+                </div>
             </div>
 
 
             <Button
+                onClick={props.ctaOnClick}
+                className={styles.button}
                 link={props.ctaLink}
-                text={props.cta}
-            />
+            >
+                {props.cta}
+            </Button>
 
         </section>
     )

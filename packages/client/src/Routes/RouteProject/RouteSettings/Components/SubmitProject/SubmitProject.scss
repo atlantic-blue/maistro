@@ -1,7 +1,14 @@
 @import "../../../../../Variables.scss";
 
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .button {
-    margin-top: 20px;
+    min-width: 300px;
     padding: 10px 40px;
     font-size: 1rem;
     background-color: var(--color-primary);
@@ -34,11 +41,22 @@
 }
 
 .loading {
-    color: green
+    color: white;
+    background-color: blue;
+}
+
+.success {
+    color: white;
+    background-color: green;
 }
 
 .error {
-    color: red
+    color: white;
+    background-color: red;
+}
+
+.errorMessage {
+    color: red;
 }
 
 .link {

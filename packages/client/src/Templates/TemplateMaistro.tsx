@@ -1,12 +1,13 @@
 import * as uuid from "uuid"
-import { faker } from '@faker-js/faker';
 import React from "react"
+import { faker } from '@faker-js/faker';
 
 import { defaultFontScheme } from "../PageContext";
 import { PageStruct } from "../types";
 import { HeaderBurgerItem } from "../Components/Gallery/Header/HeaderBurger/HeaderBurger";
 import { SectionHeroVideoItem } from "../Components/Gallery/Section/SectionHero/SectionHeroVideo/SectionHeroVideo";
 
+// https://mixkit.co/free-stock-video/going-down-a-curved-highway-through-a-mountain-range-41576/
 const videoURLS = [
     '/assets/videos/abstract-tunnel-square.mp4',
     '/assets/videos/abstract-tunnel-triangular.mp4',
@@ -19,17 +20,22 @@ export const CreateTemplateMaistro = (): PageStruct[] => {
     return [
         {
             id: uuid.v4(),
+            title: "Maistro",
+            description: "Maistro Landing Page",
             path: `/${faker.word.adjective()}`,
             contentActive: null,
-            description: "Maistro Landing Page",
             content: [
                 {
                     ...HeaderBurgerItem,
                     props: {
                         logo: {
-                            url: "/assets/logo.svg",
+                            url: "https://maistro.website/assets/logo.svg",
                         },
                         links: {
+                            login: {
+                                href: "/login",
+                                value: "My Account",
+                            }
                         },
                     }
                 },
@@ -37,7 +43,7 @@ export const CreateTemplateMaistro = (): PageStruct[] => {
                     ...SectionHeroVideoItem,
                     props: {
                         videoURL: videoURLS[Math.floor(Math.random() * videoURLS.length)],
-                        title: "Maistro",
+                        title: "Maistro AI",
                         content: (
                             <div>
                                 <div>AI-Powered Ideas in Seconds</div>
@@ -45,7 +51,7 @@ export const CreateTemplateMaistro = (): PageStruct[] => {
                             </div>
                         ),
                         buttonText: "Generate",
-                        buttonLink: "/projects",
+                        buttonLink: "/login",
                     }
                 },
             ],

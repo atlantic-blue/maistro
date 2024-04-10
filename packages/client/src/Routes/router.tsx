@@ -12,6 +12,11 @@ import RoutesProjectEdit from "./RouteProject/RouteEdit/Edit";
 import RoutesProjectEditPage from "./RouteProject/RouteEditPage/EditPage";
 import RoutesProjectPreview from "./RouteProject/RoutePreview/Preview";
 import RoutesProjectPreviewPage from "./RouteProject/RoutePreviewPage/PreviewPage";
+import RoutesLogout from "./RouteLogout/Logout";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+import RedirectRoute from "./Components/RedirectRoute/RedirectRoute";
+import { RoutesLogin } from "./RouteLogin/RoutesLogin";
+import RoutesSettings from "./RouteSettings/Settings";
 
 export enum RoutesParams {
     PROJECT_ID = ":projectId",
@@ -22,6 +27,10 @@ export enum RoutesParams {
 export enum Routes {
     HOME = "/*",
 
+    LOGIN = "/login",
+    LOGOUT = "/logout",
+
+    SETTINGS = `/settings`,
     PROJECTS = `/projects`,
 
     PROJECT_SETTINGS = `/project/${RoutesParams.PROJECT_ID}/settings`,
@@ -35,6 +44,22 @@ export enum Routes {
 }
 
 export const appRoutes = {
+    getHomeRoute() {
+        return '/'
+    },
+
+    getLoginRoute() {
+        return '/login'
+    },
+
+    getLogoutRoute() {
+        return '/logout'
+    },
+
+    getSettingsRoute() {
+        return '/settings'
+    },
+
     getProjectsRoute() {
         return '/projects'
     },
@@ -67,35 +92,83 @@ export const appRoutes = {
 const router = createBrowserRouter([
     {
         path: Routes.HOME,
-        element: <RoutesHome />,
+        element: (
+            <RedirectRoute navigateTo={appRoutes.getProjectsRoute()}>
+                <RoutesHome />
+            </RedirectRoute>
+        ),
+    },
+    {
+        path: Routes.LOGIN,
+        element: <RoutesLogin />,
+    },
+    {
+        path: Routes.LOGOUT,
+        element: <RoutesLogout />,
+    },
+    {
+        path: Routes.SETTINGS,
+        element: (
+            <ProtectedRoute>
+                <RoutesSettings />
+            </ProtectedRoute>
+        ),
     },
     {
         path: Routes.PROJECTS,
-        element: <RoutesProjects />,
+        element: (
+            <ProtectedRoute>
+                <RoutesProjects />
+            </ProtectedRoute>
+        ),
     },
     {
         path: Routes.PROJECT_SETTINGS,
-        element: <RoutesProjectSettings />,
+        element: (
+            <ProtectedRoute>
+                <RoutesProjectSettings />,
+            </ProtectedRoute>
+        ),
     },
     {
         path: Routes.PROJECT_TEMPLATES,
-        element: <RoutesProjectTemplates />,
+        element: (
+            <ProtectedRoute>
+                <RoutesProjectTemplates />,
+            </ProtectedRoute>
+        ),
     },
     {
         path: Routes.PROJECT_EDIT,
-        element: <RoutesProjectEdit />,
+        element: (
+            <ProtectedRoute>
+                <RoutesProjectEdit />,
+            </ProtectedRoute>
+        ),
     },
     {
         path: Routes.PROJECT_EDIT_PAGE,
-        element: <RoutesProjectEditPage />
+        element: (
+            <ProtectedRoute>
+                <RoutesProjectEditPage />
+            </ProtectedRoute>
+        ),
     },
     {
         path: Routes.PROJECT_PREVIEW,
-        element: <RoutesProjectPreview />,
+        element: (
+            <ProtectedRoute>
+                <RoutesProjectPreview />
+            </ProtectedRoute>
+        ),
     },
     {
         path: Routes.PROJECT_PREVIEW_PAGE,
-        element: <RoutesProjectPreviewPage />,
+        element: (
+            <ProtectedRoute>
+                <RoutesProjectPreviewPage />
+            </ProtectedRoute>
+        ),
     },
 ]);
 

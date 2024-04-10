@@ -15,15 +15,12 @@ import { appRoutes } from "../../router";
 import SubmitProject from "./Components/SubmitProject/SubmitProject";
 
 import * as styles from "./Settings.scss"
-
-interface PageSettingsProps {
-    postProject: () => Promise<void>
-}
+import RouteProjectHeader from "../Components/Header/Header";
 
 const PageSettings: React.FC<PageSettingsProps> = () => {
     const navigate = useNavigate();
 
-    const { projects } = React.useContext(ProjectsContext)
+    const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
@@ -42,14 +39,16 @@ const PageSettings: React.FC<PageSettingsProps> = () => {
 
     return (
         <Helmet>
+            <RouteProjectHeader user={user} />
             <div className={styles.content}>
                 <div className={styles.section}>
-                    <SettingsMetadata project={project} />
-
                     <SubmitProject
                         project={project}
-                        userId="TOD"
+                        userId={user.getId()}
                     />
+                </div>
+                <div className={styles.section}>
+                    <SettingsMetadata project={project} />
                 </div>
                 <div className={styles.section}>
                     <div className={styles.title}>
