@@ -1,17 +1,26 @@
 import React from "react";
 import { faker } from '@faker-js/faker';
-import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
+
 import { appRoutes } from "../router";
 import SectionHeroBasic from "../../Components/Gallery/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
 import SectionAboutUsSimple from "../../Components/Gallery/Section/SectionAboutUs/SectionAboutUsSimple/SectionAboutUsSimple";
 import FooterSimple from "../../Components/Gallery/Footer/FooterSimple/FooterSimple";
+import { AuthContext } from "../../Auth/AuthProvider";
 
-export const RoutesLogin: React.FC = () => {
-    const { loginWithRedirect } = useAuth0();
+const RoutesLogin: React.FC = () => {
+    const { logIn, isAuthenticated, user } = React.useContext(AuthContext)
+    const navigate = useNavigate()
 
-    const onLogin = () => {
-        loginWithRedirect({ appState: { returnTo: appRoutes.getProjectsRoute() } });
+    const onLogin = async () => {
+        await logIn().then(() => {
+            navigate(appRoutes.getProjectsRoute())
+        })
     };
+
+    const onSeeProjects = () => {
+        navigate(appRoutes.getProjectsRoute())
+    }
 
     return (
         <>
@@ -24,12 +33,21 @@ export const RoutesLogin: React.FC = () => {
                     },
                     content: (
                         <div>
-                            <div>Ai Powered Ideas in Seconds</div>
+                            <div>Ai Powered Ideas in Seconds!</div>
+                            {isAuthenticated && user && user.getName() && (
+                                <div>
+                                    Let's build something together {user.getName()}.
+                                </div>
+                            )}
                         </div>
                     ),
-                    cta: "Log In",
+                    cta: isAuthenticated ? "See Projects" : "Log In",
                     ctaOnClick: () => {
-                        onLogin();
+                        if (!isAuthenticated) {
+                            onLogin()
+                        } else {
+                            onSeeProjects()
+                        }
                     }
                 }}
             />
@@ -39,3 +57,5 @@ export const RoutesLogin: React.FC = () => {
         </>
     );
 };
+
+export default RoutesLogin

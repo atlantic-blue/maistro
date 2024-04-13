@@ -1,14 +1,23 @@
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 
 import Button from "../Gallery/Components/Button/Button";
+import { AuthContext } from "../../Auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
+import { appRoutes } from "../../Routes/router";
 
 const AuthLogoutButton = () => {
-    const { logout } = useAuth0();
+    const navigate = useNavigate()
+    const { logOut } = React.useContext(AuthContext)
+
+    const logOutAndNavigate = () => {
+        return logOut().then(() => {
+            navigate(appRoutes.getHomeRoute())
+        })
+    }
 
     return (
         <Button
-            onClick={() => logout()}
+            onClick={() => logOutAndNavigate()}
         >
             Log out
         </Button>

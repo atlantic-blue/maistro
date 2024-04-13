@@ -1,14 +1,4 @@
-import React from "react"
 
-import AuthLogoutButton from "../../Components/Auth/AuthLogoutButton"
-
-const RoutesLogout: React.FC = () => {
-
-    return (
-        <>
-            <AuthLogoutButton />
-        </>
-    )
-}
+import { RoutesLogout } from "./RoutesLogout"
 
 export default RoutesLogout

@@ -1,7 +1,7 @@
 import React from "react";
 import { renderToString } from 'react-dom/server';
 
-import { ProjectStruct } from "../../types";
+import { ProjectStruct, UserStruct } from "../../types";
 
 class DataStorage<V> {
     private key: string
@@ -42,8 +42,10 @@ class DataStorage<V> {
 }
 
 const ProjectsStorage = new DataStorage<Record<string, ProjectStruct>>("maistro.projects")
+const UserStorage = new DataStorage<UserStruct>("maistro.user")
 
 export {
     DataStorage,
     ProjectsStorage,
+    UserStorage,
 }

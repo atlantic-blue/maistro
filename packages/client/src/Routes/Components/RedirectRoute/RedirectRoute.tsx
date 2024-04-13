@@ -1,6 +1,7 @@
 import React from "react"
 import { Navigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import { AuthContext } from "../../../Auth/AuthProvider";
+import { Routes, appRoutes } from "../../router";
 
 interface RedirectRouteProps {
     children: React.ReactNode
@@ -8,19 +9,22 @@ interface RedirectRouteProps {
 }
 
 const RedirectRoute: React.FC<RedirectRouteProps> = (props) => {
-    const { isAuthenticated, isLoading } = useAuth0();
-
-    const isLoggedIn = !isLoading && isAuthenticated
+    const { isAuthenticated, isLoading, error } = React.useContext(AuthContext)
 
     if (isLoading) {
         return (
-            // TODO create a loading template
-            <div>Loading...</div>
+            <div>
+                Loading....
+            </div>
         )
     }
 
-    if (isLoggedIn) {
+    if (isAuthenticated) {
         return <Navigate to={props.navigateTo} />
+    }
+
+    if (error && !window.location.pathname.includes(Routes.AUTHZ_LOGIN)) {
+        return <Navigate to={appRoutes.getLoginRoute()} />
     }
 
     return (

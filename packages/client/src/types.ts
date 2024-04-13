@@ -21,6 +21,8 @@ export interface UserStruct {
     avatar: string
     email: string
     name: string
+    tokenAccess: string
+    tokenId: string
 }
 
 export interface ProjectAssetStruct {

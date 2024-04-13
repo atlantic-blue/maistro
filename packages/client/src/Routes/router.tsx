@@ -6,17 +6,18 @@ import {
 import RoutesHome from "./RouteHome/Home";
 import RoutesProjects from "./RouteProjects/Projects";
 
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+import RedirectRoute from "./Components/RedirectRoute/RedirectRoute";
 import RoutesProjectSettings from "./RouteProject/RouteSettings/Settings";
 import RoutesProjectTemplates from "./RouteProject/RouteTemplates/Templates";
 import RoutesProjectEdit from "./RouteProject/RouteEdit/Edit";
 import RoutesProjectEditPage from "./RouteProject/RouteEditPage/EditPage";
 import RoutesProjectPreview from "./RouteProject/RoutePreview/Preview";
 import RoutesProjectPreviewPage from "./RouteProject/RoutePreviewPage/PreviewPage";
-import RoutesLogout from "./RouteLogout/Logout";
-import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
-import RedirectRoute from "./Components/RedirectRoute/RedirectRoute";
-import { RoutesLogin } from "./RouteLogin/RoutesLogin";
+import RoutesLogin from "./RouteLogin/RoutesLogin";
+import RoutesLogout from "./RouteLogout/RoutesLogout";
 import RoutesSettings from "./RouteSettings/Settings";
+import RoutesCallback from "./RoutesCallback/Callback";
 
 export enum RoutesParams {
     PROJECT_ID = ":projectId",
@@ -27,8 +28,9 @@ export enum RoutesParams {
 export enum Routes {
     HOME = "/*",
 
-    LOGIN = "/login",
-    LOGOUT = "/logout",
+    AUTHZ_LOGIN = "/login",
+    AUTHZ_LOGOUT = "/logout",
+    AUTHZ_CALLBACK = "/callback",
 
     SETTINGS = `/settings`,
     PROJECTS = `/projects`,
@@ -99,12 +101,24 @@ const router = createBrowserRouter([
         ),
     },
     {
-        path: Routes.LOGIN,
-        element: <RoutesLogin />,
+        path: Routes.AUTHZ_LOGIN,
+        element: (
+            <RedirectRoute navigateTo={appRoutes.getProjectsRoute()}>
+                <RoutesLogin />
+            </RedirectRoute>
+        ),
     },
     {
-        path: Routes.LOGOUT,
+        path: Routes.AUTHZ_LOGOUT,
         element: <RoutesLogout />,
+    },
+    {
+        path: Routes.AUTHZ_CALLBACK,
+        element: (
+            <RedirectRoute navigateTo={appRoutes.getProjectsRoute()}>
+                <RoutesCallback />
+            </RedirectRoute>
+        ),
     },
     {
         path: Routes.SETTINGS,

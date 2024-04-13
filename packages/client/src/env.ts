@@ -1,10 +1,4 @@
 interface Env {
-    app: {
-        /**
-         * Unique identifier for this app
-         */
-        uuid: string
-    }
     api: {
         baseUrl: string
         ping: string
@@ -14,18 +8,20 @@ interface Env {
         baseUrl: string
     }
     auth: {
-        domain: string
+        baseUrl: string
+        logInUrl: string
+        logOutUrl: string
+        callbackUrl: string
         clientId: string
+        clientSecret: string
     }
 }
 
 const createEnv = (): Env => {
     const apiBaseUrl = process.env.URL_API_BASE_URL || ""
+    const authBaseUrl = process.env.AUTH_DOMAIN || ""
 
     return {
-        app: {
-            uuid: process.env.APP_UUID || "",
-        },
         api: {
             baseUrl: apiBaseUrl,
             ping: `${apiBaseUrl}/ping`,
@@ -35,9 +31,13 @@ const createEnv = (): Env => {
             baseUrl: process.env.URL_HOSTING_BASE_URL || "",
         },
         auth: {
-            domain: process.env.AUTH_DOMAIN || "",
+            baseUrl: authBaseUrl,
+            logInUrl: `${authBaseUrl}/login/`,
+            logOutUrl: `${authBaseUrl}/logout`,
+            callbackUrl: `${window.location.origin}/callback/`,
             clientId: process.env.AUTH_CLIENT_ID || "",
-        }
+            clientSecret: process.env.AUTH_CLIENT_SECRET || "",
+        },
     }
 }
 
