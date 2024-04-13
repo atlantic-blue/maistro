@@ -18,3 +18,16 @@ resource "aws_route53_record" "www_record" {
     evaluate_target_health = false
   }
 }
+
+/*
+https://search.google.com/search-console/welcome?utm_source=about-page
+*/
+resource "aws_route53_record" "www_record_txt_google_verify" {
+  zone_id = aws_route53_zone.www.id
+  name    = var.domain_name
+  type    = "TXT"
+  ttl     = 300
+  records = [
+    "google-site-verification=${variable.google_site_verification_token}"
+  ]
+}

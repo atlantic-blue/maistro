@@ -25,3 +25,7 @@ variable "google_client_id" {
 variable "google_client_secret" {
     type = string
 }
+
+variable "google_site_verification_token" {
+    type = string
+}
