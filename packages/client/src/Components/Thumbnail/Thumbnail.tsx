@@ -12,7 +12,7 @@ export interface ThumbnailProps {
 }
 
 const defaultDimensions: ThumbnailProps["dimensions"] = {
-    width: `160px`,
+    width: `150px`,
     height: `240px`,
     scale: 0.5,
 }
