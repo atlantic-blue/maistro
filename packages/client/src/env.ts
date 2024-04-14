@@ -15,6 +15,14 @@ interface Env {
         clientId: string
         clientSecret: string
     }
+    payments: {
+        stripe: {
+            publishableKey: string
+            subscriptionPriceId: string
+        }
+        successUrl: string
+        cancelUrl: string
+    }
 }
 
 const createEnv = (): Env => {
@@ -38,6 +46,14 @@ const createEnv = (): Env => {
             clientId: process.env.AUTH_CLIENT_ID || "",
             clientSecret: process.env.AUTH_CLIENT_SECRET || "",
         },
+        payments: {
+            stripe: {
+                publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
+                subscriptionPriceId: process.env.STRIPE_SUBSCRIPTION_PRICE_ID || "",
+            },
+            successUrl: `${window.location.origin}/settings?success=true`,
+            cancelUrl: window.location.origin,
+        }
     }
 }
 

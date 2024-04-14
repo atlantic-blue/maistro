@@ -81,6 +81,8 @@
         "webpack-dev-server": "^5.0.1"
     },
     "dependencies": {
+        "@stripe/react-stripe-js": "^2.7.0",
+        "@stripe/stripe-js": "^3.3.0",
         "@tinymce/tinymce-react": "^4.3.2",
         "html-react-parser": "^5.1.8",
         "react": "^18.2.0",

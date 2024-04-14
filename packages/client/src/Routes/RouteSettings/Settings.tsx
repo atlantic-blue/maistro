@@ -3,8 +3,10 @@ import React from "react"
 import { ProjectsContext } from "../../Projects"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
-import * as styles from "./Settings.scss"
 import AuthLogoutButton from "../../Components/Auth/AuthLogoutButton"
+import PaymentsRedirect from "../../Payments/Payments"
+
+import * as styles from "./Settings.scss"
 
 const RoutesSettings: React.FC = () => {
     const { user } = React.useContext(ProjectsContext)
@@ -18,6 +20,15 @@ const RoutesSettings: React.FC = () => {
                 <div className={styles.section}>
                     <img src={user.getAvatar()} />
                     <div>{user.getName()}</div>
+                </div>
+
+
+                <div className={styles.section}>
+                    {/*                     
+                        TODO, how do we know if the user has subscribed?
+                        https://billing.stripe.com/p/login/00g4i29gM9GOgz6dQQ
+                     */}
+                    <PaymentsRedirect user={user} />
                 </div>
 
                 <div className={styles.section}>

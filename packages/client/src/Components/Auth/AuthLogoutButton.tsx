@@ -5,6 +5,8 @@ import { AuthContext } from "../../Auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { appRoutes } from "../../Routes/router";
 
+import * as styles from "./AuthLogoutButton.scss"
+
 const AuthLogoutButton = () => {
     const navigate = useNavigate()
     const { logOut } = React.useContext(AuthContext)
@@ -18,6 +20,7 @@ const AuthLogoutButton = () => {
     return (
         <Button
             onClick={() => logOutAndNavigate()}
+            className={styles.button}
         >
             Log out
         </Button>
