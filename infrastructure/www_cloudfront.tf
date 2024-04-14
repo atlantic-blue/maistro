@@ -2,7 +2,7 @@ resource "aws_cloudfront_origin_access_identity" "www" {
   comment = "access_identity_${local.www_bucket_name}.s3.amazonaws.com"
 }
 
-resource "aws_cloudfront_distribution" "wwww" {
+resource "aws_cloudfront_distribution" "www" {
   origin {
     domain_name = aws_s3_bucket.www.bucket_regional_domain_name
     origin_id   = local.www_cloudfront_origin_id
@@ -67,7 +67,6 @@ resource "aws_cloudfront_distribution" "wwww" {
 
   aliases = [
     var.domain_name,
-    local.www_domain_name,
   ]
 
   viewer_certificate {
@@ -79,6 +78,6 @@ resource "aws_cloudfront_distribution" "wwww" {
 }
 
 
-output "hosting_aws_cloudfront_distribution" {
-  value = "https://${aws_cloudfront_distribution.hosting.domain_name}"
+output "www_cloudfront_distribution" {
+  value = "https://${aws_cloudfront_distribution.www.domain_name}"
 }

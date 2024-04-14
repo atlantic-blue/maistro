@@ -3,8 +3,8 @@ resource "aws_route53_record" "users" {
   name    = "authz.${var.domain_name}"
   type    = "A"
   alias {
-    name                   = aws_cognito_user_pool_domain.users.cloudfront_distribution
-    zone_id                = aws_cognito_user_pool_domain.users.cloudfront_distribution_zone_id
+    name                   = aws_cognito_user_pool_domain.authz.cloudfront_distribution
+    zone_id                = aws_cognito_user_pool_domain.authz.cloudfront_distribution_zone_id
     evaluate_target_health = false
   }
 }

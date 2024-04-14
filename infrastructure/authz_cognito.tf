@@ -1,4 +1,4 @@
-resource "aws_cognito_user_pool" "users" {
+resource "aws_cognito_user_pool" "authz" {
   name                     = local.authz_pool_name
   auto_verified_attributes = ["email"]
 
@@ -17,8 +17,8 @@ Create a developer account with Google.
 
 5. Add the OAuth client ID and client secret for your Google project to your user pool IDP configuration.
 **/
-resource "aws_cognito_identity_provider" "google" {
-  user_pool_id  = aws_cognito_user_pool.users.id
+resource "aws_cognito_identity_provider" "authz_google" {
+  user_pool_id  = aws_cognito_user_pool.authz.id
   provider_name = "Google"
   provider_type = "Google"
 
@@ -42,9 +42,9 @@ resource "aws_cognito_identity_provider" "google" {
   }
 }
 
-resource "aws_cognito_user_pool_client" "cognito" {
-  name         = "client"
-  user_pool_id = aws_cognito_user_pool.users.id
+resource "aws_cognito_user_pool_client" "authz" {
+  name         = local.authz_pool_name
+  user_pool_id = aws_cognito_user_pool.authz.id
 
   supported_identity_providers         = ["Google"]
   allowed_oauth_flows_user_pool_client = true
@@ -71,30 +71,30 @@ resource "aws_cognito_user_pool_client" "cognito" {
   generate_secret     = true
 }
 
-resource "aws_cognito_user_pool_domain" "users" {
-  user_pool_id    = aws_cognito_user_pool.users.id
+resource "aws_cognito_user_pool_domain" "authz" {
+  user_pool_id    = aws_cognito_user_pool.authz.id
   domain          = "authz.${var.domain_name}"
   certificate_arn = aws_acm_certificate.www_certificate.arn
 }
 
-resource "aws_cognito_user_pool_ui_customization" "example" {
-  client_id = aws_cognito_user_pool_client.cognito.id
+resource "aws_cognito_user_pool_ui_customization" "cognito" {
+  client_id = aws_cognito_user_pool_client.authz.id
 
   css        = file("${path.module}/../packages/client/assets/authz.css")
   image_file = filebase64("${path.module}/../packages/client/assets/favicon.png")
 
-  user_pool_id = aws_cognito_user_pool_domain.users.user_pool_id
+  user_pool_id = aws_cognito_user_pool_domain.authz.user_pool_id
 }
 
-output "cognito_login_url_example" {
-  value = "https://${aws_cognito_user_pool_domain.users.domain}/login?response_type=code&client_id=${aws_cognito_user_pool_client.cognito.id}&redirect_uri=https://${var.domain_name}/callback"
+output "authz_login_url" {
+  value = "https://${aws_cognito_user_pool_domain.authz.domain}/login?response_type=code&client_id=${aws_cognito_user_pool_client.authz.id}&redirect_uri=https://${var.domain_name}/callback"
 }
 
-output "cognito_client_secret" {
+output "authz_client_secret" {
   sensitive = true
-  value     = aws_cognito_user_pool_client.cognito.client_secret
+  value     = aws_cognito_user_pool_client.authz.client_secret
 }
 
-output "cognito_client_id" {
-  value = aws_cognito_user_pool_client.cognito.id
+output "authz_client_id" {
+  value = aws_cognito_user_pool_client.authz.id
 }

@@ -78,6 +78,6 @@ resource "aws_cloudfront_distribution" "hosting" {
 }
 
 
-output "www_aws_cloudfront_distribution" {
-  value = "https://${aws_cloudfront_distribution.wwww.domain_name}"
+output "hosting_cloudfront_distribution" {
+  value = "https://${aws_cloudfront_distribution.hosting.domain_name}"
 }

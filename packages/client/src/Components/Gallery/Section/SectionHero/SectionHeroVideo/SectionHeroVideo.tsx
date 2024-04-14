@@ -9,8 +9,9 @@ interface SectionHeroVideoProps {
     videoURL: string
     title: string
     content: string | React.ReactNode
-    buttonLink: string
+    buttonLink?: string
     buttonText: string
+    buttonOnClick?: () => void
 }
 
 const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
@@ -26,6 +27,7 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
                 </div>
 
                 <Button
+                    onClick={props.buttonOnClick}
                     link={props.buttonLink}
                     children={props.buttonText}
                 />

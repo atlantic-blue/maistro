@@ -1,6 +1,6 @@
 resource "aws_route53_record" "api" {
   zone_id = aws_route53_zone.www.id
-  name    = local.api_domain_name
+  name    = "api.${var.domain_name}"
   type    = "A"
 
   alias {
