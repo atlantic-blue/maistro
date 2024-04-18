@@ -7,11 +7,11 @@ import SectionHeroVideo from "../../Components/Gallery/Section/SectionHero/Secti
 
 // https://mixkit.co/free-stock-video/going-down-a-curved-highway-through-a-mountain-range-41576/
 const videoURLS = [
-    '/assets/videos/abstract-tunnel-square.mp4',
-    '/assets/videos/abstract-tunnel-triangular.mp4',
-    '/assets/videos/beach.mp4',
-    '/assets/videos/countryside.mp4',
-    '/assets/videos/villa.mp4',
+    'https://maistro.website/assets/videos/abstract-tunnel-square.mp4',
+    'https://maistro.website/assets/videos/abstract-tunnel-triangular.mp4',
+    'https://maistro.website/assets/videos/beach.mp4',
+    'https://maistro.website/assets/videos/countryside.mp4',
+    'https://maistro.website/assets/videos/villa.mp4',
 ]
 
 const RoutesHome: React.FC = () => {

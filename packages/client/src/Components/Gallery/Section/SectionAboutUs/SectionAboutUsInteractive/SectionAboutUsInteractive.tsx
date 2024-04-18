@@ -28,7 +28,9 @@ export const SectionAboutUsInteractiveItem: ContentStruct = {
     Component: SectionAboutUsInteractive,
     categories: [ContentCategory.ABOUT, ContentCategory.TEXT],
     description: "",
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles)
+    ],
 }
 
 export default SectionAboutUsInteractive;

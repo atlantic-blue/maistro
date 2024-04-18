@@ -264,10 +264,10 @@ export class Project implements IProject {
         this.fontScheme = fontScheme || defaultFontScheme
     }
 
-    static createEmptyProject() {
+    static createEmptyProject(title: string) {
         return new Project({
             id: uuid.v4(),
-            title: `Untitled-${faker.animal.bird().replace(" ", "-")}`,
+            title: `${title} ${faker.commerce.productName()}`,
             pages: {},
             assets: {},
             colourScheme: defaultColorScheme,

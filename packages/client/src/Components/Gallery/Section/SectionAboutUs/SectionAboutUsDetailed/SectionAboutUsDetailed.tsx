@@ -23,7 +23,9 @@ export const SectionAboutUsDetailedItem: ContentStruct = {
     Component: SectionAboutUsDetailed,
     categories: [ContentCategory.ABOUT, ContentCategory.TEXT],
     description: "",
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles)
+    ],
 }
 
 export default SectionAboutUsDetailed;

@@ -26,7 +26,9 @@ export const SectionContactWithMapItem: ContentStruct = {
     description: "Contact form with an embedded map for easy location reference.",
     Component: SectionContactWithMap,
     categories: [ContentCategory.CONTACT],
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles)
+    ],
 };
 
 export default SectionContactWithMap;

@@ -23,7 +23,9 @@ const SectionHeroImage: React.FC<SectionHeroImageProps> = (props) => {
 export const SectionHeroImageItem: ContentStruct = {
     id: "SectionHeroImage",
     Component: SectionHeroImage,
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles)
+    ],
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     description: "Offers a visually striking first impression with a full-width background image, suitable for storytelling or branding.",
     props: {

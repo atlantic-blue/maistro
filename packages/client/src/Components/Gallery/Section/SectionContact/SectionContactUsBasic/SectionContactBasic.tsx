@@ -21,7 +21,9 @@ export const SectionContactBasicItem: ContentStruct = {
     description: "A basic contact form for user inquiries.",
     Component: SectionContactBasic,
     categories: [ContentCategory.CONTACT],
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles)
+    ],
 };
 
 export default SectionContactBasic;

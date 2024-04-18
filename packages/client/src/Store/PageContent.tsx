@@ -110,7 +110,7 @@ class PageContent implements IPageContent {
 
     public getStylesFromClassNames(): string[] {
         const classNames = this.classNames
-        if (!classNames) {
+        if (!classNames || !Array.isArray(classNames)) {
             // TODO app level warning
             console.warn("content doesn't have any styles", this)
             return []

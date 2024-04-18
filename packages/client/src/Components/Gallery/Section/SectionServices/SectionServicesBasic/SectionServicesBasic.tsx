@@ -22,7 +22,9 @@ export const SectionServicesBasicItem: ContentStruct = {
     Component: SectionServicesBasic,
     categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
     description: "A basic and clean presentation of services, perfect for businesses that prefer a minimalist and straightforward approach.",
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles)
+    ],
 }
 
 export default SectionServicesBasic;

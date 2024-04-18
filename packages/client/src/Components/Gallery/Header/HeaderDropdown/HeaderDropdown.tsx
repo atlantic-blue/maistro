@@ -40,7 +40,7 @@ export const HeaderDropDownItem: ContentStruct<HeaderProps> = {
     ],
     props: {
         logo: {
-            url: "/assets/pages/generic/logo.png",
+            url: "https://maistro.website/assets/pages/generic/logo.png",
             slogan: "Empowering Your Vision"
         },
         links: {

@@ -1,4 +1,6 @@
 import * as path from 'path'
+import * as fs from "fs"
+
 import { Configuration } from 'webpack'
 
 import jsRule from './rules/jsRule'
@@ -49,13 +51,15 @@ const createDefaultWebpackConfig = (): Configuration => {
 
 const createMultipleWebpackConfigs = [
     "ping",
-    "upload"
+    "upload",
+    "hosting-redirect",
+    "projects-create",
 ].map(api => {
 
     return ({
         ...createDefaultWebpackConfig(),
         entry: {
-            ping: path.resolve(paths.src, api, 'index.ts'),
+            ping: path.resolve(paths.src, "lambdas", api, 'index.ts'),
         },
         output: {
             libraryTarget: "commonjs2",

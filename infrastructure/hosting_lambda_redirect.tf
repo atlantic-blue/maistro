@@ -55,15 +55,15 @@ resource "aws_iam_role_policy_attachment" "hosting_lambda_redirect" {
 data "archive_file" "hosting_lambda_redirect" {
   type = "zip"
 
-  source_dir  = "${path.module}/../packages/api/dist/redirect"
-  output_path = "${path.module}/redirect.zip"
+  source_dir  = "${path.module}/../packages/api/dist/hosting-redirect"
+  output_path = "${path.module}/hosting-redirect.zip"
 }
 
 
 resource "aws_s3_object" "hosting_lambda_redirect" {
   bucket = aws_s3_bucket.api.id
 
-  key    = "redirect.zip"
+  key    = "hosting-redirect.zip"
   source = data.archive_file.hosting_lambda_redirect.output_path
 
   etag = filemd5(data.archive_file.hosting_lambda_redirect.output_path)
@@ -106,10 +106,3 @@ resource "aws_cloudwatch_log_group" "hosting_lambda_redirect" {
     prevent_destroy = false
   }
 }
-
-# ## Lambda @ edge
-# resource "aws_lambda_function_association" "hosting_lambda_redirect" {
-#   distribution_id = aws_cloudfront_distribution.hosting.id
-#   event_type      = "origin-request"
-#   lambda_arn      = aws_lambda_function.hosting_lambda_redirect.qualified_arn
-# }

@@ -3,6 +3,9 @@ interface Env {
         baseUrl: string
         ping: string
         upload: string
+        projects: {
+            create: string
+        }
     }
     hosting: {
         baseUrl: string
@@ -34,6 +37,9 @@ const createEnv = (): Env => {
             baseUrl: apiBaseUrl,
             ping: `${apiBaseUrl}/ping`,
             upload: `${apiBaseUrl}/upload`,
+            projects: {
+                create: `${apiBaseUrl}/projects`,
+            }
         },
         hosting: {
             baseUrl: process.env.URL_HOSTING_BASE_URL || "",

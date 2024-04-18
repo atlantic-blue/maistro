@@ -37,7 +37,9 @@ export const SectionContactInteractiveItem: ContentStruct = {
     description: "Interactive FAQs with a contact form for user engagement.",
     Component: SectionContactInteractive,
     categories: [ContentCategory.CONTACT],
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles)
+    ],
 };
 
 export default SectionContactInteractive;

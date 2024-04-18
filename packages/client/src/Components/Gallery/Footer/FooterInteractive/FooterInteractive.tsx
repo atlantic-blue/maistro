@@ -33,7 +33,9 @@ export const FooterInteractiveItem: ContentStruct = {
     description: "An interactive footer that engages users by collecting their feedback directly.",
     Component: FooterInteractive,
     categories: [ContentCategory.FOOTER],
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles)
+    ],
 };
 
 export default FooterInteractive;

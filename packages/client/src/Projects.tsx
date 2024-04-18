@@ -9,6 +9,8 @@ import router from "./Routes/router";
 import "./Project.scss"
 import { User } from "./Store/User";
 import { AuthContext } from "./Auth/AuthProvider";
+import { debounceTime } from "rxjs/operators";
+import { projectsCreate } from "./Api/Projects/projectsCreate";
 
 const projectsStore = new Projects()
 const user = new User()
@@ -16,6 +18,11 @@ const user = new User()
 export const ProjectsContext = React.createContext<ProjectsState>({
     projects: projectsStore,
     user: user,
+    api: {
+        projects: {
+            create: () => Promise.resolve()
+        }
+    }
 })
 
 interface ProjectsEditProps {
@@ -37,10 +44,13 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
             setKey(`${Date.now()}`)
         })
 
-        const subscription = projectsStore.event$.subscribe(() => {
-            const value = projectsStore.getProjectsStructure()
-            ProjectsStorage.set(value)
-        })
+        const subscription = projectsStore.event$
+            .pipe(
+                debounceTime(1000) // SAVE EVERY SECOND
+            ).subscribe(() => {
+                const value = projectsStore.getProjectsStructure()
+                ProjectsStorage.set(value)
+            })
 
         return () => {
             subscription.unsubscribe()
@@ -53,6 +63,11 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
             value={{
                 projects,
                 user,
+                api: {
+                    projects: {
+                        create: projectsCreate
+                    }
+                }
             }}
         >
             <RouterProvider router={router} />

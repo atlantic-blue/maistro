@@ -11,7 +11,8 @@ const sassCss: RuleSetRule = {
             loader: 'css-loader',
             options: {
                 modules: {
-                    localIdentName: '[name]___[local]___[hash:base64:5]',
+                    // localIdentName: '[name]___[local]___[hash:base64:5]',  // TODO hashing makes posting css to pages hard
+                    localIdentName: '[name]___[local]',
                     namedExport: true,
                 },
                 importLoaders: 1,

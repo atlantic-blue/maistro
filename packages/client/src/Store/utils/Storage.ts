@@ -18,7 +18,6 @@ class DataStorage<V> {
 
     set(value: V) {
         const seen = new WeakSet();
-
         const data = JSON.stringify(value, (key, value) => {
             if (typeof value === "object" && value !== null) {
                 // Circular reference

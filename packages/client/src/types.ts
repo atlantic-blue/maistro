@@ -299,6 +299,11 @@ export type ProjectsEvent = {
 export interface ProjectsState {
     projects: Projects
     user: User
+    api: {
+        projects: {
+            create: ({ userId, name }: { userId: string, name: string }) => Promise<void>
+        }
+    }
 }
 
 export interface ProjectState {

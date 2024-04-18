@@ -28,6 +28,7 @@ const EditableVideo: React.FC<EditableVideoProps> = (props) => {
                     preload="metadata"
                     loop
                     autoPlay
+                    muted
                 >
                     <source src={preview} type="video/mp4" />
                 </video>

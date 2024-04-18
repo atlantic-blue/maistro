@@ -29,7 +29,9 @@ export const FooterDetailedItem: ContentStruct = {
     description: "A comprehensive footer that includes about info, quick links, and contact details.",
     Component: FooterDetailed,
     categories: [ContentCategory.FOOTER],
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles)
+    ],
 };
 
 export default FooterDetailed;

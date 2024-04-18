@@ -16,19 +16,28 @@ import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 import * as styles from "./Projects.scss"
 
 const RoutesProjects: React.FC = () => {
-    const { projects, user } = React.useContext(ProjectsContext)
+    const { projects, user, api } = React.useContext(ProjectsContext)
     const navigate = useNavigate();
 
     const onNewProjectClick = () => {
-        const newProject = Project.createEmptyProject()
-
-        projects.event$.next({
-            type: ProjectsMessageType.SET_PROJECT,
-            data: newProject.getProjectStructure()
+        const projectName = `${user.getName()}'s`
+        const newProject = Project.createEmptyProject(projectName)
+        api.projects.create({
+            userId: user.getId(),
+            name: newProject.getTitle(),
         })
+            .then(() => {
+                projects.event$.next({
+                    type: ProjectsMessageType.SET_PROJECT,
+                    data: newProject.getProjectStructure()
+                })
 
-
-        navigate(appRoutes.getProjectTemplateRoute(newProject.getId()))
+                navigate(appRoutes.getProjectTemplateRoute(newProject.getId()))
+            })
+            .catch(error => {
+                //TODO APP LEVEL ERROR
+                console.error(error)
+            })
     }
 
     return (

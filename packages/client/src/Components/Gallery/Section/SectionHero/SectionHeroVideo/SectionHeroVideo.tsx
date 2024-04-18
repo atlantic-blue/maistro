@@ -2,6 +2,7 @@ import React from 'react';
 
 import { ContentStruct, ContentCategory } from '../../../../../types';
 import Button from '../../../Components/Button/Button';
+import * as ButtonStyles from '../../../Components/Button/Button.scss';
 
 import * as styles from "./SectionHeroVideo.scss"
 
@@ -42,9 +43,12 @@ export const SectionHeroVideoItem: ContentStruct<SectionHeroVideoProps> = {
     Component: SectionHeroVideo,
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     description: "Creates an engaging and immersive experience with a background video, ideal for dynamic content presentation.",
-    classNames: Object.values(styles),
+    classNames: [
+        ...Object.values(styles),
+        ...Object.values(ButtonStyles),
+    ],
     props: {
-        videoURL: "/assets/hero-video.mp4",
+        videoURL: "https://maistro.website/assets/hero-video.mp4",
         title: "Immerse Yourself in Our World",
         content: "Experience the difference with us.",
         buttonLink: "#home",
