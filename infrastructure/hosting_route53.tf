@@ -1,5 +1,5 @@
 /**
-    Subdomain
+    Subdomain: Hosting
 **/
 resource "aws_route53_zone" "hosting" {
   name = "hosting.${var.domain_name}"
@@ -36,7 +36,7 @@ resource "aws_route53_record" "hosting" {
 **/
 resource "aws_route53_record" "hosting_blog" {
   zone_id = aws_route53_zone.hosting.id
-  name    = "blog.hosting.${var.domain_name}"
+  name    = "*.hosting.${var.domain_name}"
   type    = "A"
 
   alias {

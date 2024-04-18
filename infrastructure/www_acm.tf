@@ -14,7 +14,7 @@ resource "aws_acm_certificate" "www_certificate" {
   }
 
   subject_alternative_names = [
-    "*.${var.domain_name}"
+    "*.${var.domain_name}",
   ]
 }
 

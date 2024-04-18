@@ -30,8 +30,15 @@ resource "aws_cloudfront_distribution" "hosting" {
       }
     }
 
+    lambda_function_association {
+      event_type   = "viewer-request"
+      include_body = false
+      lambda_arn   = aws_lambda_function.hosting_lambda_redirect.qualified_arn
+    }
+
     viewer_protocol_policy = "redirect-to-https"
 
+    // TODO set sensible defaults
     min_ttl     = 0
     default_ttl = 0
     max_ttl     = 0
@@ -42,14 +49,14 @@ resource "aws_cloudfront_distribution" "hosting" {
     error_caching_min_ttl = 300
     error_code            = 403
     response_code         = 200
-    response_page_path    = "/index.html"
+    response_page_path    = "/index.html" // TODO create error page
   }
 
   custom_error_response {
     error_caching_min_ttl = 300
     error_code            = 404
     response_code         = 200
-    response_page_path    = "/index.html"
+    response_page_path    = "/404.html" // TODO style 404 page
   }
 
   tags = {
@@ -66,14 +73,15 @@ resource "aws_cloudfront_distribution" "hosting" {
   }
 
   aliases = [
-    local.hosting_domain_name
+    "hosting.${var.domain_name}",
+    "*.hosting.${var.domain_name}",
   ]
 
   viewer_certificate {
     # cloudfront_default_certificate = true
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.1_2016"
-    acm_certificate_arn      = aws_acm_certificate.www_certificate.arn
+    acm_certificate_arn      = aws_acm_certificate.hosting_certificate.arn
   }
 }
 
