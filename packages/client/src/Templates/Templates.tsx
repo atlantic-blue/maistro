@@ -20,6 +20,7 @@ const GetTemplates = (): Array<PageStruct[]> => {
 }
 
 interface TemplatesProps {
+    className?: string
     onClick: (items: PageStruct[]) => void
 }
 
@@ -36,6 +37,7 @@ const TemplateViews: React.FC<TemplatesProps> = (props) => {
                         key={`${firstPage.id}-${Math.random()}`}
                         onClick={() => props.onClick(template)}
                         title={firstPage.description}
+                        className={props.className}
                     >
                         {firstPage.content?.map(content => {
                             const Component = content.Component

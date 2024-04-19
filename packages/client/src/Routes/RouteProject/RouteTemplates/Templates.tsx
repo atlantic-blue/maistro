@@ -62,9 +62,11 @@ const RouteGallery: React.FC = () => {
                     <TemplateViewNew
                         onClick={onNewPageClick}
                         title="Create Your Own"
+                        className={styles.template}
                     />
                     <TemplatesViews
                         onClick={onTemplateClick}
+                        className={styles.template}
                     />
                 </div >
             </div>

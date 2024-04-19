@@ -12,9 +12,6 @@
 
     transition: transform .3s ease-in-out;
 
-    min-height: 240px;
-    width: 150px;
-
     &:hover {
         transform: translateY(-10px);
     }
