@@ -1,4 +1,5 @@
-import React from "react"
+import { faker } from '@faker-js/faker';
+import React, { useEffect } from "react"
 import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
 
@@ -19,14 +20,15 @@ const RoutesProjects: React.FC = () => {
     const { projects, user, api } = React.useContext(ProjectsContext)
     const navigate = useNavigate();
 
-    const onNewProjectClick = () => {
-        const projectName = `${user.getName()}'s`
-        const newProject = Project.createEmptyProject(projectName)
+    const onNewProjectClick = async () => {
+        const projectName = `${user.getName()}'s ${faker.commerce.productName()}`
+
         api.projects.create({
-            userId: user.getId(),
-            name: newProject.getTitle(),
+            token: user.getTokenId(),
+            name: projectName,
         })
-            .then(() => {
+            .then(({ id, name }) => {
+                const newProject = Project.createEmptyProject(id, name)
                 projects.event$.next({
                     type: ProjectsMessageType.SET_PROJECT,
                     data: newProject.getProjectStructure()

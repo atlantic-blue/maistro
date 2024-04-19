@@ -301,7 +301,8 @@ export interface ProjectsState {
     user: User
     api: {
         projects: {
-            create: ({ userId, name }: { userId: string, name: string }) => Promise<void>
+            create: ({ token, name }: { token: string, name: string }) => Promise<{id: string, name: string}>
+            read: ({ token }: { token: string }) => Promise<Partial<ProjectStruct[]>> // TODO
         }
     }
 }

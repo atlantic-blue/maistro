@@ -1,5 +1,4 @@
 import * as path from 'path'
-import * as fs from "fs"
 
 import { Configuration } from 'webpack'
 
@@ -49,11 +48,13 @@ const createDefaultWebpackConfig = (): Configuration => {
     }
 }
 
+// TODO implement with fs.readdir
 const createMultipleWebpackConfigs = [
     "ping",
     "upload",
     "hosting-redirect",
     "projects-create",
+    "projects-read",
 ].map(api => {
 
     return ({

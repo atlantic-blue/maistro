@@ -31,8 +31,8 @@ resource "aws_dynamodb_table" "projects" {
   read_capacity  = 1 // TODO investigate limits
   write_capacity = 1
 
-  hash_key  = "id"
-  range_key = "userId"
+  hash_key  = "userId"
+  range_key = "id"
 
   attribute {
     name = "id"

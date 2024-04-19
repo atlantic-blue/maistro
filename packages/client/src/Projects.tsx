@@ -11,6 +11,7 @@ import { User } from "./Store/User";
 import { AuthContext } from "./Auth/AuthProvider";
 import { debounceTime } from "rxjs/operators";
 import { projectsCreate } from "./Api/Projects/projectsCreate";
+import { projectsRead } from "./Api/Projects/projectsRead";
 
 const projectsStore = new Projects()
 const user = new User()
@@ -20,7 +21,8 @@ export const ProjectsContext = React.createContext<ProjectsState>({
     user: user,
     api: {
         projects: {
-            create: () => Promise.resolve()
+            create: () => Promise.resolve({ id: "", name: "" }),
+            read: () => Promise.resolve([])
         }
     }
 })
@@ -34,18 +36,51 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
 }) => {
     const { user } = React.useContext(AuthContext)
     const [key, setKey] = React.useState("")
+    const api = {
+        projects: {
+            create: projectsCreate,
+            read: projectsRead,
+        }
+    }
 
     useEffect(() => {
-        Object.keys(ProjectsStorage.get()).map(projectKey => {
-            projectsStore.event$.next({
-                type: ProjectsMessageType.SET_PROJECT,
-                data: ProjectsStorage.get()[projectKey]
+        if (!user) {
+            return
+        }
+
+        // TODO enable offline mode
+        // Object.keys(ProjectsStorage.get()).map(projectKey => {
+        //     projectsStore.event$.next({
+        //         type: ProjectsMessageType.SET_PROJECT,
+        //         data: ProjectsStorage.get()[projectKey]
+        //     })
+        //     setKey(`${Date.now()}`)
+        // })
+
+        api.projects
+            .read({ token: user.getTokenId() })
+            .then(projects => {
+                projects.map(project => {
+                    try {
+                        const projectData = ProjectsStorage.get()[project.id]
+                        if (!projectData) {
+                            return
+                        }
+
+                        projectsStore.event$.next({
+                            type: ProjectsMessageType.SET_PROJECT,
+                            data: projectData
+                        })
+                        setKey(`${Date.now()}`) // force update
+                    } catch (error) {
+                        console.log(error)
+                    }
+                })
             })
-            setKey(`${Date.now()}`)
-        })
 
         const subscription = projectsStore.event$
             .pipe(
+                // debounceTime(1000 * 6 * 5), // SAVE EVERY 5 MINUTES
                 debounceTime(1000) // SAVE EVERY SECOND
             ).subscribe(() => {
                 const value = projectsStore.getProjectsStructure()
@@ -55,7 +90,7 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
         return () => {
             subscription.unsubscribe()
         }
-    }, [])
+    }, [user])
 
     return (
         <ProjectsContext.Provider
@@ -63,11 +98,7 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
             value={{
                 projects,
                 user,
-                api: {
-                    projects: {
-                        create: projectsCreate
-                    }
-                }
+                api,
             }}
         >
             <RouterProvider router={router} />

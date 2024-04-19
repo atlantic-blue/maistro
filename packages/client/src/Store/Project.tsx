@@ -1,4 +1,3 @@
-import * as uuid from "uuid"
 import { Subject, Subscription } from "rxjs"
 import { faker } from '@faker-js/faker';
 
@@ -264,10 +263,10 @@ export class Project implements IProject {
         this.fontScheme = fontScheme || defaultFontScheme
     }
 
-    static createEmptyProject(title: string) {
+    static createEmptyProject(id: string, title: string) {
         return new Project({
-            id: uuid.v4(),
-            title: `${title} ${faker.commerce.productName()}`,
+            id,
+            title,
             pages: {},
             assets: {},
             colourScheme: defaultColorScheme,

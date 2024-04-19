@@ -5,6 +5,7 @@ interface Env {
         upload: string
         projects: {
             create: string
+            read: string
         }
     }
     hosting: {
@@ -39,6 +40,7 @@ const createEnv = (): Env => {
             upload: `${apiBaseUrl}/upload`,
             projects: {
                 create: `${apiBaseUrl}/projects`,
+                read: `${apiBaseUrl}/projects`,
             }
         },
         hosting: {
