@@ -34,7 +34,7 @@ class LambdaMiddlewares {
         return this
     }
 
-    public handler(handler: APIGatewayProxyHandler) {
+    public handler(handler: APIGatewayProxyHandler | CloudFrontRequestHandler) {
         return async (
             rawEvent: APIGatewayProxyEvent,
             rawContext: Context,

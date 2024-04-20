@@ -6,12 +6,15 @@ import { ProjectsStorage } from "./Store/utils/Storage";
 import { Projects } from "./Store/Projects";
 import router from "./Routes/router";
 
-import "./Project.scss"
 import { User } from "./Store/User";
 import { AuthContext } from "./Auth/AuthProvider";
 import { debounceTime } from "rxjs/operators";
 import { projectsCreate } from "./Api/Projects/projectsCreate";
 import { projectsRead } from "./Api/Projects/projectsRead";
+import { projectsReadById } from "./Api/Projects/projectsReadById";
+
+import "./Project.scss"
+import { projectsUpdateById } from "./Api/Projects/projectsUpdateById";
 
 const projectsStore = new Projects()
 const user = new User()
@@ -22,7 +25,9 @@ export const ProjectsContext = React.createContext<ProjectsState>({
     api: {
         projects: {
             create: () => Promise.resolve({ id: "", name: "" }),
-            read: () => Promise.resolve([])
+            read: () => Promise.resolve([]),
+            readById: () => Promise.resolve({}),
+            updateById: () => Promise.resolve()
         }
     }
 })
@@ -36,10 +41,12 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
 }) => {
     const { user } = React.useContext(AuthContext)
     const [key, setKey] = React.useState("")
-    const api = {
+    const api: ProjectsState["api"] = {
         projects: {
             create: projectsCreate,
             read: projectsRead,
+            readById: projectsReadById,
+            updateById: projectsUpdateById,
         }
     }
 
@@ -71,7 +78,7 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
                             type: ProjectsMessageType.SET_PROJECT,
                             data: projectData
                         })
-                        setKey(`${Date.now()}`) // force update
+                        setKey(`${Date.now()}`) // TODO force update?
                     } catch (error) {
                         console.log(error)
                     }
@@ -80,7 +87,7 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
 
         const subscription = projectsStore.event$
             .pipe(
-                // debounceTime(1000 * 6 * 5), // SAVE EVERY 5 MINUTES
+                // debounceTime(1000 * 6 * 5), // TODO SAVE EVERY 5 MINUTES?
                 debounceTime(1000) // SAVE EVERY SECOND
             ).subscribe(() => {
                 const value = projectsStore.getProjectsStructure()

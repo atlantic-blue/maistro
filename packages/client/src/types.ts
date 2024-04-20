@@ -34,7 +34,8 @@ export interface ProjectAssetStruct {
 
 export interface ProjectStruct {
     id: string
-    title: string
+    name: string
+    url: string
     pages: Record<string, PageStruct>
     assets: Record<string, ProjectAssetStruct>
     colourScheme: ColourScheme
@@ -243,7 +244,8 @@ export type ProjectAssetEvent = {
 }
 
 export enum ProjectMessageType {
-    SET_TITLE = "SET_TITLE",
+    SET_NAME = "SET_NAME",
+    SET_URL = "SET_URL",
 
     SET_PAGE = "SET_PAGE",
     READ_PAGE = "READ_PAGE", // TODO do we need this?
@@ -278,7 +280,10 @@ export type ProjectEvent = {
     type: ProjectMessageType.SET_FONT_SCHEME
     data: FontScheme
 } | {
-    type: ProjectMessageType.SET_TITLE
+    type: ProjectMessageType.SET_NAME
+    data: string
+} | {
+    type: ProjectMessageType.SET_URL
     data: string
 }
 
@@ -301,8 +306,10 @@ export interface ProjectsState {
     user: User
     api: {
         projects: {
-            create: ({ token, name }: { token: string, name: string }) => Promise<{id: string, name: string}>
-            read: ({ token }: { token: string }) => Promise<Partial<ProjectStruct[]>> // TODO
+            create: ({ token, name }: { token: string, name: string }) => Promise<{ id: string, name: string }>
+            read: ({ token }: { token: string }) => Promise<Partial<ProjectStruct[]>>
+            readById: ({ projectId, token }: { projectId: string, token: string }) => Promise<Partial<ProjectStruct>>
+            updateById: ({ projectId, token, name, url }: { projectId: string, token: string, name: string, url: string }) => Promise<void>
         }
     }
 }

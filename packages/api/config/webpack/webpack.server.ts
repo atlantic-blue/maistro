@@ -55,6 +55,8 @@ const createMultipleWebpackConfigs = [
     "hosting-redirect",
     "projects-create",
     "projects-read",
+    "projects-read-by-id",
+    "projects-update-by-id",
 ].map(api => {
 
     return ({

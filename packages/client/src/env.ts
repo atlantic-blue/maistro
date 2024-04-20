@@ -6,6 +6,7 @@ interface Env {
         projects: {
             create: string
             read: string
+            update: string
         }
     }
     hosting: {
@@ -41,6 +42,7 @@ const createEnv = (): Env => {
             projects: {
                 create: `${apiBaseUrl}/projects`,
                 read: `${apiBaseUrl}/projects`,
+                update: `${apiBaseUrl}/projects`,
             }
         },
         hosting: {

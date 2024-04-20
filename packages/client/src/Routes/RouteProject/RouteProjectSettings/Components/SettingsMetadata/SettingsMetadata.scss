@@ -1,8 +1,21 @@
-.content {}
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.section {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
 
 .input {
     border-radius: 5px;
     width: 300px;
+    border-color: white;
+    height: 23px;
 }
 
 .textarea {
@@ -16,5 +29,6 @@
 .title {
     font-size: 14px;
     font-weight: 600;
-    margin: 5px 0;
+    margin: 5px 5px 5px 0;
+    min-width: 100px;
 }

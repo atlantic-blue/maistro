@@ -43,6 +43,20 @@ resource "aws_dynamodb_table" "projects" {
     name = "userId"
     type = "S"
   }
+
+ attribute {
+    name = "url"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name               = "UrlIndex"
+    hash_key           = "url"
+    projection_type    = "INCLUDE"
+    non_key_attributes = ["userId", "id"]
+    read_capacity      = 1
+    write_capacity     = 1
+  }
 }
 
 resource "aws_dynamodb_table" "pages" {

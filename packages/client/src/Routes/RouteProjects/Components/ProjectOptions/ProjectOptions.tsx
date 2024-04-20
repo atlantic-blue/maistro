@@ -15,7 +15,7 @@ const ProjectOptions: React.FC<ProjectOptionsProps> = ({ project }) => {
                 <div
                     className={styles.title}
                 >
-                    {project.getTitle()}
+                    {project.getName()}
                 </div>
             </div>
 

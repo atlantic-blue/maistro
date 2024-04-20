@@ -3,6 +3,9 @@ import React, { useEffect } from "react"
 import { Project } from "../../../../../Store/Project"
 import { ProjectMessageType } from "../../../../../types"
 
+import Button from "../../../../../Components/Gallery/Components/Button/Button"
+import { ProjectsContext } from "../../../../../Projects"
+
 import * as styles from "./SettingsMetadata.scss"
 
 interface SettingsMetadataProps {
@@ -10,20 +13,50 @@ interface SettingsMetadataProps {
     isDisabled?: boolean
 }
 
+const HOSTING_DOMAIN = ".hosting.maistro.website"
+
 const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled }) => {
-    const [title, setTitle] = React.useState(project.getTitle())
+    const { api, user } = React.useContext(ProjectsContext)
+    const [name, setName] = React.useState(project.getName())
+    const [projectUrl, setProjectURl] = React.useState(project.getUrl())
 
     useEffect(() => {
         project.event$.next({
-            type: ProjectMessageType.SET_TITLE,
-            data: title
+            type: ProjectMessageType.SET_NAME,
+            data: name
         })
-    }, [title])
+    }, [name])
 
+    useEffect(() => {
+        project.event$.next({
+            type: ProjectMessageType.SET_URL,
+            data: projectUrl
+        })
+    }, [projectUrl])
+
+    const isValidDomain = (url: string) => {
+        const domainRegex = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (domainRegex.test(url)) {
+            return true
+        }
+
+        return false
+    }
+
+    const onClick = async () => {
+        await api.projects.updateById({
+            token: user.getTokenId(),
+            projectId: project.getId(),
+            name: name,
+            url: isValidDomain(projectUrl) ? projectUrl : `${projectUrl}${HOSTING_DOMAIN}`
+        })
+        // TODO show success 
+    }
 
     return (
-        <div>
-            <div>
+        <div className={styles.content}>
+            <div className={styles.section}>
                 <div
                     className={styles.title}
                 >
@@ -31,13 +64,14 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
                 </div>
                 <input
                     type="text"
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
+                    value={name}
+                    onChange={e => setName(e.target.value)}
                     disabled={isDisabled}
                     className={styles.input}
                 />
             </div>
-            <div>
+
+            <div className={styles.section}>
                 <div
                     className={styles.title}
                 >
@@ -46,17 +80,23 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
                 <div>
                     <input
                         type="text"
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
+                        value={projectUrl}
+                        onChange={e => setProjectURl(e.target.value)}
                         disabled={isDisabled}
                         className={styles.input}
                     />
-                    <span>
-                        hosting.maistro.website
-                    </span>
-                </div>
+                    {!isValidDomain(projectUrl) && (
+                        <span>
+                            {HOSTING_DOMAIN}
+                        </span>
+                    )}
 
+                </div>
             </div>
+
+            <Button onClick={onClick}>
+                Update
+            </Button>
         </div>
     )
 }

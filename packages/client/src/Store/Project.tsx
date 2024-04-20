@@ -20,8 +20,11 @@ interface IProject {
     setId(id: string): void
     getId(): string
 
-    setTitle(title: string): void
-    getTitle(): string
+    setName(name: string): void
+    getName(): string
+
+    setUrl(url: string): void
+    getUrl(): string
 
     setPage(id: string, page: PageStruct): void
     getPageById(id: string): Page
@@ -43,7 +46,8 @@ interface IProject {
 
 export class Project implements IProject {
     private id = `${Date.now()}`
-    private title = `Untitled-${faker.animal.bird().replace(" ", "-")}`
+    private name = `Untitled-${faker.animal.bird().replace(" ", "-")}`
+    private url = ""
     private pages: Record<string, Page> = {}
     private subscriptions: Subscription[] = []
     private colourScheme: ColourScheme = defaultColorScheme
@@ -87,8 +91,12 @@ export class Project implements IProject {
                 this.setFontScheme(event.data)
             }
 
-            if (event.type === ProjectMessageType.SET_TITLE) {
-                this.setTitle(event.data)
+            if (event.type === ProjectMessageType.SET_NAME) {
+                this.setName(event.data)
+            }
+
+            if (event.type === ProjectMessageType.SET_URL) {
+                this.setUrl(event.data)
             }
         })
     }
@@ -100,7 +108,8 @@ export class Project implements IProject {
     public getProjectStructure(): ProjectStruct {
         return {
             id: this.getId(),
-            title: this.getTitle(),
+            name: this.getName(),
+            url: this.getUrl(),
             fontScheme: this.getFontScheme(),
             colourScheme: this.getColourScheme(),
             pages: Object.keys(this.getPages())
@@ -122,9 +131,10 @@ export class Project implements IProject {
 
     public setProject = (projectStruct: ProjectStruct) => {
         this.setId(projectStruct.id)
-        this.setTitle(projectStruct.title)
+        this.setName(projectStruct.name)
         this.setColourScheme(projectStruct.colourScheme)
         this.setFontScheme(projectStruct.fontScheme)
+        this.setUrl(projectStruct.url)
 
         Object.keys(projectStruct.assets || {}).map(asset => {
             const assetStruct = projectStruct.assets[asset]
@@ -239,12 +249,20 @@ export class Project implements IProject {
         this.id = id
     }
 
-    getTitle(): string {
-        return this.title
+    getName(): string {
+        return this.name
     }
 
-    setTitle(title: string) {
-        this.title = title
+    setName(name: string) {
+        this.name = name
+    }
+
+    getUrl(): string {
+        return this.url
+    }
+
+    setUrl(url: string) {
+        this.url = url
     }
 
     getColourScheme(): ColourScheme {
@@ -266,7 +284,8 @@ export class Project implements IProject {
     static createEmptyProject(id: string, title: string) {
         return new Project({
             id,
-            title,
+            name: title,
+            url: "",
             pages: {},
             assets: {},
             colourScheme: defaultColorScheme,

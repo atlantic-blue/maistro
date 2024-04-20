@@ -33,7 +33,7 @@ resource "aws_cloudfront_distribution" "hosting" {
     lambda_function_association {
       event_type   = "viewer-request"
       include_body = false
-      lambda_arn   = aws_lambda_function.hosting_lambda_redirect.qualified_arn
+      lambda_arn   = aws_lambda_function.hosting_redirect.qualified_arn
     }
 
     viewer_protocol_policy = "redirect-to-https"

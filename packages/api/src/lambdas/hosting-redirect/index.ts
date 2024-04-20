@@ -1,29 +1,75 @@
 import AWS from 'aws-sdk';
 import { CloudFrontRequestHandler } from 'aws-lambda';
 
-const dynamoDB = new AWS.DynamoDB.DocumentClient();
+import { LambdaMiddlewares } from '../../middlewares';
 
-// Assuming you have a way to map from the domain (user-url) to user-id and project-id
-// This could be a database lookup or a configuration file; here we use a simple mapping
-const userMapping: { [key: string]: { userId: string, projectId: string } } = {
-    'test.hosting.maistro.website': { userId: '94080448-6071-707d-f507-e1dfd884d58f', projectId: '82adbd9c-d90c-491f-8ed7-2bb91e46afb1' }
-};
+/**
+    TODO remove or write about this HACK!
+    lambda at edge doesn't allow env variables,
+    we then transpile the env value at build time
+    tf: TABLE_NAME = aws_dynamodb_table.projects.name
+    in the lambda : const tableName = '${TABLE_NAME}'
+ */
+const tableName = '${TABLE_NAME}'
+AWS.config.update({ region: '${TABLE_REGION}' });
 
-const handler: CloudFrontRequestHandler = async (event) => {
+const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+const hostingRedirect: CloudFrontRequestHandler = async (event) => {
     const request = event.Records[0].cf.request;
     const hostHeader = request.headers.host[0].value;
-    const uri = request.uri;
 
-    // Check if the host header is in the userMapping
-    if (userMapping.hasOwnProperty(hostHeader)) {
-        const { userId, projectId } = userMapping[hostHeader];
-        // Rewrite the URI to include the userId and projectId
-        request.uri = `/${userId}/${projectId}${uri}`;
+    if (!tableName) {
+        console.log("process TABLE_NAME not specified")
+        return request;
     }
 
-    console.log(event, request, request.uri)
-    // Continue with the original request if no mapping exists
+    const params: AWS.DynamoDB.DocumentClient.QueryInput = {
+        TableName: tableName,
+        IndexName: "UrlIndex",
+        KeyConditionExpression: "#url = :urlValue",
+        ExpressionAttributeNames: {
+            "#url": "url"
+        },
+        ExpressionAttributeValues: {
+            ":urlValue": hostHeader // e.g test.hosting.maistro.website
+        }
+    };
+
+    const data = await dynamoDb.query(params).promise();
+    if (!data.Items || data.Items.length === 0) {
+        // Continue with the original request if no mapping exists
+        console.log("URL NOT FOUND", { hostHeader })
+        return request;
+    }
+
+    if (data.Items.length > 1) {
+        /**
+         * Multiple Urls associated with a project
+         * TODO:
+         * - flag and resolve biz error
+         */
+        console.log("There are multiple Urls associated with a project", { hostHeader })
+        return request
+    }
+
+    const { userId, id } = data.Items[0];
+    if (!userId) {
+        console.log("userId not found", JSON.stringify(data))
+        return request
+    }
+
+    if (!id) {
+        console.log("project id not found", JSON.stringify(data))
+        return request
+    }
+
+    const uri = `/${userId}/${id}${request.uri}`
+    request.uri = uri;
     return request;
 };
+
+const handler = new LambdaMiddlewares()
+    .handler(hostingRedirect)
 
 export { handler }

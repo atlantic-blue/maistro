@@ -11,6 +11,7 @@ resource "aws_apigatewayv2_api" "api" {
       "OPTIONS",
       "GET",
       "POST",
+      "PATCH"
     ]
     allow_headers = [
       "Content-Type",

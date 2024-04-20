@@ -1,22 +1,14 @@
-import Joi from "joi"
 import AWS from 'aws-sdk';
 import jwt from "jsonwebtoken"
-import * as uuid from "uuid"
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
-import jsonBodyParser from '../../middlewares/json-body-parser';
 import { LambdaMiddlewares } from '../../middlewares';
-import { validatorJoi } from '../../middlewares/validator-joi';
 import createError from '../../middlewares/error-handler';
-import authJwt from "../../middlewares/auth-jwt";
-
-interface ProjectsCreateInput {
-    name: string
-}
+import authJwt from '../../middlewares/auth-jwt';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const projectsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
+const projectsReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableName = process.env.TABLE_NAME
     if (!tableName) {
         throw createError(500, "process TABLE_NAME not specified")
@@ -28,34 +20,37 @@ const projectsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         throw createError(500, "userId not specified")
     }
 
-    const id = uuid.v4()
-    const { name } = event.body as unknown as ProjectsCreateInput;
+    const projectId = event.pathParameters && event.pathParameters['project-id']
+    if (!projectId) {
+        throw createError(500, "projectId not specified")
+    }
 
-    const params = {
+    const params: AWS.DynamoDB.DocumentClient.GetItemInput = {
         TableName: tableName,
-        Item: {
-            id,
+        Key: {
             userId,
-            name,
+            id: projectId
         }
     };
 
-    await dynamoDb.put(params).promise();
+    const data = await dynamoDb.get(params).promise()
+
+    if (!data || !data.Item) {
+        return {
+            statusCode: 404,
+            body: JSON.stringify({ message: `projectId ${projectId} not found` })
+        };
+    }
 
     return {
         statusCode: 200,
-        body: JSON.stringify({ id, name })
+        body: JSON.stringify(data.Item)
     };
 };
 
-const validationSchema = Joi.object<ProjectsCreateInput>({
-    name: Joi.string().required(),
-})
 
 const handler = new LambdaMiddlewares()
     .before(authJwt)
-    .before(jsonBodyParser)
-    .before(validatorJoi(validationSchema))
-    .handler(projectsCreate)
+    .handler(projectsReadById)
 
 export { handler }
