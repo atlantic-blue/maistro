@@ -6,7 +6,7 @@ import { AuthContext } from "../../Auth/AuthProvider";
 import { appRoutes } from "../router";
 import SectionHeroBasic from "../../Components/Gallery/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
 
-const RoutesLogout: React.FC = () => {
+const RouteLogout: React.FC = () => {
     const navigate = useNavigate();
     const { logOut } = React.useContext(AuthContext);
 
@@ -45,4 +45,4 @@ const RoutesLogout: React.FC = () => {
     );
 };
 
-export default RoutesLogout
+export default RouteLogout

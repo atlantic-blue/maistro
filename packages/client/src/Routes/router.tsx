@@ -3,21 +3,21 @@ import {
     createBrowserRouter,
 } from "react-router-dom";
 
-import RoutesHome from "./RouteHome/Home";
-import RoutesProjects from "./RouteProjects/Projects";
+import RoutesHome from "./RouteHome/RouteHome";
+import RoutesProjects from "./RouteProjects/RouteProjects";
 
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import RedirectRoute from "./Components/RedirectRoute/RedirectRoute";
-import RoutesProjectSettings from "./RouteProject/RouteSettings/Settings";
-import RoutesProjectTemplates from "./RouteProject/RouteTemplates/Templates";
-import RoutesProjectEdit from "./RouteProject/RouteEdit/Edit";
-import RoutesProjectEditPage from "./RouteProject/RouteEditPage/EditPage";
-import RoutesProjectPreview from "./RouteProject/RoutePreview/Preview";
-import RoutesProjectPreviewPage from "./RouteProject/RoutePreviewPage/PreviewPage";
-import RoutesLogin from "./RouteLogin/RoutesLogin";
-import RoutesLogout from "./RouteLogout/RoutesLogout";
-import RoutesSettings from "./RouteSettings/Settings";
-import RoutesCallback from "./RoutesCallback/Callback";
+import RouteProjectSettings from "./RouteProject/RouteProjectSettings/RouteProjectSettings";
+import RouteProjectTemplates from "./RouteProject/RouteProjectTemplates/RouteProjectTemplates";
+import RouteProjectEdit from "./RouteProject/RouteProjectEdit/RouteProjectEdit";
+import RouteProjectEditPage from "./RouteProject/RouteProjectEditPage/RouteProjectEditPage";
+import RouteProjectPreview from "./RouteProject/RouteProjectPreview/RouteProjectPreview";
+import RouteProjectPreviewPage from "./RouteProject/RouteProjectPreviewPage/RouteProjectPreviewPage";
+import RouteLogin from "./RouteLogin/RouteLogin";
+import RouteLogout from "./RouteLogout/RouteLogout";
+import RouteSettings from "./RouteSettings/RouteSettings";
+import RouteCallback from "./RoutesCallback/RoutesCallback";
 
 export enum RoutesParams {
     PROJECT_ID = ":projectId",
@@ -104,19 +104,19 @@ const router = createBrowserRouter([
         path: Routes.AUTHZ_LOGIN,
         element: (
             <RedirectRoute navigateTo={appRoutes.getProjectsRoute()}>
-                <RoutesLogin />
+                <RouteLogin />
             </RedirectRoute>
         ),
     },
     {
         path: Routes.AUTHZ_LOGOUT,
-        element: <RoutesLogout />,
+        element: <RouteLogout />,
     },
     {
         path: Routes.AUTHZ_CALLBACK,
         element: (
             <RedirectRoute navigateTo={appRoutes.getProjectsRoute()}>
-                <RoutesCallback />
+                <RouteCallback />
             </RedirectRoute>
         ),
     },
@@ -124,7 +124,7 @@ const router = createBrowserRouter([
         path: Routes.SETTINGS,
         element: (
             <ProtectedRoute>
-                <RoutesSettings />
+                <RouteSettings />
             </ProtectedRoute>
         ),
     },
@@ -140,7 +140,7 @@ const router = createBrowserRouter([
         path: Routes.PROJECT_SETTINGS,
         element: (
             <ProtectedRoute>
-                <RoutesProjectSettings />,
+                <RouteProjectSettings />,
             </ProtectedRoute>
         ),
     },
@@ -148,7 +148,7 @@ const router = createBrowserRouter([
         path: Routes.PROJECT_TEMPLATES,
         element: (
             <ProtectedRoute>
-                <RoutesProjectTemplates />,
+                <RouteProjectTemplates />,
             </ProtectedRoute>
         ),
     },
@@ -156,7 +156,7 @@ const router = createBrowserRouter([
         path: Routes.PROJECT_EDIT,
         element: (
             <ProtectedRoute>
-                <RoutesProjectEdit />,
+                <RouteProjectEdit />,
             </ProtectedRoute>
         ),
     },
@@ -164,7 +164,7 @@ const router = createBrowserRouter([
         path: Routes.PROJECT_EDIT_PAGE,
         element: (
             <ProtectedRoute>
-                <RoutesProjectEditPage />
+                <RouteProjectEditPage />
             </ProtectedRoute>
         ),
     },
@@ -172,7 +172,7 @@ const router = createBrowserRouter([
         path: Routes.PROJECT_PREVIEW,
         element: (
             <ProtectedRoute>
-                <RoutesProjectPreview />
+                <RouteProjectPreview />
             </ProtectedRoute>
         ),
     },
@@ -180,7 +180,7 @@ const router = createBrowserRouter([
         path: Routes.PROJECT_PREVIEW_PAGE,
         element: (
             <ProtectedRoute>
-                <RoutesProjectPreviewPage />
+                <RouteProjectPreviewPage />
             </ProtectedRoute>
         ),
     },

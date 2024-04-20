@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useParams } from 'react-router-dom';
 import * as uuid from "uuid"
 
@@ -13,16 +13,20 @@ import { ProjectsContext } from "../../../Projects";
 
 import EditMenu from "./Components/EditMenu/EditMenu";
 
-import * as styles from "./Edit.scss"
+import * as styles from "./RouteProjectEditPage.scss"
 
-const RoutesEditPage: React.FC = () => {
-    const { projects } = React.useContext(ProjectsContext)
+const RouteProjectEditPage: React.FC = () => {
+    const { projects, api, user } = React.useContext(ProjectsContext)
     const { projectId, pageId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
-    if (!project) {
+    if (!project || !projectId) {
         return
     }
+
+    useEffect(() => {
+        api.projects.readById({ token: user.getTokenId(), projectId }).then(console.log)
+    }, [])
 
     const page = project.getPageById(pageId || "")
 
@@ -72,4 +76,4 @@ const RoutesEditPage: React.FC = () => {
     )
 }
 
-export default RoutesEditPage
+export default RouteProjectEditPage

@@ -9,11 +9,12 @@ import Helmet from "../Components/Helmet/Helmet"
 
 import TemplateView from "../../../Components/TemplateView/TemplateView";
 import Page from "../../../Store/Page";
-import Metadata from "../RouteEdit/Components/Metadata/Metadata";
+import Metadata from "../RouteProjectEdit/Components/Metadata/Metadata";
 import RouteProjectHeader from "../Components/Header/Header";
-import * as styles from "./Preview.scss"
 
-const RoutesPreview: React.FC = () => {
+import * as styles from "./RouteProjectPreview.scss"
+
+const RouteProjectPreview: React.FC = () => {
     const navigate = useNavigate();
     const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
@@ -81,4 +82,4 @@ const RoutesPreview: React.FC = () => {
     )
 }
 
-export default RoutesPreview
+export default RouteProjectPreview

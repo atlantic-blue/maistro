@@ -1,13 +1,14 @@
 import React from "react"
 import { useQuery } from "react-query"
+import classNames from "classnames"
 
 import { Project } from "../../../../../Store/Project"
 
 import { postProject } from "../../../../../Api/Project/postProject"
 
-import * as styles from "./SubmitProject.scss"
 import env from "../../../../../env"
-import classNames from "classnames"
+
+import * as styles from "./SubmitProject.scss"
 
 interface SubmitProjectProps {
     project: Project,

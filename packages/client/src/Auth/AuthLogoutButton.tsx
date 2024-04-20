@@ -1,9 +1,9 @@
 import React from "react";
-
-import Button from "../Gallery/Components/Button/Button";
-import { AuthContext } from "../../Auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import { appRoutes } from "../../Routes/router";
+
+import Button from "../Components/Gallery/Components/Button/Button";
+import { AuthContext } from "./AuthProvider";
+import { appRoutes } from "../Routes/router";
 
 import * as styles from "./AuthLogoutButton.scss"
 

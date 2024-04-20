@@ -14,7 +14,7 @@ import { appRoutes } from "../router"
 import ProjectOptions from "./Components/ProjectOptions/ProjectOptions"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
-import * as styles from "./Projects.scss"
+import * as styles from "./RouteProjects.scss"
 
 const RoutesProjects: React.FC = () => {
     const { projects, user, api } = React.useContext(ProjectsContext)

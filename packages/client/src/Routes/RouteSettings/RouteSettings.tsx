@@ -3,10 +3,10 @@ import React from "react"
 import { ProjectsContext } from "../../Projects"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
-import AuthLogoutButton from "../../Components/Auth/AuthLogoutButton"
+import AuthLogoutButton from "../../Auth/AuthLogoutButton"
 import PaymentsRedirect from "../../Payments/Payments"
 
-import * as styles from "./Settings.scss"
+import * as styles from "./RouteSettings.scss"
 
 const RoutesSettings: React.FC = () => {
     const { user } = React.useContext(ProjectsContext)

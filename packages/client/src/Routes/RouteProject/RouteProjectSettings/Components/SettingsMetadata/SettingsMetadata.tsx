@@ -37,6 +37,26 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
                     className={styles.input}
                 />
             </div>
+            <div>
+                <div
+                    className={styles.title}
+                >
+                    Project URL
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
+                        disabled={isDisabled}
+                        className={styles.input}
+                    />
+                    <span>
+                        hosting.maistro.website
+                    </span>
+                </div>
+
+            </div>
         </div>
     )
 }

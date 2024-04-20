@@ -13,10 +13,10 @@ import Helmet from "../Components/Helmet/Helmet"
 import Metadata from "./Components/Metadata/Metadata";
 import IconBin from "../../../Components/Icons/Bin/Bin";
 
-import * as styles from "./Edit.scss"
+import * as styles from "./RouteProjectEdit.scss"
 import RouteProjectHeader from "../Components/Header/Header";
 
-const PageEdit: React.FC = () => {
+const RouteProjectEdit: React.FC = () => {
     const [key, setKey] = React.useState("")
     const navigate = useNavigate();
 
@@ -97,4 +97,4 @@ const PageEdit: React.FC = () => {
     )
 }
 
-export default PageEdit
+export default RouteProjectEdit

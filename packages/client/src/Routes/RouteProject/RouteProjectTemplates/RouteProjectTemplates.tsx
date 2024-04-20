@@ -8,11 +8,11 @@ import { CreateTemplateNew } from "../../../Templates/TemplateNew";
 import { PageStruct, ProjectMessageType } from "../../../types";
 import { ProjectsContext } from "../../../Projects";
 
-import * as styles from "./Templates.scss"
 import { appRoutes } from "../../router";
 import RouteProjectHeader from "../Components/Header/Header";
+import * as styles from "./RouteProjectTemplates.scss"
 
-const RouteGallery: React.FC = () => {
+const RouteProjectTemplates: React.FC = () => {
     const navigate = useNavigate();
     const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
@@ -74,4 +74,4 @@ const RouteGallery: React.FC = () => {
     );
 };
 
-export default RouteGallery
+export default RouteProjectTemplates

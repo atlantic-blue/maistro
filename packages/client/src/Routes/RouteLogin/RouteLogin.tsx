@@ -6,7 +6,7 @@ import SectionAboutUsSimple from "../../Components/Gallery/Section/SectionAboutU
 import FooterSimple from "../../Components/Gallery/Footer/FooterSimple/FooterSimple";
 import { AuthContext } from "../../Auth/AuthProvider";
 
-const RoutesLogin: React.FC = () => {
+const RouteLogin: React.FC = () => {
     const { logIn } = React.useContext(AuthContext)
 
     return (
@@ -34,4 +34,4 @@ const RoutesLogin: React.FC = () => {
     );
 };
 
-export default RoutesLogin
+export default RouteLogin

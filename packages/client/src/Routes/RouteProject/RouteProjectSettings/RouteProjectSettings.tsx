@@ -14,10 +14,10 @@ import { appRoutes } from "../../router";
 
 import SubmitProject from "./Components/SubmitProject/SubmitProject";
 
-import * as styles from "./Settings.scss"
+import * as styles from "./RouteProjectSettings.scss"
 import RouteProjectHeader from "../Components/Header/Header";
 
-const PageSettings: React.FC<PageSettingsProps> = () => {
+const RouteProjectSettings: React.FC = () => {
     const navigate = useNavigate();
 
     const { projects, user } = React.useContext(ProjectsContext)
@@ -99,4 +99,4 @@ const PageSettings: React.FC<PageSettingsProps> = () => {
     )
 }
 
-export default PageSettings
+export default RouteProjectSettings

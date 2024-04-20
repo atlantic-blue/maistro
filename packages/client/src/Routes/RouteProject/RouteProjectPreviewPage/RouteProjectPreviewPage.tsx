@@ -4,9 +4,9 @@ import { useParams } from "react-router-dom";
 import Helmet from "../Components/Helmet/Helmet"
 import { ProjectsContext } from "../../../Projects";
 
-import * as styles from "./PreviewPage.scss"
+import * as styles from "./RouteProjectPreviewPage.scss"
 
-const RoutesPreviewPage: React.FC = () => {
+const RouteProjectPreviewPage: React.FC = () => {
     const { projects } = React.useContext(ProjectsContext)
     const { projectId, pagePathname } = useParams()
 
@@ -33,4 +33,4 @@ const RoutesPreviewPage: React.FC = () => {
     )
 }
 
-export default RoutesPreviewPage
+export default RouteProjectPreviewPage

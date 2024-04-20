@@ -1,7 +1,7 @@
 import React from "react";
 
-import Button from "../Gallery/Components/Button/Button";
-import { AuthContext } from "../../Auth/AuthProvider";
+import { AuthContext } from "./AuthProvider";
+import Button from "../Components/Gallery/Components/Button/Button";
 
 const AuthLoginButton = () => {
     const { logIn, isAuthenticated } = React.useContext(AuthContext)
