@@ -17,6 +17,7 @@ import PageContent from "./PageContent";
 import Html from "../Components/Html/Html";
 import { getFontFamilyHref } from "../Components/FontScheme/FontScheme";
 import { resetCss } from "./utils/cssStyles";
+import { withExtension } from "../Utils/url";
 
 interface IPage {
     getHtml(): React.ReactNode
@@ -221,11 +222,11 @@ class PageStore implements IPage {
     }
 
     public getPath(): string {
-        return this.path
+        return withExtension(this.path, ".html")
     }
 
     public setPath(path: string) {
-        this.path = path.replace("/", "").replace(" ", "-")
+        this.path = withExtension(path.replace("/", "").replace(" ", "-"), ".html")
     }
 
     // HTML PAGE
@@ -293,7 +294,7 @@ class PageStore implements IPage {
                 <head>
                     <meta charSet="UTF-8" />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                    <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
 
                     <title>{this.getTitle()}</title>
                     <link rel="icon" type="image/x-icon" href="/TODO/favicon.png"></link>

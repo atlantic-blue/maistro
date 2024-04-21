@@ -15,7 +15,7 @@ export const CreateTemplateLogin = (): PageStruct[] => {
             id: uuid.v4(),
             title: "Login",
             description: "Login Page",
-            path: `/${faker.word.adjective()}`,
+            path: `/index.html`,
             contentActive: null,
             content: [
                 {

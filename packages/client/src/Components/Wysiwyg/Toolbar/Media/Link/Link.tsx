@@ -7,22 +7,8 @@ import { Command } from '../../../Wysiwyg.types';
 
 import * as styles from "../Media.scss"
 import * as wysiwygStyles from "../../../Wysiwyg.scss"
-
-const sanitizeHref = (url: string) => {
-    try {
-        const parsedUrl = new URL(url, window.location.href);
-        const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:'];
-
-        if (!allowedProtocols.includes(parsedUrl.protocol)) {
-            return ""
-        }
-
-        return parsedUrl.href;
-    } catch (error) {
-        // TODO app level message invalid URL
-        return '';
-    }
-}
+import { sanitizeHref } from '../../../../../Utils/url';
+import { ProjectsContext } from '../../../../../Projects';
 
 interface ToolbarLinkProps {
     editorRef: React.MutableRefObject<HTMLDivElement | null>
@@ -79,7 +65,7 @@ const ToolbarLink: React.FC<ToolbarLinkProps> = (props) => {
     };
 
     const onHrefInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-        const href = sanitizeHref(e.target.value)
+        const href = e.target.value
         if (currentLink) {
             currentLink!.href = href
         } else {

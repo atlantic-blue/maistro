@@ -2,30 +2,34 @@ import env from "../../env"
 
 interface ProjectsCreateInput {
     name: string
+    url: string
     token: string
 }
 
 interface ProjectsCreateOutput {
     id: string
+    url: string
     name: string
 }
 
 const projectsCreate = async (
     {
         token,
-        name
+        name,
+        url,
     }: ProjectsCreateInput,
-    url = env.api.projects.create,
+    apiUrl = env.api.projects.create,
     request = fetch,
 ): Promise<ProjectsCreateOutput> => {
-    return request(url, {
+    return request(apiUrl, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
-            name
+            name,
+            url
         })
     }).then(response => response.json())
 }

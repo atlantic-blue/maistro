@@ -84,7 +84,7 @@ const RouteProjectEdit: React.FC = () => {
                                 </TemplateView>
                             </div>
                             <div className={styles.pageContent}>
-                                <Metadata page={page} />
+                                <Metadata page={page} project={project} />
                             </div>
                             <button className={styles.button} onClick={() => onPageDelete(page)}>
                                 <IconBin className={styles.buttonIcon} />

@@ -12,6 +12,7 @@ import authJwt from "../../middlewares/auth-jwt";
 
 interface ProjectsCreateInput {
     name: string
+    url: string
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -29,7 +30,7 @@ const projectsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     }
 
     const id = uuid.v4()
-    const { name } = event.body as unknown as ProjectsCreateInput;
+    const { name, url } = event.body as unknown as ProjectsCreateInput;
 
     const params = {
         TableName: tableName,
@@ -37,6 +38,7 @@ const projectsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             id,
             userId,
             name,
+            url,
         }
     };
 
@@ -44,12 +46,13 @@ const projectsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
     return {
         statusCode: 200,
-        body: JSON.stringify({ id, name })
+        body: JSON.stringify({ id, name, url })
     };
 };
 
 const validationSchema = Joi.object<ProjectsCreateInput>({
     name: Joi.string().required(),
+    url: Joi.string().required(),
 })
 
 const handler = new LambdaMiddlewares()

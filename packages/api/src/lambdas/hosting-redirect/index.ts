@@ -64,7 +64,23 @@ const hostingRedirect: CloudFrontRequestHandler = async (event) => {
         return request
     }
 
-    const uri = `/${userId}/${id}${request.uri}`
+    /**
+     * CUSTOM ROUTING
+     * 1. redirect root to index.html
+     * 2. redirect home to index.html
+     * 3. redirect routes without an extension to {route}.html
+     *      e.g about => about.html
+     */
+    let path = request.uri
+    if (path === "/" || path === "/home") {
+        path = "/index.html"
+    }
+
+    if (!/\.\w+$/.test(path)) {
+        path += '.html';
+    }
+
+    const uri = `/${userId}/${id}${path}`
     request.uri = uri;
     return request;
 };

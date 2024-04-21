@@ -306,7 +306,7 @@ export interface ProjectsState {
     user: User
     api: {
         projects: {
-            create: ({ token, name }: { token: string, name: string }) => Promise<{ id: string, name: string }>
+            create: ({ token, name, url }: { token: string, name: string, url: string }) => Promise<{ id: string, name: string, url: string }>
             read: ({ token }: { token: string }) => Promise<Partial<ProjectStruct[]>>
             readById: ({ projectId, token }: { projectId: string, token: string }) => Promise<Partial<ProjectStruct>>
             updateById: ({ projectId, token, name, url }: { projectId: string, token: string, name: string, url: string }) => Promise<void>,

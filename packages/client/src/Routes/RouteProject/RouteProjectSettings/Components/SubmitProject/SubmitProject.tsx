@@ -6,9 +6,8 @@ import { Project } from "../../../../../Store/Project"
 
 import { postProject } from "../../../../../Api/Project/postProject"
 
-import env from "../../../../../env"
-
 import * as styles from "./SubmitProject.scss"
+import { withHttps } from "../../../../../Utils/url"
 
 interface SubmitProjectProps {
     project: Project,
@@ -35,13 +34,8 @@ const SubmitProject: React.FC<SubmitProjectProps> = ({
 
     const onPublish = () => {
         refetch()
-            .then(response => {
-                if (!response.data) {
-                    // TODO app level message
-                    return
-                }
-                // TODO needs a link to the index.html of that project instead
-                setViewLink(`${env.hosting.baseUrl}/${response.data[0].key}`)
+            .then(() => {
+                setViewLink(project.getUrl())
             })
     }
 
@@ -50,7 +44,7 @@ const SubmitProject: React.FC<SubmitProjectProps> = ({
             return
         }
 
-        window.open(viewLink, "_blank");
+        window.open(withHttps(viewLink), "_blank");
     }
 
     return (

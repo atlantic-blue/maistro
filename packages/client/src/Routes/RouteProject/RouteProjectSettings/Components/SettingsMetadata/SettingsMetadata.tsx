@@ -6,6 +6,8 @@ import { ProjectMessageType } from "../../../../../types"
 import Button from "../../../../../Components/Gallery/Components/Button/Button"
 import { ProjectsContext } from "../../../../../Projects"
 
+import { createUrl, isValidUrl } from "../../../../../Utils/url"
+
 import * as styles from "./SettingsMetadata.scss"
 
 interface SettingsMetadataProps {
@@ -34,22 +36,13 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
         })
     }, [projectUrl])
 
-    const isValidDomain = (url: string) => {
-        const domainRegex = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if (domainRegex.test(url)) {
-            return true
-        }
-
-        return false
-    }
 
     const onClick = async () => {
         await api.projects.updateById({
             token: user.getTokenId(),
             projectId: project.getId(),
             name: name,
-            url: isValidDomain(projectUrl) ? projectUrl : `${projectUrl}${HOSTING_DOMAIN}`
+            url: createUrl(projectUrl)
         })
         // TODO show success 
     }
@@ -85,12 +78,6 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
                         disabled={isDisabled}
                         className={styles.input}
                     />
-                    {!isValidDomain(projectUrl) && (
-                        <span>
-                            {HOSTING_DOMAIN}
-                        </span>
-                    )}
-
                 </div>
             </div>
 

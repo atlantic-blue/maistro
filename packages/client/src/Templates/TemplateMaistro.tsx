@@ -22,7 +22,7 @@ export const CreateTemplateMaistro = (): PageStruct[] => {
             id: uuid.v4(),
             title: "Maistro",
             description: "Maistro Landing Page",
-            path: `/${faker.word.adjective()}`,
+            path: `/index.html`,
             contentActive: null,
             content: [
                 {

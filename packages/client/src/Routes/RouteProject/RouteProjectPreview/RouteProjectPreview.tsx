@@ -72,7 +72,7 @@ const RouteProjectPreview: React.FC = () => {
                                 </TemplateView>
                             </div>
                             <div className={styles.pageContent}>
-                                <Metadata page={page} isDisabled />
+                                <Metadata page={page} project={project} isDisabled />
                             </div>
                         </div>
                     )

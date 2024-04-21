@@ -11,7 +11,7 @@ export const CreateTemplateNew = (): PageStruct[] => {
             title: "New Template",
             id: uuid.v4(),
             contentActive: null,
-            path: `/${faker.word.adjective()}`,
+            path: `/index.html`,
             content: [],
             description: "I am a page description, edit me!",
             fontScheme: defaultFontScheme,

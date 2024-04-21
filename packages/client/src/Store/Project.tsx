@@ -15,6 +15,7 @@ import { defaultColorScheme, defaultFontScheme } from "../PageContext"
 
 import Page from "./Page"
 import { ProjectAsset } from "./ProjectAsset";
+import { withHttps } from "../Utils/url";
 
 interface IProject {
     setId(id: string): void
@@ -281,11 +282,11 @@ export class Project implements IProject {
         this.fontScheme = fontScheme || defaultFontScheme
     }
 
-    static createEmptyProject(id: string, title: string) {
+    static createEmptyProject(id: string, title: string, url: string) {
         return new Project({
             id,
             name: title,
-            url: "",
+            url,
             pages: {},
             assets: {},
             colourScheme: defaultColorScheme,

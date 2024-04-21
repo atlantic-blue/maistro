@@ -16,7 +16,7 @@ export const CreateTemplateRetreats = (): PageStruct[] => {
         {
             title: "Colombian Retreats",
             id: uuid.v4(),
-            path: `/${faker.word.adjective()}`,
+            path: `/index.html`,
             contentActive: null,
             description: "A Retreats page",
             content: [

@@ -4,13 +4,15 @@ import PageStore from "../../../../../Store/Page"
 import { PageMessageType } from "../../../../../types"
 
 import * as styles from "./Metadata.scss"
+import { Project } from "../../../../../Store/Project"
 
 interface MetadataProps {
     page: PageStore
+    project: Project
     isDisabled?: boolean
 }
 
-const Metadata: React.FC<MetadataProps> = ({ page, isDisabled }) => {
+const Metadata: React.FC<MetadataProps> = ({ project, page, isDisabled }) => {
     const [title, setTitle] = React.useState(page.getTitle())
     const [path, setPath] = React.useState(page.getPath())
     const [description, setDescription] = React.useState(page.getDescription())
@@ -58,6 +60,7 @@ const Metadata: React.FC<MetadataProps> = ({ page, isDisabled }) => {
                 >
                     URL
                 </div>
+                <span>{`${project.getUrl()}/`}</span>
                 <input
                     type="text"
                     value={path}

@@ -15,30 +15,30 @@ import ProjectOptions from "./Components/ProjectOptions/ProjectOptions"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
 import * as styles from "./RouteProjects.scss"
+import { createUrl } from '../../Utils/url';
 
 const RoutesProjects: React.FC = () => {
     const { projects, user, api } = React.useContext(ProjectsContext)
     const navigate = useNavigate();
 
     const onNewProjectClick = async () => {
-        const projectName = `${user.getName()}'s ${faker.commerce.productName()}`
+        // TODO
+        // let the AI assistant choose a name
+        const projectName = faker.commerce.productName()
 
         api.projects.create({
             token: user.getTokenId(),
             name: projectName,
+            url: createUrl(projectName)
         })
-            .then(({ id, name }) => {
-                const newProject = Project.createEmptyProject(id, name)
+            .then(({ id, name, url }) => {
+                const newProject = Project.createEmptyProject(id, name, url)
                 projects.event$.next({
                     type: ProjectsMessageType.SET_PROJECT,
                     data: newProject.getProjectStructure()
                 })
 
                 navigate(appRoutes.getProjectTemplateRoute(newProject.getId()))
-            })
-            .catch(error => {
-                //TODO APP LEVEL ERROR
-                console.error(error)
             })
     }
 

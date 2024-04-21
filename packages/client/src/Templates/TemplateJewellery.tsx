@@ -16,7 +16,7 @@ export const CreateTemplateJewellery = (): PageStruct[] => {
         {
             title: "Jewellery Page",
             id: uuid.v4(),
-            path: `/${faker.word.adjective()}`,
+            path: `/index.html`,
             description: "A Jewellery e-commerce page",
             contentActive: null,
             content: [
@@ -48,7 +48,7 @@ export const CreateTemplateJewellery = (): PageStruct[] => {
         {
             title: "Jewellery Page",
             id: uuid.v4(),
-            path: `/${faker.word.adjective()}`,
+            path: `/about`,
             description: "A Jewellery e-commerce page",
             contentActive: null,
             content: [
