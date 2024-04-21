@@ -309,7 +309,8 @@ export interface ProjectsState {
             create: ({ token, name }: { token: string, name: string }) => Promise<{ id: string, name: string }>
             read: ({ token }: { token: string }) => Promise<Partial<ProjectStruct[]>>
             readById: ({ projectId, token }: { projectId: string, token: string }) => Promise<Partial<ProjectStruct>>
-            updateById: ({ projectId, token, name, url }: { projectId: string, token: string, name: string, url: string }) => Promise<void>
+            updateById: ({ projectId, token, name, url }: { projectId: string, token: string, name: string, url: string }) => Promise<void>,
+            delete: ({ token, id }: { token: string, id: string }) => Promise<void>,
         }
     }
 }

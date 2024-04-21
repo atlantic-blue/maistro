@@ -3,3 +3,5 @@ terraform.tfvars
 
 *.zip
 .env
+
+coverage

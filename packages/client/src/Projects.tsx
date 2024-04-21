@@ -15,6 +15,7 @@ import { projectsReadById } from "./Api/Projects/projectsReadById";
 
 import "./Project.scss"
 import { projectsUpdateById } from "./Api/Projects/projectsUpdateById";
+import { projectsDelete } from "./Api/Projects/projectsDelete";
 
 const projectsStore = new Projects()
 const user = new User()
@@ -27,7 +28,8 @@ export const ProjectsContext = React.createContext<ProjectsState>({
             create: () => Promise.resolve({ id: "", name: "" }),
             read: () => Promise.resolve([]),
             readById: () => Promise.resolve({}),
-            updateById: () => Promise.resolve()
+            updateById: () => Promise.resolve(),
+            delete: () => Promise.resolve(),
         }
     }
 })
@@ -47,6 +49,7 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
             read: projectsRead,
             readById: projectsReadById,
             updateById: projectsUpdateById,
+            delete: projectsDelete,
         }
     }
 

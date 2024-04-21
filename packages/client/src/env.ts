@@ -7,6 +7,7 @@ interface Env {
             create: string
             read: string
             update: string
+            delete: string
         }
     }
     hosting: {
@@ -43,6 +44,7 @@ const createEnv = (): Env => {
                 create: `${apiBaseUrl}/projects`,
                 read: `${apiBaseUrl}/projects`,
                 update: `${apiBaseUrl}/projects`,
+                delete: `${apiBaseUrl}/projects`,
             }
         },
         hosting: {
