@@ -72,7 +72,7 @@ const hostingRedirect: CloudFrontRequestHandler = async (event) => {
      *      e.g about => about.html
      */
     let path = request.uri
-    if (path === "/" || path === "/home") {
+    if (path === "/") {
         path = "/index.html"
     }
 

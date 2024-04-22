@@ -10,10 +10,14 @@ import { ProjectsContext } from "../../../Projects";
 
 import { appRoutes } from "../../router";
 import RouteProjectHeader from "../Components/Header/Header";
+import { PaymentsContext } from "../../../Payments/PaymentsProvider";
+
 import * as styles from "./RouteProjectTemplates.scss"
 
 const RouteProjectTemplates: React.FC = () => {
     const navigate = useNavigate();
+    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
+
     const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
@@ -54,18 +58,21 @@ const RouteProjectTemplates: React.FC = () => {
         )
     }
 
+    const pagesList = Object.keys(project.getPages())
+    const canCreateNewPages = pagesList.length < 2 || isSubscribed
+
     return (
         <Helmet>
             <RouteProjectHeader user={user} />
             <div className={styles.templates}>
                 <div className={styles.templatesContent}>
                     <TemplateViewNew
-                        onClick={onNewPageClick}
+                        onClick={canCreateNewPages ? onNewPageClick : redirectToCheckout}
                         title="Create Your Own"
                         className={styles.template}
                     />
                     <TemplatesViews
-                        onClick={onTemplateClick}
+                        onClick={canCreateNewPages ? onTemplateClick : redirectToCheckout}
                         className={styles.template}
                     />
                 </div >

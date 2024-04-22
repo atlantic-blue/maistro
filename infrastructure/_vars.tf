@@ -29,3 +29,7 @@ variable "google_client_secret" {
 variable "google_site_verification_token" {
     type = string
 }
+
+variable "payments_secret_key" {
+    type = string
+}

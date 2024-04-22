@@ -24,6 +24,7 @@
         "jest-watch-typeahead": "^2.2.2",
         "joi": "^17.12.3",
         "jsonwebtoken": "^9.0.2",
+        "stripe": "^15.3.0",
         "ts-node": "^10.9.2",
         "uuid": "^9.0.1",
         "webpack": "^5.91.0",

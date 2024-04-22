@@ -9,16 +9,18 @@ import { ProjectsContext } from "../../../../../Projects"
 import { createUrl, isValidUrl } from "../../../../../Utils/url"
 
 import * as styles from "./SettingsMetadata.scss"
+import { ApiContext } from "../../../../../Api/ApiProvider"
 
 interface SettingsMetadataProps {
     project: Project
     isDisabled?: boolean
 }
 
-const HOSTING_DOMAIN = ".hosting.maistro.website"
+const HOSTING_DOMAIN = ".maistro.website"
 
 const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled }) => {
-    const { api, user } = React.useContext(ProjectsContext)
+    const { api } = React.useContext(ApiContext)
+    const { user } = React.useContext(ProjectsContext)
     const [name, setName] = React.useState(project.getName())
     const [projectUrl, setProjectURl] = React.useState(project.getUrl())
 

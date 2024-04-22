@@ -14,9 +14,11 @@ import { ProjectsContext } from "../../../Projects";
 import EditMenu from "./Components/EditMenu/EditMenu";
 
 import * as styles from "./RouteProjectEditPage.scss"
+import { ApiContext } from "../../../Api/ApiProvider";
 
 const RouteProjectEditPage: React.FC = () => {
-    const { projects, api, user } = React.useContext(ProjectsContext)
+    const { api } = React.useContext(ApiContext)
+    const { projects, user } = React.useContext(ProjectsContext)
     const { projectId, pageId } = useParams()
     const project = projects.getProjectById(projectId || "")
 

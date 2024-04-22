@@ -60,7 +60,6 @@ const Metadata: React.FC<MetadataProps> = ({ project, page, isDisabled }) => {
                 >
                     URL
                 </div>
-                <span>{`${project.getUrl()}/`}</span>
                 <input
                     type="text"
                     value={path}

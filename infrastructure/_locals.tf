@@ -10,7 +10,7 @@ locals {
 
   project_name = var.project_name
 
-  prefix = "atlantic-blue"
+  prefix                             = "atlantic-blue"
   www_bucket_name                    = "${local.prefix}-${var.project_name}-www"
   www_cloudfront_origin_id           = "s3-${local.www_bucket_name}${local.enviroment_delimiter}"
   www_google_site_verification_token = var.google_site_verification_token

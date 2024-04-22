@@ -15,10 +15,11 @@ import IconBin from "../../../Components/Icons/Bin/Bin";
 
 import * as styles from "./RouteProjectEdit.scss"
 import RouteProjectHeader from "../Components/Header/Header";
+import { PaymentsContext } from "../../../Payments/PaymentsProvider";
 
 const RouteProjectEdit: React.FC = () => {
-    const [key, setKey] = React.useState("")
     const navigate = useNavigate();
+    const [key, setKey] = React.useState("")
 
     const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
@@ -45,18 +46,20 @@ const RouteProjectEdit: React.FC = () => {
         return
     }
 
+    const pagesList = Object.keys(project.getPages())
+
     return (
         <Helmet key={key}>
             <RouteProjectHeader user={user} />
             <div className={styles.content}>
-                {Object.keys(project.getPages()).length < 1 && (
+                {pagesList.length < 1 && (
                     <div className={styles.page}>
                         <div>Nothing to see!</div>
                         Choose or Create a template
                     </div>
                 )}
 
-                {Object.keys(project.getPages()).map(pageId => {
+                {pagesList.map(pageId => {
                     const page = project.getPageById(pageId)
                     if (!page) {
                         return

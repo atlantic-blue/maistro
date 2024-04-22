@@ -51,13 +51,17 @@ const createDefaultWebpackConfig = (): Configuration => {
 // TODO implement with fs.readdir
 const createMultipleWebpackConfigs = [
     "ping",
-    "upload",
+    "upload", // TODO move to projects
+
     "hosting-redirect",
+
     "projects-create",
     "projects-read",
     "projects-read-by-id",
     "projects-update-by-id",
     "projects-delete",
+
+    "payments-subscriptions-read"
 ].map(api => {
 
     return ({

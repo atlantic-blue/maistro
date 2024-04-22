@@ -9,6 +9,7 @@ import { Project } from "../../../../../Store/Project"
 import IconBin from "../../../../../Components/Icons/Bin/Bin"
 
 import * as styles from "../../RouteProjectSettings.scss"
+import { ApiContext } from "../../../../../Api/ApiProvider"
 
 interface RouteProjectSettingsDeleteProps {
     project: Project
@@ -16,8 +17,8 @@ interface RouteProjectSettingsDeleteProps {
 
 const RouteProjectSettingsDelete: React.FC<RouteProjectSettingsDeleteProps> = (props) => {
     const navigate = useNavigate();
-
-    const { projects, user, api } = React.useContext(ProjectsContext)
+    const { api } = React.useContext(ApiContext)
+    const { projects, user } = React.useContext(ProjectsContext)
     const onProjectDelete = (project: Project) => {
         // TODO offline mode
         // projects.event$.next({

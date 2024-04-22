@@ -16,10 +16,14 @@ import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
 import * as styles from "./RouteProjects.scss"
 import { createUrl } from '../../Utils/url';
+import { ApiContext } from '../../Api/ApiProvider';
+import { PaymentsContext } from '../../Payments/PaymentsProvider';
 
 const RoutesProjects: React.FC = () => {
-    const { projects, user, api } = React.useContext(ProjectsContext)
     const navigate = useNavigate();
+    const { api } = React.useContext(ApiContext)
+    const { projects, user } = React.useContext(ProjectsContext)
+    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
 
     const onNewProjectClick = async () => {
         // TODO
@@ -42,13 +46,16 @@ const RoutesProjects: React.FC = () => {
             })
     }
 
+    const projectsList = Object.keys(projects.getProjects())
+    const canCreateNewProjects = projectsList.length < 1 || isSubscribed
+
     return (
         <div className={styles.projects}>
             <RouteProjectHeader user={user} />
             <div className={styles.projectsContent}>
                 <div
                     className={classNames(styles.section, styles.sectionEmpty)}
-                    onClick={onNewProjectClick}
+                    onClick={canCreateNewProjects ? onNewProjectClick : redirectToCheckout}
                     title="Create new Project"
                 >
                     <div className={styles.content}>
@@ -57,7 +64,7 @@ const RoutesProjects: React.FC = () => {
                     </div>
                 </div>
 
-                {Object.keys(projects.getProjects()).map(projectId => {
+                {projectsList.map(projectId => {
                     const project = projects.getProjectById(projectId)
 
                     const Preview = () => {

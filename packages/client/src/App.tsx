@@ -5,6 +5,8 @@ import { defaultColorScheme, defaultFontScheme } from './PageContext';
 import { appendColourSchemeToDocument, appendFontSchemeToDocument } from './Utils/appendScheme';
 import Projects from './Projects'
 import AuthProvider from './Auth/AuthProvider';
+import ApiProvider from './Api/ApiProvider';
+import PaymentsProvider from './Payments/PaymentsProvider';
 
 const queryClient = new QueryClient()
 
@@ -16,11 +18,15 @@ const App: React.FC = () => {
     }, [])
 
     return (
-        <AuthProvider>
-            <QueryClientProvider client={queryClient}>
-                <Projects />
-            </QueryClientProvider>
-        </AuthProvider>
+        <ApiProvider>
+            <AuthProvider>
+                <PaymentsProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <Projects />
+                    </QueryClientProvider>
+                </PaymentsProvider>
+            </AuthProvider>
+        </ApiProvider>
     )
 }
 

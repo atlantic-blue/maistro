@@ -6,10 +6,14 @@ import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 import AuthLogoutButton from "../../Auth/AuthLogoutButton"
 import PaymentsRedirect from "../../Payments/Payments"
 
+import Button from "../../Components/Gallery/Components/Button/Button"
+import { PaymentsContext } from "../../Payments/PaymentsProvider"
+
 import * as styles from "./RouteSettings.scss"
 
 const RoutesSettings: React.FC = () => {
     const { user } = React.useContext(ProjectsContext)
+    const { isSubscribed } = React.useContext(PaymentsContext)
 
     return (
         <div className={styles.main}>
@@ -24,18 +28,25 @@ const RoutesSettings: React.FC = () => {
 
 
                 <div className={styles.section}>
-                    {/*                     
-                        TODO, how do we know if the user has subscribed?
-                        https://billing.stripe.com/p/login/00g4i29gM9GOgz6dQQ
-                     */}
-                    <PaymentsRedirect user={user} />
+                    {isSubscribed ?
+                        (
+                            <Button onClick={() => {
+                                window.open("https://billing.stripe.com/p/login/00g4i29gM9GOgz6dQQ", "_blank")
+                            }}>
+                                Manage Subscription
+                            </Button>
+                        ) :
+                        (
+                            <PaymentsRedirect />
+                        )
+                    }
                 </div>
 
                 <div className={styles.section}>
                     <AuthLogoutButton />
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

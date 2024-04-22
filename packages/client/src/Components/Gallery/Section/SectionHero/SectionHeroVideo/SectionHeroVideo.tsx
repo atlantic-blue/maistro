@@ -18,7 +18,13 @@ interface SectionHeroVideoProps {
 const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
     return (
         <section className={styles.hero}>
-            <video playsInline autoPlay muted loop className={styles.video}>
+            <video
+                className={styles.video}
+                playsInline
+                autoPlay
+                muted
+                loop
+            >
                 <source src={props.videoURL} type="video/mp4" />
             </video>
             <div className={styles.content}>

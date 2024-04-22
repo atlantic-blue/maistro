@@ -9,13 +9,9 @@ import router from "./Routes/router";
 import { User } from "./Store/User";
 import { AuthContext } from "./Auth/AuthProvider";
 import { debounceTime } from "rxjs/operators";
-import { projectsCreate } from "./Api/Projects/projectsCreate";
-import { projectsRead } from "./Api/Projects/projectsRead";
-import { projectsReadById } from "./Api/Projects/projectsReadById";
 
 import "./Project.scss"
-import { projectsUpdateById } from "./Api/Projects/projectsUpdateById";
-import { projectsDelete } from "./Api/Projects/projectsDelete";
+import { ApiContext } from "./Api/ApiProvider";
 
 const projectsStore = new Projects()
 const user = new User()
@@ -23,15 +19,6 @@ const user = new User()
 export const ProjectsContext = React.createContext<ProjectsState>({
     projects: projectsStore,
     user: user,
-    api: {
-        projects: {
-            create: () => Promise.resolve({ id: "", name: "" }),
-            read: () => Promise.resolve([]),
-            readById: () => Promise.resolve({}),
-            updateById: () => Promise.resolve(),
-            delete: () => Promise.resolve(),
-        }
-    }
 })
 
 interface ProjectsEditProps {
@@ -41,17 +28,9 @@ interface ProjectsEditProps {
 const ProjectsEdit: React.FC<ProjectsEditProps> = ({
     projects = projectsStore
 }) => {
+    const { api } = React.useContext(ApiContext)
     const { user } = React.useContext(AuthContext)
     const [key, setKey] = React.useState("")
-    const api: ProjectsState["api"] = {
-        projects: {
-            create: projectsCreate,
-            read: projectsRead,
-            readById: projectsReadById,
-            updateById: projectsUpdateById,
-            delete: projectsDelete,
-        }
-    }
 
     useEffect(() => {
         if (!user) {
@@ -108,7 +87,6 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
             value={{
                 projects,
                 user,
-                api,
             }}
         >
             <RouterProvider router={router} />

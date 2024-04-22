@@ -11,8 +11,8 @@ import { validatorJoi } from "../../middlewares/validator-joi";
 import createUpdateParams from "./createUpdateParams";
 
 interface ProjectsUpdateInput {
-    name?: string
-    url?: string
+    name: string
+    url: string
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -34,8 +34,15 @@ const projectsReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
         throw createError(500, "projectId not specified")
     }
 
+    const { name, url } = event.body as unknown as ProjectsUpdateInput;
+
+    const input = {
+        name,
+        url,
+    }
+
     const params = createUpdateParams(
-        event.body as unknown as Record<string, string>,
+        input,
         {
             userId,
             id: projectId
