@@ -55,6 +55,15 @@ const createMultipleWebpackConfigs = [
 
     "hosting-redirect",
 
+    "email-entries-create",
+    "email-entries-read-by-id",
+
+    "email-lists-create",
+    "email-lists-read",
+    // "email-lists-read-by-id",
+    // "email-lists-update-by-id",
+    // "email-lists-delete",
+
     "projects-create",
     "projects-read",
     "projects-read-by-id",

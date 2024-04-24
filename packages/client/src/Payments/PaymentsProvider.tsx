@@ -5,11 +5,13 @@ import env from "../env";
 import { getStripe } from "./stripe";
 
 interface PaymentsContextState {
+    isLoading: boolean
     isSubscribed: boolean
     redirectToCheckout: () => void
 }
 
 export const PaymentsContext = React.createContext<PaymentsContextState>({
+    isLoading: false,
     isSubscribed: false,
     redirectToCheckout: () => null
 })
@@ -22,12 +24,14 @@ const PaymentsProvider: React.FC<PaymentsProviderProps> = (props) => {
     const { api } = React.useContext(ApiContext)
     const { user } = React.useContext(AuthContext)
     const [isSubscribed, setIsSubscribed] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState(false)
 
     React.useEffect(() => {
         if (!user) {
             return
         }
 
+        setIsLoading(true)
         api
             .payments
             .subscriptions
@@ -36,6 +40,9 @@ const PaymentsProvider: React.FC<PaymentsProviderProps> = (props) => {
                 if (response?.subscription?.status === 'active') {
                     setIsSubscribed(true)
                 }
+            })
+            .finally(() => {
+                setIsLoading(false)
             })
 
     }, [user])
@@ -74,7 +81,7 @@ const PaymentsProvider: React.FC<PaymentsProviderProps> = (props) => {
 
     return (
         <>
-            <PaymentsContext.Provider value={{ isSubscribed, redirectToCheckout }}>
+            <PaymentsContext.Provider value={{ isSubscribed, redirectToCheckout, isLoading }}>
                 {props.children}
             </PaymentsContext.Provider>
         </>

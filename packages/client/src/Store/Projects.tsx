@@ -45,7 +45,7 @@ export class Projects implements IProjects {
 
         return Object.keys(this.getProjects())
             .reduce((acc, nextKey) => {
-                acc[nextKey] = projects[nextKey].getProjectStructure()
+                acc[nextKey] = projects[nextKey].getStruct()
                 return acc
             }, projectsStructure)
     }
@@ -55,10 +55,12 @@ export class Projects implements IProjects {
 
         // Reactively update pages content child -> parent
         project.event$.subscribe(() => {
-            this.event$.next({
-                type: ProjectsMessageType.SET_PROJECT,
-                data: project.getProjectStructure(),
-            })
+            // SAVES THE PROJECT STATE 
+            // INFINITE LOOP
+            // this.event$.next({
+            //     type: ProjectsMessageType.SET_PROJECT,
+            //     data: project.getStruct(),
+            // })
         })
 
         this.projects[id] = project

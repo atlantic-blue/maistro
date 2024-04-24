@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import React, { useEffect } from "react"
+import React from "react"
 import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
 
@@ -39,7 +39,7 @@ const RoutesProjects: React.FC = () => {
                 const newProject = Project.createEmptyProject(id, name, url)
                 projects.event$.next({
                     type: ProjectsMessageType.SET_PROJECT,
-                    data: newProject.getProjectStructure()
+                    data: newProject.getStruct()
                 })
 
                 navigate(appRoutes.getProjectTemplateRoute(newProject.getId()))

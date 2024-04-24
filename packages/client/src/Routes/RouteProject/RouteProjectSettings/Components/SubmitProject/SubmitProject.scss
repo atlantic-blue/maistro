@@ -8,27 +8,15 @@
 }
 
 .button {
+    cursor: pointer;
     min-width: 300px;
     padding: 10px 40px;
     font-size: 1rem;
-    background-color: var(--color-primary);
-    border: none;
-    cursor: pointer;
 
-    border-radius: 8px;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 0.706592px 0.706592px -0.625px,
-        rgba(0, 0, 0, 0.145) 0px 1.80656px 1.80656px -1.25px,
-        rgba(0, 0, 0, 0.137) 0px 3.62176px 3.62176px -1.875px,
-        rgba(0, 0, 0, 0.125) 0px 6.8656px 6.8656px -2.5px,
-        rgba(0, 0, 0, 0.106) 0px 13.6468px 13.6468px -3.125px,
-        rgba(0, 0, 0, 0.05) 0px 30px 30px -3.75px;
     transition: color 0.3s ease, transform 0.5s ease;
 
     &:hover {
-        filter: brightness(80%);
         transform: translateY(-5px);
-        background-color: var(--color-secondary);
-        color: #cbd5e1;
 
         &>.link {
             color: #cbd5e1;
@@ -42,21 +30,27 @@
 
 .loading {
     color: white;
-    background-color: blue;
+    background-color: #0090ff;
 }
 
 .success {
     color: white;
-    background-color: green;
+    background-color: #46a758;
 }
 
 .error {
     color: white;
-    background-color: red;
+    background-color: #e5484d;
 }
 
 .errorMessage {
-    color: red;
+    margin: 20px 0 0;
+
+    &-icon {
+        width: 20px;
+        height: 20px;
+        fill: #e5484d;
+    }
 }
 
 .link {

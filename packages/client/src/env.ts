@@ -3,6 +3,16 @@ interface Env {
         baseUrl: string
         ping: string
         upload: string
+        email: {
+            lists: {
+                create: string
+                read: string
+            }
+            entries: {
+                create: string
+                read: string
+            }
+        }
         projects: {
             create: string
             read: string
@@ -45,6 +55,16 @@ const createEnv = (): Env => {
             baseUrl: apiBaseUrl,
             ping: `${apiBaseUrl}/ping`,
             upload: `${apiBaseUrl}/upload`,
+            email: {
+                lists: {
+                    create: `${apiBaseUrl}/email/lists`,
+                    read: `${apiBaseUrl}/email/lists`,
+                },
+                entries: {
+                    create: `${apiBaseUrl}/email/entries`,
+                    read: `${apiBaseUrl}/email/list-entries`,
+                }
+            },
             projects: {
                 create: `${apiBaseUrl}/projects`,
                 read: `${apiBaseUrl}/projects`,

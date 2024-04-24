@@ -1,15 +1,17 @@
-.content {
+.section {
+    border-radius: 15px;
+    border: 1px solid #d7d2d2;
+    background-color: #eeeeee;
+    padding: 20px;
+    margin: 0 15px 15px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1080px;
 }
 
-.section {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-}
 
 .input {
     width: 300px;

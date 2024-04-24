@@ -1,4 +1,4 @@
-import createError from "../../middlewares/error-handler";
+import createError from "../middlewares/error-handler";
 
 const createUpdateParams = (
     input: Record<string, string> | null,

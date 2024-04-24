@@ -1,7 +1,8 @@
 import React from "react"
+import { Button as RadixButton, ButtonProps as RadixButtonProps, Link } from '@radix-ui/themes'
+import classNames from "classnames"
 
 import * as styles from "./Button.scss"
-import classNames from "classnames"
 
 interface ButtonProps {
     link?: string
@@ -10,22 +11,24 @@ interface ButtonProps {
     className?: string
 }
 
-const Button: React.FC<ButtonProps> = (props) => {
+const Button: React.FC<ButtonProps & RadixButtonProps> = (props) => {
     return (
-        <button
+        <RadixButton
+            size="3"
             className={classNames(styles.button, props.className)}
             onClick={props.onClick}
+            {...props}
         >
             {props.link ? (
-                <a
+                <Link
                     href={props.link}
                     className={styles.link}
                 >
                     {props.children}
-                </a>
+                </Link>
             ) : props.children
             }
-        </button>
+        </RadixButton>
     )
 }
 

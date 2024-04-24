@@ -38,12 +38,25 @@ export interface ProjectStruct {
     url: string
     pages: Record<string, PageStruct>
     assets: Record<string, ProjectAssetStruct>
+    emailLists: Record<string, ProjectEmailListStruct>
     colourScheme: ColourScheme
     fontScheme: FontScheme
 }
 
+export interface ProjectEmailListStruct {
+    id: string,
+    projectId: string,
+
+    title: string,
+    description: string,
+    createdAt: string,
+    status: string
+}
+
 export interface PageStruct {
     id: string
+    projectId: string,
+
     title: string
     path: string
     description: string
@@ -55,6 +68,8 @@ export interface PageStruct {
 
 export interface ContentStruct {
     id: string
+    projectId: string,
+
     description: string
     categories: ContentCategory[]
 
@@ -153,6 +168,23 @@ export enum FontFamily {
 /**
  *  APP
  */
+export enum ProjectEmailListMessageType {
+    SET_STATUS = "SET_STATUS",
+    SET_DESCRIPTION = "SET_DESCRIPTION",
+    SET_TITLE = "SET_TITLE",
+}
+
+export type ProjectEmailListEvent = {
+    type: ProjectEmailListMessageType.SET_STATUS
+    data: string
+} | {
+    type: ProjectEmailListMessageType.SET_DESCRIPTION
+    data: string
+} | {
+    type: ProjectEmailListMessageType.SET_TITLE
+    data: string
+}
+
 export enum PageContentMessageType {
     SET_ID = "SET_ID",
     SET_DESCRIPTION = "SET_DESCRIPTION",
@@ -248,11 +280,13 @@ export enum ProjectMessageType {
     SET_URL = "SET_URL",
 
     SET_PAGE = "SET_PAGE",
-    READ_PAGE = "READ_PAGE", // TODO do we need this?
     DELETE_PAGE = "DELETE_PAGE",
 
     SET_ASSET = "SET_ASSET",
     DELETE_ASSET = "DELETE_ASSET",
+
+    SET_EMAIL_LIST = "SET_EMAIL_LIST",
+    DELETE_EMAIL_LIST = "DELETE_EMAIL_LIST",
 
     SET_COLOUR_SCHEME = "SET_COLOUR_SCHEME",
     SET_FONT_SCHEME = "SET_FONT_SCHEME",
@@ -262,9 +296,6 @@ export type ProjectEvent = {
     type: ProjectMessageType.SET_PAGE
     data: PageStruct
 } | {
-    type: ProjectMessageType.READ_PAGE
-    data: string
-} | {
     type: ProjectMessageType.DELETE_PAGE
     data: string
 } | {
@@ -272,6 +303,12 @@ export type ProjectEvent = {
     data: ProjectAssetStruct
 } | {
     type: ProjectMessageType.DELETE_ASSET
+    data: string
+} | {
+    type: ProjectMessageType.SET_EMAIL_LIST
+    data: ProjectEmailListStruct
+} | {
+    type: ProjectMessageType.DELETE_EMAIL_LIST
     data: string
 } | {
     type: ProjectMessageType.SET_COLOUR_SCHEME

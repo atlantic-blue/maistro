@@ -19,8 +19,9 @@ const AuthLogoutButton = () => {
 
     return (
         <Button
+            size="2"
+            variant="outline"
             onClick={() => logOutAndNavigate()}
-            className={styles.button}
         >
             Log out
         </Button>

@@ -34,7 +34,14 @@ const sassCss: RuleSetRule = {
 const rawCss: RuleSetRule = {
     test: /\.css$/,
     resourceQuery: /^\?raw$/,
-    use: ['style-loader', 'css-loader'],
+    use: [
+        {
+            loader: MiniCssExtractPlugin.loader,
+        },
+        {
+            loader: 'css-loader',
+        },
+    ],
 }
 
 const cssRule: RuleSetRule = ({

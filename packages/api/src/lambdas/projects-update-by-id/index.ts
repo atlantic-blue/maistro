@@ -8,7 +8,7 @@ import createError from '../../middlewares/error-handler';
 import authJwt from '../../middlewares/auth-jwt';
 import jsonBodyParser from "../../middlewares/json-body-parser";
 import { validatorJoi } from "../../middlewares/validator-joi";
-import createUpdateParams from "./createUpdateParams";
+import createUpdateParams from "../../utils/createUpdateParams";
 
 interface ProjectsUpdateInput {
     name: string
@@ -39,6 +39,7 @@ const projectsReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
     const input = {
         name,
         url,
+        updatedAt: new Date().toISOString(),
     }
 
     const params = createUpdateParams(

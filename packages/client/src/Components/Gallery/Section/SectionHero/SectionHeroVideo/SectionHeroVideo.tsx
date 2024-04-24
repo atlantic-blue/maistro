@@ -5,6 +5,7 @@ import Button from '../../../Components/Button/Button';
 import * as ButtonStyles from '../../../Components/Button/Button.scss';
 
 import * as styles from "./SectionHeroVideo.scss"
+import { Heading, Text } from '@radix-ui/themes';
 
 interface SectionHeroVideoProps {
     videoURL: string
@@ -28,12 +29,24 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
                 <source src={props.videoURL} type="video/mp4" />
             </video>
             <div className={styles.content}>
-                <h1>{props.title}</h1>
-                <div className={styles.text}>
+                <Heading
+                    as="h1"
+                    align="center"
+                    wrap="pretty"
+                    size="9"
+                >
+                    {props.title}
+                </Heading>
+
+                <Text
+                    as="div"
+                    className={styles.text}
+                >
                     {props.content}
-                </div>
+                </Text>
 
                 <Button
+                    size="4"
                     onClick={props.buttonOnClick}
                     link={props.buttonLink}
                     children={props.buttonText}
@@ -44,7 +57,7 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
     );
 };
 
-export const SectionHeroVideoItem: ContentStruct<SectionHeroVideoProps> = {
+export const SectionHeroVideoItem: ContentStruct = {
     id: "SectionHeroVideo",
     Component: SectionHeroVideo,
     categories: [ContentCategory.HERO, ContentCategory.TEXT],

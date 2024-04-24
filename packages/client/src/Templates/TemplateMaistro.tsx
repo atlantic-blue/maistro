@@ -1,6 +1,5 @@
 import * as uuid from "uuid"
 import React from "react"
-import { faker } from '@faker-js/faker';
 
 import { defaultFontScheme } from "../PageContext";
 import { PageStruct } from "../types";

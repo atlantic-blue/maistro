@@ -22,13 +22,17 @@ const RouteProjectEditPage: React.FC = () => {
     const { projectId, pageId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
+    useEffect(() => {
+        if (!projectId) {
+            return
+        }
+
+        api.projects.readById({ token: user.getTokenId(), projectId }).then(console.log)
+    }, [])
+
     if (!project || !projectId) {
         return
     }
-
-    useEffect(() => {
-        api.projects.readById({ token: user.getTokenId(), projectId }).then(console.log)
-    }, [])
 
     const page = project.getPageById(pageId || "")
 

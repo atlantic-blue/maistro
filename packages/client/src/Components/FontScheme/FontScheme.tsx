@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import * as styles from "./FontScheme.scss"
+import { Box, Heading, Select, Text } from '@radix-ui/themes';
 
 interface FamilyFont {
     name: string
@@ -102,34 +103,64 @@ const FontDesign: React.FC<FontDesignProps> = ({
     }, [headingFont, bodyFont])
 
     return (
-        <div className={styles.container}>
-            <div className={styles.display}>
-                <h2 style={{ fontFamily: headingFont.css }}>
+        <Box className={styles.container}>
+            <Box className={styles.display}>
+                <Heading as="h2" style={{ fontFamily: headingFont.css }}>
                     {headingFont.name} - Heading Example
-                </h2>
-                <p style={{ fontFamily: bodyFont.css }}>
+                </Heading>
+                <Text as="p" style={{ fontFamily: bodyFont.css }}>
                     This is a <strong>{bodyFont.name}</strong> body text example. {bodyFont.description}
-                </p>
-            </div>
-            <div className={styles.form}>
-                <div className={styles.formSection}>
-                    <label htmlFor="heading-font-select">Select Heading Font</label>
-                    <select id="heading-font-select" value={headingFont.name} onChange={(e) => setHeadingFont(familyFont[e.target.value])}>
-                        {Object.keys(familyFont).map((option, index) => (
-                            <option key={index} value={option}>{familyFont[option].name}</option>
-                        ))}
-                    </select>
-                </div>
-                <div className={styles.formSection}>
-                    <label htmlFor="body-font-select">Select Body Font</label>
-                    <select id="body-font-select" value={bodyFont.name} onChange={(e) => setBodyFont(familyFont[e.target.value])}>
-                        {Object.keys(familyFont).map((option, index) => (
-                            <option key={index} value={option}>{familyFont[option].name}</option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-        </div>
+                </Text>
+            </Box>
+
+            <Box className={styles.form}>
+                <Box className={styles.formSection}>
+                    <Text as="label" size="2">
+                        Select Heading Font
+                    </Text>
+                    <Select.Root
+                        size="2"
+                        defaultValue={familyFont["Roboto"].name}
+                        onValueChange={(value) => setHeadingFont(familyFont[value])}
+                    >
+                        <Select.Trigger />
+                        <Select.Content>
+                            {Object.keys(familyFont).map((option, index) => (
+                                <Select.Item
+                                    key={index}
+                                    value={option}>
+                                    {familyFont[option].name}
+                                </Select.Item>
+                            ))}
+                            <Select.Item value="orange">Orange</Select.Item>
+                        </Select.Content>
+                    </Select.Root>
+                </Box>
+
+                <Box className={styles.formSection}>
+                    <Text as="label" size="2">
+                        Select Body Font
+                    </Text>
+                    <Select.Root
+                        size="2"
+                        defaultValue={familyFont["Roboto"].name}
+                        onValueChange={(value) => setBodyFont(familyFont[value])}
+                    >
+                        <Select.Trigger />
+                        <Select.Content>
+                            {Object.keys(familyFont).map((option, index) => (
+                                <Select.Item
+                                    key={index}
+                                    value={option}>
+                                    {familyFont[option].name}
+                                </Select.Item>
+                            ))}
+                            <Select.Item value="orange">Orange</Select.Item>
+                        </Select.Content>
+                    </Select.Root>
+                </Box>
+            </Box>
+        </Box>
     );
 };
 

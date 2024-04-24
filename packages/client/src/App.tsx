@@ -1,5 +1,6 @@
 import React from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { Theme } from '@radix-ui/themes';
 
 import { defaultColorScheme, defaultFontScheme } from './PageContext';
 import { appendColourSchemeToDocument, appendFontSchemeToDocument } from './Utils/appendScheme';
@@ -22,7 +23,9 @@ const App: React.FC = () => {
             <AuthProvider>
                 <PaymentsProvider>
                     <QueryClientProvider client={queryClient}>
-                        <Projects />
+                        <Theme accentColor="amber" grayColor="mauve">
+                            <Projects />
+                        </Theme>
                     </QueryClientProvider>
                 </PaymentsProvider>
             </AuthProvider>

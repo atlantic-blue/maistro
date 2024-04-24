@@ -5,15 +5,43 @@ import { NavLink, useParams } from "react-router-dom";
 import IconWireframe from "../../../../Components/Icons/Wireframe/Wireframe";
 import IconPlay from "../../../../Components/Icons/Play/Play";
 
-import { Routes, appRoutes } from "../../../router";
+import { appRoutes } from "../../../router";
 
 import * as styles from "./Menu.scss"
 import { ProjectsContext } from "../../../../Projects";
 import IconHome from "../../../../Components/Icons/Home/Home";
 import IconNew from "../../../../Components/Icons/New/New";
-import IconSave from "../../../../Components/Icons/Save/Save";
 import IconSettings from "../../../../Components/Icons/Settings/Settings";
+import { IconButton, Text } from "@radix-ui/themes";
 
+interface MenuButtonProps {
+    link: string
+    text: string
+    Icon: React.FC<any>
+}
+
+const MenuButton: React.FC<MenuButtonProps> = (props) => {
+    return (
+        <NavLink
+            to={props.link}
+            className={({ isActive, isPending }) => {
+                return classNames({
+                    [styles.linkIsActive]: isActive,
+                    isPending: ""
+                })
+            }}
+        >
+            <IconButton size="4" variant="ghost">
+                <div className={styles.linkContainer}>
+                    <props.Icon className={styles.linkStrokeIcon} />
+                    <Text>
+                        {props.text}
+                    </Text>
+                </div>
+            </IconButton>
+        </NavLink>
+    )
+}
 const Menu: React.FC = () => {
     const { projects } = React.useContext(ProjectsContext)
     const { projectId, pageId, pagePathname } = useParams()
@@ -41,90 +69,39 @@ const Menu: React.FC = () => {
         <div className={styles.menu}>
             <ul className={styles.menuContent}>
                 <li className={styles.link}>
-                    <NavLink
-                        to={
-                            appRoutes.getProjectsRoute()
-                        }
-                        className={({ isActive, isPending }) => {
-                            return classNames({
-                                [styles.linkIsActive]: isActive,
-                                isPending: ""
-                            })
-                        }}
-                    >
-                        <div className={styles.linkContainer}>
-                            <IconHome className={styles.linkIcon} />
-                            <span>Home</span>
-                        </div>
-                    </NavLink>
+                    <MenuButton
+                        link={appRoutes.getProjectsRoute()}
+                        text="Home"
+                        Icon={IconHome}
+                    />
                 </li>
                 <li className={styles.link}>
-                    <NavLink
-                        to={
-                            appRoutes.getProjectTemplateRoute(project?.getId())
-                        }
-                        className={({ isActive, isPending }) => {
-                            return classNames({
-                                [styles.linkIsActive]: isActive,
-                                isPending: ""
-                            })
-                        }}
-                    >
-                        <div className={styles.linkContainer}>
-                            <IconNew className={styles.linkIcon} />
-                            <span>Templates</span>
-                        </div>
-                    </NavLink>
+                    <MenuButton
+                        link={appRoutes.getProjectTemplateRoute(project?.getId())}
+                        text="Templates"
+                        Icon={IconNew}
+                    />
                 </li>
                 <li className={styles.link}>
-                    <NavLink
-                        to={editLink()}
-                        className={({ isActive, isPending }) => {
-                            return classNames({
-                                [styles.linkIsActive]: isActive,
-                                isPending: ""
-                            })
-                        }}
-                    >
-                        <div className={styles.linkContainer}>
-                            <IconWireframe className={styles.linkIcon} />
-                            <span>Edit</span>
-                        </div>
-                    </NavLink>
+                    <MenuButton
+                        link={editLink()}
+                        text="Edit"
+                        Icon={IconWireframe}
+                    />
                 </li>
                 <li className={styles.link}>
-                    <NavLink
-                        to={previewLink()}
-                        className={({ isActive, isPending }) => {
-                            return classNames({
-                                [styles.linkIsActive]: isActive,
-                                isPending: ""
-                            })
-                        }}
-                    >
-                        <div className={styles.linkContainer}>
-                            <IconPlay className={styles.linkIcon} />
-                            <span>Preview</span>
-                        </div>
-                    </NavLink>
+                    <MenuButton
+                        link={previewLink()}
+                        text="Preview"
+                        Icon={IconPlay}
+                    />
                 </li>
                 <li className={styles.link}>
-                    <NavLink
-                        to={
-                            appRoutes.getProjectSettingsRoute(project?.getId())
-                        }
-                        className={({ isActive, isPending }) => {
-                            return classNames({
-                                [styles.linkStrokeIsActive]: isActive,
-                                isPending: ""
-                            })
-                        }}
-                    >
-                        <div className={styles.linkContainer}>
-                            <IconSettings className={styles.linkStrokeIcon} />
-                            <span>Settings</span>
-                        </div>
-                    </NavLink>
+                    <MenuButton
+                        link={appRoutes.getProjectSettingsRoute(project?.getId())}
+                        text="Settings"
+                        Icon={IconSettings}
+                    />
                 </li>
             </ul>
         </div>

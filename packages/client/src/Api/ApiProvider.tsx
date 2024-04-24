@@ -1,10 +1,17 @@
 import React from "react";
+
 import { projectsCreate } from "./Projects/projectsCreate";
 import { projectsRead } from "./Projects/projectsRead";
 import { projectsReadById } from "./Projects/projectsReadById";
 import { projectsUpdateById } from "./Projects/projectsUpdateById";
 import { projectsDelete } from "./Projects/projectsDelete";
 import { paymentsSubscriptionsRead } from "./Payments/PaymentSubscriptions/PaymentSubscriptionsRead";
+import { EmailListsCreateInput, EmailListsCreateOutput, emailListsCreate } from "./EmailLists/emailListsCreate";
+import { EmailListsReadInput, EmailListsReadOutput, emailListsRead } from "./EmailLists/emailListsRead";
+
+import { ProjectStruct } from "../types";
+import { EmailEntriesCreateInput, EmailEntriesCreateOutput, emailEntriesCreate } from "./EmailEntries/emailEntriesCreate";
+import { EmailEntriesReadInput, EmailEntriesReadOutput, emailEntriesReadById } from "./EmailEntries/emailEntriesReadById";
 
 interface ApiContextState {
     api: {
@@ -15,6 +22,16 @@ interface ApiContextState {
             updateById: ({ projectId, token, name, url }: { projectId: string, token: string, name: string, url: string }) => Promise<void>,
             delete: ({ token, id }: { token: string, id: string }) => Promise<void>,
         }
+        email: {
+            lists: {
+                create: (input: EmailListsCreateInput) => Promise<EmailListsCreateOutput>
+                read: (input: EmailListsReadInput) => Promise<EmailListsReadOutput>
+            },
+            entries: {
+                create: (input: EmailEntriesCreateInput) => Promise<EmailEntriesCreateOutput>
+                readById: (input: EmailEntriesReadInput) => Promise<EmailEntriesReadOutput>
+            },
+        },
         payments: {
             subscriptions: {
                 read: ({ token }: { token: string }) => Promise<{ subscription: { status: string } }>
@@ -31,6 +48,16 @@ const context: ApiContextState = {
             readById: projectsReadById,
             updateById: projectsUpdateById,
             delete: projectsDelete,
+        },
+        email: {
+            lists: {
+                create: emailListsCreate,
+                read: emailListsRead,
+            },
+            entries: {
+                create: emailEntriesCreate,
+                readById: emailEntriesReadById,
+            }
         },
         payments: {
             subscriptions: {

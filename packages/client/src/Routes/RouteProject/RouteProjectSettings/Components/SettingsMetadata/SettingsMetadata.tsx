@@ -3,13 +3,13 @@ import React, { useEffect } from "react"
 import { Project } from "../../../../../Store/Project"
 import { ProjectMessageType } from "../../../../../types"
 
-import Button from "../../../../../Components/Gallery/Components/Button/Button"
 import { ProjectsContext } from "../../../../../Projects"
 
 import { createUrl, isValidUrl } from "../../../../../Utils/url"
 
 import * as styles from "./SettingsMetadata.scss"
 import { ApiContext } from "../../../../../Api/ApiProvider"
+import { Box, Button, Flex, Text, TextField } from "@radix-ui/themes"
 
 interface SettingsMetadataProps {
     project: Project
@@ -23,6 +23,7 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
     const { user } = React.useContext(ProjectsContext)
     const [name, setName] = React.useState(project.getName())
     const [projectUrl, setProjectURl] = React.useState(project.getUrl())
+    const [isLoading, setIsLoading] = React.useState(false)
 
     useEffect(() => {
         project.event$.next({
@@ -39,54 +40,61 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
     }, [projectUrl])
 
 
+    // TODO ERROR HANDLING
     const onClick = async () => {
-        await api.projects.updateById({
+        setIsLoading(true)
+        api.projects.updateById({
             token: user.getTokenId(),
             projectId: project.getId(),
             name: name,
             url: createUrl(projectUrl)
         })
-        // TODO show success 
+            .finally(() => {
+                setIsLoading(false)
+            })
     }
 
     return (
-        <div className={styles.content}>
-            <div className={styles.section}>
-                <div
+        <Flex gap="3" className={styles.content}>
+            <Box p="2">
+                <Text
                     className={styles.title}
                 >
                     Project Name
-                </div>
-                <input
+                </Text>
+                <TextField.Root
+                    size="2"
                     type="text"
+                    variant="surface"
                     value={name}
                     onChange={e => setName(e.target.value)}
                     disabled={isDisabled}
                     className={styles.input}
                 />
-            </div>
+            </Box>
 
-            <div className={styles.section}>
-                <div
+            <Box p="2">
+                <Text
                     className={styles.title}
                 >
                     Project URL
-                </div>
-                <div>
-                    <input
-                        type="text"
-                        value={projectUrl}
-                        onChange={e => setProjectURl(e.target.value)}
-                        disabled={isDisabled}
-                        className={styles.input}
-                    />
-                </div>
-            </div>
+                </Text>
+                <TextField.Root
+                    type="text"
+                    size="2"
+                    variant="surface"
+                    value={projectUrl}
+                    onChange={e => setProjectURl(e.target.value)}
+                    disabled={isDisabled}
+                    className={styles.input}
+                />
 
-            <Button onClick={onClick}>
+            </Box>
+
+            <Button onClick={onClick} size="3" loading={isLoading}>
                 Update
             </Button>
-        </div>
+        </Flex>
     )
 }
 

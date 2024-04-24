@@ -7,6 +7,7 @@ import {
     PageMessageType,
     PageStruct,
     ProjectAssetStruct,
+    ProjectEmailListStruct,
     ProjectEvent,
     ProjectMessageType,
     ProjectStruct,
@@ -15,7 +16,7 @@ import { defaultColorScheme, defaultFontScheme } from "../PageContext"
 
 import Page from "./Page"
 import { ProjectAsset } from "./ProjectAsset";
-import { withHttps } from "../Utils/url";
+import { ProjectEmailList } from "./EmailList";
 
 interface IProject {
     setId(id: string): void
@@ -50,24 +51,21 @@ export class Project implements IProject {
     private name = `Untitled-${faker.animal.bird().replace(" ", "-")}`
     private url = ""
     private pages: Record<string, Page> = {}
-    private subscriptions: Subscription[] = []
+    private assets: Record<string, ProjectAsset> = {}
+    private emailLists: Record<string, ProjectEmailList> = {}
     private colourScheme: ColourScheme = defaultColorScheme
     private fontScheme: FontScheme = defaultFontScheme
-    private assets: Record<string, ProjectAsset> = {}
 
+    private subscriptions: Subscription[] = []
     public event$ = new Subject<ProjectEvent>()
 
     constructor(project: ProjectStruct) {
-        this.setProject(project)
+        this.set(project)
         this.subscriptions = [this.createSubscriptions()]
     }
 
     private createSubscriptions() {
         return this.event$.subscribe(event => {
-            if (event.type === ProjectMessageType.READ_PAGE) {
-                this.getPageById(event.data)
-            }
-
             if (event.type === ProjectMessageType.SET_PAGE) {
                 this.setPage(event.data.id, event.data)
             }
@@ -82,6 +80,14 @@ export class Project implements IProject {
 
             if (event.type === ProjectMessageType.DELETE_ASSET) {
                 this.deleteAsset(event.data)
+            }
+
+            if (event.type === ProjectMessageType.SET_EMAIL_LIST) {
+                this.setEmailList(event.data.id, event.data)
+            }
+
+            if (event.type === ProjectMessageType.DELETE_EMAIL_LIST) {
+                this.deleteEmailList(event.data)
             }
 
             if (event.type === ProjectMessageType.SET_COLOUR_SCHEME) {
@@ -106,7 +112,7 @@ export class Project implements IProject {
         this.subscriptions.map(s => s.unsubscribe())
     }
 
-    public getProjectStructure(): ProjectStruct {
+    public getStruct(): ProjectStruct {
         return {
             id: this.getId(),
             name: this.getName(),
@@ -123,14 +129,19 @@ export class Project implements IProject {
                     acc[assetKey] = this.getAssetById(assetKey).getAssetStructure()
                     return acc
                 }, {}),
+            emailLists: Object.keys(this.getEmailLists())
+                .reduce<Record<string, ProjectEmailListStruct>>((acc, key) => {
+                    acc[key] = this.getEmailListById(key).getStruct()
+                    return acc
+                }, {}),
         }
     }
 
-    public getProject() {
+    public get() {
         return this
     }
 
-    public setProject = (projectStruct: ProjectStruct) => {
+    public set = (projectStruct: ProjectStruct) => {
         this.setId(projectStruct.id)
         this.setName(projectStruct.name)
         this.setColourScheme(projectStruct.colourScheme)
@@ -242,43 +253,78 @@ export class Project implements IProject {
         delete this.assets[id]
     }
 
-    getId(): string {
+    /**
+     * Email List
+     */
+    public setEmailList(id: string, emailListStruct: ProjectEmailListStruct): void {
+        const emailList = new ProjectEmailList(emailListStruct)
+
+        // Reactively update pages content child -> parent
+        this.subscriptions.push(
+            emailList.event$.subscribe(() => {
+                this.event$.next({
+                    type: ProjectMessageType.SET_EMAIL_LIST,
+                    data: emailList.getStruct(),
+                })
+            })
+        )
+
+        this.emailLists[id] = emailList
+    }
+
+    public assetEmailList(id: string): void {
+        delete this.assets[id]
+    }
+
+    public getEmailLists(): Record<string, ProjectEmailList> {
+        return this.emailLists
+    }
+
+    public getEmailListById(id: string): ProjectEmailList {
+        return this.emailLists[id]
+    }
+
+    public deleteEmailList(id: string): void {
+        delete this.emailLists[id]
+    }
+
+    public getId(): string {
         return this.id
     }
 
-    setId(id: string) {
+    public setId(id: string) {
         this.id = id
     }
 
-    getName(): string {
+    public getName(): string {
         return this.name
     }
 
-    setName(name: string) {
+    public setName(name: string) {
         this.name = name
     }
 
-    getUrl(): string {
+    public getUrl(): string {
         return this.url
     }
 
-    setUrl(url: string) {
+    public setUrl(url: string) {
         this.url = url
     }
 
-    getColourScheme(): ColourScheme {
+    public getColourScheme(): ColourScheme {
         return this.colourScheme
     }
 
-    setColourScheme(colourScheme: ColourScheme) {
+    public setColourScheme(colourScheme: ColourScheme) {
         this.colourScheme = colourScheme || defaultColorScheme
     }
 
-    getFontScheme(): FontScheme {
+    public getFontScheme(): FontScheme {
         return this.fontScheme
     }
 
-    setFontScheme(fontScheme: FontScheme) {
+    public setFontScheme(fontScheme: FontScheme) {
         this.fontScheme = fontScheme || defaultFontScheme
     }
 
@@ -289,6 +335,7 @@ export class Project implements IProject {
             url,
             pages: {},
             assets: {},
+            emailLists: {},
             colourScheme: defaultColorScheme,
             fontScheme: defaultFontScheme,
         })

@@ -4,6 +4,21 @@ import createError from "../error-handler";
 const NAME = "JSON_BODY_PARSER"
 const jsonBodyParser = (event: APIGatewayProxyEvent) => {
     try {
+        if (event.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+            if (event.isBase64Encoded && typeof event.body === "string") {
+                const formData = Buffer.from(event.body, 'base64').toString()
+                const params = new URLSearchParams(formData)
+                const body: Record<string, string> = {}
+                params.forEach((value, key) => {
+                    body[key] = value
+                })
+
+                // @ts-expect-error parsing into object
+                event.body = body
+                return event
+            }
+        }
+
         const body = event.body && JSON.parse(event.body);
         if (!body) {
             // TODO add logger

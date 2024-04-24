@@ -15,7 +15,7 @@
     border: 1px solid #d7d2d2;
     background-color: #eeeeee;
     padding: 20px;
-    margin: 20px;
+    margin: 0 15px 15px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -53,12 +53,11 @@
     margin: 10px 30px;
     padding: 10px;
     border: 1px solid red;
-    border-radius: 50%;
 
     &-icon {
         width: 20px;
         height: 20px;
-        fill: red
+        fill: white;
     }
 }
 

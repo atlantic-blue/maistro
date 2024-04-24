@@ -4,47 +4,58 @@ import { ProjectsContext } from "../../Projects"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
 import AuthLogoutButton from "../../Auth/AuthLogoutButton"
-import PaymentsRedirect from "../../Payments/Payments"
 
 import Button from "../../Components/Gallery/Components/Button/Button"
 import { PaymentsContext } from "../../Payments/PaymentsProvider"
 
 import * as styles from "./RouteSettings.scss"
+import { Avatar, Card, Heading } from "@radix-ui/themes"
 
 const RoutesSettings: React.FC = () => {
     const { user } = React.useContext(ProjectsContext)
-    const { isSubscribed } = React.useContext(PaymentsContext)
+    const { isSubscribed, isLoading, redirectToCheckout } = React.useContext(PaymentsContext)
 
     return (
         <div className={styles.main}>
             <RouteProjectHeader user={user} />
 
+            <br />
+            <Heading size="4" as="h3" align="center">
+                Settings
+            </Heading>
+
             <div className={styles.content}>
 
-                <div className={styles.section}>
-                    <img src={user.getAvatar()} />
+                <Card className={styles.section}>
+                    <Avatar
+                        size="7"
+                        src={user.getAvatar()}
+                        fallback={user.getName().charAt(0)}
+                    />
                     <div>{user.getName()}</div>
-                </div>
+                </Card>
 
 
-                <div className={styles.section}>
-                    {isSubscribed ?
-                        (
-                            <Button onClick={() => {
+                <Card className={styles.section}>
+                    <Button
+                        size="3"
+                        loading={isLoading}
+                        onClick={() => {
+                            if (isSubscribed) {
                                 window.open("https://billing.stripe.com/p/login/00g4i29gM9GOgz6dQQ", "_blank")
-                            }}>
-                                Manage Subscription
-                            </Button>
-                        ) :
-                        (
-                            <PaymentsRedirect />
-                        )
-                    }
-                </div>
+                            } else {
+                                redirectToCheckout()
+                            }
+                        }}
+                    >
+                        {isSubscribed ? "Manage Subscription" : "Subscribe"}
+                    </Button>
 
-                <div className={styles.section}>
+                </Card>
+
+                <Card className={styles.section}>
                     <AuthLogoutButton />
-                </div>
+                </Card>
             </div>
         </div >
     )

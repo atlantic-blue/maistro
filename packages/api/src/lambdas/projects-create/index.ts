@@ -39,6 +39,7 @@ const projectsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             userId,
             name,
             url,
+            createdAt: new Date().toISOString(),
         }
     };
 

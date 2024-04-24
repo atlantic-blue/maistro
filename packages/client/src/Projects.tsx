@@ -8,10 +8,11 @@ import router from "./Routes/router";
 
 import { User } from "./Store/User";
 import { AuthContext } from "./Auth/AuthProvider";
-import { debounceTime } from "rxjs/operators";
+import { debounceTime, filter } from "rxjs/operators";
 
 import "./Project.scss"
 import { ApiContext } from "./Api/ApiProvider";
+import useObservable from "./Utils/Hooks/UseObservable";
 
 const projectsStore = new Projects()
 const user = new User()
@@ -30,7 +31,13 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
 }) => {
     const { api } = React.useContext(ApiContext)
     const { user } = React.useContext(AuthContext)
-    const [key, setKey] = React.useState("")
+
+    const data = useObservable(
+        projectsStore.event$
+            .pipe(
+                filter(e => e.type === ProjectsMessageType.SET_PROJECT)
+            )
+    )
 
     useEffect(() => {
         if (!user) {
@@ -55,12 +62,10 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
                         if (!projectData) {
                             return
                         }
-
                         projectsStore.event$.next({
                             type: ProjectsMessageType.SET_PROJECT,
                             data: projectData
                         })
-                        setKey(`${Date.now()}`) // TODO force update?
                     } catch (error) {
                         console.log(error)
                     }
@@ -81,9 +86,9 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
         }
     }, [user])
 
+    console.log(data)
     return (
         <ProjectsContext.Provider
-            key={key}
             value={{
                 projects,
                 user,

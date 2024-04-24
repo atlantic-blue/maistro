@@ -6,7 +6,6 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 80px;
     border: 1px solid #DFE5EB;
     background-color: #F3F3F3;
     z-index: $global-z-index-4;
@@ -31,17 +30,9 @@
     }
 
     &-icon {
-        stroke: #7c6161;
-        stroke-width: 2px;
-
-        width: 40px;
-        height: 40px;
-
-        padding: 2px;
-
-        border-radius: 8px;
-        background-color: #ffffff;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .1);
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
     }
 }
 
@@ -52,6 +43,7 @@
     &-isActive {
         svg {
             fill: #FF9900;
+            stroke: #FF9900;
         }
 
         a,
