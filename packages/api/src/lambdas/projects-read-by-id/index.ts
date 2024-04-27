@@ -38,7 +38,7 @@ const projectsReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
     if (!data || !data.Item) {
         return {
             statusCode: 404,
-            body: JSON.stringify({ message: `projectId ${projectId} not found` })
+            body: JSON.stringify({})
         };
     }
 

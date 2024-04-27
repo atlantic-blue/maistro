@@ -53,6 +53,11 @@ const createMultipleWebpackConfigs = [
     "ping",
     "upload", // TODO move to projects
 
+    "content-create",
+    "content-read",
+    "content-update-by-id",
+    // TODO "content-delete",
+
     "hosting-redirect",
 
     "email-entries-create",
@@ -60,9 +65,13 @@ const createMultipleWebpackConfigs = [
 
     "email-lists-create",
     "email-lists-read",
-    // "email-lists-read-by-id",
-    // "email-lists-update-by-id",
-    // "email-lists-delete",
+    // TODO "email-lists-update-by-id",
+
+    "pages-create",
+    "pages-read",
+    "pages-read-by-id",
+    "pages-update-by-id",
+    // TODO "pages-delete",
 
     "projects-create",
     "projects-read",
@@ -72,7 +81,7 @@ const createMultipleWebpackConfigs = [
 
     "payments-subscriptions-read"
 ].map(api => {
-
+    console.info(`BUILDING: ${api}\n`)
     return ({
         ...createDefaultWebpackConfig(),
         entry: {

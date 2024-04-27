@@ -18,7 +18,7 @@ resource "aws_dynamodb_table" "projects" {
     type = "S"
   }
 
- attribute {
+  attribute {
     name = "url"
     type = "S"
   }
@@ -52,10 +52,19 @@ resource "aws_dynamodb_table" "pages" {
     name = "projectId"
     type = "S"
   }
+
+  global_secondary_index {
+    name            = "ProjectIdIndex"
+    hash_key        = "projectId"
+    projection_type = "ALL"
+
+    read_capacity  = 1
+    write_capacity = 1
+  }
 }
 
-resource "aws_dynamodb_table" "asset" {
-  name         = "${var.project_name}-assets"
+resource "aws_dynamodb_table" "content" {
+  name         = "${var.project_name}-content"
   billing_mode = "PROVISIONED"
 
   read_capacity  = 1 // TODO investigate limits
@@ -72,5 +81,14 @@ resource "aws_dynamodb_table" "asset" {
   attribute {
     name = "projectId"
     type = "S"
+  }
+
+  global_secondary_index {
+    name            = "ProjectIdIndex"
+    hash_key        = "projectId"
+    projection_type = "ALL"
+
+    read_capacity  = 1
+    write_capacity = 1
   }
 }

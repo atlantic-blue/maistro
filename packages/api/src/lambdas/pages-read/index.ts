@@ -8,7 +8,7 @@ import authJwt from '../../middlewares/auth-jwt';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const projectsRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
+const pagesRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableName = process.env.TABLE_NAME
     if (!tableName) {
         throw createError(500, "process TABLE_NAME not specified")
@@ -20,15 +20,19 @@ const projectsRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
         throw createError(500, "userId not specified")
     }
 
+    const projectId = event.pathParameters && event.pathParameters['project-id']
+    if (!projectId) {
+        throw createError(500, "projectId not specified")
+    }
+
     const params: AWS.DynamoDB.DocumentClient.QueryInput = {
         TableName: tableName,
-        KeyConditionExpression: "#userId = :userIdValue",
-        ExpressionAttributeNames: {
-            "#userId": "userId"
-        },
+        IndexName: 'ProjectIdIndex',
+        KeyConditionExpression: "projectId = :projectId",
         ExpressionAttributeValues: {
-            ":userIdValue": payload.sub
-        }
+            ':projectId': projectId
+        },
+        Limit: 25,
     };
 
     const data = await dynamoDb.query(params).promise();
@@ -48,6 +52,6 @@ const projectsRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
 
 const handler = new LambdaMiddlewares()
     .before(authJwt)
-    .handler(projectsRead)
+    .handler(pagesRead)
 
 export { handler }

@@ -35,7 +35,7 @@ const emailListsRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     if (!data || !data.Items || data.Items?.length === 0) {
         return {
             statusCode: 404,
-            body: JSON.stringify({ message: "email-lists not found" })
+            body: JSON.stringify([])
         };
     }
 
