@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
 
 import * as styles from './SectionContactDetailed.scss';
 
@@ -36,8 +36,8 @@ const SectionContactDetailed = () => (
     </div>
 );
 
-export const SectionContactDetailedItem: ContentStruct = {
-    id: "section-contact-detailed",
+export const SectionContactDetailedItem: TemplateStruct = {
+    name: "section-contact-detailed",
     description: "A detailed contact form for comprehensive inquiries.",
     Component: SectionContactDetailed,
     categories: [ContentCategory.CONTACT],

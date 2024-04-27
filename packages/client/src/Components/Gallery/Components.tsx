@@ -1,26 +1,22 @@
 import React from 'react'
 
 import GalleryItem from '../TemplateView/TemplateView'
-import PageContent from '../../Store/PageContent'
-import { ContentStruct } from '../../types'
+import ProjectContent from '../../Store/ProjectContent'
+import { TemplateStruct } from '../../types'
 
 interface ComponentsGalleryProps {
-    onClick: (content: ContentStruct) => void
-    templates: ContentStruct[]
+    onClick: (content: TemplateStruct) => void
+    templates: TemplateStruct[]
 }
 
 const ComponentsGallery: React.FC<ComponentsGalleryProps> = (props) => {
-    return props.templates.map(content => {
-        const Component = content.Component
-        // TODO revise, does it need to update the store?
-        const id = `${content.id}-${Math.random()}`
-        content.id = id
-
+    return props.templates.map(template => {
+        const Component = template.Component
         return (
             <GalleryItem
-                key={`${content.id}-${Math.random()}`}
-                onClick={() => props.onClick(content)}
-                title={content.description}
+                key={`${template.name}-${Math.random()}`}
+                onClick={() => props.onClick(template)}
+                title={template.description}
                 thumbnail={{
                     dimensions: {
                         width: `350px`,
@@ -30,7 +26,7 @@ const ComponentsGallery: React.FC<ComponentsGalleryProps> = (props) => {
                 }}
             >
                 {/*  //TODO types */}
-                <Component {...content.props as any} />
+                <Component {...template.props as any} />
             </GalleryItem>
         )
     })

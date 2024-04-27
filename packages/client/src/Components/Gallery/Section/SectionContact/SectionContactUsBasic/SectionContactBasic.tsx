@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
 
 import * as styles from './SectionContactBasic.scss';
 
@@ -29,8 +29,8 @@ const SectionContactBasic = () => (
     </div>
 );
 
-export const SectionContactBasicItem: ContentStruct = {
-    id: "SectionContactBasic",
+export const SectionContactBasicItem: TemplateStruct = {
+    name: "SectionContactBasic",
     description: "A basic contact form for user inquiries.",
     Component: SectionContactBasic,
     categories: [ContentCategory.CONTACT],

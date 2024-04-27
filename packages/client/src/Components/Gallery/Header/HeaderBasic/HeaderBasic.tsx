@@ -1,6 +1,6 @@
 import React from "react"
 
-import { ContentStruct, ContentCategory } from "../../../../types"
+import { TemplateStruct, ContentCategory } from "../../../../types"
 
 import Logo from "../../Components/Logo/Logo"
 import * as LogoStyles from "../../Components/Logo/Logo.scss"
@@ -29,11 +29,20 @@ const HeaderBasic: React.FC<HeaderProps> = (props) => {
     )
 }
 
-export const HeaderBasicItem: ContentStruct = {
-    id: "HeaderBasic",
+const HeaderBasicEditor: React.FC<HeaderProps> = (props) => {
+    return (
+        <div>
+            
+        </div>
+    )
+}
+
+export const HeaderBasicItem: TemplateStruct = {
+    name: "HeaderBasic",
     description: "A simple, straightforward navigation bar with clear, bold links and a distinct logo area. Suitable for minimalist or traditional website designs",
     categories: [ContentCategory.HEADER],
     Component: HeaderBasic,
+    ComponentEditor: HeaderBasicEditor,
     classNames: [
         ...Object.values(styles),
         ...Object.values(LogoStyles),

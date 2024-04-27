@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../types';
 
 import * as styles from './FooterInteractive.scss';
 
@@ -28,8 +28,8 @@ const FooterInteractive = () => {
     );
 };
 
-export const FooterInteractiveItem: ContentStruct = {
-    id: "footer-interactive",
+export const FooterInteractiveItem: TemplateStruct = {
+    name: "footer-interactive",
     description: "An interactive footer that engages users by collecting their feedback directly.",
     Component: FooterInteractive,
     categories: [ContentCategory.FOOTER],

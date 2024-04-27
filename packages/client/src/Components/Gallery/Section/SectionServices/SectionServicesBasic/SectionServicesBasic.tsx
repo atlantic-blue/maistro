@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
 
 import * as styles from './SectionServicesBasic.scss';
 
@@ -17,8 +17,8 @@ const SectionServicesBasic = () => {
     );
 };
 
-export const SectionServicesBasicItem: ContentStruct = {
-    id: "SectionServicesBasic",
+export const SectionServicesBasicItem: TemplateStruct = {
+    name: "SectionServicesBasic",
     Component: SectionServicesBasic,
     categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
     description: "A basic and clean presentation of services, perfect for businesses that prefer a minimalist and straightforward approach.",

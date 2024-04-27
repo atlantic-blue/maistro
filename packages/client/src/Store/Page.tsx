@@ -13,22 +13,19 @@ import {
     FontFamily,
 } from "../types";
 
-import PageContent from "./PageContent";
 import Html from "../Components/Html/Html";
 import { getFontFamilyHref } from "../Components/FontScheme/FontScheme";
 import { resetCss } from "./utils/cssStyles";
-import { withExtension } from "../Utils/url";
+import { templates } from "../Components/Gallery";
 
 interface IPage {
-    getHtml(): React.ReactNode
-
     setId(id: string): void
     getId(): string
 
-    getPageStructure(): PageStruct
+    getStruct(): PageStruct
 
-    getPage(): PageStore
-    setPage(page: PageStruct): void
+    get(): PageStore
+    set(page: PageStruct): void
 
     getPath(): string
     setPath(path: string): void
@@ -42,24 +39,34 @@ interface IPage {
     setKeyWords(keyWords: string[]): void
     getKeyWords(): string
 
-    getContent(): PageContent[]
-    setContent(content: PageContent[]): void
+    getContent(): string[]
+    setContentIds(content: string[]): void
 
     getColourScheme(): ColourScheme
     setColourScheme(colourScheme: ColourScheme): void
 
     getFontScheme(): FontScheme
     setFontScheme(fontScheme: FontScheme): void
+
+    createHtml({
+        Css,
+        Body
+    }: {
+        Css: () => React.ReactNode,
+        Body: () => React.ReactNode
+    }): React.ReactNode
+
 }
 
 class PageStore implements IPage {
     private id = `${Date.now()}`
+    private projectId: string = ""
     private title = `Untitled-${Date.now()}`
     private path = `path-${faker.color.human().replace(" ", "-")}`
     private description = "I am a Page description, edit me!"
     private keywords = ""
-    private content: PageContent[] = []
-    private contentActive: PageContent | null = null
+    private contentIds: string[] = []
+    private contentIdActive: string = ""
     private colourScheme: ColourScheme = defaultColorScheme
     private fontScheme: FontScheme = defaultFontScheme
 
@@ -67,7 +74,7 @@ class PageStore implements IPage {
     public event$ = new Subject<PageEvent>()
 
     constructor(page: PageStruct) {
-        this.setPage(page)
+        this.set(page)
         this.subscription = this.createSubscriptions()
     }
 
@@ -77,10 +84,6 @@ class PageStore implements IPage {
 
     private createSubscriptions() {
         return this.event$.subscribe(event => {
-            if (event.type === PageMessageType.SET_ID) {
-                this.setId(event.data)
-            }
-
             if (event.type === PageMessageType.SET_TITLE) {
                 this.setTitle(event.data)
             }
@@ -93,19 +96,19 @@ class PageStore implements IPage {
                 this.setDescription(event.data)
             }
 
-            if (event.type === PageMessageType.SET_CONTENT) {
-                this.setContent(event.data)
+            if (event.type === PageMessageType.SET_CONTENT_IDS) {
+                this.setContentIds(event.data)
             }
 
-            if (event.type === PageMessageType.PUT_CONTENT) {
-                this.setContent([
-                    ...this.getContent(),
-                    ...event.data,
+            if (event.type === PageMessageType.PUSH_CONTENT_IDS) {
+                this.setContentIds([
+                    ...this.contentIds,
+                    ...event.data
                 ])
             }
 
-            if (event.type === PageMessageType.SET_CONTENT_ACTIVE) {
-                this.setContentActive(event.data)
+            if (event.type === PageMessageType.SET_CONTENT_ID_ACTIVE) {
+                this.setContentIdActive(event.data)
             }
 
             if (event.type === PageMessageType.SET_COLOUR_SCHEME) {
@@ -118,31 +121,33 @@ class PageStore implements IPage {
         })
     }
 
-    public getPageStructure(): PageStruct {
+    public getStruct(): PageStruct {
         return {
             id: this.getId(),
             title: this.getTitle(),
             path: this.getPath(),
             colourScheme: this.getColourScheme(),
-            content: this.getContent().map(c => c.getContentStructure()),
-            contentActive: this.getContentActive()?.getContentStructure() || null,
+            contentIds: this.getContentIds(),
+            contentIdActive: this.getContentIdActive(),
             description: this.getDescription(),
             fontScheme: this.getFontScheme(),
+            projectId: this.getProjectId()
         }
     }
 
-    public getPage() {
+    public get() {
         return this
     }
 
-    public setPage = (page: PageStruct) => {
+    public set = (page: PageStruct) => {
         this.setId(page.id)
         this.setTitle(page.title)
         this.setPath(page.path)
         this.setDescription(page.description)
         this.setColourScheme(page.colourScheme)
         this.setFontScheme(page.fontScheme)
-        this.setContent(page.content.map(c => new PageContent(c)))
+        this.setContentIds(page.contentIds)
+        this.setContentIdActive(page.contentIdActive)
     }
 
     public getId(): string {
@@ -151,6 +156,14 @@ class PageStore implements IPage {
 
     public setId(id: string) {
         this.id = id
+    }
+
+    public setProjectId(projectId: string) {
+        this.projectId = projectId
+    }
+
+    public getProjectId(): string {
+        return this.projectId
     }
 
     public getTitle(): string {
@@ -177,32 +190,20 @@ class PageStore implements IPage {
         this.keywords = keywords.join(", ")
     }
 
-    public getContent(): PageContent[] {
-        return this.content
+    public getContentIds(): string[] {
+        return [...new Set(this.contentIds.filter(Boolean))]
     }
 
-    private contentSubscriptions: Subscription[] = []
-    public setContent(content: PageContent[] = []) {
-        this.contentSubscriptions.map(s => s.unsubscribe())
-
-        const subscriptions = content.map(c => {
-            return c.event$.subscribe(() => {
-                this.event$.next({
-                    type: PageMessageType.NOTIFY_CONTENT_UPDATED,
-                })
-            })
-        })
-
-        this.content = content
-        this.contentSubscriptions = subscriptions
+    public setContentIds(contentIds: string[] = []) {
+        this.contentIds = [...new Set(contentIds.filter(Boolean))]
     }
 
-    public getContentActive(): PageContent | null {
-        return this.contentActive
+    public getContentIdActive(): string {
+        return this.contentIdActive
     }
 
-    public setContentActive(content: PageContent | null) {
-        this.contentActive = content
+    public setContentIdActive(contentIdActive: string) {
+        this.contentIdActive = contentIdActive
     }
 
     public getColourScheme(): ColourScheme {
@@ -222,11 +223,12 @@ class PageStore implements IPage {
     }
 
     public getPath(): string {
-        return withExtension(this.path, ".html")
+        return this.path
     }
 
     public setPath(path: string) {
-        this.path = withExtension(path.replace("/", "").replace(" ", "-"), ".html")
+        const sanitised = path?.replace("/", "").replace(" ", "-")
+        this.path = sanitised === "home" ? "index" : sanitised
     }
 
     // HTML PAGE
@@ -243,37 +245,13 @@ class PageStore implements IPage {
         )
     }
 
-    public getCss() {
-        return (
-            this.getContent().map(content => {
-                const styles = content.getStylesFromClassNames()
-                if (!styles) {
-                    return null
-                }
-
-                return (
-                    <style>
-                        {content.getStylesFromClassNames()}
-                    </style>
-                )
-            })
-        )
-    }
-
-    public getHtmlBody(): React.JSX.Element {
-        return (
-            <>
-                {
-                    this.getContent().map((content) => {
-                        const Component = content.getComponent()
-                        return <Component />
-                    })
-                }
-            </>
-        )
-    }
-
-    public getHtml(): React.ReactNode {
+    public createHtml({
+        Css,
+        Body
+    }: {
+        Css: () => React.ReactNode,
+        Body: () => React.ReactNode
+    }): React.ReactNode {
         return (
             <Html
                 htmlAttributes={{
@@ -305,14 +283,16 @@ class PageStore implements IPage {
                     <style>
                         {resetCss()}
                     </style>
-                    {this.getCss()}
+                    <style>
+                        <Css />
+                    </style>
                     <link href="https://maistro.website/assets/radix-styles.css" rel="stylesheet" />
 
                     {this.getFontFamilyLinks()}
                 </head>
                 <body>
                     <main id="main">
-                        {this.getHtmlBody()}
+                        <Body />
                     </main>
 
                 </body>

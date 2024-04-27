@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../types';
 
 import * as styles from './FooterWithNavigation.scss';
 
@@ -18,8 +18,8 @@ const FooterWithNavigation = () => (
     </footer>
 );
 
-export const FooterWithNavigationItem: ContentStruct = {
-    id: "footer-with-navigation",
+export const FooterWithNavigationItem: TemplateStruct = {
+    name: "footer-with-navigation",
     description: "A footer featuring a simple navigation menu and copyright text.",
     Component: FooterWithNavigation,
     categories: [ContentCategory.FOOTER],

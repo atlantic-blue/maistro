@@ -1,6 +1,4 @@
-import PageContent from "../../Store/PageContent"
-
-const moveItem = (items: PageContent[], item: PageContent, delta: number): PageContent[] => {
+const moveItem = <I,>(items: I[], item: I, delta: number): I[] => {
     const copy = [...items]
     const currentIndex = copy.indexOf(item)
     const nextIndex = currentIndex + delta
@@ -8,16 +6,17 @@ const moveItem = (items: PageContent[], item: PageContent, delta: number): PageC
         return copy
     }
 
-    const indexSorted = [currentIndex, nextIndex].sort()
+    // TODO do we need this?
+    // const indexSorted = [currentIndex, nextIndex].sort()
     copy.splice(currentIndex, 1)
     copy.splice(nextIndex, 0, item)
     return copy
 }
 
-export const moveItemUp = (items: PageContent[], item: PageContent): PageContent[] => {
+export const moveItemUp = <I,>(items: I[], item: I): I[] => {
     return moveItem(items, item, -1)
 }
 
-export const moveItemDown = (items: PageContent[], item: PageContent): PageContent[] => {
+export const moveItemDown = <I,>(items: I[], item: I): I[] => {
     return moveItem(items, item, 1)
 }

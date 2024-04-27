@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
 import Button from '../../../Components/Button/Button';
 import * as ButtonStyles from '../../../Components/Button/Button.scss';
 
@@ -57,8 +57,8 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
     );
 };
 
-export const SectionHeroVideoItem: ContentStruct = {
-    id: "SectionHeroVideo",
+export const SectionHeroVideoItem: TemplateStruct = {
+    name: "SectionHeroVideo",
     Component: SectionHeroVideo,
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     description: "Creates an engaging and immersive experience with a background video, ideal for dynamic content presentation.",

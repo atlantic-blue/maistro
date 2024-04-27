@@ -1,4 +1,4 @@
-import { ContentStruct } from '../../types'
+import { TemplateStruct } from '../../types'
 
 import { HeaderBasicItem } from './Header/HeaderBasic/HeaderBasic'
 import { HeaderDropDownItem } from './Header/HeaderDropdown/HeaderDropdown'
@@ -30,34 +30,49 @@ import { FooterDetailedItem } from './Footer/FooterDetailed/FooterDetailed'
 import { FooterInteractiveItem } from './Footer/FooterInteractive/FooterInteractive'
 import { FooterWithNavigationItem } from './Footer/FooterWithNavigation/FooterWithNavigation'
 
-export const GetTemplates = (): ContentStruct[] => [
-    HeaderBasicItem,
-    HeaderDropDownItem,
-    HeaderBurgerItem,
-    HeaderStickyItem,
+export const GetTemplates = (): Record<string, TemplateStruct> => {
+    const templatesRecord: Record<string, TemplateStruct> = {}
+    const templatesList: TemplateStruct[] = [
+        HeaderBasicItem,
+        HeaderDropDownItem,
+        HeaderBurgerItem,
+        HeaderStickyItem,
 
-    SectionHeroBasicItem,
-    SectionHeroImageItem,
-    SectionHeroVideoItem,
-    SectionHeroSlidesItem,
+        SectionHeroBasicItem,
+        SectionHeroImageItem,
+        SectionHeroVideoItem,
+        SectionHeroSlidesItem,
 
-    SectionAboutUsSimpleItem,
-    SectionAboutUsTeamItem,
-    SectionAboutUsDetailedItem,
-    SectionAboutUsInteractiveItem,
+        SectionAboutUsSimpleItem,
+        SectionAboutUsTeamItem,
+        SectionAboutUsDetailedItem,
+        SectionAboutUsInteractiveItem,
 
-    SectionServicesBasicItem,
-    SectionServicesAccordionItem,
-    SectionServicesDetailedItem,
-    SectionServicesIconsItem,
+        SectionServicesBasicItem,
+        SectionServicesAccordionItem,
+        SectionServicesDetailedItem,
+        SectionServicesIconsItem,
 
-    SectionContactBasicItem,
-    SectionContactWithMapItem,
-    SectionContactDetailedItem,
-    SectionContactInteractiveItem,
+        SectionContactBasicItem,
+        SectionContactWithMapItem,
+        SectionContactDetailedItem,
+        SectionContactInteractiveItem,
 
-    FooterSimpleItem,
-    FooterDetailedItem,
-    FooterWithNavigationItem,
-    FooterInteractiveItem,
-]
+        FooterSimpleItem,
+        FooterDetailedItem,
+        FooterWithNavigationItem,
+        FooterInteractiveItem,
+    ]
+
+    templatesList.forEach(template => {
+        templatesRecord[template.name] = template
+    })
+
+    return templatesRecord
+}
+
+const templates = GetTemplates()
+
+export {
+    templates
+}

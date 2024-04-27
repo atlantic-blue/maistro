@@ -5,6 +5,7 @@ import IconNew from "../Icons/New/New"
 
 import * as styles from "./TemplateView.scss"
 import classNames from "classnames"
+import { Box, Card, Section, Text } from "@radix-ui/themes"
 
 interface TemplateViewProps {
     title?: string
@@ -16,23 +17,33 @@ interface TemplateViewProps {
 
 const TemplateView: React.FC<TemplateViewProps> = (props) => {
     return (
-        <div className={classNames(props.className, styles.section)} onClick={props?.onClick} title={props.title}>
-            <div className={styles.content}>
+        <Card className={classNames(props.className, styles.section)} onClick={props?.onClick} title={props.title}>
+            <Box className={styles.content}>
                 <Thumbnail {...props.thumbnail}>
                     {props.children}
                 </Thumbnail>
-            </div>
-        </div>
+            </Box>
+            <Section size="1">
+                <Text as="div" size="1" weight="bold">
+                    {props.title}
+                </Text>
+            </Section>
+        </Card>
     )
 }
 
 const TemplateViewNew: React.FC<TemplateViewProps> = (props) => {
     return (
-        <div className={classNames(props.className, styles.section, styles.sectionEmpty)} onClick={props.onClick} title={props.title}>
-            <div className={styles.content}>
+        <Card className={classNames(props.className, styles.section, styles.sectionEmpty)} onClick={props.onClick} title={props.title}>
+            <Box className={styles.content}>
                 <IconNew className={styles.icon} />
-            </div>
-        </div>
+            </Box>
+            <Section size="1">
+                <Text as="div" size="1" weight="bold">
+                    {props.title}
+                </Text>
+            </Section>
+        </Card>
     )
 }
 

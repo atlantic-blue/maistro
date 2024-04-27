@@ -9,20 +9,22 @@ import RoutesProjects from "./RouteProjects/RouteProjects";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import RedirectRoute from "./Components/RedirectRoute/RedirectRoute";
 import RouteProjectSettings from "./RouteProject/RouteProjectSettings/RouteProjectSettings";
-import RouteProjectTemplates from "./RouteProject/RouteProjectTemplates/RouteProjectTemplates";
-import RouteProjectEdit from "./RouteProject/RouteProjectEdit/RouteProjectEdit";
-import RouteProjectEditPage from "./RouteProject/RouteProjectEditPage/RouteProjectEditPage";
-import RouteProjectPreview from "./RouteProject/RouteProjectPreview/RouteProjectPreview";
-import RouteProjectPreviewPage from "./RouteProject/RouteProjectPreviewPage/RouteProjectPreviewPage";
+import RouteProjectTemplates from "./RouteProject/RouteProjectPageCreate/RouteProjectPageCreate";
+import RouteProject from "./RouteProject/RouteProject/RouteProject";
+import RouteProjectEditPage from "./RouteProject/RouteProjectPage/RouteProjectPage";
+import RouteProjectPreview from "./RouteProject/RouteProjectPreview--DELETE/RouteProjectPreview";
+import RouteProjectPreviewPage from "./RouteProject/RouteProjectPreviewPage--DELETE/RouteProjectPreviewPage";
 import RouteLogin from "./RouteLogin/RouteLogin";
 import RouteLogout from "./RouteLogout/RouteLogout";
 import RouteSettings from "./RouteSettings/RouteSettings";
 import RouteCallback from "./RoutesCallback/RoutesCallback";
+import RoutesProjectsNew from "./RouteProjectsCreate/RouteProjectsCreate";
+import RouteProjectProvider from "./RouteProject/RouteProjectProvider";
 
 export enum RoutesParams {
     PROJECT_ID = ":projectId",
     PAGE_ID = ":pageId",
-    PAGE_PATHNAME = ":pagePathname"
+    CONTENT_ID = ":contentId"
 }
 
 export enum Routes {
@@ -34,15 +36,17 @@ export enum Routes {
 
     SETTINGS = `/settings`,
     PROJECTS = `/projects`,
+    PROJECTS_NEW = `/projects/new`,
+
+    PROJECT = `/project/${RoutesParams.PROJECT_ID}`,
+
+    PROJECT_PAGE = `/project/${RoutesParams.PROJECT_ID}/page/${RoutesParams.PAGE_ID}`,
+    PROJECT_PAGE_CREATE = `/project/${RoutesParams.PROJECT_ID}/page/create`,
+
+    PROJECT_CONTENT = `/project/${RoutesParams.PROJECT_ID}/content/${RoutesParams.CONTENT_ID}`,
+    PROJECT_CONTENT_CREATE = `/project/${RoutesParams.PROJECT_ID}/content/create`,
 
     PROJECT_SETTINGS = `/project/${RoutesParams.PROJECT_ID}/settings`,
-    PROJECT_TEMPLATES = `/project/${RoutesParams.PROJECT_ID}/templates`,
-
-    PROJECT_EDIT = `/project/${RoutesParams.PROJECT_ID}/edit`,
-    PROJECT_EDIT_PAGE = `/project/${RoutesParams.PROJECT_ID}/edit/${RoutesParams.PAGE_ID}`,
-
-    PROJECT_PREVIEW = `/project/${RoutesParams.PROJECT_ID}/preview`,
-    PROJECT_PREVIEW_PAGE = `/project/${RoutesParams.PROJECT_ID}/preview/${RoutesParams.PAGE_PATHNAME}`,
 }
 
 export const appRoutes = {
@@ -66,28 +70,25 @@ export const appRoutes = {
         return '/projects'
     },
 
+    getProjectsNewRoute() {
+        return '/projects/new'
+    },
+
+
+    getProjectRoute(projectId: string) {
+        return `/project/${projectId}`
+    },
+
+    getProjectPageRoute(projectId: string, pageId: string) {
+        return `/project/${projectId}/page/${pageId}`
+    },
+
     getProjectSettingsRoute(projectId: string) {
         return `/project/${projectId}/settings`
     },
 
-    getProjectTemplateRoute(projectId: string) {
-        return `/project/${projectId}/templates`
-    },
-
-    getProjectEditRoute(projectId: string) {
-        return `/project/${projectId}/edit`
-    },
-
-    getProjectEditPageRoute(projectId: string, pageId: string) {
-        return `/project/${projectId}/edit/${pageId}`
-    },
-
-    getProjectPreviewRoute(projectId: string) {
-        return `/project/${projectId}/preview`
-    },
-
-    getProjectPreviewPageRoute(projectId: string, pathname: string) {
-        return `/project/${projectId}/preview/${pathname.replace("/", "")}`
+    getProjectPageTemplatesRoute(projectId: string) {
+        return `/project/${projectId}/page/create`
     },
 }
 
@@ -137,50 +138,50 @@ const router = createBrowserRouter([
         ),
     },
     {
+        path: Routes.PROJECTS_NEW,
+        element: (
+            <ProtectedRoute>
+                <RoutesProjectsNew />
+            </ProtectedRoute>
+        ),
+    },
+    {
         path: Routes.PROJECT_SETTINGS,
         element: (
             <ProtectedRoute>
-                <RouteProjectSettings />,
+                <RouteProjectProvider>
+                    <RouteProjectSettings />
+                </RouteProjectProvider>
             </ProtectedRoute>
         ),
     },
     {
-        path: Routes.PROJECT_TEMPLATES,
+        path: Routes.PROJECT_PAGE_CREATE,
         element: (
             <ProtectedRoute>
-                <RouteProjectTemplates />,
+                <RouteProjectProvider>
+                    <RouteProjectTemplates />
+                </RouteProjectProvider>
             </ProtectedRoute>
         ),
     },
     {
-        path: Routes.PROJECT_EDIT,
+        path: Routes.PROJECT,
         element: (
             <ProtectedRoute>
-                <RouteProjectEdit />,
+                <RouteProjectProvider>
+                    <RouteProject />
+                </RouteProjectProvider>
             </ProtectedRoute>
         ),
     },
     {
-        path: Routes.PROJECT_EDIT_PAGE,
+        path: Routes.PROJECT_PAGE,
         element: (
             <ProtectedRoute>
-                <RouteProjectEditPage />
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: Routes.PROJECT_PREVIEW,
-        element: (
-            <ProtectedRoute>
-                <RouteProjectPreview />
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: Routes.PROJECT_PREVIEW_PAGE,
-        element: (
-            <ProtectedRoute>
-                <RouteProjectPreviewPage />
+                <RouteProjectProvider>
+                    <RouteProjectEditPage />
+                </RouteProjectProvider>
             </ProtectedRoute>
         ),
     },

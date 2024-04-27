@@ -63,7 +63,7 @@ export class ProjectAsset implements IProjectAsset {
         this.setSrc(assetStruct.src)
     }
 
-    public getAssetStructure(): ProjectAssetStruct {
+    public getStruct(): ProjectAssetStruct {
         return {
             id: this.getId(),
             src: this.getSrc(),

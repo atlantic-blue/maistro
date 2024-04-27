@@ -1,7 +1,7 @@
 export interface SectionHeroProps {
     edit?: boolean
     title: string
-    content: string | React.ReactNode
+    content: string
     cta: string
     ctaLink?: string
     ctaOnClick?: () => void

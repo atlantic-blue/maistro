@@ -11,7 +11,7 @@ export const CreateTemplateLanding = (): PageStruct[] => {
             id: uuid.v4(),
             title: "Generic Landing Page",
             description: "Generic Landing Page",
-            path: `/index.html`,
+            path: `/home`,
             contentActive: null,
             content: [
                 SectionHeroBasicItem

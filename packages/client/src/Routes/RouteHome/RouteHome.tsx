@@ -1,6 +1,6 @@
 import React from "react"
 
-import { CreateTemplateMaistro } from "../../Templates/TemplateMaistro";
+import { CreateTemplateMaistro } from "../../PageTemplates/TemplateMaistro";
 import { AuthContext } from "../../Auth/AuthProvider";
 import HeaderBurger from "../../Components/Gallery/Header/HeaderBurger/HeaderBurger";
 import SectionHeroVideo from "../../Components/Gallery/Section/SectionHero/SectionHeroVideo/SectionHeroVideo";

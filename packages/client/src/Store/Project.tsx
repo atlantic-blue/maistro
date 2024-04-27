@@ -3,8 +3,8 @@ import { faker } from '@faker-js/faker';
 
 import {
     ColourScheme,
+    ProjectContentStruct,
     FontScheme,
-    PageMessageType,
     PageStruct,
     ProjectAssetStruct,
     ProjectEmailListStruct,
@@ -17,6 +17,7 @@ import { defaultColorScheme, defaultFontScheme } from "../PageContext"
 import Page from "./Page"
 import { ProjectAsset } from "./ProjectAsset";
 import { ProjectEmailList } from "./EmailList";
+import ProjectContent from "./ProjectContent";
 
 interface IProject {
     setId(id: string): void
@@ -51,8 +52,10 @@ export class Project implements IProject {
     private name = `Untitled-${faker.animal.bird().replace(" ", "-")}`
     private url = ""
     private pages: Record<string, Page> = {}
+    private content: Record<string, ProjectContent> = {}
     private assets: Record<string, ProjectAsset> = {}
     private emailLists: Record<string, ProjectEmailList> = {}
+
     private colourScheme: ColourScheme = defaultColorScheme
     private fontScheme: FontScheme = defaultFontScheme
 
@@ -80,6 +83,14 @@ export class Project implements IProject {
 
             if (event.type === ProjectMessageType.DELETE_ASSET) {
                 this.deleteAsset(event.data)
+            }
+
+            if (event.type === ProjectMessageType.SET_CONTENT) {
+                this.setContent(event.data.id, event.data)
+            }
+
+            if (event.type === ProjectMessageType.DELETE_CONTENT) {
+                this.deleteContent(event.data)
             }
 
             if (event.type === ProjectMessageType.SET_EMAIL_LIST) {
@@ -120,13 +131,18 @@ export class Project implements IProject {
             fontScheme: this.getFontScheme(),
             colourScheme: this.getColourScheme(),
             pages: Object.keys(this.getPages())
-                .reduce<Record<string, PageStruct>>((acc, pageKey) => {
-                    acc[pageKey] = this.getPageById(pageKey).getPageStructure()
+                .reduce<Record<string, PageStruct>>((acc, key) => {
+                    acc[key] = this.getPageById(key).getStruct()
                     return acc
                 }, {}),
             assets: Object.keys(this.getAssets())
-                .reduce<Record<string, ProjectAssetStruct>>((acc, assetKey) => {
-                    acc[assetKey] = this.getAssetById(assetKey).getAssetStructure()
+                .reduce<Record<string, ProjectAssetStruct>>((acc, key) => {
+                    acc[key] = this.getAssetById(key).getStruct()
+                    return acc
+                }, {}),
+            content: Object.keys(this.getContent())
+                .reduce<Record<string, ProjectContentStruct>>((acc, key) => {
+                    acc[key] = this.getContentById(key).getStruct()
                     return acc
                 }, {}),
             emailLists: Object.keys(this.getEmailLists())
@@ -164,36 +180,6 @@ export class Project implements IProject {
      */
     public setPage(id: string, pageStruct: PageStruct): void {
         const page = new Page(pageStruct)
-
-        // Reactively update pages content child -> parent
-        this.subscriptions.push(
-            page.event$.subscribe(() => {
-                this.event$.next({
-                    type: ProjectMessageType.SET_PAGE,
-                    data: page.getPageStructure(),
-                })
-            })
-        )
-
-        // Reactively update pages content parent -> child
-        this.subscriptions.push(
-            this.event$.subscribe((event) => {
-                if (event.type === ProjectMessageType.SET_COLOUR_SCHEME) {
-                    page.event$.next({
-                        type: PageMessageType.SET_COLOUR_SCHEME,
-                        data: event.data
-                    })
-                }
-
-                if (event.type === ProjectMessageType.SET_FONT_SCHEME) {
-                    page.event$.next({
-                        type: PageMessageType.SET_FONT_SCHEME,
-                        data: event.data
-                    })
-                }
-            })
-        )
-
         this.pages[id] = page
     }
 
@@ -223,22 +209,7 @@ export class Project implements IProject {
      */
     public setAsset(id: string, assetStruct: ProjectAssetStruct): void {
         const asset = new ProjectAsset(assetStruct)
-
-        // Reactively update pages content child -> parent
-        this.subscriptions.push(
-            asset.event$.subscribe(() => {
-                this.event$.next({
-                    type: ProjectMessageType.SET_ASSET,
-                    data: asset.getAssetStructure(),
-                })
-            })
-        )
-
         this.assets[id] = asset
-    }
-
-    public assetPage(id: string): void {
-        delete this.assets[id]
     }
 
     public getAssets(): Record<string, ProjectAsset> {
@@ -254,21 +225,30 @@ export class Project implements IProject {
     }
 
     /**
+     * Content
+     */
+    public setContent(id: string, contentStruct: ProjectContentStruct): void {
+        const content = new ProjectContent(contentStruct)
+        this.content[id] = content
+    }
+
+    public getContent(): Record<string, ProjectContent> {
+        return this.content
+    }
+
+    public getContentById(id: string): ProjectContent {
+        return this.content[id]
+    }
+
+    public deleteContent(id: string): void {
+        delete this.content[id]
+    }
+
+    /**
      * Email List
      */
     public setEmailList(id: string, emailListStruct: ProjectEmailListStruct): void {
         const emailList = new ProjectEmailList(emailListStruct)
-
-        // Reactively update pages content child -> parent
-        this.subscriptions.push(
-            emailList.event$.subscribe(() => {
-                this.event$.next({
-                    type: ProjectMessageType.SET_EMAIL_LIST,
-                    data: emailList.getStruct(),
-                })
-            })
-        )
-
         this.emailLists[id] = emailList
     }
 
@@ -335,6 +315,7 @@ export class Project implements IProject {
             url,
             pages: {},
             assets: {},
+            content: {},
             emailLists: {},
             colourScheme: defaultColorScheme,
             fontScheme: defaultFontScheme,

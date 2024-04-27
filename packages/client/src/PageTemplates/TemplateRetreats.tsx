@@ -1,5 +1,4 @@
 import * as uuid from "uuid"
-import { faker } from '@faker-js/faker';
 
 import { PageStruct } from "../types"
 
@@ -16,7 +15,7 @@ export const CreateTemplateRetreats = (): PageStruct[] => {
         {
             title: "Colombian Retreats",
             id: uuid.v4(),
-            path: `/index.html`,
+            path: `/home`,
             contentActive: null,
             description: "A Retreats page",
             content: [

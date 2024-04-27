@@ -1,11 +1,8 @@
-import { faker } from '@faker-js/faker';
 import React from "react"
 import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
 
 import { ProjectsContext } from "../../Projects"
-import { ProjectsMessageType } from "../../types"
-import { Project } from "../../Store/Project"
 import IconNew from "../../Components/Icons/New/New"
 import Thumbnail from "../../Components/Thumbnail/Thumbnail"
 
@@ -14,36 +11,17 @@ import { appRoutes } from "../router"
 import ProjectOptions from "./Components/ProjectOptions/ProjectOptions"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
-import * as styles from "./RouteProjects.scss"
-import { createUrl } from '../../Utils/url';
-import { ApiContext } from '../../Api/ApiProvider';
 import { PaymentsContext } from '../../Payments/PaymentsProvider';
+import * as styles from "./RouteProjects.scss"
+import { templates } from "../../Components/Gallery"
 
 const RoutesProjects: React.FC = () => {
     const navigate = useNavigate();
-    const { api } = React.useContext(ApiContext)
-    const { projects, user } = React.useContext(ProjectsContext)
+    const { projects } = React.useContext(ProjectsContext)
     const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
 
     const onNewProjectClick = async () => {
-        // TODO
-        // let the AI assistant choose a name
-        const projectName = faker.commerce.productName()
-
-        api.projects.create({
-            token: user.getTokenId(),
-            name: projectName,
-            url: createUrl(projectName)
-        })
-            .then(({ id, name, url }) => {
-                const newProject = Project.createEmptyProject(id, name, url)
-                projects.event$.next({
-                    type: ProjectsMessageType.SET_PROJECT,
-                    data: newProject.getStruct()
-                })
-
-                navigate(appRoutes.getProjectTemplateRoute(newProject.getId()))
-            })
+        navigate(appRoutes.getProjectsNewRoute())
     }
 
     const projectsList = Object.keys(projects.getProjects())
@@ -51,7 +29,7 @@ const RoutesProjects: React.FC = () => {
 
     return (
         <div className={styles.projects}>
-            <RouteProjectHeader user={user} />
+            <RouteProjectHeader />
             <div className={styles.projectsContent}>
                 <div
                     className={classNames(styles.section, styles.sectionEmpty)}
@@ -74,10 +52,20 @@ const RoutesProjects: React.FC = () => {
                             return
                         }
 
-                        const content = firstPage.getContent().map(content => {
-                            const Component = content.getComponent()
+                        const content = firstPage.getContentIds().map(contentId => {
+                            const content = project.getContentById(contentId)
+                            if (!content) {
+                                return
+                            }
+                            const Component = templates[content.getTemplateName()]?.Component
+                            if (!Component) {
+                                return null
+                            }
+
+                            let props = content.getData()
+
                             return (
-                                <Component key={content.getId()} {...content.getProps() as any} />
+                                <Component key={content.getId()} {...props as any} />
                             )
                         })
 
@@ -86,7 +74,7 @@ const RoutesProjects: React.FC = () => {
 
                     const onClick = () => {
                         navigate(
-                            appRoutes.getProjectEditRoute(project.getId())
+                            appRoutes.getProjectRoute(project.getId())
                         )
                     }
 

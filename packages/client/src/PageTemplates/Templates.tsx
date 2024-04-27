@@ -8,6 +8,7 @@ import { CreateTemplateJewellery } from "./TemplateJewellery"
 import { CreateTemplateLanding } from "./TemplateLanding"
 import { CreateTemplateMaistro } from "./TemplateMaistro"
 import { CreateTemplateLogin } from "./TemplateLogin"
+import { ThumbnailProps } from "../Components/Thumbnail/Thumbnail"
 
 const GetTemplates = (): Array<PageStruct[]> => {
     return [
@@ -22,6 +23,7 @@ const GetTemplates = (): Array<PageStruct[]> => {
 interface TemplatesProps {
     className?: string
     onClick: (items: PageStruct[]) => void
+    thumbnail?: Partial<ThumbnailProps>
 }
 
 const TemplateViews: React.FC<TemplatesProps> = (props) => {
@@ -38,12 +40,13 @@ const TemplateViews: React.FC<TemplatesProps> = (props) => {
                         onClick={() => props.onClick(template)}
                         title={firstPage.description}
                         className={props.className}
+                        thumbnail={props.thumbnail}
                     >
                         {firstPage.content?.map(content => {
                             const Component = content.Component
                             return (
                                 <Component
-                                    key={`${content.id}-${Math.random()}`}
+                                    key={`${content.name}-${Math.random()}`}
                                     {...content.props}
                                 />
                             )

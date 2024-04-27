@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
 
 import * as styles from "./SectionAboutUsTeam.scss"
 
@@ -29,8 +29,8 @@ const SectionAboutUsTeam = () => {
     );
 };
 
-export const SectionAboutUsTeamItem: ContentStruct = {
-    id: "SectionAboutUsTeam",
+export const SectionAboutUsTeamItem: TemplateStruct = {
+    name: "SectionAboutUsTeam",
     Component: SectionAboutUsTeam,
     categories: [ContentCategory.TEXT, ContentCategory.ABOUT],
     description: "",

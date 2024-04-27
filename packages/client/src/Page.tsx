@@ -17,7 +17,7 @@ const PageEdit: React.FC<PageProps> = (props) => {
             if (
                 event.type === PageMessageType.PUT_CONTENT ||
                 event.type === PageMessageType.SET_CONTENT ||
-                event.type === PageMessageType.SET_CONTENT_ACTIVE
+                event.type === PageMessageType.SET_CONTENT_ID_ACTIVE
             ) {
 
                 setChangeId(`${Math.random()}`)

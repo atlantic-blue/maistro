@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../types';
 
 import Logo from "../../Components/Logo/Logo"
 import * as LogoStyles from "../../Components/Logo/Logo.scss"
@@ -28,7 +28,7 @@ const HeaderDropdown: React.FC<HeaderProps> = (props) => {
     );
 };
 
-export const HeaderDropDownItem: ContentStruct<HeaderProps> = {
+export const HeaderDropDownItem: TemplateStruct<HeaderProps> = {
     id: "HeaderDropDownItem",
     description: "Places the logo centrally with navigation links on either side, creating a balanced, symmetrical layout. Perfect for brands emphasizing their logo or for sites with equal navigation weight on both sides of their branding.",
     Component: HeaderDropdown,

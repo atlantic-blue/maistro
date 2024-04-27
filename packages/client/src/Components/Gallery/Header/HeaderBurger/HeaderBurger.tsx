@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../types';
 
 import Logo from "../../Components/Logo/Logo"
 import * as LogoStyles from "../../Components/Logo/Logo.scss"
@@ -43,8 +43,8 @@ const HeaderBurger: React.FC<HeaderProps> = (props) => {
     );
 };
 
-export const HeaderBurgerItem: ContentStruct = {
-    id: "HeaderBurgerItem",
+export const HeaderBurgerItem: TemplateStruct = {
+    name: "HeaderBurgerItem",
     Component: HeaderBurger,
     categories: [ContentCategory.HEADER],
     description: "With a transparent background that blends into the website's hero section or background image, this navigation style offers a seamless integration. Best used on visually rich websites where the navigation should complement the background imagery",

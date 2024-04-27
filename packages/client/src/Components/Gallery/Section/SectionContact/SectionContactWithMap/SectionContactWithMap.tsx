@@ -1,7 +1,7 @@
 import React from 'react';
 
 import * as styles from './SectionContactWithMap.scss';
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
 
 const SectionContactWithMap = () => (
     <div className={styles.container}>
@@ -21,8 +21,8 @@ const SectionContactWithMap = () => (
     </div>
 );
 
-export const SectionContactWithMapItem: ContentStruct = {
-    id: "section-contact-with-map",
+export const SectionContactWithMapItem: TemplateStruct = {
+    name: "section-contact-with-map",
     description: "Contact form with an embedded map for easy location reference.",
     Component: SectionContactWithMap,
     categories: [ContentCategory.CONTACT],

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { renderToString } from 'react-dom/server';
 
 import { faker } from '@faker-js/faker';
 
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
 
 import * as styles from "./SectionHeroSlides.scss"
 
@@ -46,8 +45,8 @@ const SectionHeroSlides = () => {
     );
 };
 
-export const SectionHeroSlidesItem: ContentStruct = {
-    id: "SectionHeroSlides",
+export const SectionHeroSlidesItem: TemplateStruct = {
+    name: "SectionHeroSlides",
     Component: SectionHeroSlides,
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     description: "Showcases multiple items or messages through a transitioning slideshow, perfect for highlighting various aspects of a service or product.",

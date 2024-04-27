@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 
-import { ProjectsMessageType, ProjectsState } from "./types";
-import { ProjectsStorage } from "./Store/utils/Storage";
+import { ProjectMessageType, ProjectsMessageType, ProjectsState } from "./types";
 import { Projects } from "./Store/Projects";
 import router from "./Routes/router";
 
 import { User } from "./Store/User";
 import { AuthContext } from "./Auth/AuthProvider";
-import { debounceTime, filter } from "rxjs/operators";
+import { filter } from "rxjs/operators";
 
 import "./Project.scss"
 import { ApiContext } from "./Api/ApiProvider";
@@ -31,8 +30,31 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
 }) => {
     const { api } = React.useContext(ApiContext)
     const { user } = React.useContext(AuthContext)
+    const [isLoading, setIsLoading] = React.useState(true)
 
-    const data = useObservable(
+    const getProjects = async (user: User) => {
+        if (!user) {
+            return
+        }
+
+        const projects = await api.projects.read({ token: user.getTokenId() })
+        if (!projects || !projects.length) {
+            return
+        }
+
+        projects.map(async project => {
+            if (!project) {
+                return
+            }
+
+            projectsStore.event$.next({
+                type: ProjectsMessageType.SET_PROJECT,
+                data: project,
+            })
+        })
+    }
+
+    useObservable(
         projectsStore.event$
             .pipe(
                 filter(e => e.type === ProjectsMessageType.SET_PROJECT)
@@ -44,49 +66,20 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
             return
         }
 
-        // TODO enable offline mode
-        // Object.keys(ProjectsStorage.get()).map(projectKey => {
-        //     projectsStore.event$.next({
-        //         type: ProjectsMessageType.SET_PROJECT,
-        //         data: ProjectsStorage.get()[projectKey]
-        //     })
-        //     setKey(`${Date.now()}`)
-        // })
+        getProjects(user).finally(() => {
+            setIsLoading(false)
+        })
 
-        api.projects
-            .read({ token: user.getTokenId() })
-            .then(projects => {
-                projects.map(project => {
-                    try {
-                        const projectData = ProjectsStorage.get()[project.id]
-                        if (!projectData) {
-                            return
-                        }
-                        projectsStore.event$.next({
-                            type: ProjectsMessageType.SET_PROJECT,
-                            data: projectData
-                        })
-                    } catch (error) {
-                        console.log(error)
-                    }
-                })
-            })
-
-        const subscription = projectsStore.event$
-            .pipe(
-                // debounceTime(1000 * 6 * 5), // TODO SAVE EVERY 5 MINUTES?
-                debounceTime(1000) // SAVE EVERY SECOND
-            ).subscribe(() => {
-                const value = projectsStore.getProjectsStructure()
-                ProjectsStorage.set(value)
-            })
-
-        return () => {
-            subscription.unsubscribe()
-        }
     }, [user])
 
-    console.log(data)
+
+    // move to projectsprovider
+    if (user && isLoading) {
+        return (
+            <div>Loading Projects...</div>
+        )
+    }
+
     return (
         <ProjectsContext.Provider
             value={{

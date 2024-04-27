@@ -1,11 +1,13 @@
 import React from 'react';
 import { faker } from '@faker-js/faker';
 
-import { ContentStruct, ContentCategory } from "../../../../../types";
+import { TemplateStruct, ContentCategory } from "../../../../../types";
 
 import { SectionHeroProps } from '../SectionHeroTypes';
 
 import Button from '../../../Components/Button/Button';
+
+import SectionHeroBasicEditor from './SectionHeroBasicEditor';
 
 import * as styles from "./SectionHeroBasic.scss";
 
@@ -45,11 +47,12 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
 };
 
 
-export const SectionHeroBasicItem: ContentStruct = {
-    id: "SectionHeroBasic",
+export const SectionHeroBasicItem: TemplateStruct = {
+    name: "SectionHeroBasic",
     description: "A clean and straightforward hero component, focusing on core messaging with a clear call to action",
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     Component: SectionHeroBasic,
+    ComponentEditor: SectionHeroBasicEditor,
     classNames: [
         ...Object.values(styles)
     ],

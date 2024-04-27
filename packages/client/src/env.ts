@@ -13,6 +13,18 @@ interface Env {
                 read: string
             }
         }
+        content: {
+            create: (projectId: string) => string
+            read: (projectId: string) => string
+            update: (projectId: string) => string
+            delete: (projectId: string) => string
+        }
+        pages: {
+            create: (projectId: string) => string
+            read: (projectId: string) => string
+            update: (projectId: string) => string
+            delete: (projectId: string) => string
+        }
         projects: {
             create: string
             read: string
@@ -64,6 +76,18 @@ const createEnv = (): Env => {
                     create: `${apiBaseUrl}/email/entries`,
                     read: `${apiBaseUrl}/email/list-entries`,
                 }
+            },
+            content: {
+                create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
+                read: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
+                update: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
+                delete: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
+            },
+            pages: {
+                create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/pages`,
+                read: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/pages`,
+                update: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/pages`,
+                delete: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/pages`,
             },
             projects: {
                 create: `${apiBaseUrl}/projects`,

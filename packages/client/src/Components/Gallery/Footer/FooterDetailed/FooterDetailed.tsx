@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../types';
 
 import * as styles from './FooterDetailed.scss';
 
@@ -24,8 +24,8 @@ const FooterDetailed = () => (
     </footer>
 );
 
-export const FooterDetailedItem: ContentStruct = {
-    id: "footer-detailed",
+export const FooterDetailedItem: TemplateStruct = {
+    name: "footer-detailed",
     description: "A comprehensive footer that includes about info, quick links, and contact details.",
     Component: FooterDetailed,
     categories: [ContentCategory.FOOTER],

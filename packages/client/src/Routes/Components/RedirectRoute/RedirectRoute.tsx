@@ -14,7 +14,7 @@ const RedirectRoute: React.FC<RedirectRouteProps> = (props) => {
     if (isLoading) {
         return (
             <div>
-                Loading....
+                Loading User....
             </div>
         )
     }

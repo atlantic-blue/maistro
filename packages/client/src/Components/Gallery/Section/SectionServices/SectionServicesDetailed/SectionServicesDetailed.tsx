@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
 
 import * as styles from './SectionServicesDetailed.scss';
 
@@ -44,8 +44,8 @@ const SectionServicesDetailed = () => {
     );
 };
 
-export const SectionServicesDetailedItem: ContentStruct = {
-    id: "SectionServicesDetailed",
+export const SectionServicesDetailedItem: TemplateStruct = {
+    name: "SectionServicesDetailed",
     Component: SectionServicesDetailed,
     categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
     description: "Offers a detailed overview of each service, ideal for businesses wanting to provide comprehensive information about what they offer.",

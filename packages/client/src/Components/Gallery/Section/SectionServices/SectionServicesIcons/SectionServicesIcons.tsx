@@ -1,7 +1,7 @@
 import React from 'react';
 
 import * as styles from './SectionServicesIcons.scss';
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
 
 const SectionServicesIcons = () => {
     // Placeholder icons. Replace with actual icons for your services.
@@ -26,8 +26,8 @@ const SectionServicesIcons = () => {
     );
 };
 
-export const SectionServicesIconsItem: ContentStruct = {
-    id: "SectionServicesIcons",
+export const SectionServicesIconsItem: TemplateStruct = {
+    name: "SectionServicesIcons",
     Component: SectionServicesIcons,
     categories: [ContentCategory.TEXT, ContentCategory.SERVICES],
     description: "A visually appealing way to showcase services with relevant icons, making each service easily identifiable at a glance.",

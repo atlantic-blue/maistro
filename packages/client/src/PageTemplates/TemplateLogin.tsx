@@ -15,7 +15,7 @@ export const CreateTemplateLogin = (): PageStruct[] => {
             id: uuid.v4(),
             title: "Login",
             description: "Login Page",
-            path: `/index.html`,
+            path: `/login`,
             contentActive: null,
             content: [
                 {

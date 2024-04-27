@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
     if (isLoading) {
         return (
             <div>
-                Loading....
+                Loading User....
             </div>
         )
     }

@@ -5,13 +5,16 @@ import { DragDropContext as DnDContext, OnDragEndResponder } from "react-beautif
 import DroppableComponent from "./Droppable"
 import { PageContext } from "../../PageContext"
 
-import { PageMessageType, ContentStruct } from "../../types"
+import { PageMessageType, TemplateStruct } from "../../types"
 import * as styles from "./DragDrop.scss"
-import PageContent from "../../Store/PageContent"
+import ProjectContent from "../../Store/ProjectContent"
+import { ApiContext } from "../../Api/ApiProvider"
+import { ProjectsContext } from "../../Projects"
+import { useParams } from "react-router-dom"
 
 // a little function to help us with reordering the result
-const reorder = (content: PageContent[], startIndex: number, endIndex: number) => {
-    const result = Array.from(content);
+const reorder = (contentIds: string[], startIndex: number, endIndex: number) => {
+    const result = Array.from(contentIds);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
 
@@ -19,7 +22,10 @@ const reorder = (content: PageContent[], startIndex: number, endIndex: number) =
 };
 
 const DragAndDrop: React.FC = () => {
-    const { page } = useContext(PageContext)
+    const { projects } = React.useContext(ProjectsContext)
+    const { projectId, pageId } = useParams()
+    const project = projects.getProjectById(projectId || "")
+    const page = project.getPageById(pageId || "")
 
     const onDragEnd: OnDragEndResponder = (dropResult) => {
         // dropped outside the list
@@ -27,13 +33,16 @@ const DragAndDrop: React.FC = () => {
             return;
         }
 
-        const nextItems = reorder(
-            page.getContent(),
+        const nextContentIds = reorder(
+            page.getContentIds(),
             dropResult.source.index,
             dropResult.destination.index
         );
 
-        page.event$.next({ type: PageMessageType.SET_CONTENT, data: nextItems })
+        page.event$.next({
+            type: PageMessageType.SET_CONTENT_IDS,
+            data: nextContentIds
+        })
     }
 
     return (

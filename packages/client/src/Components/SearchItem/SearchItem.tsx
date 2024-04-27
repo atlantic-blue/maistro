@@ -2,21 +2,18 @@ import React from "react"
 
 import ComponentsGallery from "../Gallery/Components"
 
-import { ContentStruct, ContentCategory } from "../../types"
+import { TemplateStruct, ContentCategory } from "../../types"
 
 import * as styles from "./Search.scss"
-import PageContent from "../../Store/PageContent"
 
 interface SearchItemProps {
-    activeItem: PageContent
-    templates: ContentStruct[]
-    onClick: (item: ContentStruct) => void
+    templates: TemplateStruct[]
+    onClick: (item: TemplateStruct) => void
 }
 
-const SearchItem: React.FC<SearchItemProps> = ({ activeItem, templates, onClick }) => {
-    const activeCategories = activeItem?.getCategories().filter(c => ContentCategory.TEXT !== c) || []
+const SearchItem: React.FC<SearchItemProps> = ({ templates, onClick }) => {
     const [searchInput, setSearchInput] = React.useState("")
-    const [categories, setCategories] = React.useState<ContentCategory[]>(activeCategories)
+    const [categories, setCategories] = React.useState<ContentCategory[]>([])
 
     const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         setSearchInput(e.target.value)

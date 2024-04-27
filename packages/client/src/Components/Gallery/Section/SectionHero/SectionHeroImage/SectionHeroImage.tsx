@@ -2,7 +2,8 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 
 import * as styles from "./SectionHeroImage.scss"
-import { ContentStruct, ContentCategory } from '../../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../../types';
+import SectionHeroBasicEditor from '../SectionHeroBasic/SectionHeroBasicEditor';
 
 interface SectionHeroImageProps {
     imageUrl: string
@@ -20,9 +21,10 @@ const SectionHeroImage: React.FC<SectionHeroImageProps> = (props) => {
     );
 };
 
-export const SectionHeroImageItem: ContentStruct = {
-    id: "SectionHeroImage",
+export const SectionHeroImageItem: TemplateStruct = {
+    name: "SectionHeroImage",
     Component: SectionHeroImage,
+    ComponentEditor: SectionHeroBasicEditor,
     classNames: [
         ...Object.values(styles)
     ],

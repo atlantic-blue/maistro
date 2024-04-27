@@ -21,7 +21,7 @@ export const CreateTemplateMaistro = (): PageStruct[] => {
             id: uuid.v4(),
             title: "Maistro",
             description: "Maistro Landing Page",
-            path: `/index.html`,
+            path: `/home`,
             contentActive: null,
             content: [
                 {

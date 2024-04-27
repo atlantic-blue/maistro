@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { ContentStruct, ContentCategory } from '../../../../types';
+import { TemplateStruct, ContentCategory } from '../../../../types';
 
 import { HeaderProps } from '../HeaderTypes';
 
@@ -50,8 +50,8 @@ const HeaderSticky: React.FC<HeaderProps> = (props) => {
     );
 };
 
-export const HeaderStickyItem: ContentStruct = {
-    id: "HeaderSticky",
+export const HeaderStickyItem: TemplateStruct = {
+    name: "HeaderSticky",
     Component: HeaderSticky,
     description: "A sticky navigation bar that changes its background from transparent to solid on scroll, providing a dynamic user experience. This style is versatile, fitting for almost any website looking to enhance usability without sacrificing aesthetics.",
     categories: [ContentCategory.HEADER],

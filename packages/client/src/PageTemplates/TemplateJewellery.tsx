@@ -1,6 +1,4 @@
-import * as uuid from "uuid"
 import { PageStruct } from "../types"
-import { faker } from '@faker-js/faker';
 
 import { HeaderStickyItem } from "../Components/Gallery/Header/HeaderSticky/HeaderSticky"
 import { SectionHeroSlidesItem } from "../Components/Gallery/Section/SectionHero/SectionHeroSlides/SectionHeroSlides"
@@ -15,8 +13,7 @@ export const CreateTemplateJewellery = (): PageStruct[] => {
     return [
         {
             title: "Jewellery Page",
-            id: uuid.v4(),
-            path: `/index.html`,
+            path: `/home`,
             description: "A Jewellery e-commerce page",
             contentActive: null,
             content: [
@@ -47,7 +44,6 @@ export const CreateTemplateJewellery = (): PageStruct[] => {
 
         {
             title: "Jewellery Page",
-            id: uuid.v4(),
             path: `/about`,
             description: "A Jewellery e-commerce page",
             contentActive: null,

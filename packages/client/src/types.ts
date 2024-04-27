@@ -1,6 +1,6 @@
 import React from "react"
 
-import PageContent from "./Store/PageContent"
+import ProjectContent from "./Store/ProjectContent"
 import { Project } from "./Store/Project"
 import { Projects } from "./Store/Projects"
 import Page from "./Store/Page"
@@ -38,6 +38,7 @@ export interface ProjectStruct {
     url: string
     pages: Record<string, PageStruct>
     assets: Record<string, ProjectAssetStruct>
+    content: Record<string, ProjectContentStruct>
     emailLists: Record<string, ProjectEmailListStruct>
     colourScheme: ColourScheme
     fontScheme: FontScheme
@@ -60,22 +61,32 @@ export interface PageStruct {
     title: string
     path: string
     description: string
-    content: ContentStruct[]
-    contentActive: ContentStruct | null
+    contentIds: string[]
     colourScheme: ColourScheme
     fontScheme: FontScheme
+
+    contentIdActive: string
 }
 
-export interface ContentStruct {
+export interface ProjectContentStruct {
     id: string
-    projectId: string,
+    projectId: string
+    createdAt: string
+    description: string
+    template: string
+    categories: string[]
+    data: Object | undefined
+}
 
+export interface TemplateStruct {
+    name: string
     description: string
     categories: ContentCategory[]
 
     classNames: string[]
     props: any
-    Component: React.FC | string
+    Component: React.FC<any>
+    ComponentEditor: React.FC<any>
 }
 
 /**
@@ -186,28 +197,12 @@ export type ProjectEmailListEvent = {
 }
 
 export enum PageContentMessageType {
-    SET_ID = "SET_ID",
     SET_DESCRIPTION = "SET_DESCRIPTION",
-    SET_COMPONENT = "SET_COMPONENT",
-    SET_PROPS = "SET_PROPS",
-    SET_CATEGORIES = "SET_CATEGORIES",
 }
 
 export type PageContentEvent = {
-    type: PageContentMessageType.SET_ID
-    data: string
-} | {
     type: PageContentMessageType.SET_DESCRIPTION
     data: string
-} | {
-    type: PageContentMessageType.SET_COMPONENT
-    data: React.FC
-} | {
-    type: PageContentMessageType.SET_PROPS
-    data: unknown
-} | {
-    type: PageContentMessageType.SET_CATEGORIES
-    data: ContentCategory[]
 }
 
 export enum PageMessageType {
@@ -216,9 +211,9 @@ export enum PageMessageType {
     SET_TITLE = "SET_TITLE",
     SET_DESCRIPTION = "SET_DESCRIPTION",
 
-    SET_CONTENT = "SET_CONTENT",
-    PUT_CONTENT = "PUT_CONTENT",
-    SET_CONTENT_ACTIVE = "SET_CONTENT_ACTIVE",
+    PUSH_CONTENT_IDS = "PUT_CONTENT_IDS",
+    SET_CONTENT_IDS = "SET_CONTENT_IDS",
+    SET_CONTENT_ID_ACTIVE = "SET_CONTENT_ID_ACTIVE",
 
     SET_COLOUR_SCHEME = "SET_COLOUR_SCHEME",
     SET_FONT_SCHEME = "SET_FONT_SCHEME",
@@ -236,14 +231,14 @@ export type PageEvent = {
     type: PageMessageType.SET_ID
     data: string
 } | {
+    type: PageMessageType.SET_CONTENT_IDS | PageMessageType.PUSH_CONTENT_IDS
+    data: string[]
+} | {
     type: PageMessageType.SET_DESCRIPTION
     data: string
 } | {
-    type: PageMessageType.SET_CONTENT | PageMessageType.PUT_CONTENT
-    data: PageContent[]
-} | {
-    type: PageMessageType.SET_CONTENT_ACTIVE
-    data: PageContent | null
+    type: PageMessageType.SET_CONTENT_ID_ACTIVE
+    data: string
 } | {
     type: PageMessageType.SET_COLOUR_SCHEME
     data: ColourScheme
@@ -285,6 +280,9 @@ export enum ProjectMessageType {
     SET_ASSET = "SET_ASSET",
     DELETE_ASSET = "DELETE_ASSET",
 
+    SET_CONTENT = "SET_CONTENT",
+    DELETE_CONTENT = "DELETE_CONTENT",
+
     SET_EMAIL_LIST = "SET_EMAIL_LIST",
     DELETE_EMAIL_LIST = "DELETE_EMAIL_LIST",
 
@@ -303,6 +301,12 @@ export type ProjectEvent = {
     data: ProjectAssetStruct
 } | {
     type: ProjectMessageType.DELETE_ASSET
+    data: string
+} | {
+    type: ProjectMessageType.SET_CONTENT
+    data: ProjectContentStruct
+} | {
+    type: ProjectMessageType.DELETE_CONTENT
     data: string
 } | {
     type: ProjectMessageType.SET_EMAIL_LIST
@@ -352,7 +356,7 @@ export interface PageState {
 }
 
 export interface PageContentState {
-    pageContent: PageContent
+    pageContent: ProjectContent
 }
 
 export interface AppState {

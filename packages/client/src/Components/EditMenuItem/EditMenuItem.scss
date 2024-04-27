@@ -1,4 +1,17 @@
+@import "../../Variables.scss";
+
 .menu {
+    position: fixed;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    border: 1px solid gray;
+    border-bottom: 5px solid #6F56F9;
+
+    display: flex;
+    flex-direction: column;
+    z-index: $global-z-index-4;
+
     &-item {
         background-color: white;
         border: 1px solid gray;

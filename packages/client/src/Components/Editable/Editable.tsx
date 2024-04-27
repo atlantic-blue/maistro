@@ -6,20 +6,26 @@ import { interval } from "rxjs"
 import { PageContext } from '../../PageContext';
 import { PageContentMessageType, PageMessageType } from '../../types';
 import useClickOutside from '../../Utils/Hooks/UseClickOutside';
-import PageContent from '../../Store/PageContent';
+import ProjectContent from '../../Store/ProjectContent';
 
 import IconEdit from '../Icons/Edit/Edit';
 import IconSave from '../Icons/Save/Save';
 import Wysiwyg, { WysiwygApi } from '../Wysiwyg/Wysiwyg';
 
+import { ProjectsContext } from '../../Projects';
+import { useParams } from 'react-router-dom';
 import * as styles from "./Editable.scss"
 
 interface EditableContent {
-    content: PageContent;
+    content: ProjectContent;
 }
 
 const EditableContent: React.FC<EditableContent> = ({ content }) => {
-    const { page } = React.useContext(PageContext)
+    const { projects } = React.useContext(ProjectsContext)
+    const { projectId, pageId } = useParams()
+    const project = projects.getProjectById(projectId || "")
+    const page = project.getPageById(pageId || "")
+
     const ref = React.useRef<HTMLDivElement>(null)
     const editorApiRef = React.useRef<WysiwygApi>(null);
     const [isEditable, setIsEditable] = useState(false);
@@ -64,12 +70,12 @@ const EditableContent: React.FC<EditableContent> = ({ content }) => {
 
     const onEditSectionClick = () => {
         page.event$.next({
-            type: PageMessageType.SET_CONTENT_ACTIVE,
+            type: PageMessageType.SET_CONTENT_ID_ACTIVE,
             data: content
         })
     }
 
-    const Component = content.getComponent()
+    const Component = content.Component()
     return (
         <div
             ref={ref}
