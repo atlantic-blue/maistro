@@ -1,5 +1,5 @@
 import React from "react"
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import {
     ColourPalette,
@@ -12,8 +12,14 @@ import Menu from "../Menu/Menu"
 
 import { ProjectsContext } from "../../../../Projects";
 
-import * as styles from "./Helmet.scss"
 import { defaultColorScheme, defaultFontScheme } from "../../../../PageContext";
+import { Flex, Section, Separator } from "@radix-ui/themes";
+import RouteProjectHeader from "../Header/Header";
+import ProjectDropDown from "../DropDownProject/DropDownProject";
+import DropDownPage from "../DropDownPage/DropDownPage";
+
+import * as styles from "./Helmet.scss"
+import { SubmitProject } from "../../RouteProjectSettings/Components/SubmitProject/SubmitProject";
 
 const appendColourSchemeToDocument = (scheme: ColourScheme) => {
     document.documentElement.style.setProperty(ColourPalette.ACCENT, scheme?.accent);
@@ -34,9 +40,10 @@ interface HelmetProps {
 }
 
 const Helmet: React.FC<HelmetProps> = (props) => {
-    const { projects } = React.useContext(ProjectsContext)
-    const { projectId } = useParams()
+    const { projects, user } = React.useContext(ProjectsContext)
+    const { projectId, pageId } = useParams()
     const project = projects.getProjectById(projectId || "")
+    const page = project && project.getPageById(pageId || "")
 
     const [colourScheme, setColourScheme] = React.useState(project?.getColourScheme() || defaultColorScheme)
     const [fontScheme, setFontScheme] = React.useState(project?.getFontScheme() || defaultFontScheme)
@@ -81,8 +88,22 @@ const Helmet: React.FC<HelmetProps> = (props) => {
         appendFontSchemeToDocument(fontScheme)
     }, [fontScheme])
 
+
     return (
         <main className={styles.main}>
+            <RouteProjectHeader />
+
+            <Section size="1">
+                <Flex direction="row" align="center" justify="start">
+                    <ProjectDropDown project={project} />
+                    <DropDownPage project={project} page={page} />
+                    <SubmitProject
+                        project={project}
+                        userId={user.getId()}
+                    />
+                </Flex>
+            </Section>
+
             {props.children}
             <Menu />
         </main>

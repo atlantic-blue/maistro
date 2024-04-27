@@ -1,13 +1,13 @@
 import React, { useEffect } from "react"
 import { filter } from "rxjs/operators"
-import { Box, Button, Callout, Card, Heading, Section, Table, Text, TextField } from "@radix-ui/themes"
+import { Box, Button, Callout, Card, Heading, Section, Skeleton, Table, Text, TextField } from "@radix-ui/themes"
 
 import { ApiContext } from "../../../../../Api/ApiProvider"
 import { ProjectsContext } from "../../../../../Projects"
 
 import { Project } from "../../../../../Store/Project"
 import RouteProjectSettingsMailListCreate from "./RouteProjectSettingsMailListCreate"
-import { ProjectMessageType } from "../../../../../types"
+import { ProjectEmailListStruct, ProjectMessageType } from "../../../../../types"
 import useObservable from "../../../../../Utils/Hooks/UseObservable"
 
 import { EmailEntriesReadOutput } from "../../../../../Api/EmailEntries/emailEntriesReadById"
@@ -22,30 +22,44 @@ const RouteProjectSettingsMailList: React.FC<RouteProjectSettingsMailListProps> 
     const { api } = React.useContext(ApiContext)
     const [emailEntries, setEmailEntries] = React.useState<EmailEntriesReadOutput["data"]>([])
     const [emailEntriesCount, setEmailEntriesCount] = React.useState(0)
+    const [isLoading, setIsLoading] = React.useState(false)
 
     useEffect(() => {
+        setIsLoading(true)
         api.email.lists.read({
             token: user.getTokenId()
         })
             .then(emailLists => {
+                let list: ProjectEmailListStruct | null = null
+
                 emailLists.forEach((emailList) => {
                     if (emailList.projectId === props.project.getId()) {
                         props.project.event$.next({
                             type: ProjectMessageType.SET_EMAIL_LIST,
                             data: emailList
                         })
-
-                        api.email.entries
-                            .readById({
-                                emailListId: emailList.id,
-                                token: user.getTokenId(),
-                            })
-                            .then(response => {
-                                setEmailEntriesCount(response.totalCount)
-                                setEmailEntries(response.data)
-                            })
+                        list = emailList
                     }
                 })
+
+                return list
+            }).then((emailList: ProjectEmailListStruct | null) => {
+                if (!emailList) {
+                    return
+                }
+
+                api.email.entries
+                    .readById({
+                        emailListId: emailList.id,
+                        token: user.getTokenId(),
+                    })
+                    .then(response => {
+                        setEmailEntriesCount(response.totalCount)
+                        setEmailEntries(response.data)
+                    })
+            })
+            .finally(() => {
+                setIsLoading(false)
             })
     }, [props.project.getId()])
 
@@ -67,6 +81,12 @@ const RouteProjectSettingsMailList: React.FC<RouteProjectSettingsMailListProps> 
     }
 
     const emailList = Object.values(props.project.getEmailLists())[0]
+
+    if (isLoading) {
+        return (
+            <Skeleton className={styles.section} />
+        )
+    }
 
     return (
         <Card className={styles.section}>

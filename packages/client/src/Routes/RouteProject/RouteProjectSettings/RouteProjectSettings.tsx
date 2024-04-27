@@ -10,18 +10,13 @@ import FontDesign from "../../../Components/FontScheme/FontScheme";
 
 import SettingsMetadata from "./Components/SettingsMetadata/SettingsMetadata";
 
-import RouteProjectHeader from "../Components/Header/Header";
 import RouteProjectSettingsDelete from "./Components/RouteProjectSettingsDelete/RouteProjectSettingsDelete";
-
-import { ApiContext } from "../../../Api/ApiProvider";
-import { SubmitProject } from "./Components/SubmitProject/SubmitProject";
 
 import * as styles from "./RouteProjectSettings.scss"
 import RouteProjectSettingsMailList from "./Components/RouteProjectSettingsMailList/RouteProjectSettingsMailList";
 
 const RouteProjectSettings: React.FC = () => {
-    const { api } = React.useContext(ApiContext)
-    const { projects, user } = React.useContext(ProjectsContext)
+    const { projects } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
@@ -31,8 +26,6 @@ const RouteProjectSettings: React.FC = () => {
 
     return (
         <Helmet>
-            <RouteProjectHeader user={user} />
-
             <br />
             <Heading size="4" as="h3" align="center">
                 Project Settings
@@ -40,13 +33,6 @@ const RouteProjectSettings: React.FC = () => {
             <br />
 
             <div className={styles.content}>
-                <Card className={styles.section}>
-                    <SubmitProject
-                        project={project}
-                        userId={user.getId()}
-                    />
-                </Card>
-
                 <Card className={styles.section}>
                     <SettingsMetadata project={project} />
                 </Card>

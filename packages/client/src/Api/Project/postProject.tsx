@@ -4,6 +4,9 @@ import { Project } from "../../Store/Project";
 
 import { postFile } from './postFile';
 import env from "../../env"
+import { withExtension } from '../../Utils/url';
+import React from 'react';
+import { postPage } from './postPage';
 
 interface PostProjectsInput {
     userId: string
@@ -17,19 +20,15 @@ const postProject = (
 ) => {
     const pages = project.getPages()
 
-    return Promise.all(Object.values(pages).map(page => {
-        return postFile(
-            {
+    return Promise.all(
+        Object.values(pages).map(page => {
+            return postPage({
                 userId,
-                projectId: project.getId(),
-                fileName: page.getPath(),
-                fileContent: `<!DOCTYPE html>${renderToString(page.getHtml())}`,
-                fileType: "text/html",
-            },
-            url,
-            request
-        )
-    }))
+                project,
+                page
+            }, url, request)
+        })
+    )
 }
 
 export {

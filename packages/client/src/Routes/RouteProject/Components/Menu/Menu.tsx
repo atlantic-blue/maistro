@@ -44,26 +44,8 @@ const MenuButton: React.FC<MenuButtonProps> = (props) => {
 }
 const Menu: React.FC = () => {
     const { projects } = React.useContext(ProjectsContext)
-    const { projectId, pageId, pagePathname } = useParams()
+    const { projectId, pageId } = useParams()
     const project = projects.getProjectById(projectId || "")
-
-    const editLink = () => {
-        if (pagePathname) {
-            const pageId = project?.getPageByPathname(pagePathname).getId()
-            return appRoutes.getProjectEditPageRoute(project?.getId(), pageId)
-        } else {
-            return appRoutes.getProjectEditRoute(project?.getId())
-        }
-    }
-
-    const previewLink = () => {
-        if (pageId) {
-            const pathname = project?.getPageById(pageId).getPath()
-            return appRoutes.getProjectPreviewPageRoute(project?.getId(), pathname)
-        } else {
-            return appRoutes.getProjectPreviewRoute(project?.getId())
-        }
-    }
 
     return (
         <div className={styles.menu}>
@@ -77,23 +59,16 @@ const Menu: React.FC = () => {
                 </li>
                 <li className={styles.link}>
                     <MenuButton
-                        link={appRoutes.getProjectTemplateRoute(project?.getId())}
+                        link={appRoutes.getProjectPageTemplatesRoute(project?.getId())}
                         text="Templates"
                         Icon={IconNew}
                     />
                 </li>
                 <li className={styles.link}>
                     <MenuButton
-                        link={editLink()}
+                        link={appRoutes.getProjectPageRoute(projectId, pageId)}
                         text="Edit"
                         Icon={IconWireframe}
-                    />
-                </li>
-                <li className={styles.link}>
-                    <MenuButton
-                        link={previewLink()}
-                        text="Preview"
-                        Icon={IconPlay}
                     />
                 </li>
                 <li className={styles.link}>

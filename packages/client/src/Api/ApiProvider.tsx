@@ -12,9 +12,29 @@ import { EmailListsReadInput, EmailListsReadOutput, emailListsRead } from "./Ema
 import { ProjectStruct } from "../types";
 import { EmailEntriesCreateInput, EmailEntriesCreateOutput, emailEntriesCreate } from "./EmailEntries/emailEntriesCreate";
 import { EmailEntriesReadInput, EmailEntriesReadOutput, emailEntriesReadById } from "./EmailEntries/emailEntriesReadById";
+import { PagesCreateInput, PagesCreateOutput, pagesCreate } from "./Pages/pagesCreate";
+import { PagesReadByIdInput, PagesReadByIdOutput, pagesReadById } from "./Pages/pagesReadById";
+import { PagesReadInput, PagesReadOutput, pagesRead } from "./Pages/projectsRead";
+import { ContentCreateInput, ContentCreateOutput, contentCreate } from "./Content/contentCreate";
+import { ContentReadByIdInput, ContentReadByIdOutput, contentReadById } from "./Content/contentReadById";
+import { ContentReadInput, ContentReadOutput, contentRead } from "./Content/contentRead";
+import { PagesUpdateByIdInput, pagesUpdateById } from "./Pages/pagesUpdateById";
+import { ContentUpdateByIdInput, contentUpdateById } from "./Content/contentUpdateById";
 
 interface ApiContextState {
     api: {
+        content: {
+            create: (input: ContentCreateInput) => Promise<ContentCreateOutput>,
+            read: (input: ContentReadInput) => Promise<ContentReadOutput>
+            readById: (input: ContentReadByIdInput) => Promise<ContentReadByIdOutput>
+            updateById: (input: ContentUpdateByIdInput) => Promise<void>,
+        }
+        pages: {
+            create: (input: PagesCreateInput) => Promise<PagesCreateOutput>,
+            read: (input: PagesReadInput) => Promise<PagesReadOutput>
+            readById: (input: PagesReadByIdInput) => Promise<PagesReadByIdOutput>
+            updateById: (input: PagesUpdateByIdInput) => Promise<void>,
+        }
         projects: {
             create: ({ token, name, url }: { token: string, name: string, url: string }) => Promise<{ id: string, name: string, url: string }>
             read: ({ token }: { token: string }) => Promise<Partial<ProjectStruct[]>>
@@ -42,6 +62,18 @@ interface ApiContextState {
 
 const context: ApiContextState = {
     api: {
+        content: {
+            create: contentCreate,
+            read: contentRead,
+            readById: contentReadById,
+            updateById: contentUpdateById,
+        },
+        pages: {
+            create: pagesCreate,
+            read: pagesRead,
+            readById: pagesReadById,
+            updateById: pagesUpdateById,
+        },
         projects: {
             create: projectsCreate,
             read: projectsRead,

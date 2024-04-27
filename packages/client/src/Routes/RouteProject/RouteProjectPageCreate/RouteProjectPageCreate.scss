@@ -1,0 +1,41 @@
+@import "../../../Variables.scss";
+
+.section {
+    margin: 10px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.template {
+    min-height: 400px;
+    width: 350px;
+    max-width: 350px;
+}
+
+.input {
+    width: 330px;
+    visibility: visible;
+}
+
+.title {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 5px 5px 5px 0;
+    min-width: 100px;
+}
+
+.message {
+    &-loading {
+        font-size: 10px;
+        color: blue;
+        margin-bottom: 10px;
+    }
+
+    &-error {
+        font-size: 10px;
+        color: red;
+        margin-bottom: 10px;
+    }
+}

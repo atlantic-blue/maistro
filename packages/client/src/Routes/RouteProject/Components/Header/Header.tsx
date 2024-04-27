@@ -1,15 +1,18 @@
 import React from "react"
 
 import HeaderBurger from "../../../../Components/Gallery/Header/HeaderBurger/HeaderBurger"
-import * as styles from "./Header.scss"
-import { User } from "../../../../Store/User"
 import { appRoutes } from "../../../router"
+import { Avatar, Box, Text } from "@radix-ui/themes"
+import { ProjectsContext } from "../../../../Projects"
+
+import * as styles from "./Header.scss"
 
 interface RouteProjectHeaderProps {
-    user: User
+
 }
 
 const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
+    const { user } = React.useContext(ProjectsContext)
     return (
         <HeaderBurger
             {
@@ -21,11 +24,14 @@ const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
                     login: {
                         href: appRoutes.getSettingsRoute(),
                         value: (
-                            // TODO what if the avatar doesn't load?
-                            <div className={styles.headerLink}>
-                                <img src={props.user.getAvatar()} className={styles.headerAvatar} />
-                                <div className={styles.headerText}>My Settings</div>
-                            </div>
+                            <Box className={styles.headerLink}>
+                                <Avatar
+                                    size="2"
+                                    src={user.getAvatar()}
+                                    fallback={user.getName().charAt(0)}
+                                />
+                                <Text as="p" className={styles.headerText}>My Settings</Text>
+                            </Box>
                         ),
                     }
                 },

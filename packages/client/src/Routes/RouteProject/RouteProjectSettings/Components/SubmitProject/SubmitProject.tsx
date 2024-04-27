@@ -47,15 +47,16 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
     return (
         <div className={styles.content}>
             <Button
-                size="3"
-                className={classNames(styles.button, {
+                size="2"
+                className={classNames({
                     [styles.loading]: isLoading,
                     [styles.success]: viewLink,
                     [styles.error]: isError,
                 })} onClick={viewLink ? onSeeProject : onPublish}>
-                {isLoading ? "Publishing..." : viewLink ? "See Project" : "Go Live"}
+                {isLoading ? "Publishing..." : viewLink ? "See Project" : "Publish"}
             </Button>
 
+            {/* TODO use a toaster */}
             {isError &&
                 (
                     <div className={styles.errorMessage}>

@@ -1,0 +1,30 @@
+import env from "../../env"
+import { ProjectContentStruct } from "../../types"
+
+export interface ContentReadInput {
+    token: string
+    projectId: string
+}
+
+export type ContentReadOutput = ProjectContentStruct[]
+
+const contentRead = async (
+    {
+        token,
+        projectId,
+    }: ContentReadInput,
+    url = env.api.content.read,
+    request = fetch,
+): Promise<ContentReadOutput> => {
+    return request(url(projectId), {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+    }).then(response => response.json())
+}
+
+export {
+    contentRead
+}
