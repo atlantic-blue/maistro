@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 
 import { appRoutes } from "../../router";
 import { AuthContext } from "../../../Auth/AuthProvider";
+import Loading from "../../../Components/Loading/Loading";
 
 interface ProtectedRouteProps {
     children: React.ReactNode
@@ -13,9 +14,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 
     if (isLoading) {
         return (
-            <div>
+            <Loading>
                 Loading User....
-            </div>
+            </Loading>
         )
     }
 

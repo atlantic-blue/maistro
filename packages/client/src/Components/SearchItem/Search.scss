@@ -28,7 +28,7 @@
         }
 
         &-input {
-            width: 400px;
+            min-width: 300px;
             border-radius: 5px;
             border: 1px solid gray;
         }
@@ -63,4 +63,8 @@
         align-items: stretch;
         justify-content: center;
     }
+}
+
+.gallery {
+    width: 330px;
 }

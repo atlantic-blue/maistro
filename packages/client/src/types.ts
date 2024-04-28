@@ -13,7 +13,8 @@ export enum ContentCategory {
     ABOUT = "ABOUT",
     SERVICES = "SERVICES",
     TEXT = "TEXT",
-    CONTACT = "CONTACT"
+    CONTACT = "CONTACT",
+    SUBSCRIBE = "SUBSCRIBE"
 }
 
 export interface UserStruct {
@@ -64,8 +65,6 @@ export interface PageStruct {
     contentIds: string[]
     colourScheme: ColourScheme
     fontScheme: FontScheme
-
-    contentIdActive: string
 }
 
 export interface ProjectContentStruct {

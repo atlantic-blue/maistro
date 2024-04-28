@@ -11,7 +11,7 @@ export interface Link {
 }
 
 interface NavProps {
-    links: Record<string, Link>
+    links?: Record<string, Link>
     classNames?: {
         navigation: string
         navigationList: string
@@ -25,7 +25,11 @@ const Nav: React.FC<NavProps> = (props) => {
                 className={classNames(styles.navigationList, props.classNames?.navigationList)}
             >
                 {
-                    Object.keys(props.links).map(link => {
+                    Object.keys(props.links || []).map(link => {
+                        if (!props.links) {
+                            return null
+                        }
+
                         return (
                             <NavLink
                                 key={props.links[link].href}

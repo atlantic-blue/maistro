@@ -10,7 +10,7 @@ import { ProjectsContext } from "../../../Projects";
 
 import useObservable from "../../../Utils/Hooks/UseObservable";
 import { filter } from "rxjs/operators";
-import { Box, Button, Progress, Section } from "@radix-ui/themes";
+import { Box, Button, Dialog, Flex, IconButton, Progress, Section } from "@radix-ui/themes";
 import EditMenuItem from "../../../Components/EditMenuItem/EditMenuItem";
 import SearchItem from "../../../Components/SearchItem/SearchItem";
 import { GetTemplates, templates } from "../../../Components/Gallery";
@@ -19,12 +19,15 @@ import { ApiContext } from "../../../Api/ApiProvider";
 import * as styles from "./RouteProjectPage.scss"
 import DragAndDrop from "../../../Components/DragDrop/DragDrop";
 import { appRoutes } from "../../router";
+import IconClose from "../../../Components/Icons/Close/Close";
+import Loading from "../../../Components/Loading/Loading";
 
 const RouteProjectPage: React.FC = () => {
     const { api } = React.useContext(ApiContext)
     const { projects, user } = React.useContext(ProjectsContext)
     const { projectId, pageId } = useParams()
-    const [showMenu, setShowMenu] = React.useState(false)
+    const [open, setOpen] = React.useState(false);
+
     const project = projects.getProjectById(projectId || "")
     const [isLoading, setIsLoading] = React.useState(false)
 
@@ -57,7 +60,9 @@ const RouteProjectPage: React.FC = () => {
 
     if (!project || !projectId) {
         return (
-            <div>Loading Project...</div>
+            <Loading>
+                Loading Project...
+            </Loading>
         )
     }
 
@@ -70,16 +75,26 @@ const RouteProjectPage: React.FC = () => {
     }
 
     const onTemplateClick = async (template: TemplateStruct) => {
-        setShowMenu(false)
+        setOpen(false)
         setIsLoading(true)
         try {
+            let data = template.props
+            if (template.name === "SectionSubscribeBasic") {
+                const emailListId = Object.values(project.getEmailLists())[0]?.getId()
+                console.log({ emailListId })
+                data = {
+                    ...template.props,
+                    emailListId,
+                }
+            }
+
             const response = await api.content.create({
                 token: user.getTokenId(),
                 projectId: projectId,
                 template: template.name,
                 categories: template.categories,
                 description: template.description,
-                data: template.props,
+                data,
             })
 
             project.event$.next({
@@ -116,7 +131,7 @@ const RouteProjectPage: React.FC = () => {
     }
 
     const onAddContentClick = () => {
-        setShowMenu(prev => !prev)
+        setOpen(prev => !prev)
     }
 
     return (
@@ -127,24 +142,42 @@ const RouteProjectPage: React.FC = () => {
                 <div className={styles.main}>
                     <DragAndDrop />
 
-                    <Section className={styles.section} onClick={onAddContentClick}>
-                        <div className={styles.sectionContent}>
-                            Add content
-                        </div>
-                        <Button
-                            className={styles.sectionButton}
-                        >
-                            <IconNew className={styles.sectionImage} />
-                        </Button>
-                    </Section>
+                    <Dialog.Root open={open} onOpenChange={setOpen}>
+                        <Dialog.Trigger>
+                            <Section className={styles.section} onClick={onAddContentClick}>
+                                <div className={styles.sectionContent}>
+                                    Add content
+                                </div>
+                                <Button
+                                    className={styles.sectionButton}
+                                >
+                                    <IconNew className={styles.sectionImage} />
+                                </Button>
+                            </Section>
+                        </Dialog.Trigger>
+
+                        <Dialog.Content maxWidth="450px">
+                            <Flex>
+                                <Dialog.Close>
+                                    <IconButton size="1" variant="soft" color="gray" style={{ marginLeft: "auto" }}>
+                                        <IconClose style={{ width: "10px" }} />
+                                    </IconButton>
+                                </Dialog.Close>
+                            </Flex>
+                            <Dialog.Title>Add Content</Dialog.Title>
+
+                            <Flex direction="column" gap="3">
+                                <SearchItem
+                                    templates={Object.values(templates)}
+                                    onClick={onTemplateClick}
+                                />
+                            </Flex>
+                        </Dialog.Content>
+                    </Dialog.Root>
                 </div>
 
-                <EditMenuItem title="Content" show={showMenu}>
-                    <SearchItem
-                        templates={Object.values(templates)}
-                        onClick={onTemplateClick}
-                    />
-                </EditMenuItem>
+
+
             </PageEdit>
         </Helmet>
     )

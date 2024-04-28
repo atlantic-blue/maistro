@@ -5,14 +5,14 @@ import { TemplateStruct, ContentCategory } from '../../../../types';
 import { HeaderProps } from '../HeaderTypes';
 
 import Logo from "../../Components/Logo/Logo"
-import * as LogoStyles from "../../Components/Logo/Logo.scss"
 
 import Nav from "../../Components/Nav/Nav"
+import * as LogoStyles from "../../Components/Logo/Logo.scss"
 import * as NavStyles from "../../Components/Nav/Nav.scss"
 import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
-
-import { set } from 'lodash';
 import * as styles from "./HeaderSticky.scss"
+
+import HeaderBasicEditor from '../HeaderBasic/HeaderBasicEditor';
 
 const HeaderSticky: React.FC<HeaderProps> = (props) => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -30,10 +30,6 @@ const HeaderSticky: React.FC<HeaderProps> = (props) => {
 
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-    const onChange = (id: string, content: string) => {
-        set({ ...props }, id, content)
-    }
 
     return (
         <nav className={`${styles.headerSticky} ${isScrolled ? styles.scrolled : ''}`}>
@@ -53,6 +49,7 @@ const HeaderSticky: React.FC<HeaderProps> = (props) => {
 export const HeaderStickyItem: TemplateStruct = {
     name: "HeaderSticky",
     Component: HeaderSticky,
+    ComponentEditor: HeaderBasicEditor,
     description: "A sticky navigation bar that changes its background from transparent to solid on scroll, providing a dynamic user experience. This style is versatile, fitting for almost any website looking to enhance usability without sacrificing aesthetics.",
     categories: [ContentCategory.HEADER],
     classNames: [

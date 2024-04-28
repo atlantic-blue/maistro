@@ -30,21 +30,40 @@ const RouteProjectsCreate: React.FC = () => {
         }
 
         setIsLoading(true)
-        api.projects.create({
+        const projectResponse = await api.projects.create({
             token: user.getTokenId(),
             name: projectName,
             url: createUrl(projectName)
-        }).then(({ id, name, url }) => {
-            const newProject = Project.createEmptyProject(id, name, url)
-            projects.event$.next({
-                type: ProjectsMessageType.SET_PROJECT,
-                data: newProject.getStruct()
-            })
-
-            navigate(appRoutes.getProjectRoute(id))
-        }).finally(() => {
-            setIsLoading(false)
         })
+
+        const newProject = Project.createEmptyProject(
+            projectResponse.id,
+            projectResponse.name,
+            projectResponse.url
+        )
+        projects.event$.next({
+            type: ProjectsMessageType.SET_PROJECT,
+            data: newProject.getStruct()
+        })
+
+        const pageResponse = await api.pages.create({
+            token: user.getTokenId(),
+            title: projectName,
+            path: 'index',
+            description: projectDescription,
+            projectId: projectResponse.id,
+            contentIds: [],
+        })
+
+        await api.email.lists.create({
+            token: user.getTokenId(),
+            title: projectName,
+            description: projectDescription,
+            projectId: projectResponse.id,
+        })
+
+        navigate(appRoutes.getProjectPageRoute(projectResponse.id, pageResponse.id))
+        setIsLoading(false)
     }
 
     return (

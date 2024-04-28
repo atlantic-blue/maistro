@@ -1,22 +1,51 @@
-import React from "react"
-import classNames from 'classnames'
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import React, { useEffect } from "react"
+import { Droppable } from "react-beautiful-dnd";
 
 import { PageMessageType } from "../../types";
 
 import { moveItemDown, moveItemUp } from "./utils";
 import { ProjectsContext } from "../../Projects";
 import { useParams } from "react-router-dom";
-import * as styles from "./Droppable.scss"
 import DroppableItem from "./DroppableItem";
+import { ApiContext } from "../../Api/ApiProvider";
+import { debounceTime } from "rxjs";
+
+import * as styles from "./Droppable.scss"
 
 const COMPONENT_ID = "droppable"
 
 const DroppableComponent: React.FC = () => {
-    const { projects } = React.useContext(ProjectsContext)
+    const { api } = React.useContext(ApiContext)
+    const { projects, user } = React.useContext(ProjectsContext)
     const { projectId, pageId } = useParams()
     const project = projects.getProjectById(projectId || "")
     const page = project.getPageById(pageId || "")
+
+    useEffect(() => {
+        if (!projectId || !pageId) {
+            return
+        }
+
+        const subscription = page.event$
+            .pipe(
+                debounceTime(1000 * 60)
+            )
+            .subscribe(event => {
+                if (event.type === PageMessageType.SET_CONTENT_IDS) {
+                    api.pages.updateById({
+                        token: user.getTokenId(),
+                        projectId,
+                        pageId,
+                        contentIds: [
+                            ...new Set(event.data.filter(Boolean))
+                        ]
+                    })
+                }
+            })
+        return () => {
+            subscription.unsubscribe()
+        }
+    }, [])
 
     const onMoveContentUp = (contentId: string) => {
         const nextContentIds = moveItemUp(page.getContentIds(), contentId)

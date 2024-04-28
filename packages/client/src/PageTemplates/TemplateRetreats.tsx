@@ -6,7 +6,7 @@ import { HeaderBasicItem } from "../Components/Gallery/Header/HeaderBasic/Header
 import { SectionHeroVideoItem } from "../Components/Gallery/Section/SectionHero/SectionHeroVideo/SectionHeroVideo"
 import { SectionAboutUsTeamItem } from "../Components/Gallery/Section/SectionAboutUs/SectionAboutUsTeam/SectionAboutUsTeam"
 import { SectionServicesDetailedItem } from "../Components/Gallery/Section/SectionServices/SectionServicesDetailed/SectionServicesDetailed"
-import { SectionContactBasicItem } from "../Components/Gallery/Section/SectionContact/SectionContactUsBasic/SectionContactBasic"
+import { SectionContactBasicItem } from "../Components/Gallery/Section/SectionContact/SectionSubscribeBasic/SectionSubscribeBasic"
 import { FooterWithNavigationItem } from "../Components/Gallery/Footer/FooterWithNavigation/FooterWithNavigation"
 import { defaultFontScheme } from "../PageContext"
 

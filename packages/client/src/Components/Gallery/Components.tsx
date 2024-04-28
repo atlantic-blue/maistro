@@ -7,6 +7,7 @@ import { TemplateStruct } from '../../types'
 interface ComponentsGalleryProps {
     onClick: (content: TemplateStruct) => void
     templates: TemplateStruct[]
+    className?: string
 }
 
 const ComponentsGallery: React.FC<ComponentsGalleryProps> = (props) => {
@@ -24,6 +25,7 @@ const ComponentsGallery: React.FC<ComponentsGalleryProps> = (props) => {
                         scale: 0.5,
                     }
                 }}
+                className={props.className}
             >
                 {/*  //TODO types */}
                 <Component {...template.props as any} />

@@ -3,15 +3,17 @@ import React from "react"
 import { TemplateStruct, ContentCategory } from "../../../../types"
 
 import Logo from "../../Components/Logo/Logo"
-import * as LogoStyles from "../../Components/Logo/Logo.scss"
 
 import Nav from "../../Components/Nav/Nav"
+
+import * as LogoStyles from "../../Components/Logo/Logo.scss"
 import * as NavStyles from "../../Components/Nav/Nav.scss"
 import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
+import * as styles from "./HeaderBasic.scss"
 
 import { HeaderProps } from "../HeaderTypes"
 
-import * as styles from "./HeaderBasic.scss"
+import HeaderBasicEditor from "./HeaderBasicEditor"
 
 const HeaderBasic: React.FC<HeaderProps> = (props) => {
     return (
@@ -29,29 +31,22 @@ const HeaderBasic: React.FC<HeaderProps> = (props) => {
     )
 }
 
-const HeaderBasicEditor: React.FC<HeaderProps> = (props) => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
 
 export const HeaderBasicItem: TemplateStruct = {
     name: "HeaderBasic",
     description: "A simple, straightforward navigation bar with clear, bold links and a distinct logo area. Suitable for minimalist or traditional website designs",
     categories: [ContentCategory.HEADER],
-    Component: HeaderBasic,
-    ComponentEditor: HeaderBasicEditor,
     classNames: [
         ...Object.values(styles),
         ...Object.values(LogoStyles),
         ...Object.values(NavStyles),
         ...Object.values(NavLinkStyles),
     ],
+    Component: HeaderBasic,
+    ComponentEditor: HeaderBasicEditor,
     props: {
         logo: {
-            url: "https://maistro.website/assets/pages/generic/logo.png",
+            url: "https://maistro.website/assets/logo.svg",
             slogan: "Empowering Your Vision"
         },
         links: {

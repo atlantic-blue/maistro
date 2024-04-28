@@ -4,7 +4,11 @@ import { TemplateStruct, ContentCategory } from '../../../../../types';
 
 import * as styles from './SectionServicesBasic.scss';
 
-const SectionServicesBasic = () => {
+interface SectionServicesBasicProps {
+
+}
+
+const SectionServicesBasic: React.FC<SectionServicesBasicProps> = (props) => {
     return (
         <div className={styles.servicesBasic}>
             <h2>Our Services</h2>
@@ -19,12 +23,13 @@ const SectionServicesBasic = () => {
 
 export const SectionServicesBasicItem: TemplateStruct = {
     name: "SectionServicesBasic",
-    Component: SectionServicesBasic,
-    categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
     description: "A basic and clean presentation of services, perfect for businesses that prefer a minimalist and straightforward approach.",
+    categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
     classNames: [
         ...Object.values(styles)
     ],
+    Component: SectionServicesBasic,
+    props: {},
 }
 
 export default SectionServicesBasic;

@@ -15,7 +15,6 @@ export const CreateTemplateJewellery = (): PageStruct[] => {
             title: "Jewellery Page",
             path: `/home`,
             description: "A Jewellery e-commerce page",
-            contentActive: null,
             content: [
                 HeaderStickyItem,
                 SectionHeroSlidesItem,

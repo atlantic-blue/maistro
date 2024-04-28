@@ -3,14 +3,16 @@ import React from 'react';
 import { TemplateStruct, ContentCategory } from '../../../../types';
 
 import Logo from "../../Components/Logo/Logo"
-import * as LogoStyles from "../../Components/Logo/Logo.scss"
 
 import NavNested from '../../Components/NavNested/NavNested';
+
+import * as LogoStyles from "../../Components/Logo/Logo.scss"
 import * as NavNestedStyles from '../../Components/NavNested/NavNested.scss'
+import * as styles from "./HeaderDropdown.scss"
 
 import { HeaderProps } from '../HeaderTypes';
 
-import * as styles from "./HeaderDropdown.scss"
+import HeaderBasicEditor from '../HeaderBasic/HeaderBasicEditor';
 
 const HeaderDropdown: React.FC<HeaderProps> = (props) => {
     return (
@@ -28,10 +30,11 @@ const HeaderDropdown: React.FC<HeaderProps> = (props) => {
     );
 };
 
-export const HeaderDropDownItem: TemplateStruct<HeaderProps> = {
-    id: "HeaderDropDownItem",
+export const HeaderDropDownItem: TemplateStruct = {
+    name: "HeaderDropDownItem",
     description: "Places the logo centrally with navigation links on either side, creating a balanced, symmetrical layout. Perfect for brands emphasizing their logo or for sites with equal navigation weight on both sides of their branding.",
     Component: HeaderDropdown,
+    ComponentEditor: HeaderBasicEditor,
     categories: [ContentCategory.HEADER],
     classNames: [
         ...Object.values(styles),

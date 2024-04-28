@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import classNames from 'classnames'
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -14,7 +14,6 @@ import IconEdit from "../Icons/Edit/Edit";
 import sanitiseInput from "../../Utils/sanitiseInput";
 import { merge } from "lodash";
 import * as styles from "./Droppable.scss"
-import CardFlip from "../CardFlip/CardFlip";
 import IconClose from "../Icons/Close/Close";
 import { ApiContext } from "../../Api/ApiProvider";
 
@@ -26,6 +25,8 @@ interface DroppableItemProps {
     onDeleteContent: (id: string) => void
 }
 
+const COMPONENT_WRAPPER_CLASS = "COMPONENT_WRAPPER"
+
 const DroppableItem: React.FC<DroppableItemProps> = (props) => {
     const { api } = React.useContext(ApiContext)
     const { projects, user } = React.useContext(ProjectsContext)
@@ -33,6 +34,27 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
     const project = projects.getProjectById(projectId || "")
     const [isEditing, setIsEditing] = React.useState(false)
     const [open, setOpen] = React.useState(false);
+
+    useEffect(() => {
+        const componentWrappers = Array.from(document.getElementsByClassName(COMPONENT_WRAPPER_CLASS))
+        componentWrappers.forEach(componentWrapper => {
+            const anchors = Array.from(componentWrapper.getElementsByTagName('a'));
+            const buttons = Array.from(componentWrapper.getElementsByTagName('button'));
+
+            [
+                ...anchors,
+                ...buttons,
+            ].forEach(element => {
+                element.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    // TODO add a toast message
+                    alert("Publish your page test the link.")
+                }
+            });
+        })
+    }, [])
 
     if (!projectId) {
         return null
@@ -63,7 +85,11 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
 
     const onSaveData = async (input: Object) => {
         const data = sanitiseInput(input)
-        const newData = merge({ ...content.getData() }, data)
+        const newData = {
+            ...content?.getData() || {},
+            ...data,
+        }
+
         content.setData(newData)
         setOpen(false)
 
@@ -124,7 +150,9 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
                                 </div>
 
                                 <div>
-                                    <Component {...componentProps} />
+                                    <div className={COMPONENT_WRAPPER_CLASS}>
+                                        <Component {...componentProps} />
+                                    </div>
 
                                     <Dialog.Content maxWidth="450px">
                                         <Flex>

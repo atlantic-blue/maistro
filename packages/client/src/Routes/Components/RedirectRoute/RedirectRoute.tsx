@@ -2,6 +2,7 @@ import React from "react"
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../../../Auth/AuthProvider";
 import { Routes, appRoutes } from "../../router";
+import Loading from "../../../Components/Loading/Loading";
 
 interface RedirectRouteProps {
     children: React.ReactNode
@@ -13,9 +14,9 @@ const RedirectRoute: React.FC<RedirectRouteProps> = (props) => {
 
     if (isLoading) {
         return (
-            <div>
+            <Loading>
                 Loading User....
-            </div>
+            </Loading>
         )
     }
 

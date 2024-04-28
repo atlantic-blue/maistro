@@ -4,6 +4,7 @@ import { ApiContext } from "../../Api/ApiProvider"
 import { ProjectsContext } from "../../Projects"
 import { useParams } from "react-router-dom"
 import { ProjectMessageType } from "../../types"
+import Loading from "../../Components/Loading/Loading"
 
 const ProjectContext = React.createContext({})
 
@@ -79,9 +80,9 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
 
     if (isLoading) {
         return (
-            <div>
+            <Loading>
                 Loading Project...
-            </div>
+            </Loading>
         )
     }
 

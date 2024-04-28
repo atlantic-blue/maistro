@@ -1,10 +1,10 @@
 import React from "react";
+import Loading from "../../Components/Loading/Loading";
 
-// TODO loading page
 const RoutesCallback = () => {
     return (
         <div>
-            Loading...
+            <Loading />
         </div>
     )
 }

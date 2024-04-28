@@ -1,36 +1,47 @@
 import React from "react"
 import TemplateView from "../Components/TemplateView/TemplateView"
-import { PageStruct } from "../types"
+import { PageStruct, TemplateStruct } from "../types"
 import { creteAboutPage } from "./about"
 import { creteContactPage } from "./contact"
 import { cretePolicyPage } from "./policy"
 import { creteTermsPage } from "./terms"
 import { ThumbnailProps } from "../Components/Thumbnail/Thumbnail"
-import { Flex, Grid } from "@radix-ui/themes"
+import { Flex } from "@radix-ui/themes"
+import { HeaderBasicItem } from "../Components/Gallery/Header/HeaderBasic/HeaderBasic"
+import { SectionHeroSlidesItem } from "../Components/Gallery/Section/SectionHero/SectionHeroSlides/SectionHeroSlides"
+import { FooterSimpleItem } from "../Components/Gallery/Footer/FooterSimple/FooterSimple"
 import { creteServicesPage } from "./services"
+import { SectionHeroVideoItem } from "../Components/Gallery/Section/SectionHero/SectionHeroVideo/SectionHeroVideo"
 
-const createIndexPage = (): PageStruct => {
+const createIndexPage = (): { page: PageStruct, templates: TemplateStruct[] } => {
     return {
-        path: 'index',
-        title: "Home Page",
-        description: "I am a description edit me!",
+        page: {
+            path: 'index',
+            title: "Home Page",
+            description: "I am a description edit me!",
+        },
+        templates: [
+            HeaderBasicItem,
+            SectionHeroVideoItem,
+            FooterSimpleItem
+        ]
     }
 }
 
-export const createPages = () => {
+export const createPages = (): { page: PageStruct, templates: TemplateStruct[] }[] => {
     return [
         createIndexPage(),
-        creteContactPage(),
         creteAboutPage(),
+        creteContactPage(),
+        creteServicesPage(),
         cretePolicyPage(),
         creteTermsPage(),
-        creteServicesPage(),
     ]
 }
 
 interface PageViewsProps {
     className?: string
-    onClick: (items: PageStruct) => void
+    onClick: (page: PageStruct, templates: TemplateStruct[]) => void
     thumbnail?: Partial<ThumbnailProps>
 }
 
@@ -39,21 +50,21 @@ export const PageViews: React.FC<PageViewsProps> = (props) => {
 
     return (
         <Flex gap="3" wrap="wrap" justify="center" align="center">
-            {pages.map(page => {
+            {pages.map(({ page, templates }) => {
                 return (
                     <TemplateView
                         key={`${page.id}-${Math.random()}`}
-                        onClick={() => props.onClick(page)}
+                        onClick={() => props.onClick(page, templates)}
                         title={page.title}
                         className={props.className}
                         thumbnail={props.thumbnail}
                     >
-                        {page.content?.map(content => {
-                            const Component = content.Component
+                        {templates?.map(template => {
+                            const Component = template.Component
                             return (
                                 <Component
-                                    key={`${content.name}-${Math.random()}`}
-                                    {...content.props}
+                                    key={`${template.name}-${Math.random()}`}
+                                    {...template.props}
                                 />
                             )
                         })}

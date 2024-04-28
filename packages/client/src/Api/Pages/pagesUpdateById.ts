@@ -8,9 +8,9 @@ export interface PagesUpdateByIdInput {
 
     title?: string
     path?: string
-    colourScheme?: string
-    contentIds?: string[]
     description?: string
+    contentIds?: string[]
+    colourScheme?: string
     fontScheme?: string
 }
 

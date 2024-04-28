@@ -9,11 +9,16 @@ import { LambdaMiddlewares } from '../../middlewares';
 import { validatorJoi } from '../../middlewares/validator-joi';
 import createError from '../../middlewares/error-handler';
 import authJwt from "../../middlewares/auth-jwt";
+import sanitiseInput from "../../utils/sanitiseInput";
 
 interface PagesCreateInput {
     title: string
     path: string
     description: string
+
+    colourScheme?: string
+    contentIds?: string[]
+    fontScheme?: string
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -36,33 +41,25 @@ const pagesCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) 
     }
 
     const id = uuid.v4()
-    const { title, path, description } = event.body as unknown as PagesCreateInput;
     const createdAt = new Date().toISOString()
+
+    const input = {
+        ...sanitiseInput(event.body as unknown as PagesCreateInput),
+        id,
+        projectId,
+        createdAt,
+    }
 
     const params = {
         TableName: tableName,
-        Item: {
-            id,
-            projectId,
-            title,
-            path,
-            description,
-            createdAt,
-        }
+        Item: input
     };
 
     await dynamoDb.put(params).promise();
 
     return {
         statusCode: 200,
-        body: JSON.stringify({
-            id,
-            projectId,
-            title,
-            path,
-            description,
-            createdAt,
-        })
+        body: JSON.stringify(input)
     };
 };
 
@@ -70,6 +67,9 @@ const validationSchema = Joi.object<PagesCreateInput>({
     title: Joi.string().required(),
     path: Joi.string().required(),
     description: Joi.string().required(),
+    colourScheme: Joi.string().optional(),
+    contentIds: Joi.array().optional(),
+    fontScheme: Joi.string().optional(),
 })
 
 const handler = new LambdaMiddlewares()

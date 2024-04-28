@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import classNames from "classnames";
 import { Button, Callout } from "@radix-ui/themes";
@@ -7,15 +7,23 @@ import * as styles from "./SubmitProject.scss";
 import { withHttps } from "../../../../../Utils/url";
 
 import { Project } from "../../../../../Store/Project";
+import useObservable from "../../../../../Utils/Hooks/UseObservable";
+import PageStore from "../../../../../Store/Page";
+import { PageMessageType } from "../../../../../types";
+import { filter, tap } from "rxjs/operators";
 
 interface SubmitProjectProps {
     project: Project,
+    page?: PageStore,
     userId: string
     request?: (input: { project: Project, userId: string }) => Promise<void>
 }
 
 export const SubmitProject: React.FC<SubmitProjectProps> = ({
-    project, userId, request = postProject
+    project,
+    userId,
+    page,
+    request = postProject
 }) => {
     const [viewLink, setViewLink] = React.useState<null | string>(null);
     const { isError, isLoading, refetch } = useQuery({
@@ -28,6 +36,23 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
             });
         }
     });
+
+    useEffect(() => {
+        const subscription = page?.event$.pipe(
+            filter(
+                event => {
+                    return (
+                        event.type === PageMessageType.SET_CONTENT_IDS ||
+                        event.type === PageMessageType.PUSH_CONTENT_IDS
+                    )
+                })).subscribe(() => {
+                    setViewLink(null)
+                })
+
+        return () => {
+            subscription?.unsubscribe()
+        }
+    }, [])
 
     const onPublish = () => {
         refetch()

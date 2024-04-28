@@ -1,3 +1,4 @@
+import sanitiseInput from "../../Utils/sanitiseInput"
 import env from "../../env"
 
 export interface PagesCreateInput {
@@ -7,6 +8,7 @@ export interface PagesCreateInput {
     title: string
     path: string
     description: string
+    contentIds?: string[]
 }
 
 export interface PagesCreateOutput {
@@ -25,6 +27,7 @@ const pagesCreate = async (
         title,
         path,
         description,
+        contentIds,
     }: PagesCreateInput,
     apiUrl = env.api.pages.create,
     request = fetch,
@@ -35,11 +38,12 @@ const pagesCreate = async (
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({
+        body: JSON.stringify(sanitiseInput({
             title,
             path,
             description,
-        })
+            contentIds,
+        }))
     }).then(response => response.json())
 }
 

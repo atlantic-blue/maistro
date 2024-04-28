@@ -4,7 +4,7 @@ import { filter } from "rxjs/operators";
 import { Card, Flex, TextField, Text, Section } from "@radix-ui/themes";
 
 import Helmet from "../Components/Helmet/Helmet";
-import { PageStruct, ProjectMessageType } from "../../../types";
+import { PageStruct, ProjectMessageType, TemplateStruct } from "../../../types";
 import { ProjectsContext } from "../../../Projects";
 
 import { appRoutes } from "../../router";
@@ -40,7 +40,7 @@ const RouteProjectCreate: React.FC = () => {
         return
     }
 
-    const onCreateNewPage = async (page: PageStruct) => {
+    const onCreateNewPage = async (page: PageStruct, templates: TemplateStruct[]) => {
         if (!pagePath) {
             return setError("add a page url")
         }
@@ -48,14 +48,44 @@ const RouteProjectCreate: React.FC = () => {
         if (project.getPageByPathname(pagePath)) {
             return setError(`/${pagePath} already exists`)
         }
-
         setIsLoading(true)
+
+        const promises = templates.map(async (template) => {
+            const response = await api.content.create({
+                token: user.getTokenId(),
+                projectId: projectId,
+                template: template.name,
+                categories: template.categories,
+                description: template.description,
+                data: template.props,
+            })
+
+            project.event$.next({
+                type: ProjectMessageType.SET_CONTENT,
+                data: {
+                    id: response.id,
+                    description: response.description,
+                    template: response.template,
+                    projectId: response.projectId,
+                    createdAt: response.createdAt,
+                    data: response.data,
+                    categories: response.categories,
+                },
+            })
+            return response.id
+        })
+
+        const responses = await Promise.all(promises)
+
+        const contentIds = responses.filter(Boolean)
+
         const response = await api.pages.create({
             token: user.getTokenId(),
             title: page.title,
             path: pagePath,
             description: page.description,
-            projectId: projectId
+            projectId: projectId,
+            contentIds,
         })
 
         project.event$.next({
@@ -66,6 +96,7 @@ const RouteProjectCreate: React.FC = () => {
                 path: response.path,
                 projectId: response.projectId,
                 description: response.description,
+                contentIds,
             }
         })
 
@@ -80,42 +111,45 @@ const RouteProjectCreate: React.FC = () => {
 
     return (
         <Helmet>
-            <Flex justify="center" align="center" direction="row" wrap="wrap">
-                <Text
-                    className={styles.title}
-                >
-                    {project?.getUrl()}/
-                </Text>
-                <TextField.Root
-                    type="text"
-                    size="2"
-                    variant="surface"
-                    value={pagePath}
-                    onChange={e => { setError(""); setPagePath(e.target.value) }}
-                    className={styles.input}
-                    placeholder="home"
-                    required
-                />
-            </Flex>
-            <Flex justify="center" align="center" direction="row" gap="2">
-                {isLoading && <div className={styles.messageLoading}>Creating page...</div>}
-                {error && <div className={styles.messageError}>{error}</div>}
-            </Flex>
+            <Section size="1">
 
-            <Section size="1" className={styles.section}>
-                <Card>
-                    <PageViews
-                        onClick={canCreateNewPages ? onCreateNewPage : redirectToCheckout}
-                        className={styles.template}
-                        thumbnail={{
-                            dimensions: {
-                                height: "400px",
-                                width: "350px",
-                                scale: .5,
-                            }
-                        }}
+                <Flex justify="center" align="center" direction="row" wrap="wrap">
+                    <Text
+                        className={styles.title}
+                    >
+                        {project?.getUrl()}/
+                    </Text>
+                    <TextField.Root
+                        type="text"
+                        size="2"
+                        variant="surface"
+                        value={pagePath}
+                        onChange={e => { setError(""); setPagePath(e.target.value) }}
+                        className={styles.input}
+                        placeholder="home"
+                        required
                     />
-                </Card>
+                </Flex>
+                <Flex justify="center" align="center" direction="row" gap="2">
+                    {isLoading && <div className={styles.messageLoading}>Creating page...</div>}
+                    {error && <div className={styles.messageError}>{error}</div>}
+                </Flex>
+
+                <Section size="1" className={styles.section}>
+                    <Card>
+                        <PageViews
+                            onClick={canCreateNewPages ? onCreateNewPage : redirectToCheckout}
+                            className={styles.template}
+                            thumbnail={{
+                                dimensions: {
+                                    height: "400px",
+                                    width: "350px",
+                                    scale: .5,
+                                }
+                            }}
+                        />
+                    </Card>
+                </Section>
             </Section>
         </Helmet >
     );

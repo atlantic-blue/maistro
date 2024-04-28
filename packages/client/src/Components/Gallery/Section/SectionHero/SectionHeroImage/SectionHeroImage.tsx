@@ -6,16 +6,22 @@ import { TemplateStruct, ContentCategory } from '../../../../../types';
 import SectionHeroBasicEditor from '../SectionHeroBasic/SectionHeroBasicEditor';
 
 interface SectionHeroImageProps {
+    title: string
     imageUrl: string
+    content?: string
+    cta: string
+    ctaLink: string
 }
 
 const SectionHeroImage: React.FC<SectionHeroImageProps> = (props) => {
     return (
         <section className={styles.hero} style={{ backgroundImage: `url(${props.imageUrl})` }}>
             <div className={styles.content}>
-                <h1>Captivating Experiences Await</h1>
-                <p>Join us on our journey.</p>
-                <button>Discover More</button>
+                <h1>{props.title}</h1>
+                <p>{props.content}</p>
+                <button>
+                    {props.cta}
+                </button>
             </div>
         </section>
     );
@@ -31,7 +37,11 @@ export const SectionHeroImageItem: TemplateStruct = {
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     description: "Offers a visually striking first impression with a full-width background image, suitable for storytelling or branding.",
     props: {
-        imageUrl: faker.image.urlPicsumPhotos()
+        title: "Captivating Experiences Await",
+        content: "Join us on our journey.",
+        imageUrl: faker.image.urlPicsumPhotos(),
+        cta: "Discover More",
+        ctaLink: "#home"
     }
 }
 export default SectionHeroImage;

@@ -12,6 +12,7 @@ import { filter } from "rxjs/operators";
 import "./Project.scss"
 import { ApiContext } from "./Api/ApiProvider";
 import useObservable from "./Utils/Hooks/UseObservable";
+import Loading from "./Components/Loading/Loading";
 
 const projectsStore = new Projects()
 const user = new User()
@@ -76,7 +77,9 @@ const ProjectsEdit: React.FC<ProjectsEditProps> = ({
     // move to projectsprovider
     if (user && isLoading) {
         return (
-            <div>Loading Projects...</div>
+            <Loading>
+                Loading Projects...
+            </Loading>
         )
     }
 

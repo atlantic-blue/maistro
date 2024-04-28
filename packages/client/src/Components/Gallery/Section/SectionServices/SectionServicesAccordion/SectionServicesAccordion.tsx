@@ -36,6 +36,7 @@ export const SectionServicesAccordionItem: TemplateStruct = {
     Component: SectionServicesAccordion,
     categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
     description: "Features collapsible sections for each service, making it easy for users to browse through offerings and expand them for more details. This design is great for saving space while providing ample information in an organized manner.",
+    props: {},
     classNames: [
         ...Object.values(styles)
     ],

@@ -1,6 +1,6 @@
 export interface HeaderBurgerLink {
     href: string;
-    value: string | React.ReactNode
+    value: string
     links?: Record<string, HeaderBurgerLink>
 }
 

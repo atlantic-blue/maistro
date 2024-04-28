@@ -40,7 +40,7 @@ const pagesUpdateById: APIGatewayProxyHandler = async (event: APIGatewayProxyEve
     }
 
     const pageId = event.pathParameters && event.pathParameters['page-id']
-    if (!pageId) {
+    if (!pageId || pageId === 'undefined') {
         throw createError(500, "pageId not specified")
     }
 
@@ -70,9 +70,9 @@ const pagesUpdateById: APIGatewayProxyHandler = async (event: APIGatewayProxyEve
 const validationSchema = Joi.object<PagesUpdateInput>({
     title: Joi.string().optional(),
     path: Joi.string().optional(),
+    description: Joi.string().optional(),
     colourScheme: Joi.string().optional(),
     contentIds: Joi.array().optional(),
-    description: Joi.string().optional(),
     fontScheme: Joi.string().optional(),
 })
 

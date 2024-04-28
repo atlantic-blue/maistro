@@ -3,16 +3,17 @@ import React, { useState } from 'react';
 import { TemplateStruct, ContentCategory } from '../../../../types';
 
 import Logo from "../../Components/Logo/Logo"
-import * as LogoStyles from "../../Components/Logo/Logo.scss"
-
 import Nav from "../../Components/Nav/Nav"
+
+import * as LogoStyles from "../../Components/Logo/Logo.scss"
 import * as NavStyles from "../../Components/Nav/Nav.scss"
 import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
+import * as styles from "./HeaderBurger.scss";
 
 import { HeaderProps } from '../HeaderTypes';
 
-import * as styles from "./HeaderBurger.scss";
 import classNames from 'classnames';
+import HeaderBasicEditor from '../HeaderBasic/HeaderBasicEditor';
 
 const HeaderBurger: React.FC<HeaderProps> = (props) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,6 +47,7 @@ const HeaderBurger: React.FC<HeaderProps> = (props) => {
 export const HeaderBurgerItem: TemplateStruct = {
     name: "HeaderBurgerItem",
     Component: HeaderBurger,
+    ComponentEditor: HeaderBasicEditor,
     categories: [ContentCategory.HEADER],
     description: "With a transparent background that blends into the website's hero section or background image, this navigation style offers a seamless integration. Best used on visually rich websites where the navigation should complement the background imagery",
     classNames: [

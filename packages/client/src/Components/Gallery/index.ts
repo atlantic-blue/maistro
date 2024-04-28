@@ -20,7 +20,6 @@ import { SectionServicesAccordionItem } from './Section/SectionServices/SectionS
 import { SectionServicesDetailedItem } from './Section/SectionServices/SectionServicesDetailed/SectionServicesDetailed'
 import { SectionServicesIconsItem } from './Section/SectionServices/SectionServicesIcons/SectionServicesIcons'
 
-import { SectionContactBasicItem } from './Section/SectionContact/SectionContactUsBasic/SectionContactBasic'
 import { SectionContactWithMapItem } from './Section/SectionContact/SectionContactWithMap/SectionContactWithMap'
 import { SectionContactDetailedItem } from './Section/SectionContact/SectionContactDetailed/SectionContactDetailed'
 import { SectionContactInteractiveItem } from './Section/SectionContact/SectionContactInteractive/SectionContactInteractive'
@@ -29,39 +28,41 @@ import { FooterSimpleItem } from './Footer/FooterSimple/FooterSimple'
 import { FooterDetailedItem } from './Footer/FooterDetailed/FooterDetailed'
 import { FooterInteractiveItem } from './Footer/FooterInteractive/FooterInteractive'
 import { FooterWithNavigationItem } from './Footer/FooterWithNavigation/FooterWithNavigation'
+import { SectionSubscribeBasicItem } from './Section/SectionContact/SectionSubscribeBasic/SectionSubscribeBasic'
 
 export const GetTemplates = (): Record<string, TemplateStruct> => {
     const templatesRecord: Record<string, TemplateStruct> = {}
     const templatesList: TemplateStruct[] = [
         HeaderBasicItem,
-        HeaderDropDownItem,
-        HeaderBurgerItem,
-        HeaderStickyItem,
+        // HeaderDropDownItem,
+        // HeaderBurgerItem,
+        // HeaderStickyItem,
 
         SectionHeroBasicItem,
-        SectionHeroImageItem,
-        SectionHeroVideoItem,
-        SectionHeroSlidesItem,
+        // SectionHeroImageItem,
+        // SectionHeroVideoItem,
+        // SectionHeroSlidesItem,
 
-        SectionAboutUsSimpleItem,
-        SectionAboutUsTeamItem,
-        SectionAboutUsDetailedItem,
-        SectionAboutUsInteractiveItem,
+        // SectionAboutUsSimpleItem,
+        // SectionAboutUsTeamItem,
+        // SectionAboutUsDetailedItem,
+        // SectionAboutUsInteractiveItem,
 
-        SectionServicesBasicItem,
-        SectionServicesAccordionItem,
-        SectionServicesDetailedItem,
-        SectionServicesIconsItem,
+        // SectionServicesBasicItem,
+        // SectionServicesAccordionItem,
+        // SectionServicesDetailedItem,
+        // SectionServicesIconsItem,
 
-        SectionContactBasicItem,
-        SectionContactWithMapItem,
-        SectionContactDetailedItem,
-        SectionContactInteractiveItem,
+        SectionSubscribeBasicItem,
 
-        FooterSimpleItem,
-        FooterDetailedItem,
-        FooterWithNavigationItem,
-        FooterInteractiveItem,
+        // SectionContactWithMapItem,
+        // SectionContactDetailedItem,
+        // SectionContactInteractiveItem,
+
+        // FooterSimpleItem,
+        // FooterDetailedItem,
+        // FooterWithNavigationItem,
+        // FooterInteractiveItem,
     ]
 
     templatesList.forEach(template => {

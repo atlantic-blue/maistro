@@ -62,6 +62,7 @@ const SearchItem: React.FC<SearchItemProps> = ({ templates, onClick }) => {
             </div>
             <div className={styles.searchContent}>
                 <ComponentsGallery
+                    className={styles.gallery}
                     onClick={onClick}
                     templates={filteredTemplates.length < 1 ? templates : filteredTemplates}
                 />
