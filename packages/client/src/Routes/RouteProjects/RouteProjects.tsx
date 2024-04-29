@@ -12,12 +12,11 @@ import ProjectOptions from "./Components/ProjectOptions/ProjectOptions"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
 import { PaymentsContext } from '../../Payments/PaymentsProvider';
-import { templates } from "../../Components/Gallery"
+import { templates } from "../../Templates"
 import { Box, Card, Flex, Text } from "@radix-ui/themes"
 import * as styles from "./RouteProjects.scss"
-import HeaderBasic from "../../Components/Gallery/Header/HeaderBasic/HeaderBasic";
-import SectionHeroBasic from "../../Components/Gallery/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
-import SectionHeroImage from "../../Components/Gallery/Section/SectionHero/SectionHeroImage/SectionHeroImage";
+import SectionHeroBasic from "../../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
+import SectionHeroImage from "../../Templates/Section/SectionHero/SectionHeroImage/SectionHeroImage";
 
 const RoutesProjects: React.FC = () => {
     const navigate = useNavigate();

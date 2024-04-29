@@ -212,7 +212,6 @@ export enum PageMessageType {
 
     PUSH_CONTENT_IDS = "PUT_CONTENT_IDS",
     SET_CONTENT_IDS = "SET_CONTENT_IDS",
-    SET_CONTENT_ID_ACTIVE = "SET_CONTENT_ID_ACTIVE",
 
     SET_COLOUR_SCHEME = "SET_COLOUR_SCHEME",
     SET_FONT_SCHEME = "SET_FONT_SCHEME",
@@ -234,9 +233,6 @@ export type PageEvent = {
     data: string[]
 } | {
     type: PageMessageType.SET_DESCRIPTION
-    data: string
-} | {
-    type: PageMessageType.SET_CONTENT_ID_ACTIVE
     data: string
 } | {
     type: PageMessageType.SET_COLOUR_SCHEME

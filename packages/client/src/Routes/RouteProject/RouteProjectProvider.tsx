@@ -67,6 +67,38 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
             })
     }
 
+    const getEmailList = async () => {
+        if (!projectId) {
+            return
+        }
+        const response = await api.email.lists.read({
+            token: user.getTokenId(),
+        })
+
+        if (!response || !Array.isArray(response)) {
+            return
+        }
+
+        const emailList = response
+            .filter(emailList => emailList.projectId === projectId)[0]
+
+        if (!emailList) {
+            return
+        }
+
+        project.event$.next({
+            type: ProjectMessageType.SET_EMAIL_LIST,
+            data: {
+                createdAt: emailList.createdAt,
+                title: emailList.title,
+                status: emailList.status,
+                projectId: emailList.projectId,
+                id: emailList.id,
+                description: emailList.description
+            }
+        })
+    }
+
     React.useEffect(() => {
         getPages()
             .then(() => {
@@ -76,6 +108,10 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
 
     React.useEffect(() => {
         getContent()
+    }, [projectId])
+
+    React.useEffect(() => {
+        getEmailList()
     }, [projectId])
 
     if (isLoading) {

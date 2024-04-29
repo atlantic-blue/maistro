@@ -2,8 +2,8 @@ import React from "react"
 
 import { CreateTemplateMaistro } from "../../PageTemplates/TemplateMaistro";
 import { AuthContext } from "../../Auth/AuthProvider";
-import HeaderBurger from "../../Components/Gallery/Header/HeaderBurger/HeaderBurger";
-import SectionHeroVideo from "../../Components/Gallery/Section/SectionHero/SectionHeroVideo/SectionHeroVideo";
+import HeaderBurger from "../../Templates/Header/HeaderBurger/HeaderBurger";
+import SectionHeroVideo from "../../Templates/Section/SectionHero/SectionHeroVideo/SectionHeroVideo";
 
 // https://mixkit.co/free-stock-video/going-down-a-curved-highway-through-a-mountain-range-41576/
 const videoURLS = [

@@ -5,3 +5,6 @@ terraform.tfvars
 .env
 
 coverage
+
+dist
+dist-client

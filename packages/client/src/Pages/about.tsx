@@ -1,6 +1,4 @@
-import { FooterSimpleItem } from "../Components/Gallery/Footer/FooterSimple/FooterSimple"
-import { HeaderBasicItem } from "../Components/Gallery/Header/HeaderBasic/HeaderBasic"
-import { SectionAboutUsTeamItem } from "../Components/Gallery/Section/SectionAboutUs/SectionAboutUsTeam/SectionAboutUsTeam"
+import { templates } from "../Templates"
 import { PageStruct } from "../types"
 
 export const creteAboutPage = (): { page: PageStruct, templates: TemplateStruct[] } => {
@@ -11,9 +9,7 @@ export const creteAboutPage = (): { page: PageStruct, templates: TemplateStruct[
             description: "I am a description edit me!",
         },
         templates: [
-            HeaderBasicItem,
-            SectionAboutUsTeamItem,
-            FooterSimpleItem,
+            templates["HeaderBurger"],
         ]
     }
 }

@@ -7,7 +7,6 @@ import IconBin from "../Icons/Bin/Bin"
 
 import { ProjectsContext } from "../../Projects";
 import { useParams } from "react-router-dom";
-import { templates } from "../Gallery";
 import ErrorBoundary from "../../Errors/ErrorBoundary";
 import { Button, Dialog, Flex, IconButton, TextField, Text } from "@radix-ui/themes";
 import IconEdit from "../Icons/Edit/Edit";
@@ -16,6 +15,7 @@ import { merge } from "lodash";
 import * as styles from "./Droppable.scss"
 import IconClose from "../Icons/Close/Close";
 import { ApiContext } from "../../Api/ApiProvider";
+import { templates } from "../../Templates";
 
 interface DroppableItemProps {
     itemIndex: number

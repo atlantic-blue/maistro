@@ -1,6 +1,6 @@
 import React from "react"
 
-import ComponentsGallery from "../Gallery/Components"
+import ComponentsGallery from "../../Templates/Components"
 
 import { TemplateStruct, ContentCategory } from "../../types"
 

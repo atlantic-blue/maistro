@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../Auth/AuthProvider";
 import { appRoutes } from "../router";
-import SectionHeroBasic from "../../Components/Gallery/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
+import SectionHeroBasic from "../../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
 
 const RouteLogout: React.FC = () => {
     const navigate = useNavigate();

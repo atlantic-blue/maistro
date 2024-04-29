@@ -1,13 +1,13 @@
 import { PageStruct } from "../types"
 
-import { HeaderStickyItem } from "../Components/Gallery/Header/HeaderSticky/HeaderSticky"
-import { SectionHeroSlidesItem } from "../Components/Gallery/Section/SectionHero/SectionHeroSlides/SectionHeroSlides"
-import { SectionAboutUsDetailedItem } from "../Components/Gallery/Section/SectionAboutUs/SectionAboutUsDetailed/SectionAboutUsDetailed"
-import { SectionServicesAccordionItem } from "../Components/Gallery/Section/SectionServices/SectionServicesAccordion/SectionServicesAccordion"
-import { FooterWithNavigationItem } from "../Components/Gallery/Footer/FooterWithNavigation/FooterWithNavigation"
+import { HeaderStickyItem } from "../Templates/Header/HeaderSticky/HeaderSticky"
+import { SectionHeroSlidesItem } from "../Templates/Section/SectionHero/SectionHeroSlides/SectionHeroSlides"
+import { SectionAboutUsDetailedItem } from "../Templates/Section/SectionAboutUs/SectionAboutUsDetailed/SectionAboutUsDetailed"
+import { SectionServicesAccordionItem } from "../Templates/Section/SectionServices/SectionServicesAccordion/SectionServicesAccordion"
+import { FooterWithNavigationItem } from "../Templates/Footer/FooterWithNavigation/FooterWithNavigation"
 import { defaultFontScheme } from "../PageContext"
-import { HeaderBasicItem } from "../Components/Gallery/Header/HeaderBasic/HeaderBasic"
-import { SectionHeroVideoItem } from "../Components/Gallery/Section/SectionHero/SectionHeroVideo/SectionHeroVideo"
+import { HeaderBasicItem } from "../Templates/Header/HeaderBasic/HeaderBasic"
+import { SectionHeroVideoItem } from "../Templates/Section/SectionHero/SectionHeroVideo/SectionHeroVideo"
 
 export const CreateTemplateJewellery = (): PageStruct[] => {
     return [

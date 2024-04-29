@@ -1,0 +1,46 @@
+@import "../../../TemplateVariables.scss";
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 91vh;
+    font-family: var(--font-family-body);
+    color: var(--color-primary);
+
+    .video {
+        object-fit: cover;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+    .content {
+        z-index: $global-z-index-1;
+
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+        background-color: #192531b0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        font-size: 4.5rem;
+    }
+
+    .text {
+        margin-bottom: 30px;
+        font-size: 1.5rem;
+        color: var(--color-accent);
+    }
+}

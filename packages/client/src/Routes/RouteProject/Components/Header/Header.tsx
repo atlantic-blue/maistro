@@ -1,6 +1,6 @@
 import React from "react"
 
-import HeaderBurger from "../../../../Components/Gallery/Header/HeaderBurger/HeaderBurger"
+import HeaderBurger from "../../../../Templates/Header/HeaderBurger/HeaderBurger"
 import { appRoutes } from "../../../router"
 import { Avatar, Box, Text } from "@radix-ui/themes"
 import { ProjectsContext } from "../../../../Projects"

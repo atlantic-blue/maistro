@@ -12,8 +12,6 @@ import RouteProjectSettings from "./RouteProject/RouteProjectSettings/RouteProje
 import RouteProjectTemplates from "./RouteProject/RouteProjectPageCreate/RouteProjectPageCreate";
 import RouteProject from "./RouteProject/RouteProject/RouteProject";
 import RouteProjectEditPage from "./RouteProject/RouteProjectPage/RouteProjectPage";
-import RouteProjectPreview from "./RouteProject/RouteProjectPreview--DELETE/RouteProjectPreview";
-import RouteProjectPreviewPage from "./RouteProject/RouteProjectPreviewPage--DELETE/RouteProjectPreviewPage";
 import RouteLogin from "./RouteLogin/RouteLogin";
 import RouteLogout from "./RouteLogout/RouteLogout";
 import RouteSettings from "./RouteSettings/RouteSettings";

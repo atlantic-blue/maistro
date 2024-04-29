@@ -1,12 +1,7 @@
-import { renderToString } from 'react-dom/server';
-
 import { Project } from "../../Store/Project";
 
-import { postFile } from './postFile';
-import env from "../../env"
-import { withExtension } from '../../Utils/url';
-import React from 'react';
 import { postPage } from './postPage';
+import env from "../../env"
 
 interface PostProjectsInput {
     userId: string

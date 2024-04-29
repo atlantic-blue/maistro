@@ -13,7 +13,7 @@ import { filter } from "rxjs/operators";
 import { Box, Button, Dialog, Flex, IconButton, Progress, Section } from "@radix-ui/themes";
 import EditMenuItem from "../../../Components/EditMenuItem/EditMenuItem";
 import SearchItem from "../../../Components/SearchItem/SearchItem";
-import { GetTemplates, templates } from "../../../Components/Gallery";
+import { GetTemplates, templates } from "../../../Templates";
 import { ApiContext } from "../../../Api/ApiProvider";
 
 import * as styles from "./RouteProjectPage.scss"
@@ -79,9 +79,8 @@ const RouteProjectPage: React.FC = () => {
         setIsLoading(true)
         try {
             let data = template.props
-            if (template.name === "SectionSubscribeBasic") {
+            if (template.name.includes("SectionSubscribe")) {
                 const emailListId = Object.values(project.getEmailLists())[0]?.getId()
-                console.log({ emailListId })
                 data = {
                     ...template.props,
                     emailListId,

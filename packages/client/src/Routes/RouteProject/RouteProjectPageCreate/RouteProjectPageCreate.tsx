@@ -112,7 +112,6 @@ const RouteProjectCreate: React.FC = () => {
     return (
         <Helmet>
             <Section size="1">
-
                 <Flex justify="center" align="center" direction="row" wrap="wrap">
                     <Text
                         className={styles.title}

@@ -5,7 +5,7 @@ import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
 import AuthLogoutButton from "../../Auth/AuthLogoutButton"
 
-import Button from "../../Components/Gallery/Components/Button/Button"
+import Button from "../../Templates/Components/Button/Button"
 import { PaymentsContext } from "../../Payments/PaymentsProvider"
 
 import * as styles from "./RouteSettings.scss"

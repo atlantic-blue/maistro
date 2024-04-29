@@ -1,5 +1,4 @@
 import React from "react"
-import TemplateView from "../Components/TemplateView/TemplateView"
 import { PageStruct, TemplateStruct } from "../types"
 import { creteAboutPage } from "./about"
 import { creteContactPage } from "./contact"
@@ -7,11 +6,13 @@ import { cretePolicyPage } from "./policy"
 import { creteTermsPage } from "./terms"
 import { ThumbnailProps } from "../Components/Thumbnail/Thumbnail"
 import { Flex } from "@radix-ui/themes"
-import { HeaderBasicItem } from "../Components/Gallery/Header/HeaderBasic/HeaderBasic"
-import { SectionHeroSlidesItem } from "../Components/Gallery/Section/SectionHero/SectionHeroSlides/SectionHeroSlides"
-import { FooterSimpleItem } from "../Components/Gallery/Footer/FooterSimple/FooterSimple"
+import TemplateView from "../Components/TemplateView/TemplateView"
+import { HeaderBasicItem } from "../Templates/Header/HeaderBasic/HeaderBasic"
+import { SectionHeroSlidesItem } from "../Templates/Section/SectionHero/SectionHeroSlides/SectionHeroSlides"
+import { FooterSimpleItem } from "../Templates/Footer/FooterSimple/FooterSimple"
 import { creteServicesPage } from "./services"
-import { SectionHeroVideoItem } from "../Components/Gallery/Section/SectionHero/SectionHeroVideo/SectionHeroVideo"
+import { SectionHeroVideoItem } from "../Templates/Section/SectionHero/SectionHeroVideo/SectionHeroVideo"
+import { templates } from "../Templates"
 
 const createIndexPage = (): { page: PageStruct, templates: TemplateStruct[] } => {
     return {
@@ -21,9 +22,7 @@ const createIndexPage = (): { page: PageStruct, templates: TemplateStruct[] } =>
             description: "I am a description edit me!",
         },
         templates: [
-            HeaderBasicItem,
-            SectionHeroVideoItem,
-            FooterSimpleItem
+            templates["HeaderBurger"],
         ]
     }
 }

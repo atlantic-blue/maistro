@@ -1,8 +1,7 @@
 import * as uuid from "uuid"
-import { faker } from '@faker-js/faker';
 
 import { defaultFontScheme } from "../PageContext";
-import { SectionHeroBasicItem } from "../Components/Gallery/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
+import { SectionHeroBasicItem } from "../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
 import { PageStruct } from "../types";
 
 export const CreateTemplateLanding = (): PageStruct[] => {

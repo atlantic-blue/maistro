@@ -7,6 +7,7 @@ import env from "../../env"
 import { withExtension } from '../../Utils/url';
 import React from 'react';
 import PageStore from '../../Store/Page';
+import { Theme } from '@radix-ui/themes';
 
 interface PostProjectsInput {
     userId: string
@@ -25,42 +26,48 @@ const postPage = (
 ) => {
     const contentIds = page.getContentIds()
 
+    const hydrationState: Record<string, Object | undefined> = {}
+    contentIds.forEach(contentId => {
+        const content = project.getContentById(contentId)
+        const data = content.getData()
+        const templateName = content.getTemplateName()
+        const id = content.getId()
+        hydrationState[`${templateName}:${id}`] = data
+    })
+
     const Components = () => contentIds.map(contentId => {
         const content = project.getContentById(contentId)
         return <content.Component />
     })
 
-    const Styles = () => contentIds.map(contentId => {
+    const Css = () => contentIds.map(contentId => {
         const content = project.getContentById(contentId)
         const styles = content.getStylesFromClassNames()
         if (!styles) {
-            return null
+            return ""
         }
 
-        return (
-            <style>
-                {content.getStylesFromClassNames()}
-            </style>
-        )
+        return content.getStylesFromClassNames().join("\n")
     })
 
     const Html = () => page.createHtml({
+        state: hydrationState,
         Body() {
-            return <Components />
+            return renderToString(
+                <Theme accentColor="amber" grayColor="mauve">
+                    <Components />
+                </Theme>
+            )
         },
-        Css() {
-            return <Styles />
-        },
+        Css,
     })
-
-    const htmlString = renderToString(<Html />)
 
     return postFile(
         {
             userId,
             projectId: project.getId(),
             fileName: withExtension(page.getPath(), ".html"),
-            fileContent: `<!DOCTYPE html>${htmlString}`,
+            fileContent: Html(),
             fileType: "text/html",
         },
         url,

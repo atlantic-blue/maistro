@@ -1,9 +1,9 @@
 import React from "react";
 import { faker } from '@faker-js/faker';
 
-import SectionHeroBasic from "../../Components/Gallery/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
-import SectionAboutUsSimple from "../../Components/Gallery/Section/SectionAboutUs/SectionAboutUsSimple/SectionAboutUsSimple";
-import FooterSimple from "../../Components/Gallery/Footer/FooterSimple/FooterSimple";
+import SectionHeroBasic from "../../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
+import SectionAboutUsSimple from "../../Templates/Section/SectionAboutUs/SectionAboutUsSimple/SectionAboutUsSimple";
+import FooterSimple from "../../Templates/Footer/FooterSimple/FooterSimple";
 import { AuthContext } from "../../Auth/AuthProvider";
 
 const RouteLogin: React.FC = () => {

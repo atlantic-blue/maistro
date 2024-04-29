@@ -10,7 +10,7 @@ import { PaymentsContext } from '../../Payments/PaymentsProvider';
 import { ApiContext } from "../../Api/ApiProvider"
 import { createUrl } from "../../Utils/url"
 import { Project } from "../../Store/Project"
-import { ProjectsMessageType } from "../../types"
+import { ProjectMessageType, ProjectsMessageType } from "../../types"
 import { appRoutes } from "../router"
 import * as styles from "./RouteProjectsCreate.scss"
 
@@ -41,11 +41,13 @@ const RouteProjectsCreate: React.FC = () => {
             projectResponse.name,
             projectResponse.url
         )
+
         projects.event$.next({
             type: ProjectsMessageType.SET_PROJECT,
             data: newProject.getStruct()
         })
 
+        const project = projects.getProjectById(projectResponse.id)
         const pageResponse = await api.pages.create({
             token: user.getTokenId(),
             title: projectName,
@@ -55,11 +57,38 @@ const RouteProjectsCreate: React.FC = () => {
             contentIds: [],
         })
 
-        await api.email.lists.create({
+        project.event$.next({
+            type: ProjectMessageType.SET_PAGE,
+            data: {
+                id: pageResponse.id,
+                projectId: pageResponse.projectId,
+                path: pageResponse.path,
+                title: pageResponse.title,
+                description: pageResponse.description,
+                contentIds: [],
+                // TODO
+                colourScheme: {},
+                fontScheme: {}
+            },
+        })
+
+        const emailListResponse = await api.email.lists.create({
             token: user.getTokenId(),
             title: projectName,
             description: projectDescription,
             projectId: projectResponse.id,
+        })
+
+        project.event$.next({
+            type: ProjectMessageType.SET_EMAIL_LIST,
+            data: {
+                createdAt: emailListResponse.createdAt,
+                title: emailListResponse.title,
+                status: emailListResponse.status,
+                projectId: emailListResponse.projectId,
+                id: emailListResponse.id,
+                description: emailListResponse.description
+            }
         })
 
         navigate(appRoutes.getProjectPageRoute(projectResponse.id, pageResponse.id))

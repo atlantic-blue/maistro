@@ -6,7 +6,7 @@ import { PageContext } from "../../../../../PageContext"
 import { TemplateStruct, PageMessageType } from "../../../../../types"
 import SearchItem from "../../../../../Components/SearchItem/SearchItem"
 import ProjectContent from "../../../../../Store/ProjectContent"
-import { GetTemplates } from "../../../../../Components/Gallery"
+import { GetTemplates } from "../../../../../Templates"
 
 import * as styles from "./EditMenu.scss"
 

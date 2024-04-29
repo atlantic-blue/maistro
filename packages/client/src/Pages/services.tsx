@@ -1,8 +1,9 @@
-import { FooterSimpleItem } from "../Components/Gallery/Footer/FooterSimple/FooterSimple"
-import { HeaderBasicItem } from "../Components/Gallery/Header/HeaderBasic/HeaderBasic"
-import { SectionServicesAccordionItem } from "../Components/Gallery/Section/SectionServices/SectionServicesAccordion/SectionServicesAccordion"
-import { SectionServicesBasicItem } from "../Components/Gallery/Section/SectionServices/SectionServicesBasic/SectionServicesBasic"
-import { SectionServicesIconsItem } from "../Components/Gallery/Section/SectionServices/SectionServicesIcons/SectionServicesIcons"
+import { templates } from "../Templates"
+import { FooterSimpleItem } from "../Templates/Footer/FooterSimple/FooterSimple"
+import { HeaderBasicItem } from "../Templates/Header/HeaderBasic/HeaderBasic"
+import { SectionServicesAccordionItem } from "../Templates/Section/SectionServices/SectionServicesAccordion/SectionServicesAccordion"
+import { SectionServicesBasicItem } from "../Templates/Section/SectionServices/SectionServicesBasic/SectionServicesBasic"
+import { SectionServicesIconsItem } from "../Templates/Section/SectionServices/SectionServicesIcons/SectionServicesIcons"
 import { PageStruct } from "../types"
 
 export const creteServicesPage = (): { page: PageStruct, templates: TemplateStruct[] } => {
@@ -13,9 +14,9 @@ export const creteServicesPage = (): { page: PageStruct, templates: TemplateStru
             description: "I am a description edit me!",
         },
         templates: [
-            HeaderBasicItem,
-            SectionServicesIconsItem,
-            FooterSimpleItem,
+            templates["HeaderBurger"],
+            // SectionServicesIconsItem,
+            // FooterSimpleItem,
         ]
     }
 }

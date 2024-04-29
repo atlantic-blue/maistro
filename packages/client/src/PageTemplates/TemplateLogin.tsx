@@ -4,9 +4,9 @@ import { faker } from '@faker-js/faker';
 
 import { defaultFontScheme } from "../PageContext";
 import { PageStruct } from "../types";
-import { SectionHeroBasicItem } from "../Components/Gallery/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
-import { FooterSimpleItem } from "../Components/Gallery/Footer/FooterSimple/FooterSimple";
-import { SectionAboutUsSimpleItem } from "../Components/Gallery/Section/SectionAboutUs/SectionAboutUsSimple/SectionAboutUsSimple";
+import { SectionHeroBasicItem } from "../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
+import { FooterSimpleItem } from "../Templates/Footer/FooterSimple/FooterSimple";
+import { SectionAboutUsSimpleItem } from "../Templates/Section/SectionAboutUs/SectionAboutUsSimple/SectionAboutUsSimple";
 
 
 export const CreateTemplateLogin = (): PageStruct[] => {

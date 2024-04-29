@@ -5,7 +5,7 @@ import parse from 'html-react-parser'
 
 import { getCssTextByClassName } from "./utils/cssStyles";
 import { ContentCategory, PageContentEvent, PageContentMessageType, ProjectContentStruct as ProjectContentStruct } from "../types"
-import { templates } from "../Components/Gallery";
+import { templates } from "../Templates";
 
 interface IProjectContent {
     getStruct(): ProjectContentStruct
@@ -151,7 +151,10 @@ class ProjectContent implements IProjectContent {
         }
 
         const props = this.getData() || {}
-        return <Component {...props} />
+        return <Component
+            {...props}
+            data-hydration-id={`${this.getTemplateName()}:${this.getId()}`}
+        />
     }
 
     public ComponentEditor = (): React.ReactNode | null => {
@@ -174,6 +177,12 @@ class ProjectContent implements IProjectContent {
 
     public getStylesFromClassNames = (): string[] => {
         const template = templates[this.getTemplateName()]
+        if (!template) {
+            // TODO app level warning
+            console.warn("content doesn't have any styles", this)
+            return []
+        }
+
         const classNames = template.classNames
         if (!classNames || !Array.isArray(classNames)) {
             // TODO app level warning

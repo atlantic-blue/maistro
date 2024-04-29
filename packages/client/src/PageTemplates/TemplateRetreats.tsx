@@ -2,12 +2,12 @@ import * as uuid from "uuid"
 
 import { PageStruct } from "../types"
 
-import { HeaderBasicItem } from "../Components/Gallery/Header/HeaderBasic/HeaderBasic"
-import { SectionHeroVideoItem } from "../Components/Gallery/Section/SectionHero/SectionHeroVideo/SectionHeroVideo"
-import { SectionAboutUsTeamItem } from "../Components/Gallery/Section/SectionAboutUs/SectionAboutUsTeam/SectionAboutUsTeam"
-import { SectionServicesDetailedItem } from "../Components/Gallery/Section/SectionServices/SectionServicesDetailed/SectionServicesDetailed"
-import { SectionContactBasicItem } from "../Components/Gallery/Section/SectionContact/SectionSubscribeBasic/SectionSubscribeBasic"
-import { FooterWithNavigationItem } from "../Components/Gallery/Footer/FooterWithNavigation/FooterWithNavigation"
+import { HeaderBasicItem } from "../Templates/Header/HeaderBasic/HeaderBasic"
+import { SectionHeroVideoItem } from "../Templates/Section/SectionHero/SectionHeroVideo/SectionHeroVideo"
+import { SectionAboutUsTeamItem } from "../Templates/Section/SectionAboutUs/SectionAboutUsTeam/SectionAboutUsTeam"
+import { SectionServicesDetailedItem } from "../Templates/Section/SectionServices/SectionServicesDetailed/SectionServicesDetailed"
+import { SectionContactBasicItem } from "../Templates/Section/SectionContact/SectionSubscribeBasic/SectionSubscribeBasic"
+import { FooterWithNavigationItem } from "../Templates/Footer/FooterWithNavigation/FooterWithNavigation"
 import { defaultFontScheme } from "../PageContext"
 
 export const CreateTemplateRetreats = (): PageStruct[] => {

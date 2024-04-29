@@ -12,7 +12,7 @@ import { debounceTime } from "rxjs";
 
 import * as styles from "./Droppable.scss"
 
-const COMPONENT_ID = "droppable"
+const COMPONENT_ID = "DROPPABLE"
 
 const DroppableComponent: React.FC = () => {
     const { api } = React.useContext(ApiContext)
@@ -28,7 +28,7 @@ const DroppableComponent: React.FC = () => {
 
         const subscription = page.event$
             .pipe(
-                debounceTime(1000 * 60)
+                debounceTime(1000 * 10)
             )
             .subscribe(event => {
                 if (event.type === PageMessageType.SET_CONTENT_IDS) {

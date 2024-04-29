@@ -1,6 +1,7 @@
 import React from "react"
 import { Subject, Subscription } from "rxjs";
 import { faker } from '@faker-js/faker';
+import { Theme } from '@radix-ui/themes';
 
 import { defaultColorScheme, defaultFontScheme } from "../PageContext";
 import {
@@ -13,10 +14,9 @@ import {
     FontFamily,
 } from "../types";
 
-import Html from "../Components/Html/Html";
 import { getFontFamilyHref } from "../Components/FontScheme/FontScheme";
 import { resetCss } from "./utils/cssStyles";
-import { templates } from "../Components/Gallery";
+import Html from "./utils/html";
 
 interface IPage {
     setId(id: string): void
@@ -39,7 +39,6 @@ interface IPage {
     setKeyWords(keyWords: string[]): void
     getKeyWords(): string
 
-    getContent(): string[]
     setContentIds(content: string[]): void
 
     getColourScheme(): ColourScheme
@@ -66,7 +65,6 @@ class PageStore implements IPage {
     private description = "I am a Page description, edit me!"
     private keywords = ""
     private contentIds: string[] = []
-    private contentIdActive: string = ""
     private colourScheme: ColourScheme = defaultColorScheme
     private fontScheme: FontScheme = defaultFontScheme
 
@@ -107,10 +105,6 @@ class PageStore implements IPage {
                 ])
             }
 
-            if (event.type === PageMessageType.SET_CONTENT_ID_ACTIVE) {
-                this.setContentIdActive(event.data)
-            }
-
             if (event.type === PageMessageType.SET_COLOUR_SCHEME) {
                 this.setColourScheme(event.data)
             }
@@ -128,7 +122,6 @@ class PageStore implements IPage {
             path: this.getPath(),
             colourScheme: this.getColourScheme(),
             contentIds: this.getContentIds(),
-            contentIdActive: this.getContentIdActive(),
             description: this.getDescription(),
             fontScheme: this.getFontScheme(),
             projectId: this.getProjectId()
@@ -147,7 +140,6 @@ class PageStore implements IPage {
         this.setColourScheme(page.colourScheme)
         this.setFontScheme(page.fontScheme)
         this.setContentIds(page.contentIds)
-        this.setContentIdActive(page.contentIdActive)
     }
 
     public getId(): string {
@@ -198,14 +190,6 @@ class PageStore implements IPage {
         this.contentIds = [...new Set(contentIds.filter(Boolean))]
     }
 
-    public getContentIdActive(): string {
-        return this.contentIdActive
-    }
-
-    public setContentIdActive(contentIdActive: string) {
-        this.contentIdActive = contentIdActive
-    }
-
     public getColourScheme(): ColourScheme {
         return this.colourScheme
     }
@@ -235,11 +219,11 @@ class PageStore implements IPage {
     public getFontFamilyLinks() {
         return (
             Object.values(this.fontScheme).map(fontfamily => {
-                return (
+                return (`
                     <link
-                        href={getFontFamilyHref(fontfamily.family)}
+                        href={${getFontFamilyHref(fontfamily.family)}}
                         rel="stylesheet"
-                    />
+                    />`
                 )
             })
         )
@@ -247,31 +231,21 @@ class PageStore implements IPage {
 
     public createHtml({
         Css,
-        Body
+        Body,
+        state,
     }: {
-        Css: () => React.ReactNode,
-        Body: () => React.ReactNode
-    }): React.ReactNode {
+        Css: () => string[],
+        Body: () => string,
+        state: Object
+    }): string {
         return (
-            <Html
-                htmlAttributes={{
-                    lang: "eng",
-                    style: {
-                        [ColourPalette.ACCENT]: this.getColourScheme().accent,
-                        [ColourPalette.BACKGROUND]: this.getColourScheme().background,
-                        [ColourPalette.NEUTRAL]: this.getColourScheme().neutral,
-                        [ColourPalette.PRIMARY]: this.getColourScheme().primary,
-                        [ColourPalette.SECONDARY]: this.getColourScheme().secondary,
-                        [ColourPalette.TEXT]: this.getColourScheme().text,
-
-                        [FontFamily.BODY]: this.getFontScheme().body.css,
-                        [FontFamily.HEADING]: this.getFontScheme().heading.css,
-                    }
-                }}
-            >
-                <head>
+            Html({
+                htmlAttributes: `
+                lang="en" style="--font-family-body: &quot;Roboto&quot;, sans-serif; --font-family-heading: &quot;Merriweather&quot;, sans-serif; --color-accent: #d9d9d9; --color-background: #f0f0f0; --color-neutral: #e6e6e6; --color-primary: #FFC94A; --color-secondary: #453F78; --color-text: #333333;"
+                `,
+                head: `
                     <meta charSet="UTF-8" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
                     <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
 
                     <title>{this.getTitle()}</title>
@@ -281,22 +255,26 @@ class PageStore implements IPage {
                     <meta name="author" content="https://maistro.website" />
 
                     <style>
-                        {resetCss()}
+                        ${resetCss()}
                     </style>
                     <style>
-                        <Css />
+                        ${Css()}
                     </style>
                     <link href="https://maistro.website/assets/radix-styles.css" rel="stylesheet" />
 
-                    {this.getFontFamilyLinks()}
-                </head>
-                <body>
-                    <main id="main">
-                        <Body />
-                    </main>
-
-                </body>
-            </Html>
+                    ${this.getFontFamilyLinks().join('\n')}
+                `,
+                body: {
+                    main: `${Body()}`,
+                    scripts: `
+                    <script id="hydration-sate">
+                        window.__STATE__ = ${JSON.stringify(state)};
+                    </script>
+                    <script src="https://maistro.website/assets/client-js/main.js"></script>
+                    `,
+                },
+                bodyAttributes: ``,
+            })
         )
     }
 }

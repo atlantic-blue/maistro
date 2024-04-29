@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "react-query";
 import classNames from "classnames";
 import { Button, Callout } from "@radix-ui/themes";
 import { postProject } from "../../../../../Api/Project/postProject";
-import * as styles from "./SubmitProject.scss";
 import { withHttps } from "../../../../../Utils/url";
 
 import { Project } from "../../../../../Store/Project";
-import useObservable from "../../../../../Utils/Hooks/UseObservable";
 import PageStore from "../../../../../Store/Page";
-import { PageMessageType } from "../../../../../types";
 import { filter, tap } from "rxjs/operators";
+
+import * as styles from "./SubmitProject.scss";
+import { PageMessageType } from "../../../../../types";
 
 interface SubmitProjectProps {
     project: Project,
@@ -36,6 +36,7 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
             });
         }
     });
+
 
     useEffect(() => {
         const subscription = page?.event$.pipe(

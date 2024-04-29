@@ -1,6 +1,7 @@
-import { FooterSimpleItem } from "../Components/Gallery/Footer/FooterSimple/FooterSimple"
-import { HeaderBasicItem } from "../Components/Gallery/Header/HeaderBasic/HeaderBasic"
-import { SectionHeroBasicItem } from "../Components/Gallery/Section/SectionHero/SectionHeroBasic/SectionHeroBasic"
+import { templates } from "../Templates"
+import { FooterSimpleItem } from "../Templates/Footer/FooterSimple/FooterSimple"
+import { HeaderBasicItem } from "../Templates/Header/HeaderBasic/HeaderBasic"
+import { SectionHeroBasicItem } from "../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic"
 import { PageStruct } from "../types"
 
 export const cretePolicyPage = (): { page: PageStruct, templates: TemplateStruct[] } => {
@@ -11,7 +12,7 @@ export const cretePolicyPage = (): { page: PageStruct, templates: TemplateStruct
             description: "I am a description edit me!",
         },
         templates: [
-            HeaderBasicItem,
+            templates["HeaderBurger"],
             {
                 ...SectionHeroBasicItem,
                 props: {
@@ -20,7 +21,7 @@ export const cretePolicyPage = (): { page: PageStruct, templates: TemplateStruct
                     content: "Lorem...",
                 }
             },
-            FooterSimpleItem,
+            // FooterSimpleItem,
         ]
     }
 }
