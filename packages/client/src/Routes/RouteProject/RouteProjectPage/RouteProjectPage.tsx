@@ -10,7 +10,7 @@ import { ProjectsContext } from "../../../Projects";
 
 import useObservable from "../../../Utils/Hooks/UseObservable";
 import { filter } from "rxjs/operators";
-import { Box, Button, Dialog, Flex, IconButton, Progress, Section } from "@radix-ui/themes";
+import { Box, Button, Dialog, Flex, IconButton, Progress, Section, Spinner } from "@radix-ui/themes";
 import EditMenuItem from "../../../Components/EditMenuItem/EditMenuItem";
 import SearchItem from "../../../Components/SearchItem/SearchItem";
 import { GetTemplates, templates } from "../../../Templates";
@@ -75,8 +75,8 @@ const RouteProjectPage: React.FC = () => {
     }
 
     const onTemplateClick = async (template: TemplateStruct) => {
-        setOpen(false)
         setIsLoading(true)
+
         try {
             let data = template.props
             if (template.name.includes("SectionSubscribe")) {
@@ -126,6 +126,7 @@ const RouteProjectPage: React.FC = () => {
             console.error(error)
         } finally {
             setIsLoading(false)
+            setOpen(false)
         }
     }
 
@@ -165,17 +166,19 @@ const RouteProjectPage: React.FC = () => {
                             </Flex>
                             <Dialog.Title>Add Content</Dialog.Title>
 
-                            <Flex direction="column" gap="3">
-                                <SearchItem
-                                    templates={Object.values(templates)}
-                                    onClick={onTemplateClick}
-                                />
+                            <Flex direction="column" gap="3" align="center" justify="center">
+                                {isLoading ? (
+                                    <Spinner />
+                                ) : (
+                                    <SearchItem
+                                        templates={Object.values(templates)}
+                                        onClick={onTemplateClick}
+                                    />
+                                )}
                             </Flex>
                         </Dialog.Content>
                     </Dialog.Root>
                 </div>
-
-
 
             </PageEdit>
         </Helmet>

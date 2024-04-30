@@ -36,14 +36,14 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
             <Flex direction="column" gap="3">
                 <EditorData
                     type={EditorDataType.IMAGE}
-                    name="Logo Url"
+                    name="Logo"
                     value={logoUrl}
                     onChange={setLogoUrl}
                     onUploadImage={props.onUploadImage}
                 />
                 <EditorData
                     type={EditorDataType.TEXT}
-                    name="Logo Slogan"
+                    name="Slogan"
                     value={logoSlogan}
                     onChange={setLogoSlogan}
                 />
@@ -101,7 +101,10 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
 
             </Flex>
             {props.children}
-            <Button onClick={() => onSave(links)}>Save</Button>
+
+            <Flex gap="3" mt="4" justify="end">
+                <Button onClick={() => onSave(links)}>Save</Button>
+            </Flex>
         </>
     )
 };

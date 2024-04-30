@@ -1,7 +1,10 @@
 import React from "react";
-import { Button, Flex, Spinner, Text } from "@radix-ui/themes";
+import { Avatar, Box, Button, Flex, Spinner, Tabs, Text, TextField } from "@radix-ui/themes";
+
+import * as styles from "./EditorImage.scss"
 
 import { EditorImageProps } from "./EditorData";
+import IconUpLoad from "../Icons/Upload/Upload";
 
 const EditorImage: React.FC<EditorImageProps> = (props) => {
     const [preview, setPreview] = React.useState(props.value);
@@ -21,22 +24,69 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
     };
 
     return (
-        <Text as="label">
-            <Flex justify="center" align="center" direction="column">
+        <Tabs.Root defaultValue="upload">
+            <Flex justify="center" align="center" direction="column" width="100%">
                 <Text as="div" size="2" mb="1" weight="bold">
                     {props.name}
                 </Text>
-                {preview && <img src={preview} alt="Preview" style={{ maxWidth: '96px' }} />}
+                <Avatar
+                    src={preview}
+                    fallback="Preview"
+                    size="9"
+                />
 
-                {!isLoading && <input
-                    type="file"
-                    onChange={handleFileChange}
-                    accept="image/*"
-                    style={{ maxWidth: '96px' }}
-                />}
-                {isLoading && <Spinner />}
+                <Tabs.List>
+                    <Tabs.Trigger value="upload">Upload</Tabs.Trigger>
+                    <Tabs.Trigger value="url">URL</Tabs.Trigger>
+                </Tabs.List>
+
+                <Box pt="3" width="100%">
+                    <Tabs.Content value="upload">
+
+                        {!isLoading && (
+                            <>
+                                <label htmlFor="file" className={styles.uploadLabel}>
+                                    <span>
+                                        <IconUpLoad className={styles.uploadIcon}/>
+                                    </span>
+                                    <span>Upload</span>
+                                    <input
+                                        id="file"
+                                        type="file"
+                                        className={styles.uploadInput}
+                                        onChange={handleFileChange}
+                                    />
+                                </label>
+                            </>
+                        )}
+
+                        {isLoading && (
+                            <Flex justify="center" align="center" direction="column" width="100%">
+                                <Spinner />
+                            </Flex>
+                        )}
+
+                    </Tabs.Content>
+
+                    <Tabs.Content value="url">
+                        <TextField.Root
+                            placeholder={props.value}
+                            type="text"
+                            size="2"
+                            variant="surface"
+                            value={props.value}
+                            onChange={e => {
+                                const src = e.target.value;
+                                setPreview(src);
+                                props.onChange(src);
+                            }}
+                            required
+                        />
+                    </Tabs.Content>
+
+                </Box>
             </Flex>
-        </Text>
+        </Tabs.Root>
     )
 }
 

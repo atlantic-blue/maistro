@@ -1,25 +1,22 @@
 import React from 'react';
 import { faker } from '@faker-js/faker';
 
-import { TemplateStruct, ContentCategory } from "../../../templateTypes";
+import { TemplateStruct, ContentCategory, TemplateComponentType } from "../../../templateTypes";
 
 import { SectionHeroProps } from '../SectionHeroTypes';
 
-import Button from '../../../Components/Button/Button';
-
-import SectionHeroBasicEditor from './SectionHeroBasicEditor';
-
 import * as styles from "./SectionHeroBasic.scss";
+import { Box, Button, Flex, Heading, Section } from '@radix-ui/themes';
 
 const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
     return (
-        <section className={styles.hero} data-hydration-id={props["data-hydration-id"]}>
-            <h1>
+        <Section className={styles.hero} data-hydration-id={props["data-hydration-id"]}>
+            <Heading as="h1">
                 {props.title}
-            </h1>
+            </Heading>
 
-            <div className={styles.section}>
-                <div className={styles.imgFrame}>
+            <Flex className={styles.section}>
+                <Box className={styles.imgFrame}>
                     <div className={styles.imgWrapper}>
                         <img
                             src={props.img.src}
@@ -27,32 +24,32 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
                             className={styles.img}
                         />
                     </div>
-                </div>
-                <div className={styles.text}>
+                </Box>
+                <Box className={styles.text}>
                     {props.content}
-                </div>
-            </div>
+                </Box>
+            </Flex>
 
 
             <Button
                 onClick={props.ctaOnClick}
                 className={styles.button}
-                link={props.ctaLink}
             >
-                {props.cta}
+                <a href={props.ctaLink} target="_blank" rel="noopener noreferrer">
+                    {props.cta}
+                </a>
             </Button>
 
-        </section>
+        </Section>
     )
 };
 
 
 export const SectionHeroBasicItem: TemplateStruct = {
-    name: "SectionHeroBasic",
+    name: TemplateComponentType.HERO_BASIC,
     description: "Hero Basic",
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     Component: SectionHeroBasic,
-    ComponentEditor: SectionHeroBasicEditor,
     classNames: [
         ...Object.values(styles)
     ],

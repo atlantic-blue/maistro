@@ -33,12 +33,15 @@ import { SectionSubscribeBasicItem } from './Section/SectionContact/SectionSubsc
 export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct> => {
     const templatesRecord: Record<string, TemplateStruct> = {}
     const templatesList: TemplateStruct[] = [
+        HeaderBurgerItem,
+        SectionHeroBasicItem,
+        SectionSubscribeBasicItem,
+
         HeaderBasicItem,
         HeaderBurgerItem,
         // HeaderDropDownItem,
-        // HeaderStickyItem,
+        HeaderStickyItem,
 
-        SectionHeroBasicItem,
         // SectionHeroImageItem,
         // SectionHeroVideoItem,
         // SectionHeroSlidesItem,
@@ -53,7 +56,6 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct> =>
         // SectionServicesDetailedItem,
         // SectionServicesIconsItem,
 
-        SectionSubscribeBasicItem,
 
         // SectionContactWithMapItem,
         // SectionContactDetailedItem,

@@ -13,7 +13,6 @@ import { HeaderProps } from "../HeaderTypes"
 
 import { ContentCategory, TemplateComponentType, TemplateStruct } from "../../templateTypes"
 
-const COMPONENT_NAME = TemplateComponentType.HEADER_BASIC
 const HeaderBasic: React.FC<HeaderProps> = ({
     logo,
     links,
@@ -36,7 +35,7 @@ const HeaderBasic: React.FC<HeaderProps> = ({
 
 
 export const HeaderBasicItem: TemplateStruct = {
-    name: COMPONENT_NAME,
+    name: TemplateComponentType.HEADER_BASIC,
     description: "Simple header",
     categories: [ContentCategory.HEADER],
     classNames: [

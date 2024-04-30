@@ -14,7 +14,6 @@ import { HeaderProps } from '../HeaderTypes';
 
 import classNames from 'classnames';
 
-const COMPONENT_NAME = TemplateComponentType.HEADER_BURGER
 const HeaderBurger: React.FC<HeaderProps> = ({
     logo,
     links,
@@ -49,7 +48,7 @@ const HeaderBurger: React.FC<HeaderProps> = ({
 };
 
 export const HeaderBurgerItem: TemplateStruct = {
-    name: COMPONENT_NAME,
+    name: TemplateComponentType.HEADER_BURGER,
     Component: HeaderBurger,
     categories: [ContentCategory.HEADER],
     description: "Header Burger",

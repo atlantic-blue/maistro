@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { TemplateStruct, ContentCategory } from '../../templateTypes';
+import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../templateTypes';
 
 import { HeaderProps } from '../HeaderTypes';
 
@@ -11,8 +11,8 @@ import * as LogoStyles from "../../Components/Logo/Logo.scss"
 import * as NavStyles from "../../Components/Nav/Nav.scss"
 import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
 import * as styles from "./HeaderSticky.scss"
+import { Box } from '@radix-ui/themes';
 
-const COMPONENT_NAME = "HeaderSticky"
 const HeaderSticky: React.FC<HeaderProps> = ({
     logo,
     links,
@@ -36,7 +36,7 @@ const HeaderSticky: React.FC<HeaderProps> = ({
 
     return (
         <nav className={`${styles.headerSticky} ${isScrolled ? styles.scrolled : ''}`} data-hydration-id={props["data-hydration-id"]}>
-            <div className={styles.headerStickyContainer}>
+            <Box className={styles.headerStickyContainer}>
                 <Logo
                     imgUrl={logo.url}
                     slogan={logo.slogan}
@@ -44,15 +44,15 @@ const HeaderSticky: React.FC<HeaderProps> = ({
                 <Nav
                     links={links}
                 />
-            </div>
+            </Box>
         </nav>
     );
 };
 
 export const HeaderStickyItem: TemplateStruct = {
-    name: COMPONENT_NAME,
+    name: TemplateComponentType.HEADER_STICKY,
     Component: HeaderSticky,
-    description: "A sticky navigation bar that changes its background from transparent to solid on scroll, providing a dynamic user experience. This style is versatile, fitting for almost any website looking to enhance usability without sacrificing aesthetics.",
+    description: "Sticky navigation bar",
     categories: [ContentCategory.HEADER],
     classNames: [
         ...Object.values(styles),

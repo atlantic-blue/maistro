@@ -1,4 +1,5 @@
 import React from "react"
+import { Avatar, Box } from "@radix-ui/themes"
 
 import * as styles from "./Logo.scss"
 
@@ -9,12 +10,14 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = (props) => {
     return (
-        <div className={styles.logo}>
+        <Box className={styles.logo}>
             <a href="/">
-                <img src={props.imgUrl} className={styles.logoImg} />
+                <Avatar
+                    fallback={props.slogan || ""}
+                    src={props.imgUrl}
+                />
             </a>
-            {props.slogan && <span className={styles.logoSlogan}>{props.slogan}</span>}
-        </div>
+        </Box>
     )
 }
 

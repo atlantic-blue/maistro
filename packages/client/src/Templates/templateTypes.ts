@@ -15,6 +15,9 @@ export enum TemplateComponentType {
     NONE = "NONE",
     HEADER_BASIC = "HEADER_BASIC",
     HEADER_BURGER = "HEADER_BURGER",
+    HEADER_STICKY = "HEADER_STICKY",
+
+    HERO_BASIC = "HERO_BASIC",
 }
 
 export interface TemplateStruct {
