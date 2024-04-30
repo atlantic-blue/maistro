@@ -1,11 +1,10 @@
 import React from "react"
 import { Subject, Subscription } from "rxjs"
-import { renderToString } from 'react-dom/server';
-import parse from 'html-react-parser'
 
 import { getCssTextByClassName } from "./utils/cssStyles";
-import { ContentCategory, PageContentEvent, PageContentMessageType, ProjectContentStruct as ProjectContentStruct } from "../types"
+import { PageContentEvent, PageContentMessageType, ProjectContentStruct as ProjectContentStruct } from "../types"
 import { templates } from "../Templates";
+import { TemplateComponentType } from "../Templates/templateTypes";
 
 interface IProjectContent {
     getStruct(): ProjectContentStruct
@@ -26,8 +25,8 @@ interface IProjectContent {
     getData(): Object | undefined
     setData(data: Object): void
 
-    getTemplateName(): string
-    setTemplateName(template: string): void
+    getTemplate(): TemplateComponentType
+    setTemplateName(templateName: TemplateComponentType): void
 }
 
 class ProjectContent implements IProjectContent {
@@ -36,7 +35,7 @@ class ProjectContent implements IProjectContent {
     private categories: string[] = []
     private projectId: string = ""
     private data?: Object | undefined
-    private template: string = ""
+    private template: TemplateComponentType = TemplateComponentType.NONE
     private createdAt: Date = new Date()
 
     private subscription: Subscription
@@ -67,7 +66,7 @@ class ProjectContent implements IProjectContent {
             data: this.getData(),
             createdAt: this.getCreatedAt(),
             projectId: this.getProjectId(),
-            template: this.getTemplateName(),
+            template: this.getTemplate(),
         }
     }
 
@@ -110,7 +109,7 @@ class ProjectContent implements IProjectContent {
         this.template = template
     }
 
-    public getTemplateName(): string {
+    public getTemplate(): TemplateComponentType {
         return this.template
     }
 
@@ -139,7 +138,7 @@ class ProjectContent implements IProjectContent {
     }
 
     public Component = (): React.ReactNode | null => {
-        const template = templates[this.getTemplateName()]
+        const template = templates[this.getTemplate()]
         if (!template) {
             return null
         }
@@ -153,12 +152,12 @@ class ProjectContent implements IProjectContent {
         const props = this.getData() || {}
         return <Component
             {...props}
-            data-hydration-id={`${this.getTemplateName()}:${this.getId()}`}
+            data-hydration-id={`${this.getTemplate()}:${this.getId()}`}
         />
     }
 
     public ComponentEditor = (): React.ReactNode | null => {
-        const template = templates[this.getTemplateName()]
+        const template = templates[this.getTemplate()]
         if (!template) {
             return null
         }
@@ -176,7 +175,7 @@ class ProjectContent implements IProjectContent {
     }
 
     public getStylesFromClassNames = (): string[] => {
-        const template = templates[this.getTemplateName()]
+        const template = templates[this.getTemplate()]
         if (!template) {
             // TODO app level warning
             console.warn("content doesn't have any styles", this)

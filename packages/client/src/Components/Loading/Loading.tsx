@@ -7,6 +7,7 @@ import IconLogo from "../Icons/Logo/Logo"
 
 interface LoadingProps {
     children?: string
+    className?: string
 }
 
 const Loading: React.FC<LoadingProps> = (props) => {
@@ -19,7 +20,7 @@ const Loading: React.FC<LoadingProps> = (props) => {
     )
 
     return (
-        <animated.div style={animatedProps}>
+        <animated.div style={animatedProps} className={props.className}>
             <div className={styles.main} data-is-root-theme='true'>
                 <Section data-is-root-theme='true'>
                     <Flex direction="column" align="center" justify="center" gap="1">

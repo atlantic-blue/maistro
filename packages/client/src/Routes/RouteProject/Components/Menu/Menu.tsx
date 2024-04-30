@@ -60,7 +60,7 @@ const Menu: React.FC = () => {
                 <li className={styles.link}>
                     <MenuButton
                         link={appRoutes.getProjectPageTemplatesRoute(project?.getId())}
-                        text="Templates"
+                        text="New"
                         Icon={IconNew}
                     />
                 </li>

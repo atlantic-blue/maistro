@@ -13,7 +13,7 @@ import { PageContext } from "../../../../../PageContext"
 import { ProjectsContext } from "../../../../../Projects"
 import { useParams } from "react-router"
 import { ProjectMessageType } from "../../../../../types"
-import { postFile } from "../../../../../Api/Project/postFile"
+import { fileCreate } from "../../../../../Api/File/fileCreate"
 import { convertFileToBase64 } from "../../../../../Utils/toBase64"
 
 interface ToolbarToolbarMediaImageProps {

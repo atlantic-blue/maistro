@@ -5,17 +5,7 @@ import { Project } from "./Store/Project"
 import { Projects } from "./Store/Projects"
 import Page from "./Store/Page"
 import { User } from "./Store/User"
-
-export enum ContentCategory {
-    HEADER = "HEADER",
-    FOOTER = "FOOTER",
-    HERO = "HERO",
-    ABOUT = "ABOUT",
-    SERVICES = "SERVICES",
-    TEXT = "TEXT",
-    CONTACT = "CONTACT",
-    SUBSCRIBE = "SUBSCRIBE"
-}
+import { TemplateComponentType } from "./Templates/templateTypes"
 
 export interface UserStruct {
     id: string
@@ -72,20 +62,9 @@ export interface ProjectContentStruct {
     projectId: string
     createdAt: string
     description: string
-    template: string
+    template: TemplateComponentType
     categories: string[]
     data: Object | undefined
-}
-
-export interface TemplateStruct {
-    name: string
-    description: string
-    categories: ContentCategory[]
-
-    classNames: string[]
-    props: any
-    Component: React.FC<any>
-    ComponentEditor: React.FC<any>
 }
 
 /**

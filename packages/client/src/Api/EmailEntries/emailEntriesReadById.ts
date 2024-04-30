@@ -1,4 +1,5 @@
 import env from "../../env"
+import { requestController } from "../fetch"
 
 export interface EmailEntriesReadInput {
     token: string
@@ -20,7 +21,7 @@ export interface EmailEntriesReadOutput {
 const emailEntriesReadById = async (
     input: EmailEntriesReadInput,
     apiUrl = env.api.email.entries.read,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<EmailEntriesReadOutput> => {
     return request(`${apiUrl}/${input.emailListId}`, {
         method: "GET",

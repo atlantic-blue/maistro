@@ -1,3 +1,5 @@
+import { requestController } from "../fetch"
+
 interface GetAuthzTokensInput {
     url: string
     grantType: GrantTypeCode
@@ -28,13 +30,15 @@ const getAuthzTokens = ({
     redirectUrl,
     clientId,
     clientSecret,
-}: GetAuthzTokensInput): Promise<GetAuthzTokensOutput> => {
+}: GetAuthzTokensInput,
+    request = requestController.fetch
+): Promise<GetAuthzTokensOutput> => {
     const params = new URLSearchParams()
     params.set("grant_type", grantType)
     params.set("code", code)
     params.set("redirect_uri", redirectUrl)
 
-    return fetch(url, {
+    return request(url, {
         headers: new Headers({
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": `Basic ${btoa(`${clientId}:${clientSecret}`)}`,

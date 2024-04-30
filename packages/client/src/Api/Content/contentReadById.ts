@@ -1,5 +1,6 @@
 import env from "../../env"
 import { ProjectContentStruct } from "../../types"
+import { requestController } from "../fetch"
 
 export interface ContentReadByIdInput {
     token: string
@@ -16,7 +17,7 @@ const contentReadById = async (
         projectId,
     }: ContentReadByIdInput,
     url = env.api.content.read,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<ContentReadByIdOutput> => {
     return request(`${url(projectId)}/${pageId}`, {
         method: "GET",

@@ -13,13 +13,15 @@ import * as styles from "./SubmitProject.scss";
 import { PageMessageType } from "../../../../../types";
 
 interface SubmitProjectProps {
+    token: string
+    userId: string
     project: Project,
     page?: PageStore,
-    userId: string
     request?: (input: { project: Project, userId: string }) => Promise<void>
 }
 
 export const SubmitProject: React.FC<SubmitProjectProps> = ({
+    token,
     project,
     userId,
     page,
@@ -31,6 +33,7 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
         queryKey: "SubmitProject",
         queryFn: async () => {
             return await request({
+                token,
                 project,
                 userId
             });

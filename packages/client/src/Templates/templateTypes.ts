@@ -11,14 +11,17 @@ export enum ContentCategory {
     SUBSCRIBE = "SUBSCRIBE"
 }
 
+export enum TemplateComponentType {
+    NONE = "NONE",
+    HEADER_BASIC = "HEADER_BASIC",
+    HEADER_BURGER = "HEADER_BURGER",
+}
+
 export interface TemplateStruct {
-    name: string
+    name: TemplateComponentType
     description: string
     categories: ContentCategory[]
-
     classNames: string[]
     props: any
     Component: React.FC<any>
-    ComponentEditor: React.FC<any>
 }
-

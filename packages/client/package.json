@@ -1,8 +1,10 @@
 {
     "scripts": {
-        "build": "npm run types:sass && TS_NODE_PROJECT=tsconfig.json webpack --env NODE_ENV=production --config ./config/webpack/webpack.config.ts",
+        "delete:client-css": "rm -rf ./assets/client-js/css",
+        "build:app": "TS_NODE_PROJECT=tsconfig.json webpack --env NODE_ENV=production --config ./config/webpack/webpack.config.ts",
+        "build:client": "TS_NODE_PROJECT=tsconfig.json webpack --env NODE_ENV=production --config ./config/webpack/webpack.client.config.ts",
+        "build": "npm run types:sass  && npm run build:client && npm run delete:client-css && npm run build:app",
         "build:analyze": "npm run types:sass && TS_NODE_PROJECT=tsconfig.json webpack --env ANALYZE --env NODE_ENV=production --config ./config/webpack/webpack.config.ts",
-        "build:client": "npm run types:sass && TS_NODE_PROJECT=tsconfig.json webpack --env NODE_ENV=production --config ./config/webpack/webpack.client.config.ts",
         "clean": "rm -rf dist **/*.scss.d.ts",
         "dev:server": "TS_NODE_PROJECT=tsconfig.json webpack-dev-server --env NODE_ENV=development --config ./config/webpack/webpack.config.ts",
         "doc": "typedoc",

@@ -13,6 +13,7 @@ import { FooterSimpleItem } from "../Templates/Footer/FooterSimple/FooterSimple"
 import { creteServicesPage } from "./services"
 import { SectionHeroVideoItem } from "../Templates/Section/SectionHero/SectionHeroVideo/SectionHeroVideo"
 import { templates } from "../Templates"
+import { TemplateComponentType } from "../Templates/templateTypes"
 
 const createIndexPage = (): { page: PageStruct, templates: TemplateStruct[] } => {
     return {
@@ -22,7 +23,7 @@ const createIndexPage = (): { page: PageStruct, templates: TemplateStruct[] } =>
             description: "I am a description edit me!",
         },
         templates: [
-            templates["HeaderBurger"],
+            templates[TemplateComponentType.HEADER_BURGER],
         ]
     }
 }
@@ -59,7 +60,11 @@ export const PageViews: React.FC<PageViewsProps> = (props) => {
                         thumbnail={props.thumbnail}
                     >
                         {templates?.map(template => {
-                            const Component = template.Component
+                            const Component = template?.Component
+                            if (!Component) {
+                                return null
+                            }
+
                             return (
                                 <Component
                                     key={`${template.name}-${Math.random()}`}

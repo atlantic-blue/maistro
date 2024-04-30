@@ -39,3 +39,35 @@
         margin-bottom: 10px;
     }
 }
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px;
+}
+
+.input {
+    width: 300px;
+}
+
+.textarea {
+    border-radius: 5px;
+    min-width: 300px;
+    max-width: 300px;
+    min-height: 100px;
+    max-height: 300px;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 5px 5px 5px 0;
+    min-width: 100px;
+}
+
+.error-message {
+    font-size: 10px;
+    color: red;
+}

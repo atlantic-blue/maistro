@@ -1,5 +1,6 @@
 import sanitiseInput from "../../Utils/sanitiseInput"
 import env from "../../env"
+import { requestController } from "../fetch"
 
 export interface PagesCreateInput {
     token: string
@@ -30,7 +31,7 @@ const pagesCreate = async (
         contentIds,
     }: PagesCreateInput,
     apiUrl = env.api.pages.create,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<PagesCreateOutput> => {
     return request(apiUrl(projectId), {
         method: "POST",

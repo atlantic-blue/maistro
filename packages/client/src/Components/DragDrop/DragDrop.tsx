@@ -1,16 +1,12 @@
-import React, { useContext } from "react"
-
+import React from "react"
+import { useParams } from "react-router-dom"
 import { DragDropContext as DnDContext, OnDragEndResponder } from "react-beautiful-dnd"
 
-import DroppableComponent from "./Droppable"
-import { PageContext } from "../../PageContext"
-
-import { PageMessageType, TemplateStruct } from "../../types"
-import * as styles from "./DragDrop.scss"
-import ProjectContent from "../../Store/ProjectContent"
-import { ApiContext } from "../../Api/ApiProvider"
+import { PageMessageType } from "../../types"
 import { ProjectsContext } from "../../Projects"
-import { useParams } from "react-router-dom"
+
+import DroppableComponent from "./Droppable"
+import * as styles from "./DragDrop.scss"
 
 // a little function to help us with reordering the result
 const reorder = (contentIds: string[], startIndex: number, endIndex: number) => {

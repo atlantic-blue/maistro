@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate, useParams } from 'react-router-dom'
 import { filter } from "rxjs/operators";
-import { Card, Flex, TextField, Text, Section } from "@radix-ui/themes";
+import { Card, Flex, TextField, Text, Section, Button, Box } from "@radix-ui/themes";
+import * as Form from "@radix-ui/react-form"
 
 import Helmet from "../Components/Helmet/Helmet";
 import { PageStruct, ProjectMessageType, TemplateStruct } from "../../../types";
@@ -40,52 +41,26 @@ const RouteProjectCreate: React.FC = () => {
         return
     }
 
-    const onCreateNewPage = async (page: PageStruct, templates: TemplateStruct[]) => {
+    const onCreateNewPage: React.FormEventHandler<HTMLFormElement> = async (e) => {
+        e.preventDefault()
+
         if (!pagePath) {
             return setError("add a page url")
         }
 
         if (project.getPageByPathname(pagePath)) {
-            return setError(`/${pagePath} already exists`)
+            return setError(`${pagePath} already exists`)
         }
+
         setIsLoading(true)
-
-        const promises = templates.map(async (template) => {
-            const response = await api.content.create({
-                token: user.getTokenId(),
-                projectId: projectId,
-                template: template.name,
-                categories: template.categories,
-                description: template.description,
-                data: template.props,
-            })
-
-            project.event$.next({
-                type: ProjectMessageType.SET_CONTENT,
-                data: {
-                    id: response.id,
-                    description: response.description,
-                    template: response.template,
-                    projectId: response.projectId,
-                    createdAt: response.createdAt,
-                    data: response.data,
-                    categories: response.categories,
-                },
-            })
-            return response.id
-        })
-
-        const responses = await Promise.all(promises)
-
-        const contentIds = responses.filter(Boolean)
 
         const response = await api.pages.create({
             token: user.getTokenId(),
-            title: page.title,
+            title: pagePath,
             path: pagePath,
-            description: page.description,
+            description: "Edit me!",
             projectId: projectId,
-            contentIds,
+            contentIds: [],
         })
 
         project.event$.next({
@@ -96,7 +71,7 @@ const RouteProjectCreate: React.FC = () => {
                 path: response.path,
                 projectId: response.projectId,
                 description: response.description,
-                contentIds,
+                contentIds: [],
             }
         })
 
@@ -112,43 +87,59 @@ const RouteProjectCreate: React.FC = () => {
     return (
         <Helmet>
             <Section size="1">
-                <Flex justify="center" align="center" direction="row" wrap="wrap">
-                    <Text
-                        className={styles.title}
-                    >
-                        {project?.getUrl()}/
-                    </Text>
-                    <TextField.Root
-                        type="text"
-                        size="2"
-                        variant="surface"
-                        value={pagePath}
-                        onChange={e => { setError(""); setPagePath(e.target.value) }}
-                        className={styles.input}
-                        placeholder="home"
-                        required
-                    />
-                </Flex>
-                <Flex justify="center" align="center" direction="row" gap="2">
-                    {isLoading && <div className={styles.messageLoading}>Creating page...</div>}
-                    {error && <div className={styles.messageError}>{error}</div>}
-                </Flex>
+                <Card className={styles.card}>
+                    <Flex direction="column" align="center" justify="center">
+                        <Text
+                            className={styles.title}
+                        >
+                            {project?.getUrl()}/{pagePath}
+                        </Text>
 
-                <Section size="1" className={styles.section}>
-                    <Card>
-                        <PageViews
-                            onClick={canCreateNewPages ? onCreateNewPage : redirectToCheckout}
-                            className={styles.template}
-                            thumbnail={{
-                                dimensions: {
-                                    height: "400px",
-                                    width: "350px",
-                                    scale: .5,
-                                }
-                            }}
-                        />
-                    </Card>
-                </Section>
+                        {error && (
+                            <Text
+                                className={styles.errorMessage}
+                            >
+                                {error}
+                            </Text>
+                        )}
+
+                        <Form.Root onSubmit={canCreateNewPages ? onCreateNewPage : redirectToCheckout}>
+                            <Flex gap="3" direction="column">
+                                <Form.Field name="projectName">
+                                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+                                        <Text
+                                            className={styles.title}
+                                        >
+                                            Page Name
+                                        </Text>
+                                        <Form.Message match="valueMissing" className={styles.errorMessage}>
+                                            Please provide a name
+                                        </Form.Message>
+                                    </div>
+                                    <Form.Control asChild>
+                                        <TextField.Root
+                                            type="text"
+                                            size="2"
+                                            variant="surface"
+                                            value={pagePath}
+                                            onChange={e => setPagePath(e.target.value)}
+                                            className={styles.input}
+                                            required
+                                        />
+                                    </Form.Control>
+                                </Form.Field>
+                                <Form.Submit asChild>
+                                    <Button
+                                        style={{ marginTop: 10 }}
+                                        loading={isLoading}
+                                    >
+                                        Create Page
+                                    </Button>
+                                </Form.Submit>
+                            </Flex>
+                        </Form.Root>
+                    </Flex>
+                </Card>
             </Section>
         </Helmet >
     );

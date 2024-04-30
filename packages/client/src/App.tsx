@@ -19,17 +19,19 @@ const App: React.FC = () => {
     }, [])
 
     return (
-        <ApiProvider>
-            <AuthProvider>
-                <PaymentsProvider>
-                    <QueryClientProvider client={queryClient}>
-                        <Theme accentColor="amber" grayColor="mauve">
+        <Theme accentColor="amber" grayColor="mauve">
+            <ApiProvider>
+                <AuthProvider>
+                    <PaymentsProvider>
+                        <QueryClientProvider client={queryClient}>
+
                             <Projects />
-                        </Theme>
-                    </QueryClientProvider>
-                </PaymentsProvider>
-            </AuthProvider>
-        </ApiProvider>
+
+                        </QueryClientProvider>
+                    </PaymentsProvider>
+                </AuthProvider>
+            </ApiProvider>
+        </Theme>
     )
 }
 

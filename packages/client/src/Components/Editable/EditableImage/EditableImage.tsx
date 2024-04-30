@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { postFile } from '../../../Api/Project/postFile';
+import { fileCreate } from '../../../Api/File/fileCreate';
 import { convertFileToBase64 } from '../../../Utils/toBase64';
 import env from '../../../env';
 
@@ -24,7 +24,7 @@ export const uploadImage = async ({
 }) => {
     try {
         const fileBase64 = await convertFileToBase64(file)
-        const { key } = await postFile({
+        const { key } = await fileCreate({
             userId,
             projectId,
             fileContent: fileBase64,

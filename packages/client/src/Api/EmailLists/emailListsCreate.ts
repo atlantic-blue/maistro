@@ -1,6 +1,7 @@
 import env from "../../env"
 
 import { ProjectEmailListStruct } from "../../types"
+import { requestController } from "../fetch"
 
 export interface EmailListsCreateInput {
     token: string
@@ -19,7 +20,7 @@ const emailListsCreate = async (
         description,
     }: EmailListsCreateInput,
     apiUrl = env.api.email.lists.create,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<EmailListsCreateOutput> => {
     return request(apiUrl, {
         method: "POST",

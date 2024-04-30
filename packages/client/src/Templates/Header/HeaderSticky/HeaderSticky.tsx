@@ -12,8 +12,6 @@ import * as NavStyles from "../../Components/Nav/Nav.scss"
 import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
 import * as styles from "./HeaderSticky.scss"
 
-import HeaderBasicEditor from '../HeaderBasic/HeaderBasicEditor';
-
 const COMPONENT_NAME = "HeaderSticky"
 const HeaderSticky: React.FC<HeaderProps> = ({
     logo,
@@ -54,7 +52,6 @@ const HeaderSticky: React.FC<HeaderProps> = ({
 export const HeaderStickyItem: TemplateStruct = {
     name: COMPONENT_NAME,
     Component: HeaderSticky,
-    ComponentEditor: HeaderBasicEditor,
     description: "A sticky navigation bar that changes its background from transparent to solid on scroll, providing a dynamic user experience. This style is versatile, fitting for almost any website looking to enhance usability without sacrificing aesthetics.",
     categories: [ContentCategory.HEADER],
     classNames: [

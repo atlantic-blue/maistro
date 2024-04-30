@@ -1,4 +1,5 @@
 import env from "../../env"
+import { requestController } from "../fetch"
 
 interface ProjectsReadInput {
     projectId: string
@@ -16,7 +17,7 @@ const projectsUpdateById = async (
         url
     }: ProjectsReadInput,
     apiUrl = env.api.projects.update,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<void> => {
     return request(`${apiUrl}/${projectId}`, {
         method: "PATCH",

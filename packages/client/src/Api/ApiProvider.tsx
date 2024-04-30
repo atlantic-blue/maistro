@@ -20,6 +20,14 @@ import { ContentReadByIdInput, ContentReadByIdOutput, contentReadById } from "./
 import { ContentReadInput, ContentReadOutput, contentRead } from "./Content/contentRead";
 import { PagesUpdateByIdInput, pagesUpdateById } from "./Pages/pagesUpdateById";
 import { ContentUpdateByIdInput, contentUpdateById } from "./Content/contentUpdateById";
+import { CreateFileInput, CreateFileOutput, fileCreate } from "./File/fileCreate";
+import { Box, Progress } from "@radix-ui/themes";
+import Loading from "../Components/Loading/Loading";
+
+import * as styles from "./ApiProvider.scss"
+
+import { Subject } from "rxjs/internal/Subject";
+import ProgressSplash from "../Components/ProgressSplash/ProgressSplash";
 
 interface ApiContextState {
     api: {
@@ -42,6 +50,9 @@ interface ApiContextState {
             updateById: ({ projectId, token, name, url }: { projectId: string, token: string, name: string, url: string }) => Promise<void>,
             delete: ({ token, id }: { token: string, id: string }) => Promise<void>,
         }
+        file: {
+            createFile(input: CreateFileInput): Promise<CreateFileOutput>
+        }
         email: {
             lists: {
                 create: (input: EmailListsCreateInput) => Promise<EmailListsCreateOutput>
@@ -62,6 +73,9 @@ interface ApiContextState {
 
 const context: ApiContextState = {
     api: {
+        file: {
+            createFile: fileCreate
+        },
         content: {
             create: contentCreate,
             read: contentRead,
@@ -108,6 +122,7 @@ interface ApiProviderProps {
 const ApiProvider: React.FC<ApiProviderProps> = (props) => {
     return (
         <>
+            <ProgressSplash />
             <ApiContext.Provider value={context}>
                 {props.children}
             </ApiContext.Provider>

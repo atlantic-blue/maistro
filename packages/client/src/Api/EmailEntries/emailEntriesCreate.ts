@@ -1,4 +1,5 @@
 import env from "../../env"
+import { requestController } from "../fetch"
 
 export interface EmailEntriesCreateInput {
     name: string,
@@ -11,7 +12,7 @@ export interface EmailEntriesCreateOutput { }
 const emailEntriesCreate = async (
     input: EmailEntriesCreateInput,
     apiUrl = env.api.email.entries.create,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<EmailEntriesCreateOutput> => {
     return request(apiUrl, {
         method: "POST",

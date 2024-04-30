@@ -1,5 +1,6 @@
 import env from "../../env"
 import { ProjectStruct } from "../../types"
+import { requestController } from "../fetch"
 
 interface ProjectsReadInput {
     projectId: string
@@ -12,7 +13,7 @@ const projectsReadById = async (
         token
     }: ProjectsReadInput,
     url = env.api.projects.read,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<ProjectStruct> => {
     return request(`${url}/${projectId}`, {
         method: "GET",

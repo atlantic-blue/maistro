@@ -1,5 +1,6 @@
 import env from "../../env"
 import { PageStruct } from "../../types"
+import { requestController } from "../fetch"
 
 export interface PagesReadByIdInput {
     token: string
@@ -16,7 +17,7 @@ const pagesReadById = async (
         projectId,
     }: PagesReadByIdInput,
     url = env.api.pages.read,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<PagesReadByIdOutput> => {
     return request(`${url(projectId)}/${pageId}`, {
         method: "GET",

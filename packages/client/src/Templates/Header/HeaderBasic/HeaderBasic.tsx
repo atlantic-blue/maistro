@@ -11,10 +11,9 @@ import * as styles from "./HeaderBasic.scss"
 
 import { HeaderProps } from "../HeaderTypes"
 
-import HeaderBasicEditor from "./HeaderBasicEditor"
-import { ContentCategory, TemplateStruct } from "../../templateTypes"
+import { ContentCategory, TemplateComponentType, TemplateStruct } from "../../templateTypes"
 
-const COMPONENT_NAME = "HeaderBasic"
+const COMPONENT_NAME = TemplateComponentType.HEADER_BASIC
 const HeaderBasic: React.FC<HeaderProps> = ({
     logo,
     links,
@@ -47,7 +46,6 @@ export const HeaderBasicItem: TemplateStruct = {
         ...Object.values(NavLinkStyles),
     ],
     Component: HeaderBasic,
-    ComponentEditor: HeaderBasicEditor,
     props: {
         logo: {
             url: "https://maistro.website/assets/logo.svg",

@@ -188,6 +188,7 @@ const Helmet: React.FC<HelmetProps> = (props) => {
 
                     <NavigationMenu.Item>
                         <SubmitProject
+                            token={user.getTokenId()}
                             userId={user.getId()}
                             project={project}
                             page={page}

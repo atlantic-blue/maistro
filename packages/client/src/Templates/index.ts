@@ -1,4 +1,4 @@
-import { TemplateStruct } from './templateTypes'
+import { TemplateComponentType, TemplateStruct } from './templateTypes'
 
 import { HeaderBasicItem } from './Header/HeaderBasic/HeaderBasic'
 import { HeaderDropDownItem } from './Header/HeaderDropdown/HeaderDropdown'
@@ -30,7 +30,7 @@ import { FooterInteractiveItem } from './Footer/FooterInteractive/FooterInteract
 import { FooterWithNavigationItem } from './Footer/FooterWithNavigation/FooterWithNavigation'
 import { SectionSubscribeBasicItem } from './Section/SectionContact/SectionSubscribeBasic/SectionSubscribeBasic'
 
-export const GetTemplates = (): Record<string, TemplateStruct> => {
+export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct> => {
     const templatesRecord: Record<string, TemplateStruct> = {}
     const templatesList: TemplateStruct[] = [
         HeaderBasicItem,

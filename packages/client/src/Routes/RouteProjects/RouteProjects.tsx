@@ -88,7 +88,7 @@ const RoutesProjects: React.FC = () => {
                                 if (!content) {
                                     return
                                 }
-                                const Component = templates[content.getTemplateName()]?.Component
+                                const Component = templates[content.getTemplate()]?.Component
                                 if (!Component) {
                                     return null
                                 }

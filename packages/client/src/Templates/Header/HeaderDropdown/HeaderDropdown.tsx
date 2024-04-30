@@ -12,8 +12,6 @@ import * as styles from "./HeaderDropdown.scss"
 
 import { HeaderProps } from '../HeaderTypes';
 
-import HeaderBasicEditor from '../HeaderBasic/HeaderBasicEditor';
-
 const COMPONENT_NAME = "HeaderDropdown"
 const HeaderDropdown: React.FC<HeaderProps> = ({
     logo,
@@ -39,7 +37,6 @@ export const HeaderDropDownItem: TemplateStruct = {
     name: COMPONENT_NAME,
     description: "Header Dropdown",
     Component: HeaderDropdown,
-    ComponentEditor: HeaderBasicEditor,
     categories: [ContentCategory.HEADER],
     classNames: [
         ...Object.values(styles),

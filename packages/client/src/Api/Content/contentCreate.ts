@@ -1,4 +1,5 @@
 import env from "../../env"
+import { requestController } from "../fetch"
 
 export interface ContentCreateInput {
     token: string
@@ -31,7 +32,7 @@ const contentCreate = async (
         description,
     }: ContentCreateInput,
     apiUrl = env.api.content.create,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<ContentCreateOutput> => {
     return request(apiUrl(projectId), {
         method: "POST",

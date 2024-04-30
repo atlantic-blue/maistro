@@ -2,7 +2,9 @@ interface Env {
     api: {
         baseUrl: string
         ping: string
-        upload: string
+        file: {
+            create: string
+        }
         email: {
             lists: {
                 create: string
@@ -66,7 +68,9 @@ const createEnv = (): Env => {
         api: {
             baseUrl: apiBaseUrl,
             ping: `${apiBaseUrl}/ping`,
-            upload: `${apiBaseUrl}/upload`,
+            file: {
+                create: `${apiBaseUrl}/upload`,
+            },
             email: {
                 lists: {
                     create: `${apiBaseUrl}/email/lists`,

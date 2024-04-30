@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import classNames from 'classnames'
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 
 import IconUp from "../Icons/Up/Up";
 import IconBin from "../Icons/Bin/Bin"
@@ -8,14 +8,16 @@ import IconBin from "../Icons/Bin/Bin"
 import { ProjectsContext } from "../../Projects";
 import { useParams } from "react-router-dom";
 import ErrorBoundary from "../../Errors/ErrorBoundary";
-import { Button, Dialog, Flex, IconButton, TextField, Text } from "@radix-ui/themes";
+import { Box, Dialog, Flex, IconButton, Tabs, Text } from "@radix-ui/themes";
 import IconEdit from "../Icons/Edit/Edit";
 import sanitiseInput from "../../Utils/sanitiseInput";
-import { merge } from "lodash";
-import * as styles from "./Droppable.scss"
 import IconClose from "../Icons/Close/Close";
 import { ApiContext } from "../../Api/ApiProvider";
 import { templates } from "../../Templates";
+import editors from "../Editor";
+
+import * as styles from "./Droppable.scss"
+import { convertFileToBase64 } from "../../Utils/toBase64";
 
 interface DroppableItemProps {
     itemIndex: number
@@ -65,13 +67,13 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
         return null
     }
 
-    const template = templates[content.getTemplateName()]
+    const template = templates[content.getTemplate()]
     if (!template) {
         return null
     }
 
     const Component = template?.Component
-    const ComponentEditor = template?.ComponentEditor
+    const ComponentEditor = editors[template?.name] || (() => null)
 
     if (!Component) {
         return null
@@ -100,6 +102,26 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
             contentId: props.itemId,
             data: newData
         })
+    }
+
+    const onUploadImage = async (file: File): Promise<string> => {
+        try {
+            const fileBase64 = await convertFileToBase64(file)
+            const { src } = await api.file.createFile({
+                token: user.getTokenId(),
+                userId: user.getId(),
+                projectId,
+                fileContent: fileBase64,
+                fileName: file.name,
+                fileType: file.type,
+            })
+
+            return src
+        } catch (error) {
+            // TODO app level error
+            console.log(error)
+            return ""
+        }
     }
 
     return (
@@ -165,7 +187,27 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
 
                                         <Dialog.Title>Edit </Dialog.Title>
                                         <Flex direction="column" gap="3">
-                                            <ComponentEditor {...componentProps} onSaveData={onSaveData} />
+                                            <Tabs.Root defaultValue="data">
+                                                <Tabs.List>
+                                                    <Tabs.Trigger value="data">Data</Tabs.Trigger>
+                                                    <Tabs.Trigger value="styles">Styles</Tabs.Trigger>
+                                                </Tabs.List>
+
+                                                <Box pt="3">
+                                                    <Tabs.Content value="data">
+                                                        <ComponentEditor
+                                                            {...componentProps}
+                                                            onSaveData={onSaveData}
+                                                            onUploadImage={onUploadImage}
+                                                        />
+                                                    </Tabs.Content>
+
+                                                    <Tabs.Content value="syles">
+                                                        <Text size="2">Access and update your documents.</Text>
+                                                    </Tabs.Content>
+                                                </Box>
+                                            </Tabs.Root>
+
                                         </Flex>
                                     </Dialog.Content>
 

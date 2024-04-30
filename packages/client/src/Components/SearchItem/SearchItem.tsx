@@ -2,9 +2,8 @@ import React from "react"
 
 import ComponentsGallery from "../../Templates/Components"
 
-import { TemplateStruct, ContentCategory } from "../../types"
-
 import * as styles from "./Search.scss"
+import { ContentCategory, TemplateStruct } from "../../Templates/templateTypes"
 
 interface SearchItemProps {
     templates: TemplateStruct[]

@@ -1,6 +1,7 @@
 import env from "../../env"
 
 import { ProjectEmailListStruct } from "../../types"
+import { requestController } from "../fetch"
 
 export interface EmailListsReadInput {
     token: string
@@ -13,7 +14,7 @@ const emailListsRead = async (
         token
     }: EmailListsReadInput,
     url = env.api.email.lists.read,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<EmailListsReadOutput> => {
     return request(url, {
         method: "GET",

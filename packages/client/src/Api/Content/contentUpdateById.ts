@@ -1,5 +1,6 @@
 import sanitiseInput from "../../Utils/sanitiseInput"
 import env from "../../env"
+import { requestController } from "../fetch"
 
 export interface ContentUpdateByIdInput {
     projectId: string
@@ -20,7 +21,7 @@ const contentUpdateById = async (
         ...payload
     }: ContentUpdateByIdInput,
     apiUrl = env.api.content.update,
-    request = fetch,
+    request = requestController.fetch,
 ): Promise<void> => {
     return request(`${apiUrl(projectId)}/${contentId}`, {
         method: "PATCH",

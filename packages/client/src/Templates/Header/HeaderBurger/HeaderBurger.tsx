@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { TemplateStruct, ContentCategory } from '../../templateTypes';
+import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../templateTypes';
 
 import Logo from "../../Components/Logo/Logo"
 import Nav from "../../Components/Nav/Nav"
@@ -13,9 +13,8 @@ import * as styles from "./HeaderBurger.scss";
 import { HeaderProps } from '../HeaderTypes';
 
 import classNames from 'classnames';
-import HeaderBasicEditor from '../HeaderBasic/HeaderBasicEditor';
 
-const COMPONENT_NAME = "HeaderBurger"
+const COMPONENT_NAME = TemplateComponentType.HEADER_BURGER
 const HeaderBurger: React.FC<HeaderProps> = ({
     logo,
     links,
@@ -52,7 +51,6 @@ const HeaderBurger: React.FC<HeaderProps> = ({
 export const HeaderBurgerItem: TemplateStruct = {
     name: COMPONENT_NAME,
     Component: HeaderBurger,
-    ComponentEditor: HeaderBasicEditor,
     categories: [ContentCategory.HEADER],
     description: "Header Burger",
     classNames: [
