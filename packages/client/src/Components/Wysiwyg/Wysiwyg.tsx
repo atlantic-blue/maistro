@@ -1,4 +1,6 @@
 import React, { useRef } from 'react';
+import { BehaviorSubject } from 'rxjs';
+import { Box, IconButton, Section } from '@radix-ui/themes';
 
 import { ColourScheme } from '../../types';
 
@@ -10,7 +12,6 @@ import ToolbarJustify from './Toolbar/Justify/Justify';
 import ToolBarFormatBlock from './Toolbar/FormatBlock/FormatBlock';
 import ToolbarUndoRedo from './Toolbar/UndoRedo/UndoRedo';
 import ToolbarColour from './Toolbar/Colour/Colour';
-import { BehaviorSubject } from 'rxjs';
 import ToolbarMedia from './Toolbar/Media/Media';
 import { Command } from './Wysiwyg.types';
 
@@ -26,7 +27,8 @@ interface WysiwygProps {
     isEditable: boolean
     children: React.ReactNode
     colourScheme: ColourScheme
-    apiRef: any
+    apiRef: React.RefObject<WysiwygApi>
+    onUploadImage: (file: File) => Promise<string>
 }
 
 export interface WysiwygApi {
@@ -37,15 +39,20 @@ const Wysiwyg: React.FC<WysiwygProps> = (props) => {
     const editorRef = useRef<HTMLDivElement | null>(null);
 
     const execCommand = (command: Command, argument?: string | Node) => {
-        if (command === Command.CUSTOM__INSERT_NODE) {
-            try {
-                window?.getSelection()?.getRangeAt(0).insertNode(argument as Node)
-            } catch (error) {
-                editorRef.current?.prepend(argument as Node)
+        try {
+            if (command === Command.CUSTOM__INSERT_NODE) {
+                try {
+                    window?.getSelection()?.getRangeAt(0).insertNode(argument as Node)
+                } catch (error) {
+                    editorRef.current?.prepend(argument as Node)
+                }
+            } else {
+                document.execCommand(command, false, argument as string);
+                editorRef.current?.focus()
             }
-        } else {
-            document.execCommand(command, false, argument as string);
-            editorRef.current?.focus()
+        } catch (error) {
+            // TODO APP LEVEL ERROR
+            console.log(error)
         }
     };
 
@@ -56,43 +63,13 @@ const Wysiwyg: React.FC<WysiwygProps> = (props) => {
     }));
 
     return (
-        <div className={styles.wysiwyg}>
+        <Box className={styles.wysiwyg}>
             {props.isEditable &&
                 <div className={styles.toolbar}>
 
                     <ToolbarUndoRedo
                         execCommand={execCommand}
                     />
-
-                    <div className={styles.toolbarGroup}>
-                        <button
-                            type="button"
-                            aria-label="Bold"
-                            title="Bold"
-                            tabIndex={-1}
-                            className={styles.button}
-                            onClick={() => execCommand(Command.BOLD)}>
-                            <IconBold className={styles.buttonIcon} />
-                        </button>
-                        <button
-                            type="button"
-                            aria-label="Italic"
-                            title="Italic"
-                            tabIndex={-1}
-                            className={styles.button}
-                            onClick={() => execCommand(Command.ITALIC)}>
-                            <IconItalic className={styles.buttonIcon} />
-                        </button>
-                        <button
-                            type="button"
-                            aria-label="Underline"
-                            title="Underline"
-                            tabIndex={-1}
-                            className={styles.button}
-                            onClick={() => execCommand(Command.UNDERLINE)}>
-                            <IconUnderline className={styles.buttonIcon} />
-                        </button>
-                    </div>
 
                     <ToolbarJustify
                         execCommand={execCommand}
@@ -103,6 +80,35 @@ const Wysiwyg: React.FC<WysiwygProps> = (props) => {
                         editorRef={editorRef}
                     />
 
+                    <div className={styles.toolbarGroup}>
+                        <IconButton
+                            type="button"
+                            aria-label="Bold"
+                            title="Bold"
+                            variant="ghost"
+                            className={styles.button}
+                            onClick={() => execCommand(Command.BOLD)}>
+                            <IconBold className={styles.buttonIcon} />
+                        </IconButton>
+                        <IconButton
+                            type="button"
+                            aria-label="Italic"
+                            title="Italic"
+                            variant="ghost"
+                            className={styles.button}
+                            onClick={() => execCommand(Command.ITALIC)}>
+                            <IconItalic className={styles.buttonIcon} />
+                        </IconButton>
+                        <IconButton
+                            type="button"
+                            aria-label="Underline"
+                            title="Underline"
+                            variant="ghost"
+                            className={styles.button}
+                            onClick={() => execCommand(Command.UNDERLINE)}>
+                            <IconUnderline className={styles.buttonIcon} />
+                        </IconButton>
+                    </div>
 
                     <ToolbarColour
                         execCommand={execCommand}
@@ -112,19 +118,20 @@ const Wysiwyg: React.FC<WysiwygProps> = (props) => {
                     <ToolbarMedia
                         editorRef={editorRef}
                         execCommand={execCommand}
+                        onUploadImage={props.onUploadImage}
                     />
                 </div>
             }
 
-            <div
+            <Box
                 ref={editorRef}
-                className={styles.editor}
                 contentEditable={props.isEditable}
                 suppressContentEditableWarning
+                className={styles.editor}
             >
                 {props.children}
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 };
 

@@ -8,6 +8,7 @@ import IconJustify from "../../../Icons/Justify/Justify"
 import { Command } from "../../Wysiwyg.types"
 
 import * as styles from "../../Wysiwyg.scss"
+import { IconButton } from "@radix-ui/themes"
 
 interface ToolbarJustifyProps {
     execCommand: (cmd: Command) => void
@@ -16,42 +17,42 @@ interface ToolbarJustifyProps {
 const ToolbarJustify: React.FC<ToolbarJustifyProps> = (props) => {
     return (
         <div className={styles.toolbarGroup}>
-            <button
+            <IconButton
                 type="button"
                 aria-label="Justify Left"
                 title="Justify Left"
-                tabIndex={-1}
+                variant="ghost"
                 className={styles.button}
                 onClick={() => props.execCommand(Command.JUSTIFY_LEFT)}>
                 <IconJustifyLeft className={styles.buttonIcon} />
-            </button>
-            <button
+            </IconButton>
+            <IconButton
                 type="button"
                 aria-label="Justify Center"
                 title="Justify Center"
-                tabIndex={-1}
+                variant="ghost"
                 className={styles.button}
                 onClick={() => props.execCommand(Command.JUSTIFY_CENTER)}>
                 <IconJustifyCenter className={styles.buttonIcon} />
-            </button>
-            <button
+            </IconButton>
+            <IconButton
                 type="button"
                 aria-label="Justify Right"
                 title="Justify Right"
-                tabIndex={-1}
+                variant="ghost"
                 className={styles.button}
                 onClick={() => props.execCommand(Command.JUSTIFY_RIGHT)}>
                 <IconJustifyRight className={styles.buttonIcon} />
-            </button>
-            <button
+            </IconButton>
+            <IconButton
                 type="button"
                 aria-label="Justify"
                 title="Justify"
-                tabIndex={-1}
+                variant="ghost"
                 className={styles.button}
                 onClick={() => props.execCommand(Command.JUSTIFY)}>
                 <IconJustify className={styles.buttonIcon} />
-            </button>
+            </IconButton>
         </div>
     )
 }

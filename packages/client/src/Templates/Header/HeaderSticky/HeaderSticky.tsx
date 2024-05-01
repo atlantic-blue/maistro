@@ -11,7 +11,7 @@ import * as LogoStyles from "../../Components/Logo/Logo.scss"
 import * as NavStyles from "../../Components/Nav/Nav.scss"
 import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
 import * as styles from "./HeaderSticky.scss"
-import { Box } from '@radix-ui/themes';
+import { Box, Flex, Section } from '@radix-ui/themes';
 
 const HeaderSticky: React.FC<HeaderProps> = ({
     logo,
@@ -35,17 +35,19 @@ const HeaderSticky: React.FC<HeaderProps> = ({
     }, []);
 
     return (
-        <nav className={`${styles.headerSticky} ${isScrolled ? styles.scrolled : ''}`} data-hydration-id={props["data-hydration-id"]}>
-            <Box className={styles.headerStickyContainer}>
-                <Logo
-                    imgUrl={logo.url}
-                    slogan={logo.slogan}
-                />
-                <Nav
-                    links={links}
-                />
+        <Section size="1" className={`${styles.headerSticky} ${isScrolled ? styles.scrolled : ''}`} data-hydration-id={props["data-hydration-id"]}>
+            <Box ml='4' mr='4'>
+                <Flex align="center" justify="between">
+                    <Logo
+                        imgUrl={logo.url}
+                        slogan={logo.slogan}
+                    />
+                    <Nav
+                        links={links}
+                    />
+                </Flex>
             </Box>
-        </nav>
+        </Section>
     );
 };
 

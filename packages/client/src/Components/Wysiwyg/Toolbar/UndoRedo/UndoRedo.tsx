@@ -5,6 +5,7 @@ import IconRedo from "../../../Icons/Redo/Redo"
 import { Command } from "../../Wysiwyg.types"
 
 import * as styles from "../../Wysiwyg.scss"
+import { Flex, IconButton } from "@radix-ui/themes"
 
 interface ToolbarJustifyProps {
     execCommand: (cmd: Command, args?: string | Node) => void
@@ -13,24 +14,24 @@ interface ToolbarJustifyProps {
 const ToolbarUndoRedo: React.FC<ToolbarJustifyProps> = (props) => {
     return (
         <div className={styles.toolbarGroup}>
-            <button
+            <IconButton
                 type="button"
                 aria-label="Undo"
                 title="Undo"
-                tabIndex={-1}
+                variant="ghost"
                 className={styles.button}
                 onClick={() => props.execCommand('undo')}>
                 <IconUndo className={styles.buttonIcon} />
-            </button>
-            <button
+            </IconButton>
+            <IconButton
                 type="button"
                 aria-label="Redo"
                 title="Redo"
-                tabIndex={-1}
+                variant="ghost"
                 className={styles.button}
                 onClick={() => props.execCommand('redo')}>
                 <IconRedo className={styles.buttonIcon} />
-            </button>
+            </IconButton>
         </div>
     )
 }

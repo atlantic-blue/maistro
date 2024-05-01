@@ -5,31 +5,25 @@ import useClickOutside from "../../../../../Utils/Hooks/UseClickOutside"
 import IconImage from "../../../../Icons/Image/Image"
 import { Command } from "../../../Wysiwyg.types"
 import ToolbarJustify from "../../Justify/Justify"
-import EditableImage, { uploadImage } from "../../../../Editable/EditableImage/EditableImage"
 
 import * as styles from "../Media.scss"
 import * as wysiwygStyles from "../../../Wysiwyg.scss"
-import { PageContext } from "../../../../../PageContext"
-import { ProjectsContext } from "../../../../../Projects"
-import { useParams } from "react-router"
-import { ProjectMessageType } from "../../../../../types"
-import { fileCreate } from "../../../../../Api/File/fileCreate"
-import { convertFileToBase64 } from "../../../../../Utils/toBase64"
+import EditorImage from "../../../../Editor/EditorImage"
+import { EditorDataType } from "../../../../Editor/EditorData"
+import { Box, Card, Flex, IconButton, Slider, Spinner } from "@radix-ui/themes"
 
 interface ToolbarToolbarMediaImageProps {
     editorRef: React.MutableRefObject<HTMLDivElement | null>
     execCommand: (cmd: Command, args?: string | Node) => void
+    onUploadImage: (file: File) => Promise<string>
 }
 
 const TOOLBAR_MEDIA_IMAGE = "ToolbarMedia-image"
 
 const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
-    const { projects, user } = React.useContext(ProjectsContext)
-    const { projectId } = useParams()
-    const project = projects.getProjectById(projectId || "")
-
     const ref = React.useRef(null)
     const [currentMedia, setCurrentMedia] = React.useState<HTMLImageElement | null>(null)
+    const [isLoading, setIsLoading] = React.useState(false)
 
     useClickOutside({
         ref,
@@ -66,32 +60,25 @@ const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
         if (!event?.target?.files) {
             return
         }
+        try {
+            setIsLoading(true)
+            const file = event?.target?.files[0];
+            const src = await props.onUploadImage(file)
 
-        const file = event?.target?.files[0];
-        const src = await uploadImage({
-            file,
-            userId: user.getId(),
-            projectId: project.getId(),
-        })
+            const img = document.createElement('img');
+            img.src = src
+            img.className = styles.media;
 
-        project.event$.next({
-            type: ProjectMessageType.SET_ASSET,
-            data: {
-                id: file.name,
-                src: src,
-                description: "",
-                contentType: file.type
-            }
-        })
+            const div = document.createElement('div');
+            div.appendChild(img)
 
-        const img = document.createElement('img');
-        img.src = src
-        img.className = styles.media;
-
-        const div = document.createElement('div');
-        div.appendChild(img)
-
-        props.execCommand(Command.CUSTOM__INSERT_NODE, div)
+            props.execCommand(Command.CUSTOM__INSERT_NODE, div)
+        } catch (error) {
+            // TODO app level error
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
     };
 
     const onSizeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -135,41 +122,55 @@ const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
 
     return (
         <div className={styles.section}>
-            <input id={TOOLBAR_MEDIA_IMAGE} type="file" accept="image/*" onChange={onInsertImage} style={{ display: 'none' }} />
-            <button className={wysiwygStyles.button} type="button">
+            <IconButton
+                className={wysiwygStyles.button}
+                type="button"
+                variant="ghost"
+            >
                 <label htmlFor={TOOLBAR_MEDIA_IMAGE}>
-                    <IconImage className={wysiwygStyles.buttonIcon} />
+                    {!isLoading ?
+                        (
+                            <IconImage className={wysiwygStyles.buttonIcon} />
+                        ) :
+                        (
+                            < Spinner />
+                        )
+                    }
+                    <input
+                        id={TOOLBAR_MEDIA_IMAGE}
+                        type="file"
+                        accept="image/*"
+                        onChange={onInsertImage}
+                        style={{ display: 'none' }}
+                    />
                 </label>
-            </button>
+            </IconButton>
+
             {currentMedia && (
-
-                <div className={styles.options} ref={ref}>
-                    <div className={styles.optionsContainer}>
-                        <div className={styles.optionsPreview}>
-                            <EditableImage
-                                projectId={project.getId()}
-                                userId={user.getId()}
-                                className={styles.optionsPreviewImg}
-                                defaultImage={currentMedia.src}
-                                onChange={onImageChange}
-                            />
-                        </div>
-
-                        <ToolbarJustify
-                            execCommand={justifyContent}
+                <Card className={styles.options} ref={ref}>
+                    <Box className={styles.optionsPreview}>
+                        <EditorImage
+                            name="Image"
+                            type={EditorDataType.IMAGE}
+                            value={currentMedia.src}
+                            onChange={onImageChange}
+                            onUploadImage={props.onUploadImage}
                         />
+                    </Box>
 
-                        <input
-                            className={styles.optionsInput}
-                            type="range"
-                            defaultValue={currentMedia.width}
-                            onChange={onSizeChange}
-                            min={0}
-                            max={1080}
-                        />
+                    <ToolbarJustify
+                        execCommand={justifyContent}
+                    />
 
-                    </div>
-                </div>
+                    <input
+                        className={styles.optionsInput}
+                        type="range"
+                        defaultValue={currentMedia.width}
+                        onChange={onSizeChange}
+                        min={0}
+                        max={1080}
+                    />
+                </Card>
             )}
         </div>
     )

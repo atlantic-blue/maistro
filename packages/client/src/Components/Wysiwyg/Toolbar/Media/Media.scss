@@ -26,8 +26,10 @@
     position: absolute;
     z-index: $global-z-index-3;
     border-radius: 16px;
-    // border: 1px solid gray;
     background-color: white;
+    left: -50px;
+    top: 50px;
+    padding: 10px;
 
     &-container {
         padding: 10px;

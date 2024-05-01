@@ -176,7 +176,7 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
                                         <Component {...componentProps} />
                                     </div>
 
-                                    <Dialog.Content maxWidth="450px">
+                                    <Dialog.Content maxWidth="800px">
                                         <Flex>
                                             <Dialog.Close>
                                                 <IconButton size="1" variant="soft" color="gray" style={{ marginLeft: "auto" }}>

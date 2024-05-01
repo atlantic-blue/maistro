@@ -59,9 +59,10 @@ const HeroBasicEditor: React.FC<SectionHeroProps & EditorProps> = (props) => {
                 />
 
                 <EditorData
-                    type={EditorDataType.TEXT}
+                    type={EditorDataType.WYSIWYG}
                     name="Content"
                     value={state.content}
+                    onUploadImage={props.onUploadImage}
                     onChange={e => {
                         setState(prev => {
                             return {

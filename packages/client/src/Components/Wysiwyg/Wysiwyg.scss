@@ -63,16 +63,16 @@
         &-icon {
             display: block;
             fill: #222f3e;
-            width: 20px;
-            height: 20px;
+            width: 15px;
+            height: 15px;
         }
     }
 }
 
 .editor {
-    padding: 10px;
-
     overflow: auto;
-
     overflow: scroll;
+    background-color: white;
+    border: 1px solid #e5e4e4;
+    padding: 20px;
 }

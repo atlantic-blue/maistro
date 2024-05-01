@@ -20,7 +20,7 @@ interface ToolbarJustifyProps {
 const ToolbarColourGrid: React.FC<{ palette: string[]; onChange: (colour: string) => void }> = (props) => {
     return (
         <div className={styles.grid}>
-            {props.palette.map(colour => {
+            {props.palette?.map(colour => {
                 return (
                     <div
                         key={colour}

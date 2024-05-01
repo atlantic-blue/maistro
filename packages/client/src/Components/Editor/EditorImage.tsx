@@ -9,6 +9,7 @@ import IconUpLoad from "../Icons/Upload/Upload";
 const EditorImage: React.FC<EditorImageProps> = (props) => {
     const [preview, setPreview] = React.useState(props.value);
     const [isLoading, setLoading] = React.useState(false)
+    const uploadId = `${props.name}-${Date.now()}`
 
     const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
         if (!event.target.files || !event.target.files[0]) {
@@ -45,13 +46,13 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
 
                         {!isLoading && (
                             <>
-                                <label htmlFor="file" className={styles.uploadLabel}>
+                                <label htmlFor={uploadId} className={styles.uploadLabel}>
                                     <span>
-                                        <IconUpLoad className={styles.uploadIcon}/>
+                                        <IconUpLoad className={styles.uploadIcon} />
                                     </span>
                                     <span>Upload</span>
                                     <input
-                                        id="file"
+                                        id={uploadId}
                                         type="file"
                                         className={styles.uploadInput}
                                         onChange={handleFileChange}

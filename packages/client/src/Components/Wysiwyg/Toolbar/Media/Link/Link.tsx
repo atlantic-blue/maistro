@@ -4,11 +4,10 @@ import useClickOutside from '../../../../../Utils/Hooks/UseClickOutside';
 
 import IconLink from '../../../../Icons/Link/Link';
 import { Command } from '../../../Wysiwyg.types';
+import { Button, Card, IconButton, TextArea, Text, TextField, Box, Flex } from '@radix-ui/themes';
 
 import * as styles from "../Media.scss"
 import * as wysiwygStyles from "../../../Wysiwyg.scss"
-import { sanitizeHref } from '../../../../../Utils/url';
-import { ProjectsContext } from '../../../../../Projects';
 
 interface ToolbarLinkProps {
     editorRef: React.MutableRefObject<HTMLDivElement | null>
@@ -128,44 +127,45 @@ const ToolbarLink: React.FC<ToolbarLinkProps> = (props) => {
             ref={ref}
             className={styles.section}
         >
-            <button
+            <IconButton
                 type="button"
+                variant='ghost'
                 onClick={onButtonClick}
                 className={wysiwygStyles.button}
             >
                 <IconLink className={wysiwygStyles.buttonIcon} />
-            </button>
+            </IconButton>
             {
                 toggle && (
-                    <div className={styles.options}>
-                        <div className={styles.option}>
-                            <div className={styles.optionsTitle}>
-                                URL
-                            </div>
-                            <input
-                                type="text"
-                                className={styles.optionsInput}
-                                onChange={onHrefInput}
-                                defaultValue={currentLink?.href}
-                            />
-                        </div>
-                        <div className={styles.option}>
-                            <div className={styles.optionsTitle}>
-                                Text to display
-                            </div>
-                            <textarea
-                                rows={2}
-                                onChange={onTextInput}
-                                className={styles.optionsInput}
-                                defaultValue={currentLink?.innerText}
-                            />
-                        </div>
-                        <div className={styles.optionsContainer}>
-                            <button onClick={onCreate}>
+                    <Card className={styles.options} size="4" >
+                        <Flex align="center" justify="center" direction="column" width="160px">
+                            <Box className={styles.option}>
+                                <Text as="div" size="2" mb="1" weight="bold">
+                                    URL
+                                </Text>
+                                <TextField.Root
+                                    type="text"
+                                    className={styles.optionsInput}
+                                    onChange={onHrefInput}
+                                    defaultValue={currentLink?.href}
+                                />
+                            </Box>
+                            <Box className={styles.option}>
+                                <Text as="div" size="2" mb="1" weight="bold">
+                                    Text to display
+                                </Text>
+                                <TextArea
+                                    rows={2}
+                                    onChange={onTextInput}
+                                    className={styles.optionsInput}
+                                    defaultValue={currentLink?.innerText}
+                                />
+                            </Box>
+                            <Button onClick={onCreate}>
                                 Create
-                            </button>
-                        </div>
-                    </div>
+                            </Button>
+                        </Flex>
+                    </Card>
                 )
             }
         </div>
