@@ -90,7 +90,7 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
                     })
                 }
 
-                <Button size="1" variant="ghost" onClick={() => setLinks([...links, { href: "#Edit-me!", value: "Edit me" }])}>
+                <Button size="1" variant="ghost" onClick={() => setLinks([...links, { href: "#Edit-me!", name: "Edit me" }])}>
                     Create Link
                 </Button>
 

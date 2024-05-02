@@ -3,7 +3,7 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import Helmet from "../Components/Helmet/Helmet"
 import IconNew from "../../../Components/Icons/New/New";
-import { PageMessageType, ProjectMessageType, TemplateStruct } from "../../../types";
+import { PageMessageType, ProjectMessageType } from "../../../types";
 import PageEdit from "../../../Page";
 
 import { ProjectsContext } from "../../../Projects";
@@ -21,6 +21,7 @@ import DragAndDrop from "../../../Components/DragDrop/DragDrop";
 import { appRoutes } from "../../router";
 import IconClose from "../../../Components/Icons/Close/Close";
 import Loading from "../../../Components/Loading/Loading";
+import { TemplateStruct } from "../../../Templates/templateTypes";
 
 const RouteProjectPage: React.FC = () => {
     const { api } = React.useContext(ApiContext)

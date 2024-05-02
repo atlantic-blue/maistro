@@ -19,6 +19,7 @@ export enum TemplateComponentType {
 
     HERO_BASIC = "HERO_BASIC",
     HERO_IMAGE = "HERO_IMAGE",
+    HERO_SLIDES = "HERO_SLIDES",
 }
 
 export interface TemplateStruct {

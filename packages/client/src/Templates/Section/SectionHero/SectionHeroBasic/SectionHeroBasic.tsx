@@ -16,7 +16,11 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
             data-hydration-id={props["data-hydration-id"]}
             className={styles.hero}
         >
-            <Heading as="h1">
+            <Heading
+                as="h1"
+                size="9"
+                className={styles.heroTitle}
+            >
                 {props.title}
             </Heading>
 

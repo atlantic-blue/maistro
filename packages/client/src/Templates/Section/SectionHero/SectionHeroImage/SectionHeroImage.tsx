@@ -19,7 +19,13 @@ const SectionHeroImage: React.FC<SectionHeroProps> = (props) => {
             <div className={styles.heroWrapper}>
                 <div className={styles.heroImageFilter} />
                 <Flex className={styles.heroContent} align="center" direction="column" justify="center" gap="3">
-                    <Heading as="h1" size="9" className={styles.heroTitle}>{props.title}</Heading>
+                    <Heading
+                        as="h1"
+                        size="9"
+                        className={styles.heroTitle}
+                    >
+                        {props.title}
+                    </Heading>
                     <TemplateWysiwyg
                         content={props.content}
                         className={styles.heroText}
@@ -28,7 +34,9 @@ const SectionHeroImage: React.FC<SectionHeroProps> = (props) => {
                         size="4"
                         className={styles.heroButton}
                     >
-                        {props.cta}
+                        <a href={props.ctaLink} target="_blank" rel="noopener noreferrer">
+                            {props.cta}
+                        </a>
                     </Button>
                 </Flex>
             </div>

@@ -43,7 +43,7 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct> =>
 
         SectionHeroImageItem,
         // SectionHeroVideoItem,
-        // SectionHeroSlidesItem,
+        SectionHeroSlidesItem,
 
         // SectionAboutUsSimpleItem,
         // SectionAboutUsTeamItem,

@@ -5,33 +5,22 @@
     background-color: var(--color-background);
     color: var(--color-text);
 
-    h1 {
+    &-title {
         margin-bottom: 20px;
-        font-size: 2.5rem;
+        font-size: 3rem;
+        color: var(--accent-9);
     }
-
 
     .button {
         min-width: 300px;
         min-height: 50px;
         padding: 10px 20px;
-        font-size: 1rem;
-        color: #fff;
-        background-color: var(--color-primary);
-        border: none;
         cursor: pointer;
-
-        border-radius: 8px;
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 0.706592px 0.706592px -0.625px,
-            rgba(0, 0, 0, 0.145) 0px 1.80656px 1.80656px -1.25px,
-            rgba(0, 0, 0, 0.137) 0px 3.62176px 3.62176px -1.875px,
-            rgba(0, 0, 0, 0.125) 0px 6.8656px 6.8656px -2.5px,
-            rgba(0, 0, 0, 0.106) 0px 13.6468px 13.6468px -3.125px,
-            rgba(0, 0, 0, 0.05) 0px 30px 30px -3.75px;
+        font-size: 1rem;
 
         a {
             text-decoration: none;
-            color: white;
+            color: var(--accent-11);
         }
     }
 
