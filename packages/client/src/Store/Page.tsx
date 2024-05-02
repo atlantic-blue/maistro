@@ -51,9 +51,9 @@ interface IPage {
         Css,
         Body
     }: {
-        Css: () => React.ReactNode,
-        Body: () => React.ReactNode
-    }): React.ReactNode
+        Css: () => string,
+        Body: () => string,
+    }): string
 
 }
 
@@ -234,7 +234,7 @@ class PageStore implements IPage {
         Body,
         state,
     }: {
-        Css: () => string[],
+        Css: () => string,
         Body: () => string,
         state: Object
     }): string {

@@ -2,7 +2,7 @@
 
 .header-burger {
     position: relative;
-    background-color: var(--color-primary);
+    background-color: var(--accent-9);
     font-family: var(--font-family-body);
 
     &-container {
@@ -54,7 +54,7 @@
         position: absolute;
         top: 100%;
         right: 0;
-        background-color: var(--color-primary);
+        background-color: var(--accent-9);
         width: 100%;
         text-align: center;
         padding: 20px 0;

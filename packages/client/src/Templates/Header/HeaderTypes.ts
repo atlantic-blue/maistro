@@ -1,3 +1,5 @@
+import { NavigationItem } from "../Components/Navigation/Navigation";
+
 export interface HeaderBurgerLink {
     href: string;
     value: string
@@ -10,5 +12,5 @@ export interface HeaderProps {
         url: string
         slogan?: string
     }
-    links?: Record<string, HeaderBurgerLink>
+    links?: NavigationItem[]
 }

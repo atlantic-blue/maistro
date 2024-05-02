@@ -1,7 +1,8 @@
 @import "../../TemplateVariables.scss";
 
-.header-sticky+section {
-    margin-top: -100px;
+.header-sticky+section,
+.header-sticky+div {
+    margin-top: -100px !important;
 }
 
 .header-sticky {
@@ -38,6 +39,6 @@
     }
 
     &.scrolled {
-        background-color: var(--color-primary);
+        background-color: var(--accent-9);
     }
 }

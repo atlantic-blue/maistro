@@ -23,12 +23,12 @@ const RoutesHome: React.FC = () => {
                     logo: {
                         url: "https://maistro.website/assets/logo.svg",
                     },
-                    links: {
-                        login: {
+                    links: [
+                        {
                             href: "/login",
-                            value: "My Account",
+                            name: "My Account",
                         }
-                    },
+                    ]
                 }}
             />
             <SectionHeroVideo

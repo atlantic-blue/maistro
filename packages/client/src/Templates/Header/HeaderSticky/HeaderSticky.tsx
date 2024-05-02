@@ -6,12 +6,11 @@ import { HeaderProps } from '../HeaderTypes';
 
 import Logo from "../../Components/Logo/Logo"
 
-import Nav from "../../Components/Nav/Nav"
 import * as LogoStyles from "../../Components/Logo/Logo.scss"
-import * as NavStyles from "../../Components/Nav/Nav.scss"
-import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
+import * as NavigationStyles from "../../Components/Navigation/Navigation.scss"
 import * as styles from "./HeaderSticky.scss"
 import { Box, Flex, Section } from '@radix-ui/themes';
+import Navigation from '../../Components/Navigation/Navigation';
 
 const HeaderSticky: React.FC<HeaderProps> = ({
     logo,
@@ -42,8 +41,8 @@ const HeaderSticky: React.FC<HeaderProps> = ({
                         imgUrl={logo.url}
                         slogan={logo.slogan}
                     />
-                    <Nav
-                        links={links}
+                    <Navigation
+                        items={links}
                     />
                 </Flex>
             </Box>
@@ -59,32 +58,27 @@ export const HeaderStickyItem: TemplateStruct = {
     classNames: [
         ...Object.values(styles),
         ...Object.values(LogoStyles),
-        ...Object.values(NavStyles),
-        ...Object.values(NavLinkStyles),
+        ...Object.values(NavigationStyles),
     ],
     props: {
         logo: {
             url: "https://maistro.website/assets/pages/generic/logo.png",
             slogan: "Empowering Your Vision"
         },
-        links: {
-            home: {
-                href: "#home",
-                value: "Home",
+        links: [
+            {
+                name: "Home",
+                href: "/"
             },
-            about: {
-                href: "#about",
-                value: "About",
+            {
+                name: "About",
+                href: "/about"
             },
-            services: {
-                href: "#services",
-                value: "Services",
+            {
+                name: "Contact",
+                href: "/contact"
             },
-            contact: {
-                href: "#contact",
-                value: "Contact",
-            }
-        },
+        ]
     }
 }
 

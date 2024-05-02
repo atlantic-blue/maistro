@@ -7,6 +7,7 @@ const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.HEADER_BURGER]: HeaderBasicEditor,
     [TemplateComponentType.HEADER_STICKY]: HeaderBasicEditor,
     [TemplateComponentType.HERO_BASIC]: HeroBasicEditor,
+    [TemplateComponentType.HERO_IMAGE]: HeroBasicEditor,
 }
 
 export default editors

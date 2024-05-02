@@ -1,71 +1,44 @@
 import React from 'react';
 import { faker } from '@faker-js/faker';
+import { Button, Flex, Heading, Section, Text } from '@radix-ui/themes';
 
-import { TemplateStruct, ContentCategory } from '../../../templateTypes';
-import SectionHeroBasicEditor from '../SectionHeroBasic/SectionHeroBasicEditor';
-import { Button, Flex, Heading, Section, Text, TextField } from '@radix-ui/themes';
+import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../../templateTypes';
+
+import { SectionHeroProps } from '../SectionHeroTypes';
 
 import * as styles from "./SectionHeroImage.scss"
+import TemplateWysiwyg from '../../../Components/TemplateWysiwyg/TemplateWysiwyg';
 
-interface SectionHeroImageProps {
-    title: string
-    imageUrl: string
-    content?: string
-    cta: string
-    ctaLink: string
-    "data-hydration-id"?: string
-}
-
-interface EditorProps {
-    fields: [{ name: string; value: string }]
-}
-
-const Editor: React.FC<EditorProps> = (props) => {
-    const [state, setState] = React.useState(props.fields)
-
-    state.map((field, index) => {
-        return (
-            <label>
-                <Text as="div" size="2" mb="1" weight="bold">
-                    {field.name}
-                </Text>
-                <TextField.Root
-                    placeholder={field.value}
-                    type="text"
-                    size="2"
-                    variant="surface"
-                    value={field.value}
-                    onChange={e => setState(prev => {
-                        prev[index].value = e.target.value
-                        return [
-                            ...prev
-                        ]
-                    })}
-                    required
-                />
-            </label>
-        )
-    })
-}
-
-const SectionHeroImage: React.FC<SectionHeroImageProps> = (props) => {
+const SectionHeroImage: React.FC<SectionHeroProps> = (props) => {
     return (
-        <Section className={styles.hero} style={{ backgroundImage: `url(${props.imageUrl})` }} data-hydration-id={props["data-hydration-id"]}>
-            <Flex className={styles.content} align="center" direction="column" justify="center">
-                <Heading as="h1">{props.title}</Heading>
-                <Text>{props.content}</Text>
-                <Button>
-                    {props.cta}
-                </Button>
-            </Flex>
+        <Section
+            data-hydration-id={props["data-hydration-id"]}
+            className={styles.hero}
+            style={{ backgroundImage: `url(${props?.img?.src})` }}
+        >
+            <div className={styles.heroWrapper}>
+                <div className={styles.heroImageFilter} />
+                <Flex className={styles.heroContent} align="center" direction="column" justify="center" gap="3">
+                    <Heading as="h1" size="9" className={styles.heroTitle}>{props.title}</Heading>
+                    <TemplateWysiwyg
+                        content={props.content}
+                        className={styles.heroText}
+                    />
+                    <Button
+                        size="4"
+                        className={styles.heroButton}
+                    >
+                        {props.cta}
+                    </Button>
+                </Flex>
+            </div>
         </Section>
     );
 };
 
 export const SectionHeroImageItem: TemplateStruct = {
-    name: "SectionHeroImage",
+    name: TemplateComponentType.HERO_IMAGE,
     Component: SectionHeroImage,
-    ComponentEditor: SectionHeroBasicEditor,
     classNames: [
         ...Object.values(styles)
     ],
@@ -74,9 +47,13 @@ export const SectionHeroImageItem: TemplateStruct = {
     props: {
         title: "Captivating Experiences Await",
         content: "Join us on our journey.",
-        imageUrl: faker.image.urlPicsumPhotos(),
+        img: {
+            src: faker.image.urlPicsumPhotos(),
+            alt: "",
+        },
         cta: "Discover More",
         ctaLink: "#home"
     }
 }
+
 export default SectionHeroImage;

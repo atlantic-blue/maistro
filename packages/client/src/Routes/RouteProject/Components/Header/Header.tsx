@@ -19,11 +19,12 @@ const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
             ...{
                 logo: {
                     url: "https://maistro.website/assets/logo.svg",
+                    slogan: "",
                 },
-                links: {
-                    login: {
+                links: [
+                    {
                         href: appRoutes.getSettingsRoute(),
-                        value: (
+                        name: (
                             <Box className={styles.headerLink}>
                                 <Avatar
                                     size="2"
@@ -34,7 +35,7 @@ const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
                             </Box>
                         ),
                     }
-                },
+                ]
             }
             }
         />

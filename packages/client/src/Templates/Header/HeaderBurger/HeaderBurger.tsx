@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 
 import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../templateTypes';
 
@@ -12,7 +13,6 @@ import * as styles from "./HeaderBurger.scss";
 
 import { HeaderProps } from '../HeaderTypes';
 
-import classNames from 'classnames';
 
 const HeaderBurger: React.FC<HeaderProps> = ({
     logo,
@@ -63,24 +63,20 @@ export const HeaderBurgerItem: TemplateStruct = {
             url: "https://maistro.website/assets/pages/generic/logo.png",
             slogan: "Empowering Your Vision"
         },
-        links: {
-            home: {
-                href: "#home",
-                value: "Home",
+        links: [
+            {
+                name: "Home",
+                href: "/"
             },
-            about: {
-                href: "#about",
-                value: "About",
+            {
+                name: "About",
+                href: "/about",
             },
-            services: {
-                href: "#services",
-                value: "Services",
+            {
+                name: "Contact",
+                href: "/contact"
             },
-            contact: {
-                href: "#contact",
-                value: "Contact",
-            }
-        },
+        ]
     },
 }
 

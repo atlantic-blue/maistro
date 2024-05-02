@@ -1,7 +1,6 @@
 import { TemplateComponentType, TemplateStruct } from './templateTypes'
 
 import { HeaderBasicItem } from './Header/HeaderBasic/HeaderBasic'
-import { HeaderDropDownItem } from './Header/HeaderDropdown/HeaderDropdown'
 import { HeaderBurgerItem } from './Header/HeaderBurger/HeaderBurger'
 import { HeaderStickyItem } from './Header/HeaderSticky/HeaderSticky'
 
@@ -42,7 +41,7 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct> =>
         // HeaderDropDownItem,
         HeaderStickyItem,
 
-        // SectionHeroImageItem,
+        SectionHeroImageItem,
         // SectionHeroVideoItem,
         // SectionHeroSlidesItem,
 

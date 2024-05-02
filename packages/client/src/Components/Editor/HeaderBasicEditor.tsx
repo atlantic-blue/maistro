@@ -1,8 +1,8 @@
 import React from "react"
-
 import { Button, Card, Flex } from "@radix-ui/themes"
+
 import EditorData, { EditorDataType } from "../../Components/Editor/EditorData"
-import { HeaderBurgerLink, HeaderProps } from "../../Templates/Header/HeaderTypes"
+import { HeaderProps } from "../../Templates/Header/HeaderTypes"
 
 interface EditorProps {
     onSaveData: (props: HeaderProps) => void
@@ -13,21 +13,16 @@ interface EditorProps {
 const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
     const [logoUrl, setLogoUrl] = React.useState(props.logo.url)
     const [logoSlogan, setLogoSlogan] = React.useState(props.logo.slogan)
-    const [links, setLinks] = React.useState(Object.values(props.links || {}))
+    const [links, setLinks] = React.useState(props.links || [])
 
 
-    const onSave = (ls: HeaderBurgerLink[]) => {
-        const headerLinks: Record<string, HeaderBurgerLink> = {}
-        ls.forEach((l) => {
-            headerLinks[l.value.toLowerCase()] = l
-        })
-
+    const onSave = () => {
         props.onSaveData({
             logo: {
                 url: logoUrl,
                 slogan: logoSlogan,
             },
-            links: headerLinks
+            links,
         })
     }
 
@@ -55,11 +50,11 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
                                 <EditorData
                                     type={EditorDataType.TEXT}
                                     name="Link Text"
-                                    value={link.value}
+                                    value={link.name}
                                     onChange={data => setLinks(prev => {
                                         prev[index] = {
                                             href: prev[index].href,
-                                            value: data,
+                                            name: data,
                                         }
                                         return [
                                             ...prev
@@ -73,7 +68,7 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
                                     value={link.href}
                                     onChange={data => setLinks(prev => {
                                         prev[index] = {
-                                            value: prev[index].value,
+                                            name: prev[index].name,
                                             href: data,
                                         }
                                         return [
@@ -103,7 +98,7 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
             {props.children}
 
             <Flex gap="3" mt="4" justify="end">
-                <Button onClick={() => onSave(links)}>Save</Button>
+                <Button onClick={() => onSave()}>Save</Button>
             </Flex>
         </>
     )

@@ -12,7 +12,10 @@ import * as styles from "./SectionHeroBasic.scss";
 
 const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
     return (
-        <Section className={styles.hero} data-hydration-id={props["data-hydration-id"]}>
+        <Section
+            data-hydration-id={props["data-hydration-id"]}
+            className={styles.hero}
+        >
             <Heading as="h1">
                 {props.title}
             </Heading>

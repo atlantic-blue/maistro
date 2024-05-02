@@ -156,7 +156,7 @@ const RouteProjectPage: React.FC = () => {
                             </Section>
                         </Dialog.Trigger>
 
-                        <Dialog.Content maxWidth="450px">
+                        <Dialog.Content maxWidth="800px">
                             <Flex>
                                 <Dialog.Close>
                                     <IconButton size="1" variant="soft" color="gray" style={{ marginLeft: "auto" }}>

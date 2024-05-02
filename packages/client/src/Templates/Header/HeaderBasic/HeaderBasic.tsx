@@ -2,16 +2,15 @@ import React from "react"
 
 import Logo from "../../Components/Logo/Logo"
 
-import Nav from "../../Components/Nav/Nav"
-
 import * as LogoStyles from "../../Components/Logo/Logo.scss"
-import * as NavStyles from "../../Components/Nav/Nav.scss"
-import * as NavLinkStyles from "../../Components/NavLink/NavLink.scss"
+import * as NavigationStyles from "../../Components/Navigation/Navigation.scss"
 import * as styles from "./HeaderBasic.scss"
 
 import { HeaderProps } from "../HeaderTypes"
 
 import { ContentCategory, TemplateComponentType, TemplateStruct } from "../../templateTypes"
+import Navigation from "../../Components/Navigation/Navigation"
+import { Box, Flex } from "@radix-ui/themes"
 
 const HeaderBasic: React.FC<HeaderProps> = ({
     logo,
@@ -20,16 +19,18 @@ const HeaderBasic: React.FC<HeaderProps> = ({
 }) => {
     return (
         <header className={styles.header} data-hydration-id={props["data-hydration-id"]}>
-            <div className={styles.headerContainer}>
-                <Logo
-                    imgUrl={logo.url}
-                    slogan={logo.slogan}
-                />
-                <Nav
-                    links={links}
-                />
-            </div>
-        </header>
+            <Box ml='4' mr='4'>
+                <Flex align="center" justify="between">
+                    <Logo
+                        imgUrl={logo.url}
+                        slogan={logo.slogan}
+                    />
+                    <Navigation
+                        items={links}
+                    />
+                </Flex>
+            </Box>
+        </header >
     )
 }
 
@@ -41,8 +42,7 @@ export const HeaderBasicItem: TemplateStruct = {
     classNames: [
         ...Object.values(styles),
         ...Object.values(LogoStyles),
-        ...Object.values(NavStyles),
-        ...Object.values(NavLinkStyles),
+        ...Object.values(NavigationStyles),
     ],
     Component: HeaderBasic,
     props: {
@@ -50,24 +50,20 @@ export const HeaderBasicItem: TemplateStruct = {
             url: "https://maistro.website/assets/logo.svg",
             slogan: "Empowering Your Vision"
         },
-        links: {
-            home: {
-                href: "#home",
-                value: "Home",
+        links: [
+            {
+                name: "Home",
+                href: "/"
             },
-            about: {
-                href: "#about",
-                value: "About",
+            {
+                name: "About",
+                href: "/about",
             },
-            services: {
-                href: "#services",
-                value: "Services",
+            {
+                name: "Contact",
+                href: "/contact"
             },
-            contact: {
-                href: "#contact",
-                value: "Contact",
-            }
-        },
+        ]
     }
 }
 

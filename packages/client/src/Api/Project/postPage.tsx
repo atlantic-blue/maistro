@@ -43,14 +43,13 @@ const postPage = (
         return <content.Component />
     })
 
-    const Css = () => contentIds.map(contentId => {
+    const getContentStyles = () => contentIds.map(contentId => {
         const content = project.getContentById(contentId)
         const styles = content.getStylesFromClassNames()
         if (!styles) {
             return ""
         }
-
-        return content.getStylesFromClassNames().join("\n")
+        return styles.join("\n")
     })
 
     const Html = () => page.createHtml({
@@ -62,7 +61,7 @@ const postPage = (
                 </Theme>
             )
         },
-        Css,
+        Css: () => getContentStyles().join("\n"),
     })
 
     return fileCreate(

@@ -47,23 +47,15 @@ const RoutesProjects: React.FC = () => {
                                 scale: 0.5
                             }}
                         >
-                            <SectionHeroBasic
-                                {...{
-                                    title: "Create a new Project!",
-                                    content: "Discover our services and offerings.",
-                                    cta: "Get Started",
-                                    ctaLink: "#home",
-                                    img: {
-                                        src: faker.image.urlPicsumPhotos(),
-                                        alt: "img",
-                                    }
-                                }}
-                            />
                             <SectionHeroImage
                                 {...{
                                     title: "Captivating Experiences Await",
-                                    imageUrl: faker.image.urlPicsumPhotos(),
-                                    cta: "Discover More",
+                                    img: {
+                                        src: faker.image.urlPicsumPhotos(),
+                                        alt: "",
+                                    },
+                                    content: "Launch Your Next Adventure",
+                                    cta: "Generate",
                                     ctaLink: "#home"
                                 }}
                             />
