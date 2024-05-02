@@ -38,11 +38,10 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct> =>
 
         HeaderBasicItem,
         HeaderBurgerItem,
-        // HeaderDropDownItem,
         HeaderStickyItem,
 
         SectionHeroImageItem,
-        // SectionHeroVideoItem,
+        SectionHeroVideoItem,
         SectionHeroSlidesItem,
 
         // SectionAboutUsSimpleItem,

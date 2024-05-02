@@ -2,10 +2,12 @@ import React from "react";
 import EditorText from "./EditorText";
 import EditorImage from "./EditorImage";
 import EditorWysiwyg from "./EditorWysiwyg";
+import EditorVideo from "./EditorVideo";
 
 export enum EditorDataType {
     TEXT = "TEXT",
     IMAGE = "IMAGE",
+    VIDEO = "VIDEO",
     WYSIWYG = "WYSIWYG",
 }
 
@@ -15,6 +17,14 @@ export interface EditorWysiwygProps {
     value?: string
     onChange: (value: string) => void
     onUploadImage: (file: File) => Promise<string>
+}
+
+export interface EditorVideoProps {
+    type: EditorDataType.VIDEO
+    name: string
+    value?: string
+    onChange: (value: string) => void
+    // onUploadImage: (file: File) => Promise<string>
 }
 
 export interface EditorImageProps {
@@ -30,7 +40,7 @@ export type EditorDataProps = {
     name: string
     value?: string
     onChange: (value: string) => void
-} | EditorImageProps | EditorWysiwygProps
+} | EditorImageProps | EditorVideoProps | EditorWysiwygProps
 
 const EditorData: React.FC<EditorDataProps> = (props) => {
     switch (props.type) {
@@ -41,6 +51,10 @@ const EditorData: React.FC<EditorDataProps> = (props) => {
         case EditorDataType.IMAGE:
             return (
                 <EditorImage {...props} />
+            )
+        case EditorDataType.VIDEO:
+            return (
+                <EditorVideo {...props} />
             )
         case EditorDataType.WYSIWYG:
             return (

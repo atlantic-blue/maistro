@@ -33,7 +33,10 @@ const RoutesHome: React.FC = () => {
             />
             <SectionHeroVideo
                 {...{
-                    videoURL: videoURLS[Math.floor(Math.random() * videoURLS.length)],
+                    video: {
+                        src: videoURLS[Math.floor(Math.random() * videoURLS.length)],
+                        alt: "",
+                    },
                     title: "Maistro AI",
                     content: (
                         <div>
@@ -41,8 +44,8 @@ const RoutesHome: React.FC = () => {
                             <div>Start Free & Transform Today!</div>
                         </div>
                     ),
-                    buttonText: "Generate",
-                    buttonOnClick: logIn,
+                    cta: "Generate",
+                    ctaOnClick: logIn,
                 }}
             />
         </>

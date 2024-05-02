@@ -1,24 +1,32 @@
 import React from 'react';
 
-import { TemplateStruct, ContentCategory } from '../../../templateTypes';
+import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../../templateTypes';
 import Button from '../../../Components/Button/Button';
 import * as ButtonStyles from '../../../Components/Button/Button.scss';
 
 import * as styles from "./SectionHeroVideo.scss"
-import { Heading, Text } from '@radix-ui/themes';
+import { Flex, Heading, Section } from '@radix-ui/themes';
+import TemplateWysiwyg from '../../../Components/TemplateWysiwyg/TemplateWysiwyg';
 
-interface SectionHeroVideoProps {
-    videoURL: string
+export interface SectionHeroVideoProps {
+    "data-hydration-id"?: string
     title: string
+    video: {
+        src: string
+        alt: string
+    }
     content: string | React.ReactNode
-    buttonLink?: string
-    buttonText: string
-    buttonOnClick?: () => void
+    cta: string
+    ctaLink?: string
+    ctaOnClick?: () => void
 }
 
 const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
     return (
-        <section className={styles.hero} {...props}>
+        <Section
+            data-hydration-id={props["data-hydration-id"]}
+            className={styles.hero}
+        >
             <video
                 className={styles.video}
                 playsInline
@@ -26,54 +34,57 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
                 muted
                 loop
             >
-                <source src={props.videoURL} type="video/mp4" />
+                <source src={props.video?.src} type="video/mp4" />
             </video>
-            <div className={styles.content}>
+            <Flex className={styles.content} align="center" direction="column" justify="center" gap="3">
                 <Heading
                     as="h1"
                     align="center"
                     wrap="pretty"
                     size="9"
+                    className={styles.heroTitle}
                 >
                     {props.title}
                 </Heading>
 
-                <Text
-                    as="div"
-                    className={styles.text}
-                >
-                    {props.content}
-                </Text>
+                <TemplateWysiwyg
+                    content={props.content}
+                    className={styles.heroText}
+                />
 
                 <Button
                     size="4"
-                    onClick={props.buttonOnClick}
-                    link={props.buttonLink}
-                    children={props.buttonText}
-                />
+                    onClick={props.ctaOnClick}
+                    className={styles.heroButton}
+                >
+                    <a href={props.ctaLink} target="_blank" rel="noopener noreferrer">
+                        {props.cta}
+                    </a>
+                </Button>
 
-            </div>
-        </section >
+            </Flex>
+        </Section>
     );
 };
 
 export const SectionHeroVideoItem: TemplateStruct = {
-    name: "SectionHeroVideo",
+    name: TemplateComponentType.HERO_VIDEO,
     Component: SectionHeroVideo,
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
-    description: "Creates an engaging and immersive experience with a background video, ideal for dynamic content presentation.",
+    description: "Hero Video",
     classNames: [
         ...Object.values(styles),
         ...Object.values(ButtonStyles),
     ],
     props: {
-        videoURL: "https://maistro.website/assets/hero-video.mp4",
+        video: {
+            src: "https://maistro.website/assets/hero-video.mp4"
+        },
         title: "Immerse Yourself in Our World",
         content: "Experience the difference with us.",
-        buttonLink: "#home",
-        buttonText: "Get Started",
+        ctaLink: "#home",
+        cta: "Get Started",
     },
-    ComponentEditor: () => null,
 }
 
 export default SectionHeroVideo;

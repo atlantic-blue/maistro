@@ -1,6 +1,6 @@
 import React from "react";
 import htmlReactParser from 'html-react-parser'
-import { Button, Flex, Section, Text } from "@radix-ui/themes";
+import { Box, Button, Flex, Section, Text } from "@radix-ui/themes";
 import { EditorDataProps, EditorWysiwygProps } from "./EditorData";
 import Wysiwyg, { WysiwygApi } from "../Wysiwyg/Wysiwyg";
 import ErrorBoundary from "../../Errors/ErrorBoundary";
@@ -16,7 +16,7 @@ const EditorWysiwyg: React.FC<EditorWysiwygProps> = (props) => {
 
     return (
         <ErrorBoundary>
-            <Section>
+            <Box>
                 <Text as="div" size="2" mb="1" weight="bold">
                     {props.name}
                 </Text>
@@ -35,7 +35,7 @@ const EditorWysiwyg: React.FC<EditorWysiwygProps> = (props) => {
                         Save {props.name}
                     </Button>
                 </Flex>
-            </Section>
+            </Box>
         </ErrorBoundary>
     )
 }

@@ -8,8 +8,9 @@
     justify-content: center;
     text-align: center;
     height: 100vh;
+    padding: 0 !important;
+    margin: 0 !important;
     font-family: var(--font-family-body);
-    color: var(--color-primary);
 
     .video {
         object-fit: cover;
@@ -22,7 +23,7 @@
 
     .content {
         z-index: $global-z-index-1;
-
+        position: inherit;
         width: 100%;
         height: 100%;
         padding: 20px;
@@ -33,9 +34,29 @@
         justify-content: center;
     }
 
-    h1 {
+    &-title {
         margin-bottom: 20px;
-        font-size: 4.5rem;
+        font-size: 3rem;
+        color: var(--accent-9);
+    }
+
+    &-text {
+        color: var(--accent-3);
+        margin-bottom: 20px;
+        font-size: 30px;
+    }
+
+    &-button {
+        min-width: 300px;
+        min-height: 50px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 1rem;
+
+        a {
+            text-decoration: none;
+            color: var(--accent-11);
+        }
     }
 
     .text {
