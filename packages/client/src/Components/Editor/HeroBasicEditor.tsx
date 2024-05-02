@@ -5,7 +5,7 @@ import EditorData, { EditorDataType } from "./EditorData";
 
 interface EditorProps {
     onSaveData: (props: SectionHeroProps) => void
-    onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
     children: React.ReactNode
 }
 
@@ -55,14 +55,14 @@ const HeroBasicEditor: React.FC<SectionHeroProps & EditorProps> = (props) => {
                             }
                         })
                     }}
-                    onUploadImage={props.onUploadImage}
+                    onUploadFile={props.onUploadFile}
                 />
 
                 <EditorData
                     type={EditorDataType.WYSIWYG}
                     name="Content"
                     value={state.content}
-                    onUploadImage={props.onUploadImage}
+                    onUploadFile={props.onUploadFile}
                     onChange={e => {
                         setState(prev => {
                             return {

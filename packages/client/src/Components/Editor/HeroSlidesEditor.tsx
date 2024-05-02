@@ -6,7 +6,7 @@ import EditorData, { EditorDataType } from "./EditorData";
 
 interface EditorProps {
     onSaveData: (props: SectionHeroSlidesProps) => void
-    onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
     children: React.ReactNode
 }
 
@@ -63,14 +63,14 @@ const HeroSlidesEditor: React.FC<SectionHeroSlidesProps & EditorProps> = (props)
                                         }
                                     })
                                 }}
-                                onUploadImage={props.onUploadImage}
+                                onUploadFile={props.onUploadFile}
                             />
 
                             <EditorData
                                 type={EditorDataType.WYSIWYG}
                                 name="Content"
                                 value={slide.content}
-                                onUploadImage={props.onUploadImage}
+                                onUploadFile={props.onUploadFile}
                                 onChange={e => {
                                     setState(prev => {
                                         prev.slides[index] = {

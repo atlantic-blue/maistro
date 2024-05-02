@@ -17,7 +17,7 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
         }
         setLoading(true)
         const file = event.target.files[0]
-        const src = await props.onUploadImage(file)
+        const src = await props.onUploadFile(file)
 
         setPreview(src);
         props.onChange(src)
@@ -54,6 +54,7 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
                                     <input
                                         id={uploadId}
                                         type="file"
+                                        accept="image/*"
                                         className={styles.uploadInput}
                                         onChange={handleFileChange}
                                     />

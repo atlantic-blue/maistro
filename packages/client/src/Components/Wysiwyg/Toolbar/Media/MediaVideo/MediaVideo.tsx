@@ -8,18 +8,23 @@ import { Command } from "../../../Wysiwyg.types"
 
 import * as styles from "../Media.scss"
 import * as wysiwygStyles from "../../../Wysiwyg.scss"
-import EditableVideo from "../../../../Editable/EditableVideo/EditableVideo"
+import { Box, Card, IconButton, Spinner } from "@radix-ui/themes"
+import EditorVideo from "../../../../Editor/EditorVideo"
+import { EditorDataType } from "../../../../Editor/EditorData"
 
 
 interface ToolbarToolbarMediaVideoProps {
     editorRef: React.MutableRefObject<HTMLDivElement | null>
     execCommand: (cmd: Command, args?: string | Node) => void
+    onUploadFile: (file: File) => Promise<string>
 }
 
 const TOOLBAR_MEDIA_VIDEO = "ToolbarMedia-video"
 
 const ToolbarMediaVideo: React.FC<ToolbarToolbarMediaVideoProps> = (props) => {
     const [currentMedia, setCurrentMedia] = React.useState<HTMLSourceElement | null>(null)
+    const [isLoading, setIsLoading] = React.useState(false)
+
     const ref = React.useRef(null)
 
     useClickOutside({
@@ -45,32 +50,40 @@ const ToolbarMediaVideo: React.FC<ToolbarToolbarMediaVideoProps> = (props) => {
         };
     }, [])
 
-    const onInsertImage: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const onInsertVideo: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
         if (!event?.target?.files) {
             return
         }
 
-        const file = event?.target?.files[0];
-        const objectUrl = URL.createObjectURL(file);
+        try {
+            const file = event?.target?.files[0];
+            const src = await props.onUploadFile(file)
 
-        const videoSource = document.createElement("source");
-        videoSource.src = objectUrl
-        videoSource.type = "video/mp4"
+            const videoSource = document.createElement("source");
+            videoSource.src = src
+            videoSource.type = "video/mp4"
 
-        const div = document.createElement('div');
-        div.className = styles.mediaContainer;
-        div.addEventListener('click', () => {
-            setCurrentMedia(videoSource)
-        });
+            const div = document.createElement('div');
+            div.className = styles.mediaContainer;
+            div.addEventListener('click', () => {
+                setCurrentMedia(videoSource)
+            });
 
-        const video = document.createElement("video");
-        video.className = styles.mediaVideo;
-        video.controls = true
+            const video = document.createElement("video");
+            video.className = styles.mediaVideo;
+            video.controls = true
 
-        div.appendChild(video)
-        video.appendChild(videoSource)
+            div.appendChild(video)
+            video.appendChild(videoSource)
 
-        props.execCommand(Command.CUSTOM__INSERT_NODE, div)
+            props.execCommand(Command.CUSTOM__INSERT_NODE, div)
+        } catch (error) {
+            // TODO app level error
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
+
     };
 
     const onSizeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -110,19 +123,34 @@ const ToolbarMediaVideo: React.FC<ToolbarToolbarMediaVideoProps> = (props) => {
 
     return (
         <div className={styles.section}>
-            <input id={TOOLBAR_MEDIA_VIDEO} type="file" accept="video/*" onChange={onInsertImage} style={{ display: 'none' }} />
-            <button className={wysiwygStyles.button} type="button">
+            <IconButton className={wysiwygStyles.button} type="button">
                 <label htmlFor={TOOLBAR_MEDIA_VIDEO}>
-                    <IconVideo className={wysiwygStyles.buttonIcon} />
+                    {
+                        !isLoading ? (
+                            <IconVideo className={wysiwygStyles.buttonIcon} />
+                        ) : (
+                            <Spinner />
+                        )
+                    }
                 </label>
-            </button>
+                <input
+                    id={TOOLBAR_MEDIA_VIDEO}
+                    type="file"
+                    accept="video/*"
+                    onChange={onInsertVideo}
+                    style={{ display: 'none' }}
+                />
+            </IconButton>
             {currentMedia && (
-                <div className={styles.options} ref={ref}>
-                    <div className={styles.optionsContainer}>
+                <Card className={styles.options} ref={ref}>
+                    <Box className={styles.optionsContainer}>
                         <div className={styles.optionsPreview}>
-                            <EditableVideo
-                                defaultVideo={currentMedia.src}
+                            <EditorVideo
+                                name="Video"
+                                type={EditorDataType.VIDEO}
+                                value={currentMedia.src}
                                 onChange={onVideoChange}
+                                onUploadFile={props.onUploadFile}
                             />
                         </div>
 
@@ -139,8 +167,8 @@ const ToolbarMediaVideo: React.FC<ToolbarToolbarMediaVideoProps> = (props) => {
                             max={1080}
                         />
 
-                    </div>
-                </div>
+                    </Box>
+                </Card>
             )}
         </div>
     )

@@ -15,7 +15,7 @@ import { Box, Card, Flex, IconButton, Slider, Spinner } from "@radix-ui/themes"
 interface ToolbarToolbarMediaImageProps {
     editorRef: React.MutableRefObject<HTMLDivElement | null>
     execCommand: (cmd: Command, args?: string | Node) => void
-    onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
 }
 
 const TOOLBAR_MEDIA_IMAGE = "ToolbarMedia-image"
@@ -63,7 +63,7 @@ const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
         try {
             setIsLoading(true)
             const file = event?.target?.files[0];
-            const src = await props.onUploadImage(file)
+            const src = await props.onUploadFile(file)
 
             const img = document.createElement('img');
             img.src = src
@@ -154,7 +154,7 @@ const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
                             type={EditorDataType.IMAGE}
                             value={currentMedia.src}
                             onChange={onImageChange}
-                            onUploadImage={props.onUploadImage}
+                            onUploadFile={props.onUploadFile}
                         />
                     </Box>
 

@@ -104,8 +104,15 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
         })
     }
 
-    const onUploadImage = async (file: File): Promise<string> => {
+    const onUploadFile = async (file: File): Promise<string> => {
         try {
+            const maxSize = 5 * 1024 * 1024; // 5 MB limit
+            if (file.size > maxSize) {
+                // TODO app level error
+                console.log(`File size should not exceed 5 MB.`)
+                return ""
+            }
+
             const fileBase64 = await convertFileToBase64(file)
             const { src } = await api.file.createFile({
                 token: user.getTokenId(),
@@ -198,7 +205,7 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
                                                         <ComponentEditor
                                                             {...componentProps}
                                                             onSaveData={onSaveData}
-                                                            onUploadImage={onUploadImage}
+                                                            onUploadFile={onUploadFile}
                                                         />
                                                     </Tabs.Content>
 

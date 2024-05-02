@@ -28,7 +28,7 @@ interface WysiwygProps {
     children: React.ReactNode
     colourScheme: ColourScheme
     apiRef: React.RefObject<WysiwygApi>
-    onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
 }
 
 export interface WysiwygApi {
@@ -118,7 +118,7 @@ const Wysiwyg: React.FC<WysiwygProps> = (props) => {
                     <ToolbarMedia
                         editorRef={editorRef}
                         execCommand={execCommand}
-                        onUploadImage={props.onUploadImage}
+                        onUploadFile={props.onUploadFile}
                     />
                 </div>
             }

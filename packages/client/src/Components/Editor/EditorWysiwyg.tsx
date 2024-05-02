@@ -1,7 +1,7 @@
 import React from "react";
 import htmlReactParser from 'html-react-parser'
-import { Box, Button, Flex, Section, Text } from "@radix-ui/themes";
-import { EditorDataProps, EditorWysiwygProps } from "./EditorData";
+import { Box, Button, Flex, Text } from "@radix-ui/themes";
+import { EditorWysiwygProps } from "./EditorData";
 import Wysiwyg, { WysiwygApi } from "../Wysiwyg/Wysiwyg";
 import ErrorBoundary from "../../Errors/ErrorBoundary";
 import { defaultColorScheme } from "../../PageContext";
@@ -25,7 +25,7 @@ const EditorWysiwyg: React.FC<EditorWysiwygProps> = (props) => {
                     key={Date.now()}
                     colourScheme={defaultColorScheme}
                     apiRef={editorApiRef}
-                    onUploadImage={props.onUploadImage}
+                    onUploadFile={props.onUploadFile}
                     isEditable
                 >
                     {htmlReactParser(props.value || "")}

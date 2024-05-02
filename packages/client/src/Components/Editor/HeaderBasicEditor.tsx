@@ -6,7 +6,7 @@ import { HeaderProps } from "../../Templates/Header/HeaderTypes"
 
 interface EditorProps {
     onSaveData: (props: HeaderProps) => void
-    onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
     children: React.ReactNode
 }
 
@@ -34,7 +34,7 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
                     name="Logo"
                     value={logoUrl}
                     onChange={setLogoUrl}
-                    onUploadImage={props.onUploadImage}
+                    onUploadFile={props.onUploadFile}
                 />
                 <EditorData
                     type={EditorDataType.TEXT}

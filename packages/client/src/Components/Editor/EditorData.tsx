@@ -16,7 +16,7 @@ export interface EditorWysiwygProps {
     name: string
     value?: string
     onChange: (value: string) => void
-    onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
 }
 
 export interface EditorVideoProps {
@@ -24,7 +24,7 @@ export interface EditorVideoProps {
     name: string
     value?: string
     onChange: (value: string) => void
-    // onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
 }
 
 export interface EditorImageProps {
@@ -32,7 +32,7 @@ export interface EditorImageProps {
     name: string
     value?: string
     onChange: (value: string) => void
-    onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
 }
 
 export type EditorDataProps = {

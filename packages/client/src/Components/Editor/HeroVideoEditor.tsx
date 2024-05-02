@@ -6,7 +6,7 @@ import { SectionHeroVideoProps } from "../../Templates/Section/SectionHero/Secti
 
 interface EditorProps {
     onSaveData: (props: SectionHeroProps) => void
-    onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
     children: React.ReactNode
 }
 
@@ -44,6 +44,7 @@ const HeroVideoEditor: React.FC<SectionHeroVideoProps & EditorProps> = (props) =
                 <EditorData
                     type={EditorDataType.VIDEO}
                     name="Hero video"
+                    onUploadFile={props.onUploadFile}
                     value={state.video.src}
                     onChange={e => {
                         setState(prev => {
@@ -62,7 +63,7 @@ const HeroVideoEditor: React.FC<SectionHeroVideoProps & EditorProps> = (props) =
                     type={EditorDataType.WYSIWYG}
                     name="Content"
                     value={state.content}
-                    onUploadImage={props.onUploadImage}
+                    onUploadFile={props.onUploadFile}
                     onChange={e => {
                         setState(prev => {
                             return {

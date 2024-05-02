@@ -10,7 +10,7 @@ import * as wysiwygStyles from "../../Wysiwyg.scss"
 interface ToolbarToolbarMediaProps {
     editorRef: React.MutableRefObject<HTMLDivElement | null>
     execCommand: (cmd: Command, args?: string | Node) => void
-    onUploadImage: (file: File) => Promise<string>
+    onUploadFile: (file: File) => Promise<string>
 }
 
 const ToolbarMedia: React.FC<ToolbarToolbarMediaProps> = (props) => {
@@ -19,13 +19,15 @@ const ToolbarMedia: React.FC<ToolbarToolbarMediaProps> = (props) => {
             <ToolbarMediaImage
                 editorRef={props.editorRef}
                 execCommand={props.execCommand}
-                onUploadImage={props.onUploadImage}
+                onUploadFile={props.onUploadFile}
             />
-            {/* // TODO enable video
+
             <ToolbarMediaVideo
                 editorRef={props.editorRef}
                 execCommand={props.execCommand}
-            /> */}
+                onUploadFile={props.onUploadFile}
+            />
+
             <ToolbarLink
                 editorRef={props.editorRef}
                 execCommand={props.execCommand}
