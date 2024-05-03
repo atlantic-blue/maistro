@@ -11,7 +11,7 @@
 .item {
     background-color: none;
     position: relative;
-    background-color: #f0f0f0;
+    background-color: var(--accent-1);
 
     &-wrapper {
         display: flex;
@@ -19,7 +19,7 @@
 
     &-dragging,
     &-interacting {
-        border: 3px dashed blue;
+        border: 3px dashed var(--accent-contrast);
     }
 
     &-helper {
@@ -27,14 +27,22 @@
         top: 8px;
         right: 10px;
         z-index: $global-z-index-3;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        background-color: var(--accent-1);
+        padding: 5px;
 
         &-button {
-            background-color: white;
-            border: 1px dotted #e4c7c7;
-            padding: 4px;
+            background-color: var(--accent-1);
+            padding: 3px;
+            width: 25px;
+            height: 25px;
+            margin: 0 3px;
 
             &:hover {
                 cursor: pointer;
+                background-color: var(--accent-4);
             }
         }
 

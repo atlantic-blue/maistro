@@ -3,6 +3,7 @@ import HeaderBasicEditor from "./HeaderBasicEditor";
 import HeroBasicEditor from "./HeroBasicEditor";
 import HeroSlidesEditor from "./HeroSlidesEditor";
 import HeroVideoEditor from "./HeroVideoEditor";
+import SectionBlankEditor from "./SectionBlankEditor";
 
 const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.HEADER_BASIC]: HeaderBasicEditor,
@@ -12,6 +13,7 @@ const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.HERO_IMAGE]: HeroBasicEditor,
     [TemplateComponentType.HERO_SLIDES]: HeroSlidesEditor,
     [TemplateComponentType.HERO_VIDEO]: HeroVideoEditor,
+    [TemplateComponentType.SECTION_BLANK]: SectionBlankEditor,
 }
 
 export default editors

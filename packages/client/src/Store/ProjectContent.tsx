@@ -190,7 +190,7 @@ class ProjectContent implements IProjectContent {
         }
 
         return classNames.map(className => {
-            const cssRule = getCssTextByClassName(`.${className}`)
+            const cssRule = getCssTextByClassName(className)
             return cssRule.reduce((styles, next) => {
                 if (!next) {
                     return styles

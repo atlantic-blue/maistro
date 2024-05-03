@@ -1,7 +1,5 @@
-import React from "react"
 import { Subject, Subscription } from "rxjs";
 import { faker } from '@faker-js/faker';
-import { Theme } from '@radix-ui/themes';
 
 import { defaultColorScheme, defaultFontScheme } from "../PageContext";
 import {
@@ -10,8 +8,6 @@ import {
     PageStruct,
     PageEvent,
     PageMessageType,
-    ColourPalette,
-    FontFamily,
 } from "../types";
 
 import { getFontFamilyHref } from "../Components/FontScheme/FontScheme";
@@ -174,6 +170,15 @@ class PageStore implements IPage {
         this.description = description
     }
 
+    public getFavicon(): string {
+        // TODO
+        return ""
+    }
+
+    public setFavicon(url: string) {
+        // TODO
+    }
+
     public getKeyWords(): string {
         return this.keywords
     }
@@ -221,7 +226,7 @@ class PageStore implements IPage {
             Object.values(this.fontScheme).map(fontfamily => {
                 return (`
                     <link
-                        href={${getFontFamilyHref(fontfamily.family)}}
+                        href=${getFontFamilyHref(fontfamily.family)}
                         rel="stylesheet"
                     />`
                 )
@@ -248,10 +253,10 @@ class PageStore implements IPage {
                     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
                     <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
 
-                    <title>{this.getTitle()}</title>
-                    <link rel="icon" type="image/x-icon" href="/TODO/favicon.png"></link>
-                    <meta name="description" content={this.getDescription()} />
-                    <meta name="keywords" content={this.getKeyWords()} />
+                    <title>${this.getTitle()}</title>
+                    <link rel="icon" type="image/x-icon" href=${this.getFavicon()}></link>
+                    <meta name="description" content=${this.getDescription()} />
+                    <meta name="keywords" content=${this.getKeyWords()} />
                     <meta name="author" content="https://maistro.website" />
 
                     <style>

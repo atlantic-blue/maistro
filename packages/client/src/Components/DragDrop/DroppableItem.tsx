@@ -148,34 +148,32 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
                         >
                             <Dialog.Root open={open} onOpenChange={setOpen}>
                                 <div className={styles.itemHelper}>
-                                    <Flex gap="1" direction="row" align="center">
-                                        {Boolean(ComponentEditor) &&
-                                            (
-                                                <Dialog.Trigger>
-                                                    <IconButton className={styles.itemHelperButton} onClick={() => setIsEditing(!isEditing)}>
-                                                        <IconEdit className={styles.itemHelperIcon} />
-                                                    </IconButton>
-                                                </Dialog.Trigger>
-                                            )
-                                        }
-
-                                        {props.itemIndex ?
-                                            (
-                                                <IconButton className={styles.itemHelperButton} onClick={() => props.onMoveContentUp(props.itemId)}>
-                                                    <IconUp className={styles.itemHelperIcon} />
+                                    {Boolean(ComponentEditor) &&
+                                        (
+                                            <Dialog.Trigger>
+                                                <IconButton className={styles.itemHelperButton} onClick={() => setIsEditing(!isEditing)}>
+                                                    <IconEdit className={styles.itemHelperIcon} />
                                                 </IconButton>
-                                            ) : null
-                                        }
+                                            </Dialog.Trigger>
+                                        )
+                                    }
 
-                                        <IconButton className={styles.itemHelperButton} onClick={() => props.onMoveContentDown(props.itemId)}>
-                                            <IconUp className={classNames(styles.itemHelperIcon, styles.itemHelperIconDown)} />
-                                        </IconButton>
+                                    {(props.itemIndex > 1) ?
+                                        (
+                                            <IconButton className={styles.itemHelperButton} onClick={() => props.onMoveContentUp(props.itemId)}>
+                                                <IconUp className={styles.itemHelperIcon} />
+                                            </IconButton>
+                                        ) : null
+                                    }
+
+                                    <IconButton className={styles.itemHelperButton} onClick={() => props.onMoveContentDown(props.itemId)}>
+                                        <IconUp className={classNames(styles.itemHelperIcon, styles.itemHelperIconDown)} />
+                                    </IconButton>
 
 
-                                        <IconButton className={styles.itemHelperButton} onClick={() => props.onDeleteContent(props.itemId)}>
-                                            <IconBin className={styles.itemHelperIcon} />
-                                        </IconButton>
-                                    </Flex>
+                                    <IconButton className={styles.itemHelperButton} onClick={() => props.onDeleteContent(props.itemId)}>
+                                        <IconBin className={styles.itemHelperIcon} />
+                                    </IconButton>
                                 </div>
 
                                 <div>

@@ -9,6 +9,8 @@ import { SectionHeroProps } from '../SectionHeroTypes';
 import TemplateWysiwyg from '../../../Components/TemplateWysiwyg/TemplateWysiwyg';
 
 import * as styles from "./SectionHeroBasic.scss";
+import * as animationStyles from "../../../Styles/animation.scss"
+import classNames from 'classnames';
 
 const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
     return (
@@ -19,7 +21,7 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
             <Heading
                 as="h1"
                 size="9"
-                className={styles.heroTitle}
+                className={classNames(styles.heroTitle, animationStyles.fadeIn)}
             >
                 {props.title}
             </Heading>
@@ -63,7 +65,8 @@ export const SectionHeroBasicItem: TemplateStruct = {
     categories: [ContentCategory.HERO, ContentCategory.TEXT],
     Component: SectionHeroBasic,
     classNames: [
-        ...Object.values(styles)
+        ...Object.values(styles),
+        ...Object.values(animationStyles)
     ],
     props: {
         title: "Landing Page.",

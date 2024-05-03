@@ -11,6 +11,7 @@ import { HeaderProps } from "../HeaderTypes"
 import { ContentCategory, TemplateComponentType, TemplateStruct } from "../../templateTypes"
 import Navigation from "../../Components/Navigation/Navigation"
 import { Box, Flex } from "@radix-ui/themes"
+import classNames from "classnames"
 
 const HeaderBasic: React.FC<HeaderProps> = ({
     logo,
@@ -18,7 +19,7 @@ const HeaderBasic: React.FC<HeaderProps> = ({
     ...props
 }) => {
     return (
-        <header className={styles.header} data-hydration-id={props["data-hydration-id"]}>
+        <header className={classNames(styles.header)} data-hydration-id={props["data-hydration-id"]}>
             <Box ml='4' mr='4'>
                 <Flex align="center" justify="between">
                     <Logo

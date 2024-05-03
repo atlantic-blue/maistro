@@ -28,19 +28,21 @@ import { FooterDetailedItem } from './Footer/FooterDetailed/FooterDetailed'
 import { FooterInteractiveItem } from './Footer/FooterInteractive/FooterInteractive'
 import { FooterWithNavigationItem } from './Footer/FooterWithNavigation/FooterWithNavigation'
 import { SectionSubscribeBasicItem } from './Section/SectionContact/SectionSubscribeBasic/SectionSubscribeBasic'
+import { SectionBlankItem } from './Section/SectionBlank'
 
 export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct> => {
     const templatesRecord: Record<string, TemplateStruct> = {}
     const templatesList: TemplateStruct[] = [
         HeaderBurgerItem,
-        SectionHeroBasicItem,
+        SectionHeroImageItem,
+        SectionBlankItem,
         SectionSubscribeBasicItem,
 
         HeaderBasicItem,
         HeaderBurgerItem,
         HeaderStickyItem,
 
-        SectionHeroImageItem,
+        SectionHeroBasicItem,
         SectionHeroVideoItem,
         SectionHeroSlidesItem,
 
