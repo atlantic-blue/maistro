@@ -1,0 +1,86 @@
+@keyframes keyFrameFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes keyFrameSlideInFromLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes keyFrameSlideInFromRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes keyFrameSlideInFromTop {
+    from {
+        transform: translateY(-100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes keyFrameSlideInFromBottom {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes keyFrameScaleUp {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+.fade-in {
+    animation: keyFrameFadeIn 2s ease-out forwards;
+}
+
+.slide-in-left {
+    animation: keyFrameSlideInFromLeft 0.8s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+.slide-in-right {
+    animation: keyFrameSlideInFromRight 0.8s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+.slide-in-top {
+    animation: keyFrameSlideInFromTop 0.8s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+.slide-in-bottom {
+    animation: keyFrameSlideInFromBottom 0.8s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+.scale-up {
+    animation: keyFrameScaleUp 0.8s ease-out forwards;
+}
