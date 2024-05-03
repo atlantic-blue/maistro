@@ -1,7 +1,7 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import * as Form from "@radix-ui/react-form"
-import { Button, Flex,  TextArea, TextField, Text, Card } from "@radix-ui/themes"
+import { Button, Flex, TextArea, TextField, Text, Card } from "@radix-ui/themes"
 
 import { ProjectsContext } from "../../Projects"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
@@ -48,50 +48,81 @@ const RouteProjectsCreate: React.FC = () => {
         })
 
         const project = projects.getProjectById(projectResponse.id)
-        const pageResponse = await api.pages.create({
-            token: user.getTokenId(),
-            title: projectName,
-            path: 'index',
-            description: projectDescription,
-            projectId: projectResponse.id,
-            contentIds: [],
-        })
 
-        project.event$.next({
-            type: ProjectMessageType.SET_PAGE,
-            data: {
-                id: pageResponse.id,
-                projectId: pageResponse.projectId,
-                path: pageResponse.path,
-                title: pageResponse.title,
-                description: pageResponse.description,
+        const promises = () => [
+            api.pages.create({
+                token: user.getTokenId(),
+                title: projectName,
+                path: 'index',
+                description: projectDescription,
+                projectId: projectResponse.id,
                 contentIds: [],
-                // TODO
-                colourScheme: {},
-                fontScheme: {}
-            },
-        })
+            }).then(pageResponse => {
+                project.event$.next({
+                    type: ProjectMessageType.SET_PAGE,
+                    data: {
+                        id: pageResponse.id,
+                        projectId: pageResponse.projectId,
+                        path: pageResponse.path,
+                        title: pageResponse.title,
+                        description: pageResponse.description,
+                        contentIds: [],
+                        // TODO
+                        colourScheme: {},
+                        fontScheme: {}
+                    },
+                })
+                return pageResponse
+            }),
+            api.pages.create({
+                token: user.getTokenId(),
+                title: projectName,
+                path: 'success',
+                description: projectDescription,
+                projectId: projectResponse.id,
+                contentIds: [],
+            }).then(pageResponse => {
+                project.event$.next({
+                    type: ProjectMessageType.SET_PAGE,
+                    data: {
+                        id: pageResponse.id,
+                        projectId: pageResponse.projectId,
+                        path: pageResponse.path,
+                        title: pageResponse.title,
+                        description: pageResponse.description,
+                        contentIds: [],
+                        // TODO
+                        colourScheme: {},
+                        fontScheme: {}
+                    },
+                })
+                return pageResponse
+            }),
 
-        const emailListResponse = await api.email.lists.create({
-            token: user.getTokenId(),
-            title: projectName,
-            description: projectDescription,
-            projectId: projectResponse.id,
-        })
+            api.email.lists.create({
+                token: user.getTokenId(),
+                title: projectName,
+                description: projectDescription,
+                projectId: projectResponse.id,
+            }).then(emailListResponse => {
+                project.event$.next({
+                    type: ProjectMessageType.SET_EMAIL_LIST,
+                    data: {
+                        createdAt: emailListResponse.createdAt,
+                        title: emailListResponse.title,
+                        status: emailListResponse.status,
+                        projectId: emailListResponse.projectId,
+                        id: emailListResponse.id,
+                        description: emailListResponse.description
+                    }
+                })
+                return emailListResponse
+            })
+        ]
 
-        project.event$.next({
-            type: ProjectMessageType.SET_EMAIL_LIST,
-            data: {
-                createdAt: emailListResponse.createdAt,
-                title: emailListResponse.title,
-                status: emailListResponse.status,
-                projectId: emailListResponse.projectId,
-                id: emailListResponse.id,
-                description: emailListResponse.description
-            }
-        })
+        const [indexPageResponse] = await Promise.all(promises())
 
-        navigate(appRoutes.getProjectPageRoute(projectResponse.id, pageResponse.id))
+        navigate(appRoutes.getProjectPageRoute(projectResponse.id, indexPageResponse.id))
         setIsLoading(false)
     }
 

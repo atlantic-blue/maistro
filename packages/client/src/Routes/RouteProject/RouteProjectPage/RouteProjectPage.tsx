@@ -22,6 +22,7 @@ import { appRoutes } from "../../router";
 import IconClose from "../../../Components/Icons/Close/Close";
 import Loading from "../../../Components/Loading/Loading";
 import { TemplateStruct } from "../../../Templates/templateTypes";
+import env from "../../../env";
 
 const RouteProjectPage: React.FC = () => {
     const { api } = React.useContext(ApiContext)
@@ -84,6 +85,7 @@ const RouteProjectPage: React.FC = () => {
                 const emailListId = Object.values(project.getEmailLists())[0]?.getId()
                 data = {
                     ...template.props,
+                    url: env.api.email.entries.create,
                     emailListId,
                 }
             }
