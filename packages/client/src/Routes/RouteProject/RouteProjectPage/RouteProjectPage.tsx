@@ -10,10 +10,9 @@ import { ProjectsContext } from "../../../Projects";
 
 import useObservable from "../../../Utils/Hooks/UseObservable";
 import { filter } from "rxjs/operators";
-import { Box, Button, Dialog, Flex, IconButton, Progress, Section, Spinner } from "@radix-ui/themes";
-import EditMenuItem from "../../../Components/EditMenuItem/EditMenuItem";
+import { Button, Dialog, Flex, IconButton, Section, Spinner } from "@radix-ui/themes";
 import SearchItem from "../../../Components/SearchItem/SearchItem";
-import { GetTemplates, templates } from "../../../Templates";
+import { templates } from "../../../Templates";
 import { ApiContext } from "../../../Api/ApiProvider";
 
 import * as styles from "./RouteProjectPage.scss"

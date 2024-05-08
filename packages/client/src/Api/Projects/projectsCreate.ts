@@ -1,13 +1,13 @@
 import env from "../../env"
 import { requestController } from "../fetch"
 
-interface ProjectsCreateInput {
+export interface ProjectsCreateInput {
     name: string
     url: string
     token: string
 }
 
-interface ProjectsCreateOutput {
+export interface ProjectsCreateOutput {
     id: string
     url: string
     name: string

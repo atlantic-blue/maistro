@@ -15,6 +15,9 @@ interface Env {
                 read: string
             }
         }
+        aiContent: {
+            create: (projectId: string) => string
+        }
         content: {
             create: (projectId: string) => string
             read: (projectId: string) => string
@@ -80,6 +83,9 @@ const createEnv = (): Env => {
                     create: `${apiBaseUrl}/email/entries`,
                     read: `${apiBaseUrl}/email/list-entries`,
                 }
+            },
+            aiContent: {
+                create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/ai-content`,
             },
             content: {
                 create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,

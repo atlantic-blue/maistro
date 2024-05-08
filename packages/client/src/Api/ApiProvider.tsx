@@ -1,6 +1,6 @@
 import React from "react";
 
-import { projectsCreate } from "./Projects/projectsCreate";
+import { ProjectsCreateInput, ProjectsCreateOutput, projectsCreate } from "./Projects/projectsCreate";
 import { projectsRead } from "./Projects/projectsRead";
 import { projectsReadById } from "./Projects/projectsReadById";
 import { projectsUpdateById } from "./Projects/projectsUpdateById";
@@ -23,9 +23,13 @@ import { ContentUpdateByIdInput, contentUpdateById } from "./Content/contentUpda
 import { CreateFileInput, CreateFileOutput, fileCreate } from "./File/fileCreate";
 
 import ProgressSplash from "../Components/ProgressSplash/ProgressSplash";
+import { AiContentCreateInput, AiContentCreateOutput, aiContentCreate } from "./AiContent/contentCreate";
 
 interface ApiContextState {
     api: {
+        aiContent: {
+            create: (input: AiContentCreateInput) => Promise<AiContentCreateOutput>,
+        }
         content: {
             create: (input: ContentCreateInput) => Promise<ContentCreateOutput>,
             read: (input: ContentReadInput) => Promise<ContentReadOutput>
@@ -39,7 +43,7 @@ interface ApiContextState {
             updateById: (input: PagesUpdateByIdInput) => Promise<void>,
         }
         projects: {
-            create: ({ token, name, url }: { token: string, name: string, url: string }) => Promise<{ id: string, name: string, url: string }>
+            create: (input: ProjectsCreateInput) => Promise<ProjectsCreateOutput>
             read: ({ token }: { token: string }) => Promise<Partial<ProjectStruct[]>>
             readById: ({ projectId, token }: { projectId: string, token: string }) => Promise<Partial<ProjectStruct>>
             updateById: ({ projectId, token, name, url }: { projectId: string, token: string, name: string, url: string }) => Promise<void>,
@@ -70,6 +74,9 @@ const context: ApiContextState = {
     api: {
         file: {
             createFile: fileCreate
+        },
+        aiContent: {
+            create: aiContentCreate
         },
         content: {
             create: contentCreate,

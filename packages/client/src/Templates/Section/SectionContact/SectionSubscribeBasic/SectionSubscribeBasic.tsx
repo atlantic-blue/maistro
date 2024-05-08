@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TemplateStruct, ContentCategory } from '../../../templateTypes';
+import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../../templateTypes';
 
 import * as styles from './SectionSubscribeBasic.scss';
 import SectionSubscribeBasicEditor from './SectionSubscribeBasicEditor';
@@ -61,15 +61,14 @@ const SectionSubscribeBasic: React.FC<SectionSubscribeBasicProps> = (props) => (
 );
 
 export const SectionSubscribeBasicItem: TemplateStruct = {
-    name: "SectionSubscribeBasic",
+    name: TemplateComponentType.SUBSCRIBE_BASIC,
     description: "A basic contact form for user inquiries.",
     Component: SectionSubscribeBasic,
-    ComponentEditor: SectionSubscribeBasicEditor,
     categories: [ContentCategory.SUBSCRIBE],
     props: {
-        title: "Subscribe Today!",
         url: "",
         emailListId: "00000000-0000-0000-0000-00000000",
+        title: "Subscribe Today!",
         redirect: "/success",
         cta: "Subscribe",
     },

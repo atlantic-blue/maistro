@@ -158,7 +158,7 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
                                         )
                                     }
 
-                                    {(props.itemIndex > 1) ?
+                                    {props.itemIndex ?
                                         (
                                             <IconButton className={styles.itemHelperButton} onClick={() => props.onMoveContentUp(props.itemId)}>
                                                 <IconUp className={styles.itemHelperIcon} />
