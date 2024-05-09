@@ -13,21 +13,28 @@ import { LambdaMiddlewares } from '../../middlewares';
 import { validatorJoi } from '../../middlewares/validator-joi';
 import createError from '../../middlewares/error-handler';
 import authJwt from "../../middlewares/auth-jwt";
+import { isBase64 } from "../../utils/base64";
 
-interface AiContentCreateInput {
+interface AiImagesCreateInput {
     data: string
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const client = new BedrockRuntimeClient({ region: 'us-east-1' });
+const s3 = new AWS.S3();
 
-const MAX_INPUT_TOKENS = 100000; // 100 thousand per month
-const MAX_OUTPUT_TOKENS = 100000; // 100 thousand per month
+const MAX_IMAGES = 40; // 40 images per month
 
-const AiContentCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
+// TODO count images even if lambda fails
+const AiImagesCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableName = process.env.TABLE_NAME
     if (!tableName) {
         throw createError(500, "process TABLE_NAME not specified")
+    }
+
+    const bucketName = process.env.BUCKET_NAME
+    if (!bucketName) {
+        throw createError(500, "process BUCKET_NAME not specified")
     }
 
     const { payload } = (event as any).auth.decodedJwt as jwt.Jwt
@@ -41,11 +48,13 @@ const AiContentCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEve
         throw createError(500, "projectId not specified")
     }
 
-    const { data } = event.body as unknown as AiContentCreateInput;
+    const { data } = event.body as unknown as AiImagesCreateInput;
+    if (!projectId) {
+        throw createError(500, "data prompt not specified")
+    }
 
-    // Get Current token counts
-    console.log("Get Current token counts")
-
+    // Get Current image counts
+    console.log("Get Current image counts")
     const date = new Date();
     date.setDate(1); // Set to the first of the month
     date.setHours(0, 0, 0, 0); // Start of the day
@@ -63,53 +72,50 @@ const AiContentCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEve
     };
 
     const aiContent = await dynamoDb.query(queryParams).promise();
-    let totalInputTokens = 0
-    let totalOutputTokens = 0
+    const totalImages = (aiContent?.Items?.length || 0) + 1
 
-    // TODO monitor this query to see if it performs well. how many times does a user create content per month?
-    aiContent?.Items?.forEach(item => {
-        totalInputTokens += item.inputTokens;
-        totalOutputTokens += item.outputTokens;
-    });
-
-    if (
-        (totalInputTokens + data.length) > MAX_INPUT_TOKENS ||
-        totalOutputTokens > MAX_OUTPUT_TOKENS
-    ) return {
+    if (totalImages > MAX_IMAGES) return {
         statusCode: 403,
-        body: JSON.stringify({ error: "Token limit exceeded for the month" })
+        body: JSON.stringify({ error: "Images limit exceeded for the month" })
     }
 
 
     // Call Bedrock
     console.log("Call Bedrock")
-
-    const modelId = "amazon.titan-text-express-v1"
-    const temperature = 0.9
-    const maxTokenCount = 5000
+    const modelId = "amazon.titan-image-generator-v1"
 
     const command = new InvokeModelCommand({
         contentType: "application/json",
         accept: "application/json",
         modelId,
         body: JSON.stringify({
-            inputText: data,
-            textGenerationConfig: {
-                maxTokenCount,
-                stopSequences: [],
-                temperature,
-                topP: 0.1
+            textToImageParams: {
+                text: data
+            },
+            taskType: "TEXT_IMAGE",
+            imageGenerationConfig: {
+                cfgScale: 8,
+                seed: 0,
+                quality: "premium",
+                width: 1024,
+                height: 1024,
+                numberOfImages: 1
             }
         })
     })
 
+    interface ClientResponse {
+        images: string[]
+        error: unknown
+    }
+
     const response = await client.send(command);
-    const jsonString = Buffer.from(response.body).toString('utf8');
+    const textDecoder = new TextDecoder('utf-8');
+    const jsonString = textDecoder.decode(response.body.buffer);
     console.log({ jsonString })
-    const parsedData = JSON.parse(jsonString);
-    console.log({ parsedData })
-    const outputData = parsedData?.results[0]?.outputText;
-    console.log({ outputData })
+    const parsedData: ClientResponse = JSON.parse(jsonString);
+    const image = parsedData?.images[0];
+    console.log({ image })
 
     // Update table content
     console.log("Update table content")
@@ -122,25 +128,36 @@ const AiContentCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEve
             projectId,
             createdAt: now,
             inputContent: data,
-            outputContent: outputData,
-            inputTokens: data.length,
-            outputTokens: outputData.length,
         }
     };
 
     await dynamoDb.put(putParams).promise();
 
+    let content: string | Buffer = image
+    const [useBase64, buffer] = isBase64(image)
+    if (useBase64 && buffer) {
+        content = buffer
+    }
+
+    // TODO we are assuming that all ContentType is "image/png"
+    const key = `${userId}/${projectId}/assets/ai-images/${id}.png`;
+    await s3.putObject({
+        Bucket: bucketName,
+        Key: key,
+        Body: content,
+        ContentType: "image/png"
+    }).promise();
+
     return {
         statusCode: 200,
         body: JSON.stringify({
-            output: outputData,
-            inputTokens: totalInputTokens + data.length,
-            outputTokens: totalOutputTokens + outputData.length
+            src: key,
+            totalImages,
         })
     };
 }
 
-const validationSchema = Joi.object<AiContentCreateInput>({
+const validationSchema = Joi.object<AiImagesCreateInput>({
     data: Joi.string().required(),
 })
 
@@ -148,6 +165,6 @@ const handler = new LambdaMiddlewares()
     .before(authJwt)
     .before(jsonBodyParser)
     .before(validatorJoi(validationSchema))
-    .handler(AiContentCreate)
+    .handler(AiImagesCreate)
 
 export { handler }

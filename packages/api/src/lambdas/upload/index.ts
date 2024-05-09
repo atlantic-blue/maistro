@@ -1,6 +1,6 @@
 import { S3 } from 'aws-sdk';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
-import { isBase64 } from './utils';
+import { isBase64 } from '../../utils/base64';
 
 const s3 = new S3();
 
@@ -47,7 +47,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             };
         }
 
-        const key = `${userId}/${projectId}/${fileName}`;
+        const key = `${userId}/${projectId}/assets/${fileName}`;
 
         let content: string | Buffer = fileContent
         const [useBase64, buffer] = isBase64(fileContent)

@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { appRoutes } from '../../../router';
 import { PaymentsContext } from '../../../../Payments/PaymentsProvider';
 import createSectionHeroPrompt from '../../../../Ai/prompts/SectionHero';
+import createSectionHeroImagesPrompt from '../../../../Ai/prompts/SectionHeroImage';
 
 enum CreateProjectFlowId {
     NAME = "name",
@@ -274,18 +275,33 @@ const ProjectFlow: React.FC = () => {
             const emotion = values[CreateProjectFlowId.EMOTION]
             const cta = values[CreateProjectFlowId.CTA]
 
-            const response = await createSectionHeroPrompt({
-                projectName,
-                benefits,
-                cta,
-                description,
-                emotion,
-                targetAudience
-            },
-                user.getTokenId(),
-                projectsCreateResponse.id,
-                api.aiContent.create,
-            )
+            setProgressMessage("Generating Ai Copywriting & Images...")
+            const promises = () => [
+                createSectionHeroImagesPrompt({
+                    projectName,
+                    description,
+                    emotion,
+                    targetAudience
+                },
+                    user.getTokenId(),
+                    projectsCreateResponse.id,
+                    api.ai.aiImages.create,
+                ),
+                createSectionHeroPrompt({
+                    projectName,
+                    benefits,
+                    cta,
+                    description,
+                    emotion,
+                    targetAudience
+                },
+                    user.getTokenId(),
+                    projectsCreateResponse.id,
+                    api.ai.aiContents.create,
+                )
+            ]
+
+            const [imageResponse, sectionResponse] = await Promise.all(promises())
 
             setProgressMessage("Creating content...")
             const template = templates[TemplateComponentType.HERO_IMAGE]
@@ -297,9 +313,15 @@ const ProjectFlow: React.FC = () => {
                 description: template.description,
                 data: {
                     ...template.props,
-                    title: response.title,
-                    content: response.content,
-                    cta: response.cta,
+                    ...(imageResponse.src && {
+                        img: {
+                            src: `${env.hosting.baseUrl}/${imageResponse.src}`,
+                            alt: cta,
+                        }
+                    }),
+                    title: sectionResponse.title,
+                    content: sectionResponse.content,
+                    cta: sectionResponse.cta,
                     ctaLink: "/",
                 }
             })

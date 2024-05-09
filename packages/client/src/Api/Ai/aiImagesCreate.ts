@@ -1,28 +1,27 @@
 import env from "../../env"
 import { requestController } from "../fetch"
 
-export interface AiContentCreateInput {
+export interface AiImagesCreateInput {
     token: string
     projectId: string
 
     data: string
 }
 
-export interface AiContentCreateOutput {
-    output: string
-    inputTokens: number
-    outputTokens: number
+export interface AiImagesCreateOutput {
+    src: string
+    totalImages: number
 }
 
-const aiContentCreate = async (
+const aiImagesCreate = async (
     {
         token,
         projectId,
         data,
-    }: AiContentCreateInput,
-    apiUrl = env.api.aiContent.create,
+    }: AiImagesCreateInput,
+    apiUrl = env.api.ai.aiImages.create,
     request = requestController.fetch,
-): Promise<AiContentCreateOutput> => {
+): Promise<AiImagesCreateOutput> => {
     return request(apiUrl(projectId), {
         method: "POST",
         headers: {
@@ -36,5 +35,5 @@ const aiContentCreate = async (
 }
 
 export {
-    aiContentCreate
+    aiImagesCreate
 }

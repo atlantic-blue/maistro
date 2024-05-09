@@ -1,4 +1,4 @@
-import { AiContentCreateInput, AiContentCreateOutput } from "../../Api/AiContent/contentCreate"
+import { AiContentsCreateInput, AiContentsCreateOutput } from "../../Api/Ai/aiContentsCreate"
 
 interface CreateSectionHeroPromptInput {
     projectName: string
@@ -19,7 +19,7 @@ const createSectionHeroPrompt = async (
     input: CreateSectionHeroPromptInput,
     token: string,
     projectId: string,
-    request: (input: AiContentCreateInput) => Promise<AiContentCreateOutput>
+    request: (input: AiContentsCreateInput) => Promise<AiContentsCreateOutput>
 ): Promise<CreateSectionHeroPromptOutput> => {
     try {
         const prompt = `
@@ -43,7 +43,7 @@ const createSectionHeroPrompt = async (
             data: prompt
         })
 
-        return JSON.parse(promptAiResponse.output.replaceAll("```", "").replaceAll("\n", "")) as CreateSectionHeroPromptOutput
+        return JSON.parse(promptAiResponse.output.trim().replace(/^```|```$/g, '').trim()) as CreateSectionHeroPromptOutput
     } catch (error) {
         // TODO app level error
         console.error(error)

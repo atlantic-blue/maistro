@@ -23,12 +23,18 @@ import { ContentUpdateByIdInput, contentUpdateById } from "./Content/contentUpda
 import { CreateFileInput, CreateFileOutput, fileCreate } from "./File/fileCreate";
 
 import ProgressSplash from "../Components/ProgressSplash/ProgressSplash";
-import { AiContentCreateInput, AiContentCreateOutput, aiContentCreate } from "./AiContent/contentCreate";
+import { AiContentsCreateInput, AiContentsCreateOutput, aiContentsCreate } from "./Ai/aiContentsCreate";
+import { AiImagesCreateInput, AiImagesCreateOutput, aiImagesCreate } from "./Ai/aiImagesCreate";
 
 interface ApiContextState {
     api: {
-        aiContent: {
-            create: (input: AiContentCreateInput) => Promise<AiContentCreateOutput>,
+        ai: {
+            aiContents: {
+                create: (input: AiContentsCreateInput) => Promise<AiContentsCreateOutput>,
+            }
+            aiImages: {
+                create: (input: AiImagesCreateInput) => Promise<AiImagesCreateOutput>,
+            }
         }
         content: {
             create: (input: ContentCreateInput) => Promise<ContentCreateOutput>,
@@ -75,8 +81,13 @@ const context: ApiContextState = {
         file: {
             createFile: fileCreate
         },
-        aiContent: {
-            create: aiContentCreate
+        ai: {
+            aiContents: {
+                create: aiContentsCreate
+            },
+            aiImages: {
+                create: aiImagesCreate
+            },
         },
         content: {
             create: contentCreate,

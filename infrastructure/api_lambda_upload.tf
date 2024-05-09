@@ -105,7 +105,7 @@ resource "aws_lambda_function" "api_lambda_upload" {
 
   environment {
     variables = {
-      BUCKET_NAME = "${local.hosting_bucket_name}"
+      BUCKET_NAME = "${aws_s3_bucket.hosting.bucket}"
     }
   }
 

@@ -1,0 +1,204 @@
+# IAM ROLE
+data "aws_iam_policy_document" "api_lambda_ai_images_create" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+
+    actions = [
+      "sts:AssumeRole"
+    ]
+  }
+}
+
+resource "aws_iam_role" "api_lambda_ai_images_create" {
+  name               = "${local.api_bucket_name}-ai-images-create"
+  assume_role_policy = data.aws_iam_policy_document.api_lambda_ai_images_create.json
+
+  tags = {
+    application = "${lookup(local.tags, "application")}"
+    environment = "${lookup(local.tags, "environment")}"
+    gitRepo     = "${lookup(local.tags, "git_repo")}"
+    managedBy   = "${lookup(local.tags, "managed_by")}"
+  }
+}
+
+# IAM POLICY
+resource "aws_iam_policy" "api_lambda_ai_images_create_logs" {
+  name = "${local.api_bucket_name}-ai-images-create-logs"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        Action : [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+
+        ],
+        Effect : "Allow",
+        Resource : ["*"]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "api_lambda_ai_images_create_logs" {
+  role       = aws_iam_role.api_lambda_ai_images_create.id
+  policy_arn = aws_iam_policy.api_lambda_ai_images_create_logs.arn
+}
+
+# Dynamo
+resource "aws_iam_policy" "api_lambda_ai_images_create_dynamo" {
+  name = "${local.api_bucket_name}-ai-images-create-dynamo"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        Action : [
+          "dynamodb:Query",
+          "dynamodb:PutItem"
+        ],
+        Effect : "Allow",
+        Resource : [
+          "${aws_dynamodb_table.ai_images.arn}",
+          "${aws_dynamodb_table.ai_images.arn}/index/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "api_lambda_ai_images_create_dynamo" {
+  role       = aws_iam_role.api_lambda_ai_images_create.id
+  policy_arn = aws_iam_policy.api_lambda_ai_images_create_dynamo.arn
+}
+
+# Bedrock
+resource "aws_iam_policy" "api_lambda_ai_images_create_bedrock" {
+  name = "${local.api_bucket_name}-ai-images-create-bedrock"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        Action : [
+          "bedrock:InvokeModel",
+        ],
+        Effect : "Allow",
+        Resource : [
+          "*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "api_lambda_ai_images_create_bedrock" {
+  role       = aws_iam_role.api_lambda_ai_images_create.id
+  policy_arn = aws_iam_policy.api_lambda_ai_images_create_bedrock.arn
+}
+
+# S3
+resource "aws_iam_policy" "api_lambda_ai_images_create_s3" {
+  name = "${local.api_bucket_name}-ai-images-create-s3"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        Action : [
+          "s3:Put*",
+        ],
+        Effect : "Allow",
+        Resource : ["${aws_s3_bucket.hosting.arn}/*"]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "api_lambda_ai_images_create_s3" {
+  role       = aws_iam_role.api_lambda_ai_images_create.id
+  policy_arn = aws_iam_policy.api_lambda_ai_images_create_s3.arn
+}
+
+## LAMBDA
+data "archive_file" "api_lambda_ai_images_create" {
+  type = "zip"
+
+  source_dir  = "${path.module}/../packages/api/dist/ai-images-create"
+  output_path = "${path.module}/ai-images-create.zip"
+}
+
+
+resource "aws_s3_object" "api_lambda_ai_images_create" {
+  bucket = aws_s3_bucket.api.id
+
+  key    = "ai-images-create.zip"
+  source = data.archive_file.api_lambda_ai_images_create.output_path
+
+  etag = filemd5(data.archive_file.api_lambda_ai_images_create.output_path)
+}
+
+resource "aws_lambda_function" "api_lambda_ai_images_create" {
+  function_name = "${local.api_bucket_name}-ai-images-create"
+
+  handler = "index.handler"
+  runtime = "nodejs20.x"
+
+  s3_bucket = aws_s3_bucket.api.id
+  s3_key    = aws_s3_object.api_lambda_ai_images_create.key
+
+  role             = aws_iam_role.api_lambda_ai_images_create.arn
+  source_code_hash = data.archive_file.api_lambda_ai_images_create.output_base64sha256
+
+  timeout = 60 * 3 // 3 minutes
+
+  environment {
+    variables = {
+      TABLE_NAME  = "${aws_dynamodb_table.ai_images.name}"
+      BUCKET_NAME = "${aws_s3_bucket.hosting.bucket}"
+    }
+  }
+
+  tags = {
+    application = "${lookup(local.tags, "application")}"
+    environment = "${lookup(local.tags, "environment")}"
+    gitRepo     = "${lookup(local.tags, "git_repo")}"
+    managedBy   = "${lookup(local.tags, "managed_by")}"
+  }
+}
+
+## LOGS
+resource "aws_cloudwatch_log_group" "api_lambda_ai_images_create" {
+  name              = "/aws/lambda/${aws_lambda_function.api_lambda_ai_images_create.function_name}"
+  retention_in_days = 1
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+## API GATEWAY
+resource "aws_apigatewayv2_integration" "api_lambda_ai_images_create" {
+  api_id = aws_apigatewayv2_api.api.id
+
+  integration_type = "AWS_PROXY"
+  integration_uri  = aws_lambda_function.api_lambda_ai_images_create.invoke_arn
+}
+
+resource "aws_apigatewayv2_route" "api_lambda_ai_images_create" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "POST /projects/{project-id}/ai-images"
+
+  target = "integrations/${aws_apigatewayv2_integration.api_lambda_ai_images_create.id}"
+}
+
+resource "aws_lambda_permission" "api_lambda_ai_images_create" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.api_lambda_ai_images_create.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
+}
