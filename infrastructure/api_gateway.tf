@@ -31,7 +31,14 @@ resource "aws_apigatewayv2_api" "api" {
 resource "aws_cloudwatch_log_group" "api" {
   name = "/aws/api-gw/${aws_apigatewayv2_api.api.name}"
 
-  retention_in_days = 7
+  retention_in_days = 1
+
+  tags = {
+    application = "${lookup(local.tags, "application")}"
+    environment = "${lookup(local.tags, "environment")}"
+    gitRepo     = "${lookup(local.tags, "git_repo")}"
+    managedBy   = "${lookup(local.tags, "managed_by")}"
+  }
 }
 
 resource "aws_apigatewayv2_stage" "prod" {

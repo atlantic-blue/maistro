@@ -19,6 +19,7 @@ locals {
   hosting_cloudfront_origin_id = "s3-${local.hosting_bucket_name}${local.enviroment_delimiter}"
   hosting_domain_name          = "hosting.${var.domain_name}"
 
+  ai_bucket_name  = "${local.prefix}-${var.project_name}-ai"
   api_bucket_name = "${local.prefix}-${var.project_name}-api"
   api_domain_name = "api.${var.domain_name}"
 
