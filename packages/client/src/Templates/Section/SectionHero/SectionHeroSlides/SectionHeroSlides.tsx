@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { faker } from '@faker-js/faker';
 import { Button, Flex, Heading, Section } from '@radix-ui/themes';
 
-import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
 
 import TemplateWysiwyg from '../../../Components/TemplateWysiwyg/TemplateWysiwyg';
 import { SectionHeroProps } from '../SectionHeroTypes';
@@ -75,7 +75,7 @@ const SectionHeroSlides: React.FC<SectionHeroSlidesProps> = (props) => {
 export const SectionHeroSlidesItem: TemplateStruct = {
     name: TemplateComponentType.HERO_SLIDES,
     Component: SectionHeroSlides,
-    categories: [ContentCategory.HERO, ContentCategory.TEXT],
+    categories: [TemplateCategory.HERO],
     description: "Hero Slides",
     classNames: [
         ...Object.values(styles)

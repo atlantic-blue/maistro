@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../templateTypes';
+import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../templateTypes';
 
 import Logo from "../../Components/Logo/Logo"
 import Nav from "../../Components/Nav/Nav"
@@ -50,7 +50,7 @@ const HeaderBurger: React.FC<HeaderProps> = ({
 export const HeaderBurgerItem: TemplateStruct = {
     name: TemplateComponentType.HEADER_BURGER,
     Component: HeaderBurger,
-    categories: [ContentCategory.HEADER],
+    categories: [TemplateCategory.HEADER],
     description: "Header Burger",
     classNames: [
         ...Object.values(styles),

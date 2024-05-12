@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../templateTypes';
+import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../templateTypes';
 
 import { HeaderProps } from '../HeaderTypes';
 
@@ -54,7 +54,7 @@ export const HeaderStickyItem: TemplateStruct = {
     name: TemplateComponentType.HEADER_STICKY,
     Component: HeaderSticky,
     description: "Sticky navigation bar",
-    categories: [ContentCategory.HEADER],
+    categories: [TemplateCategory.HEADER],
     classNames: [
         ...Object.values(styles),
         ...Object.values(LogoStyles),

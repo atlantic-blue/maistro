@@ -2,7 +2,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { Box, Button, Flex, Heading, Section } from '@radix-ui/themes';
 
-import { TemplateStruct, ContentCategory, TemplateComponentType } from "../../../templateTypes";
+import { TemplateStruct, TemplateCategory, TemplateComponentType } from "../../../templateTypes";
 
 import { SectionHeroProps } from '../SectionHeroTypes';
 
@@ -62,7 +62,7 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
 export const SectionHeroBasicItem: TemplateStruct = {
     name: TemplateComponentType.HERO_BASIC,
     description: "Hero Basic",
-    categories: [ContentCategory.HERO, ContentCategory.TEXT],
+    categories: [TemplateCategory.HERO],
     Component: SectionHeroBasic,
     classNames: [
         ...Object.values(styles),

@@ -97,17 +97,6 @@ const projectFlowQuestions: FormQuestion[] = [
             [CreateProjectFlowId.CTA]: '',
         },
     },
-    {
-        id: CreateProjectFlowId.CTA,
-        title: "What action do you want visitors to take upon seeing the hero section?",
-        validationSchema: yup.object({
-            [CreateProjectFlowId.CTA]: yup
-                .string()
-        }),
-        initialValues: {
-            [CreateProjectFlowId.CTA]: '',
-        },
-    },
 ]
 
 const ProjectFlow: React.FC = () => {

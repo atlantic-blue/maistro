@@ -3,7 +3,7 @@ import React from "react"
 import ComponentsGallery from "../../Templates/Components"
 
 import * as styles from "./Search.scss"
-import { ContentCategory, TemplateStruct } from "../../Templates/templateTypes"
+import { TemplateCategory, TemplateStruct } from "../../Templates/templateTypes"
 
 interface SearchItemProps {
     templates: TemplateStruct[]
@@ -12,13 +12,13 @@ interface SearchItemProps {
 
 const SearchItem: React.FC<SearchItemProps> = ({ templates, onClick }) => {
     const [searchInput, setSearchInput] = React.useState("")
-    const [categories, setCategories] = React.useState<ContentCategory[]>([])
+    const [categories, setCategories] = React.useState<TemplateCategory[]>([])
 
     const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         setSearchInput(e.target.value)
     }
 
-    const onOptionChange = (event: React.ChangeEvent<HTMLInputElement>, category: ContentCategory) => {
+    const onOptionChange = (event: React.ChangeEvent<HTMLInputElement>, category: TemplateCategory) => {
         if (event.target.checked) {
             setCategories([
                 ...categories,
@@ -51,9 +51,9 @@ const SearchItem: React.FC<SearchItemProps> = ({ templates, onClick }) => {
                     <input className={styles.searchFindInput} type="text" onChange={onChange} placeholder="e.g. About" />
                 </div>
                 <div className={styles.searchOptions}>
-                    {Object.values(ContentCategory).map(c => c.toLocaleLowerCase()).map(c => (
+                    {Object.values(TemplateCategory).map(c => c.toLocaleLowerCase()).map(c => (
                         <span key={`search-checkbox-${c}`} className={styles.searchCheckbox}>
-                            <input id={`search-checkbox-${c}`} type="checkbox" checked={categories.map(ct => ct.toLocaleLowerCase()).includes(c)} onChange={(e) => onOptionChange(e, c.toUpperCase() as ContentCategory)} />
+                            <input id={`search-checkbox-${c}`} type="checkbox" checked={categories.map(ct => ct.toLocaleLowerCase()).includes(c)} onChange={(e) => onOptionChange(e, c.toUpperCase() as TemplateCategory)} />
                             <label className={styles.searchOptionsLabel} htmlFor={`search-checkbox-${c}`}>{c}</label>
                         </span>
                     ))}

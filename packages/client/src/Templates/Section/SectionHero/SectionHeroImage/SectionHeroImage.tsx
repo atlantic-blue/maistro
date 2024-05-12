@@ -2,7 +2,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { Button, Flex, Heading, Section, Text } from '@radix-ui/themes';
 
-import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
 
 import { SectionHeroProps } from '../SectionHeroTypes';
 
@@ -50,7 +50,7 @@ export const SectionHeroImageItem: TemplateStruct = {
     classNames: [
         ...Object.values(styles)
     ],
-    categories: [ContentCategory.HERO, ContentCategory.TEXT],
+    categories: [TemplateCategory.HERO],
     description: "Hero Image",
     props: {
         title: "Captivating Experiences Await",
@@ -61,7 +61,7 @@ export const SectionHeroImageItem: TemplateStruct = {
         },
         cta: "Discover More",
         ctaLink: "#home"
-    }
+    },
 }
 
 export default SectionHeroImage;

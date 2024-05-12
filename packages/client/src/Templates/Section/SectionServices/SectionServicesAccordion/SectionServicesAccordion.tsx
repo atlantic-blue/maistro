@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import * as styles from './SectionServicesAccordion.scss';
-import { TemplateStruct, ContentCategory } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory } from '../../../templateTypes';
 
 const SectionServicesAccordion = (props) => {
     const [activeService, setActiveService] = useState<number | null>(null);
@@ -34,7 +34,7 @@ const SectionServicesAccordion = (props) => {
 export const SectionServicesAccordionItem: TemplateStruct = {
     name: "SectionServicesAccordion",
     Component: SectionServicesAccordion,
-    categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
+    categories: [TemplateCategory.SERVICES],
     description: "Features collapsible sections for each service, making it easy for users to browse through offerings and expand them for more details. This design is great for saving space while providing ample information in an organized manner.",
     props: {},
     classNames: [

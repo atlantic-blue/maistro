@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TemplateStruct, ContentCategory } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory } from '../../../templateTypes';
 
 import * as styles from './SectionContactDetailed.scss';
 
@@ -40,7 +40,7 @@ export const SectionContactDetailedItem: TemplateStruct = {
     name: "section-contact-detailed",
     description: "A detailed contact form for comprehensive inquiries.",
     Component: SectionContactDetailed,
-    categories: [ContentCategory.CONTACT],
+    categories: [TemplateCategory.CONTACT],
     classNames: [
         ...Object.values(styles)
     ],

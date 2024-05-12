@@ -2,7 +2,7 @@ import React from 'react';
 
 
 import * as styles from './FooterWithNavigation.scss';
-import { ContentCategory, TemplateStruct } from '../../templateTypes';
+import { TemplateCategory, TemplateStruct } from '../../templateTypes';
 
 const FooterWithNavigation = () => (
     <footer className={styles.footerWithNav}>
@@ -22,7 +22,7 @@ export const FooterWithNavigationItem: TemplateStruct = {
     name: "footer-with-navigation",
     description: "A footer featuring a simple navigation menu and copyright text.",
     Component: FooterWithNavigation,
-    categories: [ContentCategory.FOOTER],
+    categories: [TemplateCategory.FOOTER],
     classNames: [
         ...Object.values(styles)
     ],

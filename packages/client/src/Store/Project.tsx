@@ -19,7 +19,7 @@ import Page from "./Page"
 import { ProjectAsset } from "./ProjectAsset";
 import { ProjectEmailList } from "./EmailList";
 import ProjectContent from "./ProjectContent";
-import ProjectThread from "./ProjectAssistantMessages";
+import ProjectThread from "./ProjectThread";
 
 interface IProject {
     setId(id: string): void

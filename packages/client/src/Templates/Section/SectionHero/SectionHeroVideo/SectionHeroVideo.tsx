@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
 import Button from '../../../Components/Button/Button';
 import * as ButtonStyles from '../../../Components/Button/Button.scss';
 
@@ -70,7 +70,7 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
 export const SectionHeroVideoItem: TemplateStruct = {
     name: TemplateComponentType.HERO_VIDEO,
     Component: SectionHeroVideo,
-    categories: [ContentCategory.HERO, ContentCategory.TEXT],
+    categories: [TemplateCategory.HERO],
     description: "Hero Video",
     classNames: [
         ...Object.values(styles),

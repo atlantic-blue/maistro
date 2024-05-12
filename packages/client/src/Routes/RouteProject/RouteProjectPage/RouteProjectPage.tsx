@@ -19,8 +19,9 @@ import DragAndDrop from "../../../Components/DragDrop/DragDrop";
 import { appRoutes } from "../../router";
 import IconClose from "../../../Components/Icons/Close/Close";
 import Loading from "../../../Components/Loading/Loading";
-import { TemplateStruct } from "../../../Templates/templateTypes";
+import { TemplateComponentType, TemplateStruct } from "../../../Templates/templateTypes";
 import env from "../../../env";
+import SectionFlow from "./Components/SectionFlow/SectionFlow";
 
 const RouteProjectPage: React.FC = () => {
     const { api } = React.useContext(ApiContext)
@@ -30,6 +31,7 @@ const RouteProjectPage: React.FC = () => {
 
     const project = projects.getProjectById(projectId || "")
     const [isLoading, setIsLoading] = React.useState(false)
+    const [progressUpdate, setProgressUpdate] = React.useState("")
 
     // Rerender every time a new page or content is set
     useObservable(project?.event$?.pipe(
@@ -76,15 +78,69 @@ const RouteProjectPage: React.FC = () => {
 
     const onTemplateClick = async (template: TemplateStruct) => {
         setIsLoading(true)
-
+        setProgressUpdate("Creating Template...")
         try {
             let data = template.props
-            if (template.name.includes("SectionSubscribe")) {
-                const emailListId = Object.values(project.getEmailLists())[0]?.getId()
+
+            if (template.name.includes(TemplateComponentType.SUBSCRIBE_BASIC)) {
+                let emailListId = Object.values(project.getEmailLists())[0]?.getId()
+                if (!emailListId) {
+                    setProgressUpdate("Creating Mailing list...")
+                    await api.email.lists.create({
+                        token: user.getTokenId(),
+                        title: project.getName(),
+                        description: page.getDescription(),
+                        projectId: project.getId(),
+                    }).then(emailListResponse => {
+                        setProgressUpdate("Creating mailing list...")
+                        emailListId = emailListResponse.id
+                        project.event$.next({
+                            type: ProjectMessageType.SET_EMAIL_LIST,
+                            data: {
+                                createdAt: emailListResponse.createdAt,
+                                title: emailListResponse.title,
+                                status: emailListResponse.status,
+                                projectId: emailListResponse.projectId,
+                                id: emailListResponse.id,
+                                description: emailListResponse.description
+                            }
+                        })
+                    })
+                }
+
                 data = {
                     ...template.props,
                     url: env.api.email.entries.create,
                     emailListId,
+                }
+
+                let successPage = project.getPageByPathname("success")
+                if (!successPage) {
+                    setProgressUpdate("Creating Success page...")
+                    await api.pages.create({
+                        token: user.getTokenId(),
+                        path: 'success',
+                        title: project.getName(),
+                        description: page.getDescription(),
+                        projectId: project.getId(),
+                        contentIds: [],
+                    }).then(pageResponse => {
+                        setProgressUpdate("Success page created...")
+                        project.event$.next({
+                            type: ProjectMessageType.SET_PAGE,
+                            data: {
+                                id: pageResponse.id,
+                                projectId: pageResponse.projectId,
+                                path: pageResponse.path,
+                                title: pageResponse.title,
+                                description: pageResponse.description,
+                                contentIds: [],
+                                // TODO
+                                colourScheme: {},
+                                fontScheme: {}
+                            },
+                        })
+                    })
                 }
             }
 
@@ -115,7 +171,7 @@ const RouteProjectPage: React.FC = () => {
                 data: [response.id]
             })
 
-            // TODO include in save button
+            setProgressUpdate("Updating page...")
             await api.pages.updateById({
                 projectId,
                 pageId: page.getId(),
@@ -149,14 +205,14 @@ const RouteProjectPage: React.FC = () => {
                                 <Flex direction="column" justify="center" align="center">
                                     <IconNew className={styles.sectionImage} />
                                     <Text as="div" className={styles.sectionContent}>
-                                        Add content
+                                        Add a section
                                     </Text>
                                 </Flex>
                             </Button>
                         </Card>
                     </Dialog.Trigger>
 
-                    <Dialog.Content maxWidth="800px">
+                    <Dialog.Content maxWidth="880px">
                         <Flex>
                             <Dialog.Close>
                                 <IconButton size="1" variant="soft" color="gray" style={{ marginLeft: "auto" }}>
@@ -164,18 +220,18 @@ const RouteProjectPage: React.FC = () => {
                                 </IconButton>
                             </Dialog.Close>
                         </Flex>
-                        <Dialog.Title>Add Content</Dialog.Title>
+                        <Dialog.Title align="center">Add a section</Dialog.Title>
 
-                        <Flex direction="column" gap="3" align="center" justify="center">
-                            {isLoading ? (
+                        {isLoading ? (
+                            <Flex direction="column" align="center" justify="center" gap="2">
                                 <Spinner />
-                            ) : (
-                                <SearchItem
-                                    templates={Object.values(templates)}
-                                    onClick={onTemplateClick}
-                                />
-                            )}
-                        </Flex>
+                                <Text>
+                                    {progressUpdate}
+                                </Text>
+                            </Flex>
+                        ) : (
+                            <SectionFlow onTemplateClick={onTemplateClick} />
+                        )}
                     </Dialog.Content>
                 </Dialog.Root>
             </div>

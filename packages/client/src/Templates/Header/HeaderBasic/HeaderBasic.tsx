@@ -8,7 +8,7 @@ import * as styles from "./HeaderBasic.scss"
 
 import { HeaderProps } from "../HeaderTypes"
 
-import { ContentCategory, TemplateComponentType, TemplateStruct } from "../../templateTypes"
+import { TemplateCategory, TemplateComponentType, TemplateStruct } from "../../templateTypes"
 import Navigation from "../../Components/Navigation/Navigation"
 import { Box, Flex } from "@radix-ui/themes"
 import classNames from "classnames"
@@ -39,7 +39,7 @@ const HeaderBasic: React.FC<HeaderProps> = ({
 export const HeaderBasicItem: TemplateStruct = {
     name: TemplateComponentType.HEADER_BASIC,
     description: "Simple header",
-    categories: [ContentCategory.HEADER],
+    categories: [TemplateCategory.HEADER],
     classNames: [
         ...Object.values(styles),
         ...Object.values(LogoStyles),

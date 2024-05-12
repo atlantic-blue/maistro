@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import * as styles from './FooterInteractive.scss';
-import { ContentCategory, TemplateStruct } from '../../templateTypes';
+import { TemplateCategory, TemplateStruct } from '../../templateTypes';
 
 const FooterInteractive = () => {
     const [feedback, setFeedback] = useState('');
@@ -31,7 +31,7 @@ export const FooterInteractiveItem: TemplateStruct = {
     name: "footer-interactive",
     description: "An interactive footer that engages users by collecting their feedback directly.",
     Component: FooterInteractive,
-    categories: [ContentCategory.FOOTER],
+    categories: [TemplateCategory.FOOTER],
     classNames: [
         ...Object.values(styles)
     ],

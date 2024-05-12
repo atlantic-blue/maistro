@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { TemplateStruct, ContentCategory } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory } from '../../../templateTypes';
 
 import * as styles from "./SectionAboutUsInteractive.scss"
 
@@ -26,7 +26,7 @@ const SectionAboutUsInteractive = (props) => {
 export const SectionAboutUsInteractiveItem: TemplateStruct = {
     name: "SectionAboutUsInteractive",
     Component: SectionAboutUsInteractive,
-    categories: [ContentCategory.ABOUT, ContentCategory.TEXT],
+    categories: [TemplateCategory.ABOUT],
     description: "",
     classNames: [
         ...Object.values(styles)

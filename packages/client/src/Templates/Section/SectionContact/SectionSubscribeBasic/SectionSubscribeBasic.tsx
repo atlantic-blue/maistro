@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TemplateStruct, ContentCategory, TemplateComponentType } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
 
 import * as styles from './SectionSubscribeBasic.scss';
 import SectionSubscribeBasicEditor from './SectionSubscribeBasicEditor';
@@ -64,7 +64,7 @@ export const SectionSubscribeBasicItem: TemplateStruct = {
     name: TemplateComponentType.SUBSCRIBE_BASIC,
     description: "A basic contact form for user inquiries.",
     Component: SectionSubscribeBasic,
-    categories: [ContentCategory.SUBSCRIBE],
+    categories: [TemplateCategory.SUBSCRIBE],
     props: {
         url: "",
         emailListId: "00000000-0000-0000-0000-00000000",

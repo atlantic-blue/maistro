@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TemplateStruct, ContentCategory } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory } from '../../../templateTypes';
 
 import * as styles from './SectionServicesBasic.scss';
 
@@ -24,7 +24,7 @@ const SectionServicesBasic: React.FC<SectionServicesBasicProps> = (props) => {
 export const SectionServicesBasicItem: TemplateStruct = {
     name: "SectionServicesBasic",
     description: "A basic and clean presentation of services, perfect for businesses that prefer a minimalist and straightforward approach.",
-    categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
+    categories: [TemplateCategory.SERVICES],
     classNames: [
         ...Object.values(styles)
     ],

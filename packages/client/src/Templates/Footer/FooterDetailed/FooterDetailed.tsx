@@ -2,7 +2,7 @@ import React from 'react';
 
 
 import * as styles from './FooterDetailed.scss';
-import { ContentCategory, TemplateStruct } from '../../templateTypes';
+import { TemplateCategory, TemplateStruct } from '../../templateTypes';
 
 const FooterDetailed = () => (
     <footer className={styles.detailedFooter}>
@@ -28,7 +28,7 @@ export const FooterDetailedItem: TemplateStruct = {
     name: "footer-detailed",
     description: "A comprehensive footer that includes about info, quick links, and contact details.",
     Component: FooterDetailed,
-    categories: [ContentCategory.FOOTER],
+    categories: [TemplateCategory.FOOTER],
     classNames: [
         ...Object.values(styles)
     ],

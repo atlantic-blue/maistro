@@ -1,3 +1,4 @@
+import { TemplateCategory, TemplateComponentType } from "../../Templates/templateTypes"
 import env from "../../env"
 import { requestController } from "../fetch"
 
@@ -5,9 +6,9 @@ export interface ContentCreateInput {
     token: string
     projectId: string
 
-    template: string
     data: Object
-    categories: any[]
+    template: TemplateComponentType
+    categories: TemplateCategory[]
     description: string
 }
 
@@ -16,9 +17,9 @@ export interface ContentCreateOutput {
     projectId: string
     createdAt: string
 
-    template: string
     data: string
-    categories: string
+    template: TemplateComponentType
+    categories: TemplateCategory[]
     description: string
 }
 

@@ -1,7 +1,8 @@
-import { Flex, Section } from "@radix-ui/themes"
 import React from "react"
+import { Flex, Section } from "@radix-ui/themes"
+
 import TemplateWysiwyg from "../Components/TemplateWysiwyg/TemplateWysiwyg"
-import { ContentCategory, TemplateComponentType, TemplateStruct } from "../templateTypes"
+import { TemplateCategory, TemplateComponentType, TemplateStruct } from "../templateTypes"
 
 import * as styles from "./SectionBlank.scss"
 
@@ -31,7 +32,7 @@ export const SectionBlankItem: TemplateStruct = {
     classNames: [
         ...Object.values(styles)
     ],
-    categories: [ContentCategory.TEXT],
+    categories: [TemplateCategory.TEXT],
     description: "Blank",
     props: {
         content: "Join us on our journey.",

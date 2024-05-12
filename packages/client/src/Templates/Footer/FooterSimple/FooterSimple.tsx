@@ -1,7 +1,7 @@
 import React from 'react';
 
 import * as styles from './FooterSimple.scss';
-import { ContentCategory, TemplateStruct } from '../../templateTypes';
+import { TemplateCategory, TemplateStruct } from '../../templateTypes';
 
 interface FooterSimpleProps {
     name: string
@@ -17,7 +17,7 @@ export const FooterSimpleItem: TemplateStruct = {
     name: "FooterSimpleItem",
     description: "A minimalistic footer with copyright information.",
     Component: FooterSimple,
-    categories: [ContentCategory.FOOTER],
+    categories: [TemplateCategory.FOOTER],
     classNames: [
         ...Object.values(styles),
     ],

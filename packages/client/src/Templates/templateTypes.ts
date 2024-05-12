@@ -1,14 +1,14 @@
 import React from "react"
 
-export enum ContentCategory {
+export enum TemplateCategory {
     HEADER = "HEADER",
-    FOOTER = "FOOTER",
     HERO = "HERO",
-    ABOUT = "ABOUT",
-    SERVICES = "SERVICES",
     TEXT = "TEXT",
-    CONTACT = "CONTACT",
     SUBSCRIBE = "SUBSCRIBE"
+    // ABOUT = "ABOUT",
+    // SERVICES = "SERVICES",
+    // CONTACT = "CONTACT",
+    // FOOTER = "FOOTER",
 }
 
 export enum TemplateComponentType {
@@ -30,7 +30,7 @@ export enum TemplateComponentType {
 export interface TemplateStruct {
     name: TemplateComponentType
     description: string
-    categories: ContentCategory[]
+    categories: TemplateCategory[]
     classNames: string[]
     props: any
     Component: React.FC<any>

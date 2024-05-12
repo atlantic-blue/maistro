@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TemplateStruct, ContentCategory } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory } from '../../../templateTypes';
 
 import * as styles from './SectionServicesDetailed.scss';
 
@@ -47,7 +47,7 @@ const SectionServicesDetailed = (props) => {
 export const SectionServicesDetailedItem: TemplateStruct = {
     name: "SectionServicesDetailed",
     Component: SectionServicesDetailed,
-    categories: [ContentCategory.SERVICES, ContentCategory.TEXT],
+    categories: [TemplateCategory.SERVICES],
     description: "Offers a detailed overview of each service, ideal for businesses wanting to provide comprehensive information about what they offer.",
     classNames: [
         ...Object.values(styles)

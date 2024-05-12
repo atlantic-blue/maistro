@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { TemplateStruct, ContentCategory } from '../../../templateTypes';
+import { TemplateStruct, TemplateCategory } from '../../../templateTypes';
 
 import * as styles from './SectionContactInteractive.scss';
 
@@ -36,7 +36,7 @@ export const SectionContactInteractiveItem: TemplateStruct = {
     name: "section-contact-interactive",
     description: "Interactive FAQs with a contact form for user engagement.",
     Component: SectionContactInteractive,
-    categories: [ContentCategory.CONTACT],
+    categories: [TemplateCategory.CONTACT],
     classNames: [
         ...Object.values(styles)
     ],
