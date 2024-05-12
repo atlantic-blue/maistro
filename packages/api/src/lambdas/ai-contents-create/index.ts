@@ -19,7 +19,7 @@ interface AiContentsCreateInput {
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
-const client = new BedrockRuntimeClient({ region: 'us-east-1' });
+const client = new BedrockRuntimeClient();
 
 const MAX_INPUT_TOKENS = 100000; // 100 thousand per month
 const MAX_OUTPUT_TOKENS = 100000; // 100 thousand per month
@@ -45,8 +45,6 @@ const AiContentsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
     const { data } = event.body as unknown as AiContentsCreateInput;
 
     // Get Current token counts
-    console.log("Get Current token counts")
-
     const date = new Date();
     date.setDate(1); // Set to the first of the month
     date.setHours(0, 0, 0, 0); // Start of the day
@@ -83,41 +81,43 @@ const AiContentsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
 
 
     // Call Bedrock
-    console.log("Call Bedrock")
-
-    const modelId = "amazon.titan-text-express-v1"
-    const temperature = 0.9
-    const maxTokenCount = 5000
+    // https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-text.html
+    // const modelId = "amazon.titan-text-express-v1"
+    const modelId = "amazon.titan-text-premier-v1:0"
+    const temperature = 0.7
+    const topP = 0.9
+    const maxTokenCount = 1024
 
     const command = new InvokeModelCommand({
         contentType: "application/json",
         accept: "application/json",
         modelId,
+        trace: "ENABLED",
         body: JSON.stringify({
             inputText: data,
             textGenerationConfig: {
                 maxTokenCount,
                 stopSequences: [],
                 temperature,
-                topP: 0.1
+                topP,
             }
         })
     })
 
-
     interface ClientResponse {
         inputTextTokenCount: number
-        results: { tokenCount: number, outputText: string }[]
-        completionReason: "FINISH"
+        results: {
+            tokenCount: number,
+            outputText: string,
+            completionReason: "FINISH"
+        }[]
     }
 
     const response = await client.send(command);
     const jsonString = Buffer.from(response.body).toString('utf8');
-    console.log(jsonString)
 
     const parsedData: ClientResponse = JSON.parse(jsonString);
     const outputData = parsedData?.results[0];
-    console.log({ outputData })
 
     // Update table content
     const id = uuid.v4()

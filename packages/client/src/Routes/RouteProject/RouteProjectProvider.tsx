@@ -3,8 +3,9 @@ import React from "react"
 import { ApiContext } from "../../Api/ApiProvider"
 import { ProjectsContext } from "../../Projects"
 import { useParams } from "react-router-dom"
-import { ProjectMessageType } from "../../types"
+import { ProjectMessageType, ProjectThreadMessageRole } from "../../types"
 import Loading from "../../Components/Loading/Loading"
+import { createMaistroChatPrompt } from "../../Ai/prompts/Maistro"
 
 const ProjectContext = React.createContext({})
 
@@ -18,6 +19,64 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
     const [isLoading, setIsLoading] = React.useState(true)
+
+    const getThreads = async () => {
+        if (!project) {
+            return
+        }
+
+        const threads = await api.ai.aiThreads.read({
+            projectId: project.getId(),
+            token: user.getTokenId(),
+        })
+
+        if (!threads || !threads.length) {
+            const aiThreadResponse = await api.ai.aiThreads.create({
+                token: user.getTokenId(),
+                name: project.getName(),
+                projectId: project.getId(),
+                messages: [
+                    {
+                        role: ProjectThreadMessageRole.SYSTEM,
+                        timestamp: new Date().toUTCString(),
+                        content: [
+                            {
+                                text: "Do not wrap responses with  \`\`\` and \`\`\`",
+                            },
+                            {
+                                text: createMaistroChatPrompt()
+                            }
+                        ]
+                    }
+                ]
+            })
+
+            project.event$.next({
+                type: ProjectMessageType.SET_AI_THREAD,
+                data: {
+                    id: aiThreadResponse.id,
+                    createdAt: aiThreadResponse.createdAt,
+                    projectId: aiThreadResponse.projectId,
+                    name: aiThreadResponse.name,
+                    messages: aiThreadResponse.messages
+                },
+            })
+            return
+        }
+
+        threads.map(thread => {
+            project.event$.next({
+                type: ProjectMessageType.SET_AI_THREAD,
+                data: {
+                    id: thread.id,
+                    createdAt: thread.createdAt,
+                    projectId: thread.projectId,
+                    name: thread.name,
+                    messages: thread.messages
+                },
+            })
+        })
+    }
 
     const getPages = async () => {
         if (!project) {
@@ -112,6 +171,10 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
 
     React.useEffect(() => {
         getEmailList()
+    }, [projectId])
+
+    React.useEffect(() => {
+        getThreads()
     }, [projectId])
 
     if (isLoading) {

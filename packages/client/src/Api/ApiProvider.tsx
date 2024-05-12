@@ -23,14 +23,20 @@ import { ContentUpdateByIdInput, contentUpdateById } from "./Content/contentUpda
 import { CreateFileInput, CreateFileOutput, fileCreate } from "./File/fileCreate";
 
 import ProgressSplash from "../Components/ProgressSplash/ProgressSplash";
-import { AiContentsCreateInput, AiContentsCreateOutput, aiContentsCreate } from "./Ai/aiContentsCreate";
 import { AiImagesCreateInput, AiImagesCreateOutput, aiImagesCreate } from "./Ai/aiImagesCreate";
+import { AiThreadsCreateInput, AiThreadsCreateOutput, aiThreadsCreate } from "./Ai/aiThreadsCreate";
+import { AiThreadsUpdateByIdInput, AiThreadsUpdateByIdOutput, aiThreadsUpdateById } from "./Ai/aiThreadsUpdateById";
+import { AiThreadsReadByIdInput, AiThreadsReadByIdOutput, aiThreadsReadById } from "./Ai/aiThreadsReadById";
+import { AiThreadsReadInput, AiThreadsReadOutput, aiThreadsRead } from "./Ai/aiThreadsRead";
 
 interface ApiContextState {
     api: {
         ai: {
-            aiContents: {
-                create: (input: AiContentsCreateInput) => Promise<AiContentsCreateOutput>,
+            aiThreads: {
+                create: (input: AiThreadsCreateInput) => Promise<AiThreadsCreateOutput>,
+                read: (input: AiThreadsReadInput) => Promise<AiThreadsReadOutput>,
+                readById: (input: AiThreadsReadByIdInput) => Promise<AiThreadsReadByIdOutput>,
+                updateById: (input: AiThreadsUpdateByIdInput) => Promise<AiThreadsUpdateByIdOutput>,
             }
             aiImages: {
                 create: (input: AiImagesCreateInput) => Promise<AiImagesCreateOutput>,
@@ -82,8 +88,11 @@ const context: ApiContextState = {
             createFile: fileCreate
         },
         ai: {
-            aiContents: {
-                create: aiContentsCreate
+            aiThreads: {
+                create: aiThreadsCreate,
+                updateById: aiThreadsUpdateById,
+                read: aiThreadsRead,
+                readById: aiThreadsReadById,
             },
             aiImages: {
                 create: aiImagesCreate

@@ -31,6 +31,7 @@ export interface ProjectStruct {
     assets: Record<string, ProjectAssetStruct>
     content: Record<string, ProjectContentStruct>
     emailLists: Record<string, ProjectEmailListStruct>
+    threads: Record<string, ProjectThreadStruct>
     colourScheme: ColourScheme
     fontScheme: FontScheme
 }
@@ -65,6 +66,28 @@ export interface ProjectContentStruct {
     template: TemplateComponentType
     categories: string[]
     data: Object | undefined
+}
+
+export interface ProjectThreadStruct {
+    id: string
+    name: string
+    projectId: string
+    createdAt: string
+    messages: ProjectThreadMessage[]
+}
+
+export enum ProjectThreadMessageRole {
+    USER = "user",
+    ASSISTANT = "assistant",
+    SYSTEM = "system"
+}
+
+export interface ProjectThreadMessage {
+    timestamp: string
+    content: {
+        text: string
+    }[]
+    role: ProjectThreadMessageRole
 }
 
 /**
@@ -244,6 +267,16 @@ export type ProjectAssetEvent = {
     data: string
 }
 
+// Project Thread
+export enum ProjectThreadMessageType {
+    PUSH_MESSAGE = "PUSH_MESSAGE",
+}
+
+export type ProjectThreadEvent = {
+    type: ProjectThreadMessageType.PUSH_MESSAGE
+    data: ProjectThreadMessage
+}
+
 export enum ProjectMessageType {
     SET_NAME = "SET_NAME",
     SET_URL = "SET_URL",
@@ -259,6 +292,9 @@ export enum ProjectMessageType {
 
     SET_EMAIL_LIST = "SET_EMAIL_LIST",
     DELETE_EMAIL_LIST = "DELETE_EMAIL_LIST",
+
+    SET_AI_THREAD = "SET_AI_THREAD",
+    DELETE_AI_THREAD = "DELETE_AI_THREAD",
 
     SET_COLOUR_SCHEME = "SET_COLOUR_SCHEME",
     SET_FONT_SCHEME = "SET_FONT_SCHEME",
@@ -287,6 +323,12 @@ export type ProjectEvent = {
     data: ProjectEmailListStruct
 } | {
     type: ProjectMessageType.DELETE_EMAIL_LIST
+    data: string
+} | {
+    type: ProjectMessageType.SET_AI_THREAD
+    data: ProjectThreadStruct
+} | {
+    type: ProjectMessageType.DELETE_AI_THREAD
     data: string
 } | {
     type: ProjectMessageType.SET_COLOUR_SCHEME

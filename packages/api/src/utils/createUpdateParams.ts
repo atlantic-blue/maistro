@@ -1,7 +1,7 @@
 import createError from "../middlewares/error-handler";
 
 const createUpdateParams = (
-    input: Record<string, string> | null,
+    input: Record<string, unknown> | null,
     key: AWS.DynamoDB.DocumentClient.Key,
     tableName: string,
 ): AWS.DynamoDB.DocumentClient.UpdateItemInput => {
@@ -12,7 +12,7 @@ const createUpdateParams = (
 
     let updateExpression = 'set';
     const ExpressionAttributeNames: Record<string, string> = {};
-    const ExpressionAttributeValues: Record<string, string> = {};
+    const ExpressionAttributeValues: Record<string, unknown> = {};
 
     Object.keys(input).forEach((key, idx) => {
         updateExpression += ` #${key} = :val${idx},`;

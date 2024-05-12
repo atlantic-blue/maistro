@@ -16,8 +16,12 @@ interface Env {
             }
         }
         ai: {
-            aiContents: {
+            aiThreads: {
                 create: (projectId: string) => string
+                updateById: (projectId: string, threadId: string) => string
+                read: (projectId: string) => string
+                readById: (projectId: string, threadId: string) => string
+
             }
             aiImages: {
                 create: (projectId: string) => string
@@ -90,11 +94,14 @@ const createEnv = (): Env => {
                 }
             },
             ai: {
-                aiContents: {
-                    create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/ai-contents`,
+                aiThreads: {
+                    create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/ai/threads`,
+                    updateById: (projectId: string, threadId: string) => `${apiBaseUrl}/projects/${projectId}/ai/threads/${threadId}`,
+                    read: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/ai/threads`,
+                    readById: (projectId: string, threadId: string) => `${apiBaseUrl}/projects/${projectId}/ai/threads/${threadId}`,
                 },
                 aiImages: {
-                    create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/ai-images`,
+                    create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/ai/images`,
                 },
             },
             content: {

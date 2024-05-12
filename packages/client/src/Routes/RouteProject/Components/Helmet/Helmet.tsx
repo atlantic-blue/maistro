@@ -29,6 +29,7 @@ import { Project } from "../../../../Store/Project";
 import Page from "../../../../Store/Page";
 import useObservable from "../../../../Utils/Hooks/UseObservable";
 import { filter, tap } from "rxjs/operators";
+import AiAssistant from "../../../../Ai/Assistant/AiAssistant";
 
 
 const ListItem = React.forwardRef(({ className, children, title, ...props }, forwardedRef) => (
@@ -207,6 +208,7 @@ const Helmet: React.FC<HelmetProps> = (props) => {
 
             {props.children}
             <Menu />
+            <AiAssistant />
         </main>
     )
 }

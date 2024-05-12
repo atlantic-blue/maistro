@@ -4,13 +4,12 @@ import { Navigate, useParams } from 'react-router-dom';
 import Helmet from "../Components/Helmet/Helmet"
 import IconNew from "../../../Components/Icons/New/New";
 import { PageMessageType, ProjectMessageType } from "../../../types";
-import PageEdit from "../../../Page";
 
 import { ProjectsContext } from "../../../Projects";
 
 import useObservable from "../../../Utils/Hooks/UseObservable";
 import { filter } from "rxjs/operators";
-import { Button, Dialog, Flex, IconButton, Section, Spinner } from "@radix-ui/themes";
+import { Button, Card, Dialog, Flex, IconButton, Section, Spinner, Text } from "@radix-ui/themes";
 import SearchItem from "../../../Components/SearchItem/SearchItem";
 import { templates } from "../../../Templates";
 import { ApiContext } from "../../../Api/ApiProvider";
@@ -138,51 +137,48 @@ const RouteProjectPage: React.FC = () => {
 
     return (
         <Helmet>
-            <PageEdit
-                page={page}
-            >
-                <div className={styles.main}>
-                    <DragAndDrop />
+            <div className={styles.main}>
+                <DragAndDrop />
 
-                    <Dialog.Root open={open} onOpenChange={setOpen}>
-                        <Dialog.Trigger>
-                            <Section className={styles.section} onClick={onAddContentClick}>
-                                <div className={styles.sectionContent}>
-                                    Add content
-                                </div>
-                                <Button
-                                    className={styles.sectionButton}
-                                >
+                <Dialog.Root open={open} onOpenChange={setOpen}>
+                    <Dialog.Trigger>
+                        <Card className={styles.section} onClick={onAddContentClick}>
+                            <Button
+                                className={styles.sectionButton}
+                            >
+                                <Flex direction="column" justify="center" align="center">
                                     <IconNew className={styles.sectionImage} />
-                                </Button>
-                            </Section>
-                        </Dialog.Trigger>
+                                    <Text as="div" className={styles.sectionContent}>
+                                        Add content
+                                    </Text>
+                                </Flex>
+                            </Button>
+                        </Card>
+                    </Dialog.Trigger>
 
-                        <Dialog.Content maxWidth="800px">
-                            <Flex>
-                                <Dialog.Close>
-                                    <IconButton size="1" variant="soft" color="gray" style={{ marginLeft: "auto" }}>
-                                        <IconClose style={{ width: "10px" }} />
-                                    </IconButton>
-                                </Dialog.Close>
-                            </Flex>
-                            <Dialog.Title>Add Content</Dialog.Title>
+                    <Dialog.Content maxWidth="800px">
+                        <Flex>
+                            <Dialog.Close>
+                                <IconButton size="1" variant="soft" color="gray" style={{ marginLeft: "auto" }}>
+                                    <IconClose style={{ width: "10px" }} />
+                                </IconButton>
+                            </Dialog.Close>
+                        </Flex>
+                        <Dialog.Title>Add Content</Dialog.Title>
 
-                            <Flex direction="column" gap="3" align="center" justify="center">
-                                {isLoading ? (
-                                    <Spinner />
-                                ) : (
-                                    <SearchItem
-                                        templates={Object.values(templates)}
-                                        onClick={onTemplateClick}
-                                    />
-                                )}
-                            </Flex>
-                        </Dialog.Content>
-                    </Dialog.Root>
-                </div>
-
-            </PageEdit>
+                        <Flex direction="column" gap="3" align="center" justify="center">
+                            {isLoading ? (
+                                <Spinner />
+                            ) : (
+                                <SearchItem
+                                    templates={Object.values(templates)}
+                                    onClick={onTemplateClick}
+                                />
+                            )}
+                        </Flex>
+                    </Dialog.Content>
+                </Dialog.Root>
+            </div>
         </Helmet>
     )
 }

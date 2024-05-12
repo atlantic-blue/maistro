@@ -66,7 +66,7 @@ const pagesCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) 
 const validationSchema = Joi.object<PagesCreateInput>({
     title: Joi.string().required(),
     path: Joi.string().required(),
-    description: Joi.string().required(),
+    description: Joi.string().optional(),
     colourScheme: Joi.string().optional(),
     contentIds: Joi.array().optional(),
     fontScheme: Joi.string().optional(),

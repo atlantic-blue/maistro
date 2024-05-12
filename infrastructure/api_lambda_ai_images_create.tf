@@ -64,8 +64,8 @@ resource "aws_iam_policy" "api_lambda_ai_images_create_dynamo" {
         ],
         Effect : "Allow",
         Resource : [
-          "${aws_dynamodb_table.ai_images.arn}",
-          "${aws_dynamodb_table.ai_images.arn}/index/*"
+          "${aws_dynamodb_table.ai_images_usage.arn}",
+          "${aws_dynamodb_table.ai_images_usage.arn}/index/*"
         ]
       }
     ]
@@ -153,11 +153,11 @@ resource "aws_lambda_function" "api_lambda_ai_images_create" {
   role             = aws_iam_role.api_lambda_ai_images_create.arn
   source_code_hash = data.archive_file.api_lambda_ai_images_create.output_base64sha256
 
-  timeout = 60 * 3 // 3 minutes
+  timeout = 60 * 2 // 2 minutes
 
   environment {
     variables = {
-      TABLE_NAME  = "${aws_dynamodb_table.ai_images.name}"
+      TABLE_NAME  = "${aws_dynamodb_table.ai_images_usage.name}"
       BUCKET_NAME = "${aws_s3_bucket.hosting.bucket}"
     }
   }
@@ -189,7 +189,7 @@ resource "aws_apigatewayv2_integration" "api_lambda_ai_images_create" {
 
 resource "aws_apigatewayv2_route" "api_lambda_ai_images_create" {
   api_id    = aws_apigatewayv2_api.api.id
-  route_key = "POST /projects/{project-id}/ai-images"
+  route_key = "POST /projects/{project-id}/ai/images"
 
   target = "integrations/${aws_apigatewayv2_integration.api_lambda_ai_images_create.id}"
 }

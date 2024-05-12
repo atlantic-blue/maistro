@@ -54,7 +54,6 @@ const AiImagesCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     }
 
     // Get Current image counts
-    console.log("Get Current image counts")
     const date = new Date();
     date.setDate(1); // Set to the first of the month
     date.setHours(0, 0, 0, 0); // Start of the day
@@ -81,7 +80,6 @@ const AiImagesCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
 
     // Call Bedrock
-    console.log("Call Bedrock")
     const modelId = "amazon.titan-image-generator-v1"
 
     const command = new InvokeModelCommand({
@@ -112,13 +110,10 @@ const AiImagesCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const response = await client.send(command);
     const textDecoder = new TextDecoder('utf-8');
     const jsonString = textDecoder.decode(response.body.buffer);
-    console.log({ jsonString })
     const parsedData: ClientResponse = JSON.parse(jsonString);
     const image = parsedData?.images[0];
-    console.log({ image })
 
     // Update table content
-    console.log("Update table content")
     const id = uuid.v4()
     const putParams: AWS.DynamoDB.DocumentClient.PutItemInput = {
         TableName: tableName,

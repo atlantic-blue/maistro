@@ -11,6 +11,7 @@ import {
     ProjectEvent,
     ProjectMessageType,
     ProjectStruct,
+    ProjectThreadStruct,
 } from "../types"
 import { defaultColorScheme, defaultFontScheme } from "../PageContext"
 
@@ -18,6 +19,7 @@ import Page from "./Page"
 import { ProjectAsset } from "./ProjectAsset";
 import { ProjectEmailList } from "./EmailList";
 import ProjectContent from "./ProjectContent";
+import ProjectThread from "./ProjectAssistantMessages";
 
 interface IProject {
     setId(id: string): void
@@ -55,6 +57,7 @@ export class Project implements IProject {
     private content: Record<string, ProjectContent> = {}
     private assets: Record<string, ProjectAsset> = {}
     private emailLists: Record<string, ProjectEmailList> = {}
+    private threads: Record<string, ProjectThread> = {}
 
     private colourScheme: ColourScheme = defaultColorScheme
     private fontScheme: FontScheme = defaultFontScheme
@@ -99,6 +102,14 @@ export class Project implements IProject {
 
             if (event.type === ProjectMessageType.DELETE_EMAIL_LIST) {
                 this.deleteEmailList(event.data)
+            }
+
+            if (event.type === ProjectMessageType.SET_AI_THREAD) {
+                this.setThread(event.data.id, event.data)
+            }
+
+            if (event.type === ProjectMessageType.DELETE_AI_THREAD) {
+                this.deleteThread(event.data)
             }
 
             if (event.type === ProjectMessageType.SET_COLOUR_SCHEME) {
@@ -150,6 +161,11 @@ export class Project implements IProject {
                     acc[key] = this.getEmailListById(key).getStruct()
                     return acc
                 }, {}),
+            threads: Object.keys(this.getThreads())
+                .reduce<Record<string, ProjectThreadStruct>>((acc, key) => {
+                    acc[key] = this.getThreadById(key).getStruct()
+                    return acc
+                }, {}),
         }
     }
 
@@ -173,6 +189,16 @@ export class Project implements IProject {
             const pageStruct = projectStruct.pages[pageKey]
             this.setPage(pageStruct.id, pageStruct)
         })
+
+        Object.keys(projectStruct.emailLists || {}).map(key => {
+            const struct = projectStruct.emailLists[key]
+            this.setEmailList(struct.id, struct)
+        })
+
+        Object.keys(projectStruct.threads || {}).map(key => {
+            const struct = projectStruct.threads[key]
+            this.setThread(struct.id, struct)
+        })
     }
 
     /**
@@ -193,6 +219,7 @@ export class Project implements IProject {
 
     public getPageByPathname(pathname: string): Page {
         return Object.keys(this.pages)
+            .filter(contentKey => contentKey !== "undefined")
             .filter(contentKey => {
                 return this.pages[contentKey].getPath().includes(pathname)
             }).map(contentKey => {
@@ -245,15 +272,31 @@ export class Project implements IProject {
     }
 
     /**
+     * Threads
+     */
+    public setThread(id: string, struct: ProjectThreadStruct): void {
+        const thread = new ProjectThread(struct)
+        this.threads[id] = thread
+    }
+
+    public getThreads(): Record<string, ProjectThread> {
+        return this.threads
+    }
+
+    public getThreadById(id: string): ProjectThread {
+        return this.threads[id]
+    }
+
+    public deleteThread(id: string): void {
+        delete this.threads[id]
+    }
+
+    /**
      * Email List
      */
     public setEmailList(id: string, emailListStruct: ProjectEmailListStruct): void {
         const emailList = new ProjectEmailList(emailListStruct)
         this.emailLists[id] = emailList
-    }
-
-    public assetEmailList(id: string): void {
-        delete this.assets[id]
     }
 
     public getEmailLists(): Record<string, ProjectEmailList> {
@@ -268,6 +311,7 @@ export class Project implements IProject {
         delete this.emailLists[id]
     }
 
+    //
     public getId(): string {
         return this.id
     }

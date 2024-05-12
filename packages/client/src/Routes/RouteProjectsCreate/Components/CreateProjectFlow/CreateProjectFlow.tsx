@@ -8,7 +8,7 @@ import { ApiContext } from '../../../../Api/ApiProvider';
 import { ProjectsContext } from '../../../../Projects';
 import { ProjectsCreateOutput } from '../../../../Api/Projects/projectsCreate';
 import { Project } from '../../../../Store/Project';
-import { PageMessageType, ProjectMessageType, ProjectsMessageType } from '../../../../types';
+import { PageMessageType, ProjectMessageType, ProjectThreadMessageRole, ProjectsMessageType } from '../../../../types';
 import { templates } from '../../../../Templates';
 import { TemplateComponentType } from '../../../../Templates/templateTypes';
 import env from '../../../../env';
@@ -18,6 +18,7 @@ import { appRoutes } from '../../../router';
 import { PaymentsContext } from '../../../../Payments/PaymentsProvider';
 import createSectionHeroPrompt from '../../../../Ai/prompts/SectionHero';
 import createSectionHeroImagesPrompt from '../../../../Ai/prompts/SectionHeroImage';
+import { createMaistroChatPrompt } from '../../../../Ai/prompts/Maistro';
 
 enum CreateProjectFlowId {
     NAME = "name",
@@ -140,6 +141,26 @@ const ProjectFlow: React.FC = () => {
             url: createUrl(projectName),
         })
 
+        const aiThreadResponse = await api.ai.aiThreads.create({
+            token: user.getTokenId(),
+            name: projectName,
+            projectId: response.id,
+            messages: [
+                {
+                    role: ProjectThreadMessageRole.SYSTEM,
+                    timestamp: new Date().toUTCString(),
+                    content: [
+                        {
+                            text: "Do not wrap responses with  \`\`\` and \`\`\`",
+                        },
+                        {
+                            text: createMaistroChatPrompt()
+                        }
+                    ]
+                }
+            ]
+        })
+
         const newProject = Project.createEmptyProject(
             response.id,
             response.name,
@@ -151,8 +172,45 @@ const ProjectFlow: React.FC = () => {
             data: newProject.getStruct()
         })
 
-        setProjectsCreateResponse(response)
+        const project = projects.getProjectById(response.id)
+        project.event$.next({
+            type: ProjectMessageType.SET_AI_THREAD,
+            data: {
+                createdAt: aiThreadResponse.createdAt,
+                id: aiThreadResponse.id,
+                projectId: aiThreadResponse.projectId,
+                name: aiThreadResponse.name,
+                messages: aiThreadResponse.messages,
+            },
+        })
+
+        const pageResponse = await api.pages.create({
+            token: user.getTokenId(),
+            title: projectName,
+            projectId: response.id,
+            path: 'index',
+            description: projectName,
+            contentIds: [],
+        })
+
+        setProgressMessage("Index page created...")
+        project.event$.next({
+            type: ProjectMessageType.SET_PAGE,
+            data: {
+                id: pageResponse.id,
+                projectId: pageResponse.projectId,
+                path: pageResponse.path,
+                title: pageResponse.title,
+                description: pageResponse.description,
+                contentIds: [],
+                // TODO
+                colourScheme: {},
+                fontScheme: {}
+            },
+        })
+
         setProgressMessage("")
+        navigate(appRoutes.getProjectPageRoute(project.getId(), pageResponse.id))
     }
 
     const createPages = async (currentId: string, values: Record<string, string>) => {

@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Callback, Context } from "aws-lambda"
+import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Callback, CloudFrontRequestHandler, Context } from "aws-lambda"
 
 type middlewareRequestFn = (e: APIGatewayProxyEvent) => Promise<APIGatewayProxyEvent> | APIGatewayProxyEvent
 type middlewaresResponseFn = (e: APIGatewayProxyResult) => APIGatewayProxyResult
@@ -55,7 +55,8 @@ class LambdaMiddlewares {
                 // prepare response
                 return result
             } catch (error) {
-                console.log(error, rawEvent)
+                console.log({ error })
+                console.log(JSON.stringify(rawEvent, void 0, 4))
                 return {
                     statusCode: 500,
                     body: JSON.stringify({ message: error.message })

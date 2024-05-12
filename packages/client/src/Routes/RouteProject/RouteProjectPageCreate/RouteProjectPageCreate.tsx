@@ -5,7 +5,7 @@ import { Card, Flex, TextField, Text, Section, Button, Box } from "@radix-ui/the
 import * as Form from "@radix-ui/react-form"
 
 import Helmet from "../Components/Helmet/Helmet";
-import { PageStruct, ProjectMessageType, TemplateStruct } from "../../../types";
+import { ProjectMessageType } from "../../../types";
 import { ProjectsContext } from "../../../Projects";
 
 import { appRoutes } from "../../router";
@@ -13,7 +13,6 @@ import { PaymentsContext } from "../../../Payments/PaymentsProvider";
 import { ApiContext } from "../../../Api/ApiProvider";
 
 import useObservable from "../../../Utils/Hooks/UseObservable";
-import { PageViews } from "../../../Pages";
 import * as styles from "./RouteProjectPageCreate.scss"
 
 const RouteProjectCreate: React.FC = () => {
