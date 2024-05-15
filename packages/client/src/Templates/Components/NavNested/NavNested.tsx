@@ -30,7 +30,7 @@ const Link: React.FC<LinkProps> = (props) => {
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
-            <a href={props.link.href}>
+            <a href={props.link.href} aria-label={props.link.value}>
                 {props.link.value}
             </a>
             {isDropdownVisible && props.link.links && (

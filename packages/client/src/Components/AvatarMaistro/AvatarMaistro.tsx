@@ -19,6 +19,7 @@ const AvatarMaistro: React.FC<AvatarMaistroProps> = (props) => {
             fallback={
                 <IconLogoSimple className={classNames(styles.avatarIcon, props.classNames?.icon)} />
             }
+            alt="Maistro"
         />
     )
 }

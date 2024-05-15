@@ -35,6 +35,18 @@ const createWebpackPlugins = (
             ],
         }),
 
+        /**
+         * Add robots.txt
+         */
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.join(paths.root, 'assets', 'robots.txt'),
+                    to: path.join(paths.root, 'dist'),
+                },
+            ],
+        }),
+
         new MiniCssExtractPlugin({
             filename: "css/[name][contenthash].css",
         }),

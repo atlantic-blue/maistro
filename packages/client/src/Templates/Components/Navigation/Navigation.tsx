@@ -8,7 +8,7 @@ export interface NavigationItem {
     name: string | React.ReactNode
     href: string
     children?: NavigationItem[]
-    description?: string
+    description: string
 }
 
 interface NavigationProps {
@@ -31,7 +31,7 @@ const Navigation: React.FC<NavigationProps> = (props) => {
                                         {item.children?.map(childItem => {
                                             return (
                                                 <NavigationMenu.Link asChild key={`NavigationMenu-${childItem.name}`}>
-                                                    <a className={styles.listItemLink} href={childItem.href} target="_blank" rel="noopener noreferrer">
+                                                    <a className={styles.listItemLink} href={childItem.href} aria-label={childItem.description} target="_blank" rel="noopener noreferrer">
                                                         <div className={styles.listItemHeading}>{childItem.name}</div>
                                                         <p className={styles.listItemText}>{childItem.description}</p>
                                                     </a>
@@ -46,7 +46,7 @@ const Navigation: React.FC<NavigationProps> = (props) => {
 
                     return (
                         <NavigationMenu.Item key={`NavigationMenu-${item.name}`}>
-                            <NavigationMenu.Link className={styles.navigationMenuLink} href={item.href} target="_blank" rel="noopener noreferrer">
+                            <NavigationMenu.Link className={styles.navigationMenuLink} href={item.href} target="_blank" rel="noopener noreferrer" aria-label={item.description}>
                                 {item.name}
                             </NavigationMenu.Link>
                         </NavigationMenu.Item>

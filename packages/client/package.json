@@ -14,7 +14,7 @@
         "test": "jest",
         "test:watch": "jest --watch --no-coverage",
         "test:coverage": "jest --coverage",
-        "types:sass": "npm run clean && typed-scss-modules src --camelCase",
+        "types:sass": "rm -rf **/*.scss.d.ts && typed-scss-modules src --camelCase",
         "types:sass:watch": "npm run types:sass -- --watch"
     },
     "devDependencies": {
@@ -81,12 +81,13 @@
         "sass": "^1.70.0",
         "sass-loader": "^14.1.0",
         "style-loader": "^3.3.4",
+        "terser": "^5.31.0",
         "ts-node": "^10.9.2",
         "typed-scss-modules": "^8.0.0",
         "typedoc": "^0.25.8",
         "typescript": "^5.3.3",
         "uuid": "^9.0.1",
-        "webpack": "^5.90.1",
+        "webpack": "^5.91.0",
         "webpack-bundle-analyzer": "^4.10.1",
         "webpack-cli": "^5.1.4",
         "webpack-dev-server": "^5.0.1",

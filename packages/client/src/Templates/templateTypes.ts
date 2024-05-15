@@ -27,11 +27,11 @@ export enum TemplateComponentType {
     SUBSCRIBE_BASIC = "SUBSCRIBE_BASIC",
 }
 
-export interface TemplateStruct {
+export interface TemplateStruct<Props> {
     name: TemplateComponentType
     description: string
     categories: TemplateCategory[]
     classNames: string[]
-    props: any
+    props: Props
     Component: React.FC<any>
 }

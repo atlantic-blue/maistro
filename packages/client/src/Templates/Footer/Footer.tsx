@@ -7,6 +7,7 @@ const Footer: React.FC = () => {
         <footer className={styles.footer}>
             <nav className={styles.footerNavigation}>
                 <ul className={styles.footerNavigationList}>
+                    {/* // TODO aria labels */}
                     <li className={styles.footerNavigationItem}><a href="#privacy">Privacy Policy</a></li>
                     <li className={styles.footerNavigationItem}><a href="#terms">Terms of Use</a></li>
                     <li className={styles.footerNavigationItem}><a href="#contact">Contact Us</a></li>

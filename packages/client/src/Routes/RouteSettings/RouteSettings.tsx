@@ -31,6 +31,7 @@ const RoutesSettings: React.FC = () => {
                         size="7"
                         src={user.getAvatar()}
                         fallback={user.getName().charAt(0)}
+                        alt={user.getName()}
                     />
                     <div>{user.getName()}</div>
                 </Card>

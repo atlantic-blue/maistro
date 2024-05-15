@@ -63,8 +63,6 @@ const HeroBasicEditor: React.FC<SectionHeroProps & EditorProps> = (props) => {
                 <EditorData
                     type={EditorDataType.WYSIWYG}
                     name="Content"
-                    section="content"
-                    aiEnabled
                     value={state.content}
                     onUploadFile={props.onUploadFile}
                     onChange={e => {

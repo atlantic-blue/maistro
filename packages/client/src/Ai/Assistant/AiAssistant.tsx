@@ -1,6 +1,7 @@
 import React from "react"
+import { filter } from "rxjs";
 import { useParams } from "react-router-dom";
-import { Avatar, Dialog, Flex, IconButton, Text } from "@radix-ui/themes"
+import { Dialog, Flex, IconButton, Text } from "@radix-ui/themes"
 
 import IconClose from "../../Components/Icons/Close/Close";
 import AiAssistantInput from "./Input/AiAssistantInput";
@@ -9,12 +10,11 @@ import { ProjectsContext } from "../../Projects";
 import AiAssistantThread from "./Thread/AiAssistantThread";
 
 import { ProjectMessageType, ProjectThreadMessage, ProjectThreadMessageType } from "../../types";
-
-import * as styles from "./AiAssistant.scss"
 import useObservable from "../../Utils/Hooks/UseObservable";
-import { filter } from "rxjs";
 import { PaymentsContext } from "../../Payments/PaymentsProvider";
 import AvatarMaistro from "../../Components/AvatarMaistro/AvatarMaistro";
+
+import * as styles from "./AiAssistant.scss"
 
 const AiAssistant: React.FC = () => {
     const { api } = React.useContext(ApiContext)

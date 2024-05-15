@@ -4,17 +4,18 @@ import { Avatar, Box } from "@radix-ui/themes"
 import * as styles from "./Logo.scss"
 
 interface LogoProps {
-    slogan?: string
+    slogan: string
     imgUrl: string
 }
 
 const Logo: React.FC<LogoProps> = (props) => {
     return (
         <Box className={styles.logo}>
-            <a href="/">
+            <a href="/" aria-label={props.slogan}>
                 <Avatar
-                    fallback={props.slogan || ""}
+                    fallback={props.slogan}
                     src={props.imgUrl}
+                    alt={props.slogan}
                 />
             </a>
         </Box>

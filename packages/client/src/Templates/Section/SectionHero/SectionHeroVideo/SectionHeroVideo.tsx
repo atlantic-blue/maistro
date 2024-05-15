@@ -57,9 +57,13 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
                     onClick={props.ctaOnClick}
                     className={styles.heroButton}
                 >
-                    <a href={props.ctaLink} target="_blank" rel="noopener noreferrer">
-                        {props.cta}
-                    </a>
+                    {props.ctaLink ?
+                        (
+                            <a aria-label={props.cta} href={props.ctaLink} target="_blank" rel="noopener noreferrer">
+                                {props.cta}
+                            </a>
+                        ) : props.cta
+                    }
                 </Button>
 
             </Flex>
@@ -67,7 +71,7 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
     );
 };
 
-export const SectionHeroVideoItem: TemplateStruct = {
+export const SectionHeroVideoItem: TemplateStruct<SectionHeroVideoProps> = {
     name: TemplateComponentType.HERO_VIDEO,
     Component: SectionHeroVideo,
     categories: [TemplateCategory.HERO],
@@ -78,7 +82,8 @@ export const SectionHeroVideoItem: TemplateStruct = {
     ],
     props: {
         video: {
-            src: "https://maistro.website/assets/hero-video.mp4"
+            src: "https://maistro.website/assets/hero-video.mp4",
+            alt: "Main hero video"
         },
         title: "Immerse Yourself in Our World",
         content: "Experience the difference with us.",

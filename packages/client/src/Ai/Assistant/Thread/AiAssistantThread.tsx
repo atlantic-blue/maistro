@@ -50,6 +50,7 @@ const AiAssistantThread = () => {
                                     }
                                     radius="small"
                                     className={styles.avatar}
+                                    alt={message.role === ProjectThreadMessageRole.ASSISTANT ? ProjectThreadMessageRole.ASSISTANT : user.getName()}
                                 />
 
                                 <Box>

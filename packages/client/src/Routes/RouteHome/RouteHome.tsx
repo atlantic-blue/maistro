@@ -22,11 +22,13 @@ const RoutesHome: React.FC = () => {
                 {...{
                     logo: {
                         url: "https://maistro.website/assets/logo.svg",
+                        slogan: "Maistro"
                     },
                     links: [
                         {
                             href: "/login",
                             name: "My Account",
+                            description: "Log in to your account"
                         }
                     ]
                 }}
@@ -35,7 +37,7 @@ const RoutesHome: React.FC = () => {
                 {...{
                     video: {
                         src: videoURLS[Math.floor(Math.random() * videoURLS.length)],
-                        alt: "",
+                        alt: "Get started with Maistro",
                     },
                     title: "Maistro AI",
                     content: (

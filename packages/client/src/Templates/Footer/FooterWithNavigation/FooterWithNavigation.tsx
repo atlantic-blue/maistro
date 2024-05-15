@@ -8,6 +8,7 @@ const FooterWithNavigation = () => (
     <footer className={styles.footerWithNav}>
         <nav>
             <ul className={styles.navList}>
+                {/* // TODO aria labels */}
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/services">Services</a></li>

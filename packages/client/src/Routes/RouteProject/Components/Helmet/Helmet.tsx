@@ -35,7 +35,7 @@ import AiAssistant from "../../../../Ai/Assistant/AiAssistant";
 const ListItem = React.forwardRef(({ className, children, title, ...props }, forwardedRef) => (
     <li>
         <NavigationMenu.Link asChild>
-            <a className={classNames(styles.listItemLink, className)} {...props} ref={forwardedRef}>
+            <a className={classNames(styles.listItemLink, className)} {...props} ref={forwardedRef} aria-label={title}>
                 <div className={styles.listItemHeading}>{title}</div>
                 <p className={styles.listItemText}>{children}</p>
             </a>
@@ -152,7 +152,7 @@ const Helmet: React.FC<HelmetProps> = (props) => {
                                 })}
                                 <li>
                                     <NavigationMenu.Link asChild>
-                                        <a className={styles.callout} onClick={onNewProjectClick}>
+                                        <a className={styles.callout} onClick={onNewProjectClick} aria-label="New Project">
                                             <div className={styles.calloutHeading}> New Project</div>
                                         </a>
                                     </NavigationMenu.Link>
@@ -178,7 +178,7 @@ const Helmet: React.FC<HelmetProps> = (props) => {
                                 })}
                                 <li>
                                     <NavigationMenu.Link asChild>
-                                        <a className={styles.callout} onClick={onNewPageClick}>
+                                        <a className={styles.callout} onClick={onNewPageClick} aria-label="New Page">
                                             <div className={styles.calloutHeading}>New page</div>
                                         </a>
                                     </NavigationMenu.Link>

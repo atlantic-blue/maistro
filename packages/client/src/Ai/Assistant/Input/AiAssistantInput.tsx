@@ -2,8 +2,8 @@ import React from "react"
 import { Box, TextArea, IconButton } from "@radix-ui/themes"
 import IconUpLoad from "../../../Components/Icons/Upload/Upload"
 
-import * as styles from "./AiAssistantInput.scss"
 import { ProjectThreadMessage, ProjectThreadMessageRole } from "../../../types"
+import * as styles from "./AiAssistantInput.scss"
 
 interface AiAssistantInputProps {
     placeholder?: string

@@ -54,15 +54,18 @@ export const HeaderBasicItem: TemplateStruct = {
         links: [
             {
                 name: "Home",
-                href: "/"
+                href: "/",
+                description: "Home page",
             },
             {
                 name: "About",
                 href: "/about",
+                description: "About page",
             },
             {
                 name: "Contact",
-                href: "/contact"
+                href: "/contact",
+                description: "contact page",
             },
         ]
     }

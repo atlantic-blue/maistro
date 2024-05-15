@@ -50,7 +50,7 @@ const HeaderSticky: React.FC<HeaderProps> = ({
     );
 };
 
-export const HeaderStickyItem: TemplateStruct = {
+export const HeaderStickyItem: TemplateStruct<HeaderProps> = {
     name: TemplateComponentType.HEADER_STICKY,
     Component: HeaderSticky,
     description: "Sticky navigation bar",
@@ -68,15 +68,18 @@ export const HeaderStickyItem: TemplateStruct = {
         links: [
             {
                 name: "Home",
-                href: "/"
+                href: "/",
+                description: "Home page",
             },
             {
                 name: "About",
-                href: "/about"
+                href: "/about",
+                description: "About page",
             },
             {
                 name: "Contact",
-                href: "/contact"
+                href: "/contact",
+                description: "contact page",
             },
         ]
     }

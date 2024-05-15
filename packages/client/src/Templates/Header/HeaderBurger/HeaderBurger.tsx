@@ -47,7 +47,7 @@ const HeaderBurger: React.FC<HeaderProps> = ({
     );
 };
 
-export const HeaderBurgerItem: TemplateStruct = {
+export const HeaderBurgerItem: TemplateStruct<HeaderProps> = {
     name: TemplateComponentType.HEADER_BURGER,
     Component: HeaderBurger,
     categories: [TemplateCategory.HEADER],
@@ -66,15 +66,18 @@ export const HeaderBurgerItem: TemplateStruct = {
         links: [
             {
                 name: "Home",
-                href: "/"
+                href: "/",
+                description: "Home page",
             },
             {
                 name: "About",
                 href: "/about",
+                description: "About page",
             },
             {
                 name: "Contact",
-                href: "/contact"
+                href: "/contact",
+                description: "contact page",
             },
         ]
     },

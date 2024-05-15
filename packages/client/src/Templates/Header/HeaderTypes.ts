@@ -10,7 +10,7 @@ export interface HeaderProps {
     "data-hydration-id"?: string
     logo: {
         url: string
-        slogan?: string
+        slogan: string
     }
     links?: NavigationItem[]
 }

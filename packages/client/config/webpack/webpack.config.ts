@@ -1,6 +1,7 @@
 import path from 'path'
 import { Configuration } from 'webpack'
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin"
+import TerserPlugin from 'terser-webpack-plugin'
 
 import jsRule from './rules/jsRules'
 import cssRule from './rules/cssRule'
@@ -43,7 +44,14 @@ const createWebpackConfig = (args: WebpackArgs): Configuration => {
                     default: false,
                 },
             },
-            minimizer: [new CssMinimizerPlugin()],
+            minimizer: [new TerserPlugin({
+                terserOptions: {
+                    compress: {
+                        drop_console: true,
+                    },
+                    mangle: true,
+                },
+            }), new CssMinimizerPlugin()],
             minimize: env.isProduction()
         },
         ...(env.isDevelopment() && {

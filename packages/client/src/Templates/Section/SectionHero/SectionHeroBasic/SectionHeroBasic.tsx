@@ -49,7 +49,7 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
                 onClick={props.ctaOnClick}
                 className={styles.button}
             >
-                <a href={props.ctaLink} target="_blank" rel="noopener noreferrer">
+                <a aria-label={props.cta} href={props.ctaLink} target="_blank" rel="noopener noreferrer">
                     {props.cta}
                 </a>
             </Button>
@@ -59,7 +59,7 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
 };
 
 
-export const SectionHeroBasicItem: TemplateStruct = {
+export const SectionHeroBasicItem: TemplateStruct<SectionHeroProps> = {
     name: TemplateComponentType.HERO_BASIC,
     description: "Hero Basic",
     categories: [TemplateCategory.HERO],
@@ -75,7 +75,7 @@ export const SectionHeroBasicItem: TemplateStruct = {
         ctaLink: "#home",
         img: {
             src: faker.image.urlPicsumPhotos(),
-            alt: "img",
+            alt: faker.word.words(3),
         }
     }
 }

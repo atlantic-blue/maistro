@@ -1,10 +1,10 @@
 import React from "react"
-
-import NavLink from "../NavLink/NavLink"
 import classNames from "classnames";
 
-import * as styles from "./Nav.scss"
+import NavLink from "../NavLink/NavLink"
 import { NavigationItem } from "../Navigation/Navigation";
+
+import * as styles from "./Nav.scss"
 
 export interface Link {
     href: string;
@@ -37,6 +37,7 @@ const Nav: React.FC<NavProps> = (props) => {
                                 key={props.links[key].href}
                                 href={props.links[key].href}
                                 value={props.links[key].name}
+                                description={props.links[key].description}
                             />
                         )
                     })

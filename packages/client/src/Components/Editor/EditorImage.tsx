@@ -33,9 +33,10 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
                     {props.name}
                 </Text>
                 <Avatar
+                    size="9"
                     src={preview}
                     fallback="Preview"
-                    size="9"
+                    alt="Preview"
                 />
 
                 <Tabs.List size="2">

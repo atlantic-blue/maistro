@@ -30,6 +30,7 @@ const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
                                     size="2"
                                     src={user.getAvatar()}
                                     fallback={user.getName().charAt(0)}
+                                    alt={user.getName()}
                                 />
                                 <Text as="p" className={styles.headerText}>My Settings</Text>
                             </Box>

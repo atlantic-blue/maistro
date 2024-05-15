@@ -39,12 +39,18 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
                 <EditorData
                     type={EditorDataType.TEXT}
                     name="Slogan"
+                    section="headline"
+                    aiEnabled
                     value={logoSlogan}
                     onChange={setLogoSlogan}
                 />
 
                 {
                     links.map((link, index) => {
+                        if (typeof link.name !== "string") {
+                            return
+                        }
+
                         return (
                             <Card key={index}>
                                 <EditorData
@@ -54,6 +60,7 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
                                     onChange={data => setLinks(prev => {
                                         prev[index] = {
                                             href: prev[index].href,
+                                            description: prev[index].description,
                                             name: data,
                                         }
                                         return [
@@ -69,7 +76,24 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
                                     onChange={data => setLinks(prev => {
                                         prev[index] = {
                                             name: prev[index].name,
+                                            description: prev[index].description,
                                             href: data,
+                                        }
+                                        return [
+                                            ...prev
+                                        ]
+                                    })}
+                                />
+
+                                <EditorData
+                                    type={EditorDataType.TEXT}
+                                    name="Link description"
+                                    value={link.href}
+                                    onChange={data => setLinks(prev => {
+                                        prev[index] = {
+                                            name: prev[index].name,
+                                            href: prev[index].href,
+                                            description: data,
                                         }
                                         return [
                                             ...prev
@@ -90,7 +114,7 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
                     })
                 }
 
-                <Button size="1" variant="ghost" onClick={() => setLinks([...links, { href: "#Edit-me!", name: "Edit me" }])}>
+                <Button size="1" variant="ghost" onClick={() => setLinks([...links, { href: "#Edit-me!", name: "Edit me", description: "Edit me!" }])}>
                     Create Link
                 </Button>
 

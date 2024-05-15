@@ -110,7 +110,7 @@ const ToolbarLink: React.FC<ToolbarLinkProps> = (props) => {
 
                 currentLink.remove();
             }
-            const html = `<a href="${href}" target="_blank">${text || 'Link'}</a>`;
+            const html = `<a href="${href}" arial-label="${href}" target="_blank">${text || 'Link'}</a>`;
 
             props.execCommand(Command.INSERT_HTML,
                 html

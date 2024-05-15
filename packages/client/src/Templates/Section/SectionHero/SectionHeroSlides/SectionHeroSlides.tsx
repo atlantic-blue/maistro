@@ -58,7 +58,7 @@ const SectionHeroSlides: React.FC<SectionHeroSlidesProps> = (props) => {
                                         onClick={slide.ctaOnClick}
                                         size="4"
                                     >
-                                        <a href={slide.ctaLink} target="_blank" rel="noopener noreferrer">
+                                        <a aria-label={slide.cta} href={slide.ctaLink} target="_blank" rel="noopener noreferrer">
                                             {slide.cta}
                                         </a>
                                     </Button>
@@ -72,7 +72,7 @@ const SectionHeroSlides: React.FC<SectionHeroSlidesProps> = (props) => {
     );
 };
 
-export const SectionHeroSlidesItem: TemplateStruct = {
+export const SectionHeroSlidesItem: TemplateStruct<SectionHeroSlidesProps> = {
     name: TemplateComponentType.HERO_SLIDES,
     Component: SectionHeroSlides,
     categories: [TemplateCategory.HERO],
@@ -86,7 +86,8 @@ export const SectionHeroSlidesItem: TemplateStruct = {
                 title: faker.lorem.words(5),
                 content: faker.lorem.sentence(),
                 img: {
-                    src: faker.image.urlPicsumPhotos()
+                    src: faker.image.urlPicsumPhotos(),
+                    alt: faker.word.words(3),
                 },
                 cta: faker.lorem.words(3),
                 ctaLink: "/about",
@@ -95,7 +96,8 @@ export const SectionHeroSlidesItem: TemplateStruct = {
                 title: faker.lorem.words(5),
                 content: faker.lorem.sentence(),
                 img: {
-                    src: faker.image.urlPicsumPhotos()
+                    src: faker.image.urlPicsumPhotos(),
+                    alt: faker.word.words(3),
                 },
                 cta: faker.lorem.words(3),
                 ctaLink: "/contact",
@@ -104,7 +106,8 @@ export const SectionHeroSlidesItem: TemplateStruct = {
                 title: faker.lorem.words(5),
                 content: faker.lorem.sentence(),
                 img: {
-                    src: faker.image.urlPicsumPhotos()
+                    src: faker.image.urlPicsumPhotos(),
+                    alt: faker.word.words(3),
                 },
                 cta: faker.lorem.words(3),
                 ctaLink: "/services",
@@ -113,7 +116,8 @@ export const SectionHeroSlidesItem: TemplateStruct = {
                 title: faker.lorem.words(5),
                 content: faker.lorem.sentence(),
                 img: {
-                    src: faker.image.urlPicsumPhotos()
+                    src: faker.image.urlPicsumPhotos(),
+                    alt: faker.word.words(3),
                 },
                 cta: faker.lorem.words(3),
                 ctaLink: "/home",

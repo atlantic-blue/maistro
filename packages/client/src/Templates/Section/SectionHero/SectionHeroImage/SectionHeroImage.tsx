@@ -34,7 +34,7 @@ const SectionHeroImage: React.FC<SectionHeroProps> = (props) => {
                         size="4"
                         className={styles.heroButton}
                     >
-                        <a href={props.ctaLink} target="_blank" rel="noopener noreferrer">
+                        <a aria-label={props.cta} href={props.ctaLink} target="_blank" rel="noopener noreferrer">
                             {props.cta}
                         </a>
                     </Button>
@@ -44,7 +44,7 @@ const SectionHeroImage: React.FC<SectionHeroProps> = (props) => {
     );
 };
 
-export const SectionHeroImageItem: TemplateStruct = {
+export const SectionHeroImageItem: TemplateStruct<SectionHeroProps> = {
     name: TemplateComponentType.HERO_IMAGE,
     Component: SectionHeroImage,
     classNames: [
@@ -57,7 +57,7 @@ export const SectionHeroImageItem: TemplateStruct = {
         content: "Join us on our journey.",
         img: {
             src: faker.image.urlPicsumPhotos(),
-            alt: "",
+            alt: faker.word.words(3),
         },
         cta: "Discover More",
         ctaLink: "#home"
