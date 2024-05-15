@@ -287,6 +287,16 @@ export class Project implements IProject {
         return this.threads[id]
     }
 
+    public getThreadByName(name: string): ProjectThread {
+        return Object.keys(this.threads)
+            .filter(contentKey => contentKey !== "undefined")
+            .filter(contentKey => {
+                return this.threads[contentKey].getName().includes(name)
+            }).map(contentKey => {
+                return this.threads[contentKey]
+            })[0]
+    }
+
     public deleteThread(id: string): void {
         delete this.threads[id]
     }

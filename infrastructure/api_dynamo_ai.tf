@@ -31,10 +31,16 @@ resource "aws_dynamodb_table" "ai_threads" {
     type = "S"
   }
 
-attribute {
+  attribute {
     name = "createdAt"
     type = "S"
   }
+
+  attribute {
+    name = "updatedAt"
+    type = "S"
+  }
+
   attribute {
     name = "projectId"
     type = "S"
@@ -56,6 +62,15 @@ attribute {
   global_secondary_index {
     name            = "ProjectIdIndex"
     hash_key        = "projectId"
+    read_capacity   = 1
+    write_capacity  = 1
+    projection_type = "ALL"
+  }
+
+  global_secondary_index {
+    name            = "UserIdUpdatedAtIndex"
+    hash_key        = "userId"
+    range_key       = "updatedAt"
     read_capacity   = 1
     write_capacity  = 1
     projection_type = "ALL"

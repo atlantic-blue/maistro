@@ -19,17 +19,17 @@ variable "environment" {
 }
 
 variable "google_client_id" {
-    type = string
+  type = string
 }
 
 variable "google_client_secret" {
-    type = string
+  type = string
 }
 
 variable "google_site_verification_token" {
-    type = string
+  type = string
 }
 
 variable "payments_secret_key" {
-    type = string
+  type = string
 }

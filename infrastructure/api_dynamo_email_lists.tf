@@ -18,7 +18,7 @@ resource "aws_dynamodb_table" "email_lists" {
     type = "S"
   }
 
- attribute {
+  attribute {
     name = "projectId"
     type = "S"
   }

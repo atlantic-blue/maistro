@@ -5,6 +5,8 @@ import * as styles from "./EditorImage.scss"
 
 import { EditorImageProps } from "./EditorData";
 import IconUpLoad from "../Icons/Upload/Upload";
+import AvatarMaistro from "../AvatarMaistro/AvatarMaistro";
+import EditorImageAi from "../../Ai/EditorImageAi/EditorImageAi";
 
 const EditorImage: React.FC<EditorImageProps> = (props) => {
     const [preview, setPreview] = React.useState(props.value);
@@ -25,7 +27,7 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
     };
 
     return (
-        <Tabs.Root defaultValue="upload">
+        <Tabs.Root defaultValue="ai">
             <Flex justify="center" align="center" direction="column" width="100%">
                 <Text as="div" size="2" mb="1" weight="bold">
                     {props.name}
@@ -36,12 +38,24 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
                     size="9"
                 />
 
-                <Tabs.List>
+                <Tabs.List size="2">
+                    <Tabs.Trigger value="ai">
+                        <AvatarMaistro />
+                    </Tabs.Trigger>
                     <Tabs.Trigger value="upload">Upload</Tabs.Trigger>
                     <Tabs.Trigger value="url">URL</Tabs.Trigger>
                 </Tabs.List>
 
                 <Box pt="3" width="100%">
+                    <Tabs.Content value="ai">
+                        <EditorImageAi
+                            onChange={src => {
+                                setPreview(src);
+                                props.onChange(src);
+                            }}
+                        />
+                    </Tabs.Content>
+
                     <Tabs.Content value="upload">
 
                         {!isLoading && (

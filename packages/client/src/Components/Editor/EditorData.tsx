@@ -35,12 +35,16 @@ export interface EditorImageProps {
     onUploadFile: (file: File) => Promise<string>
 }
 
-export type EditorDataProps = {
+export interface EditorTextProps {
     type: EditorDataType.TEXT
     name: string
     value?: string
     onChange: (value: string) => void
-} | EditorImageProps | EditorVideoProps | EditorWysiwygProps
+    aiEnabled?: boolean
+    section: "headline" | "content" | "cta"
+}
+
+export type EditorDataProps = EditorTextProps | EditorImageProps | EditorVideoProps | EditorWysiwygProps
 
 const EditorData: React.FC<EditorDataProps> = (props) => {
     switch (props.type) {

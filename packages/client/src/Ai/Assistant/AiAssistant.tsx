@@ -14,6 +14,7 @@ import * as styles from "./AiAssistant.scss"
 import useObservable from "../../Utils/Hooks/UseObservable";
 import { filter } from "rxjs";
 import { PaymentsContext } from "../../Payments/PaymentsProvider";
+import AvatarMaistro from "../../Components/AvatarMaistro/AvatarMaistro";
 
 const AiAssistant: React.FC = () => {
     const { api } = React.useContext(ApiContext)
@@ -25,7 +26,7 @@ const AiAssistant: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState(false)
     const [error, setError] = React.useState(null)
     const [open, setOpen] = React.useState(false);
-    const thread = Object.values(project.getThreads())[0]
+    const thread = project.getThreadByName(project.getName())
 
     useObservable(project.event$.pipe(filter(event => {
         return event.type === ProjectMessageType.SET_AI_THREAD
@@ -37,16 +38,16 @@ const AiAssistant: React.FC = () => {
     }
 
     const onSubmit = async (message: ProjectThreadMessage) => {
-        if (!isSubscribed) {
-            redirectToCheckout()
-            return
-        }
         try {
             setIsLoading(true)
 
             thread.event$.next({
                 type: ProjectThreadMessageType.PUSH_MESSAGE,
-                data: message
+                data: {
+                    message,
+                    inputTokens: thread.getInputTokens(),
+                    outputTokens: thread.getOutputTokens(),
+                }
             })
 
             const response = await api.ai.aiThreads.updateById({
@@ -58,12 +59,10 @@ const AiAssistant: React.FC = () => {
 
             thread.event$.next({
                 type: ProjectThreadMessageType.PUSH_MESSAGE,
-                data: response.message
+                data: response
             })
         } catch (error) {
             // TODO app level error
-            console.log("HRE")
-            console.log(error);
             setError(error)
         } finally {
             setIsLoading(false)
@@ -75,11 +74,7 @@ const AiAssistant: React.FC = () => {
             <Dialog.Root open={open} onOpenChange={setOpen}>
                 <Dialog.Trigger>
                     <IconButton variant="ghost" className={styles.iconButton}>
-                        <Avatar
-                            fallback="Ai"
-                            src="https://maistro.website/assets/logo.svg"
-                            className={styles.avatar}
-                        />
+                        <AvatarMaistro />
                     </IconButton>
                 </Dialog.Trigger>
 
@@ -103,7 +98,12 @@ const AiAssistant: React.FC = () => {
                     </Dialog.Title>
 
                     <AiAssistantThread />
-                    <AiAssistantInput onSubmit={onSubmit} isLoading={isLoading} />
+                    <AiAssistantInput onSubmit={
+                        !isSubscribed && thread.getOutputTokens() > 500 ?
+                            redirectToCheckout :
+                            onSubmit
+                    }
+                        isLoading={isLoading} />
                     {error && <Text>
                         {error}
                     </Text>}

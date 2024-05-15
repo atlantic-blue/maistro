@@ -1,4 +1,8 @@
 .input {
+    &-textarea {
+        min-width: 300px;
+    }
+
     &-button {
         width: 100%;
         margin-top: 10px;

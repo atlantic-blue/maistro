@@ -8,13 +8,14 @@ import useObservable from "../../../Utils/Hooks/UseObservable"
 import { filter } from "rxjs"
 
 import * as styles from "./AiAssistantThread.scss"
+import { IconLogoSimple } from "../../../Components/Icons/Logo/Logo"
 
 const AiAssistantThread = () => {
     const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
-    const thread = Object.values(project.getThreads())[0]
+    const thread = project.getThreadByName(project.getName())
 
     useObservable(thread.event$.pipe(filter(event => {
         return event.type === ProjectThreadMessageType.PUSH_MESSAGE
@@ -39,8 +40,14 @@ const AiAssistantThread = () => {
                             <Flex gap="3" align="start" justify="start">
                                 <Avatar
                                     size="3"
-                                    src={message.role === ProjectThreadMessageRole.ASSISTANT ? "https://maistro.website/assets/logo.svg" : user.getAvatar()}
-                                    fallback={message.role === ProjectThreadMessageRole.ASSISTANT ? "Ai" : user.getName()}
+                                    src={message.role === ProjectThreadMessageRole.ASSISTANT ? "" : user.getAvatar()}
+                                    fallback={
+                                        message.role === ProjectThreadMessageRole.ASSISTANT ? (
+                                            <Box width="24px" height="24px">
+                                                <IconLogoSimple />
+                                            </Box>
+                                        ) : user.getName().charAt(0)
+                                    }
                                     radius="small"
                                     className={styles.avatar}
                                 />

@@ -128,6 +128,7 @@ const AiContentsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
             userId,
             projectId,
             createdAt: now,
+            updatedAt: now,
             inputContent: data,
             outputContent: outputData?.outputText,
             inputTokens: parsedData.inputTextTokenCount,

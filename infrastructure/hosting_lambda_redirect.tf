@@ -145,7 +145,7 @@ resource "aws_lambda_function" "hosting_redirect" {
 ## LOGS
 resource "aws_cloudwatch_log_group" "hosting_redirect" {
   name              = "/aws/lambda/${aws_lambda_function.hosting_redirect.function_name}"
-    retention_in_days = 1
+  retention_in_days = 1
 
   lifecycle {
     prevent_destroy = false

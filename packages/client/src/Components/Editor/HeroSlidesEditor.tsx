@@ -30,6 +30,8 @@ const HeroSlidesEditor: React.FC<SectionHeroSlidesProps & EditorProps> = (props)
                                 type={EditorDataType.TEXT}
                                 name="Title"
                                 value={slide.title}
+                                section="headline"
+                                aiEnabled
                                 onChange={e => {
                                     setState(prev => {
                                         prev.slides[index] = {
@@ -88,6 +90,8 @@ const HeroSlidesEditor: React.FC<SectionHeroSlidesProps & EditorProps> = (props)
                             <EditorData
                                 type={EditorDataType.TEXT}
                                 name="cta text"
+                                section="cta"
+                                aiEnabled
                                 value={slide.cta}
                                 onChange={e => {
                                     setState(prev => {
@@ -106,6 +110,7 @@ const HeroSlidesEditor: React.FC<SectionHeroSlidesProps & EditorProps> = (props)
                             <EditorData
                                 type={EditorDataType.TEXT}
                                 name="cta link"
+                                section="cta"
                                 value={slide.ctaLink}
                                 onChange={e => {
                                     setState(prev => {

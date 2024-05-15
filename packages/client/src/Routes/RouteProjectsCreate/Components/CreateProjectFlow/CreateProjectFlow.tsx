@@ -1,8 +1,10 @@
+import { Box, Flex } from '@radix-ui/themes';
+import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import * as yup from 'yup';
 
 import { FormQuestion } from '../CreateProjectForm/CreateProjectForm';
 import CreateProjectForms from '../CreateProjectForms/CreateProjectForms';
-import React, { useState } from 'react';
 import { createUrl } from '../../../../Utils/url';
 import { ApiContext } from '../../../../Api/ApiProvider';
 import { ProjectsContext } from '../../../../Projects';
@@ -12,8 +14,6 @@ import { PageMessageType, ProjectMessageType, ProjectThreadMessageRole, Projects
 import { templates } from '../../../../Templates';
 import { TemplateComponentType } from '../../../../Templates/templateTypes';
 import env from '../../../../env';
-import { Box, Flex } from '@radix-ui/themes';
-import { useNavigate } from 'react-router-dom';
 import { appRoutes } from '../../../router';
 import { PaymentsContext } from '../../../../Payments/PaymentsProvider';
 import createSectionHeroPrompt from '../../../../Ai/prompts/SectionHero';

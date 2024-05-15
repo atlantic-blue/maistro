@@ -6,6 +6,7 @@ import * as styles from "./AiAssistantInput.scss"
 import { ProjectThreadMessage, ProjectThreadMessageRole } from "../../../types"
 
 interface AiAssistantInputProps {
+    placeholder?: string
     onSubmit: (message: ProjectThreadMessage) => void
     isLoading: boolean
 }
@@ -33,12 +34,13 @@ const AiAssistantInput: React.FC<AiAssistantInputProps> = (props) => {
     return (
         <Box>
             <TextArea
-                placeholder="What would you like to create?"
+                required
+                placeholder={props.placeholder || "What would you like to create?"}
                 size="3"
                 variant="surface"
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                required
+                className={styles.inputTextarea}
             />
             <IconButton
                 size="1"

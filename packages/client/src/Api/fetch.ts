@@ -72,7 +72,7 @@ class RequestController {
                         init,
                     }
                 })
-                throw error
+                return error
             })
             .then((response) => {
                 this.event$.next({

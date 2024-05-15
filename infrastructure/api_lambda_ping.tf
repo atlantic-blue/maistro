@@ -98,7 +98,7 @@ resource "aws_lambda_function" "api_lambda_ping" {
 ## LOGS
 resource "aws_cloudwatch_log_group" "api_lambda_ping" {
   name              = "/aws/lambda/${aws_lambda_function.api_lambda_ping.function_name}"
-    retention_in_days = 1
+  retention_in_days = 1
 
   lifecycle {
     prevent_destroy = false

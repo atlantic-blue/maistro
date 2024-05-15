@@ -6,8 +6,9 @@ export interface AiThreadsUpdateByIdInput {
     token: string
     projectId: string
     threadId: string
-
     messages: ProjectThreadMessage[]
+
+    stateless?: boolean
 }
 
 export interface AiThreadsUpdateByIdOutput {
@@ -21,13 +22,17 @@ const aiThreadsUpdateById = async (
         token,
         projectId,
         threadId,
+        stateless,
 
         messages,
     }: AiThreadsUpdateByIdInput,
     apiUrl = env.api.ai.aiThreads.updateById,
     request = requestController.fetch,
 ): Promise<AiThreadsUpdateByIdOutput> => {
-    return request(apiUrl(projectId, threadId), {
+    const params = new URLSearchParams()
+    params.append("stateless", stateless ? "true" : "false");
+
+    return request(`${apiUrl(projectId, threadId)}?${params.toString()}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

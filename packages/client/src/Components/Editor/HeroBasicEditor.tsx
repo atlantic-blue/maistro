@@ -29,6 +29,8 @@ const HeroBasicEditor: React.FC<SectionHeroProps & EditorProps> = (props) => {
                 <EditorData
                     type={EditorDataType.TEXT}
                     name="Title"
+                    section="headline"
+                    aiEnabled
                     value={state.title}
                     onChange={e => {
                         setState(prev => {
@@ -61,6 +63,8 @@ const HeroBasicEditor: React.FC<SectionHeroProps & EditorProps> = (props) => {
                 <EditorData
                     type={EditorDataType.WYSIWYG}
                     name="Content"
+                    section="content"
+                    aiEnabled
                     value={state.content}
                     onUploadFile={props.onUploadFile}
                     onChange={e => {
@@ -76,6 +80,8 @@ const HeroBasicEditor: React.FC<SectionHeroProps & EditorProps> = (props) => {
                 <EditorData
                     type={EditorDataType.TEXT}
                     name="cta text"
+                    section="cta"
+                    aiEnabled
                     value={state.cta}
                     onChange={e => {
                         setState(prev => {
@@ -90,6 +96,7 @@ const HeroBasicEditor: React.FC<SectionHeroProps & EditorProps> = (props) => {
                 <EditorData
                     type={EditorDataType.TEXT}
                     name="cta link"
+                    section="cta"
                     value={state.ctaLink}
                     onChange={e => {
                         setState(prev => {

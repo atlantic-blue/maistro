@@ -73,7 +73,14 @@ export interface ProjectThreadStruct {
     name: string
     projectId: string
     createdAt: string
+    updatedAt: string
     messages: ProjectThreadMessage[]
+    inputTokens: number
+    outputTokens: number
+}
+
+export enum ProjectThreadName {
+    COPYWRITING = "MAISTRO_COPYWRITING"
 }
 
 export enum ProjectThreadMessageRole {
@@ -274,7 +281,11 @@ export enum ProjectThreadMessageType {
 
 export type ProjectThreadEvent = {
     type: ProjectThreadMessageType.PUSH_MESSAGE
-    data: ProjectThreadMessage
+    data: {
+        message: ProjectThreadMessage
+        inputTokens: number,
+        outputTokens: number,
+    }
 }
 
 export enum ProjectMessageType {

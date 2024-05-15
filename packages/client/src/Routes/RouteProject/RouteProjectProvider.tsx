@@ -3,9 +3,10 @@ import React from "react"
 import { ApiContext } from "../../Api/ApiProvider"
 import { ProjectsContext } from "../../Projects"
 import { useParams } from "react-router-dom"
-import { ProjectMessageType, ProjectThreadMessageRole } from "../../types"
+import { ProjectMessageType, ProjectThreadMessageRole, ProjectThreadName } from "../../types"
 import Loading from "../../Components/Loading/Loading"
 import { createMaistroChatPrompt } from "../../Ai/prompts/Maistro"
+import { createMaistroCopywritingPrompt } from "../../Ai/prompts/MaistroCopywriting"
 
 const ProjectContext = React.createContext({})
 
@@ -20,6 +21,75 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
     const project = projects.getProjectById(projectId || "")
     const [isLoading, setIsLoading] = React.useState(true)
 
+    const createCopyWritingThread = async () => {
+        const aiThreadResponse = await api.ai.aiThreads.create({
+            token: user.getTokenId(),
+            name: ProjectThreadName.COPYWRITING,
+            projectId: project.getId(),
+            messages: [
+                {
+                    role: ProjectThreadMessageRole.SYSTEM,
+                    timestamp: new Date().toUTCString(),
+                    content: [
+                        {
+                            text: "Do not wrap responses with  \`\`\` and \`\`\`",
+                        },
+                    ]
+                }
+            ]
+        })
+
+        project.event$.next({
+            type: ProjectMessageType.SET_AI_THREAD,
+            data: {
+                id: aiThreadResponse.id,
+                createdAt: aiThreadResponse.createdAt,
+                projectId: aiThreadResponse.projectId,
+                name: aiThreadResponse.name,
+                messages: aiThreadResponse.messages,
+                updatedAt: aiThreadResponse.createdAt,
+                inputTokens: 0,
+                outputTokens: 0,
+            },
+        })
+    }
+
+    const createMainThread = async () => {
+        const aiThreadResponse = await api.ai.aiThreads.create({
+            token: user.getTokenId(),
+            name: project.getName(),
+            projectId: project.getId(),
+            messages: [
+                {
+                    role: ProjectThreadMessageRole.SYSTEM,
+                    timestamp: new Date().toUTCString(),
+                    content: [
+                        {
+                            text: "Do not wrap responses with  \`\`\` and \`\`\`",
+                        },
+                        {
+                            text: createMaistroChatPrompt()
+                        }
+                    ]
+                }
+            ]
+        })
+
+        project.event$.next({
+            type: ProjectMessageType.SET_AI_THREAD,
+            data: {
+                id: aiThreadResponse.id,
+                createdAt: aiThreadResponse.createdAt,
+                projectId: aiThreadResponse.projectId,
+                name: aiThreadResponse.name,
+                messages: aiThreadResponse.messages,
+                updatedAt: aiThreadResponse.createdAt,
+                inputTokens: 0,
+                outputTokens: 0,
+            },
+        })
+    }
+
     const getThreads = async () => {
         if (!project) {
             return
@@ -30,52 +100,22 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
             token: user.getTokenId(),
         })
 
-        if (!threads || !threads.length) {
-            const aiThreadResponse = await api.ai.aiThreads.create({
-                token: user.getTokenId(),
-                name: project.getName(),
-                projectId: project.getId(),
-                messages: [
-                    {
-                        role: ProjectThreadMessageRole.SYSTEM,
-                        timestamp: new Date().toUTCString(),
-                        content: [
-                            {
-                                text: "Do not wrap responses with  \`\`\` and \`\`\`",
-                            },
-                            {
-                                text: createMaistroChatPrompt()
-                            }
-                        ]
-                    }
-                ]
+        if (threads) {
+            threads?.map(thread => {
+                project.event$.next({
+                    type: ProjectMessageType.SET_AI_THREAD,
+                    data: thread,
+                })
             })
-
-            project.event$.next({
-                type: ProjectMessageType.SET_AI_THREAD,
-                data: {
-                    id: aiThreadResponse.id,
-                    createdAt: aiThreadResponse.createdAt,
-                    projectId: aiThreadResponse.projectId,
-                    name: aiThreadResponse.name,
-                    messages: aiThreadResponse.messages
-                },
-            })
-            return
         }
 
-        threads.map(thread => {
-            project.event$.next({
-                type: ProjectMessageType.SET_AI_THREAD,
-                data: {
-                    id: thread.id,
-                    createdAt: thread.createdAt,
-                    projectId: thread.projectId,
-                    name: thread.name,
-                    messages: thread.messages
-                },
-            })
-        })
+        if (threads && !threads?.find(thread => thread.name === ProjectThreadName.COPYWRITING)) {
+            createCopyWritingThread()
+        }
+
+        if (!threads || !threads.length) {
+            return createMainThread()
+        }
     }
 
     const getPages = async () => {
