@@ -1,6 +1,6 @@
 import React from 'react';
-import { faker } from '@faker-js/faker';
-import { Button, Flex, Heading, Section, Text } from '@radix-ui/themes';
+import { randImg, randSentence } from '@ngneat/falso';
+import { Button, Flex, Heading, Section } from '@radix-ui/themes';
 
 import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
 
@@ -56,8 +56,8 @@ export const SectionHeroImageItem: TemplateStruct<SectionHeroProps> = {
         title: "Captivating Experiences Await",
         content: "Join us on our journey.",
         img: {
-            src: faker.image.urlPicsumPhotos(),
-            alt: faker.word.words(3),
+            src: randImg(),
+            alt: randSentence(),
         },
         cta: "Discover More",
         ctaLink: "#home"

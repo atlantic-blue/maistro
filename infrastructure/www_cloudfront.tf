@@ -38,6 +38,50 @@ resource "aws_cloudfront_distribution" "www" {
     compress    = true
   }
 
+  ordered_cache_behavior {
+    path_pattern     = "/assets/client-js/*"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = local.www_cloudfront_origin_id
+
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin"]
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 60    // 1minute
+    default_ttl            = 3600  // 1hour
+    max_ttl                = 86400 // 1day
+    compress               = true
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "/assets/*"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = local.www_cloudfront_origin_id
+
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin"]
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 86400    // 1day
+    default_ttl            = 31536000 // 1year
+    max_ttl                = 31536000 // 1year
+    compress               = true
+  }
+
   custom_error_response {
     error_caching_min_ttl = 300
     error_code            = 403

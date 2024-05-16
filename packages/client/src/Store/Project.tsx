@@ -1,5 +1,5 @@
 import { Subject, Subscription } from "rxjs"
-import { faker } from '@faker-js/faker';
+import { randAnimal } from '@ngneat/falso';
 
 import {
     ColourScheme,
@@ -51,7 +51,7 @@ interface IProject {
 
 export class Project implements IProject {
     private id = `${Date.now()}`
-    private name = `Untitled-${faker.animal.bird().replace(" ", "-")}`
+    private name = `Untitled-${randAnimal().replace(" ", "-")}`
     private url = ""
     private pages: Record<string, Page> = {}
     private content: Record<string, ProjectContent> = {}
@@ -371,6 +371,7 @@ export class Project implements IProject {
             assets: {},
             content: {},
             emailLists: {},
+            threads: {},
             colourScheme: defaultColorScheme,
             fontScheme: defaultFontScheme,
         })

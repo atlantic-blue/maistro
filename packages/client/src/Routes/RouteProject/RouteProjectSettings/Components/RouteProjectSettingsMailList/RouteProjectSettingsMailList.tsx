@@ -32,7 +32,11 @@ const RouteProjectSettingsMailList: React.FC<RouteProjectSettingsMailListProps> 
             .then(emailLists => {
                 let list: ProjectEmailListStruct | null = null
 
-                emailLists.forEach((emailList) => {
+                if (!Array.isArray(emailLists)) {
+                    return list
+                }
+
+                emailLists?.forEach((emailList) => {
                     if (emailList.projectId === props.project.getId()) {
                         props.project.event$.next({
                             type: ProjectMessageType.SET_EMAIL_LIST,

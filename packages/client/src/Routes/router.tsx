@@ -2,22 +2,66 @@ import React from "react"
 import {
     createBrowserRouter,
 } from "react-router-dom";
+import loadable from "@loadable/component";
 
-import RoutesHome from "./RouteHome/RouteHome";
-import RoutesProjects from "./RouteProjects/RouteProjects";
+import Loading from "../Components/Loading/Loading";
 
-import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
-import RedirectRoute from "./Components/RedirectRoute/RedirectRoute";
-import RouteProjectSettings from "./RouteProject/RouteProjectSettings/RouteProjectSettings";
-import RouteProjectTemplates from "./RouteProject/RouteProjectPageCreate/RouteProjectPageCreate";
-import RouteProject from "./RouteProject/RouteProject/RouteProject";
-import RouteProjectEditPage from "./RouteProject/RouteProjectPage/RouteProjectPage";
-import RouteLogin from "./RouteLogin/RouteLogin";
-import RouteLogout from "./RouteLogout/RouteLogout";
-import RouteSettings from "./RouteSettings/RouteSettings";
-import RouteCallback from "./RoutesCallback/RoutesCallback";
-import RoutesProjectsNew from "./RouteProjectsCreate/RouteProjectsCreate";
-import RouteProjectProvider from "./RouteProject/RouteProjectProvider";
+// https://v5.reactrouter.com/web/guides/code-splitting
+const RoutesHome = loadable(() => import("./RouteHome/RouteHome"), {
+    fallback: <Loading />
+});
+
+const RoutesProjects = loadable(() => import("./RouteProjects/RouteProjects"), {
+    fallback: <Loading />
+});
+
+const ProtectedRoute = loadable(() => import("./Components/ProtectedRoute/ProtectedRoute"), {
+    fallback: <Loading />
+});
+
+const RedirectRoute = loadable(() => import("./Components/RedirectRoute/RedirectRoute"), {
+    fallback: <Loading />
+});
+
+const RouteProjectSettings = loadable(() => import("./RouteProject/RouteProjectSettings/RouteProjectSettings"), {
+    fallback: <Loading />
+});
+
+const RouteProjectTemplates = loadable(() => import("./RouteProject/RouteProjectPageCreate/RouteProjectPageCreate"), {
+    fallback: <Loading />
+});
+
+const RouteProject = loadable(() => import("./RouteProject/RouteProject/RouteProject"), {
+    fallback: <Loading />
+});
+
+const RouteProjectEditPage = loadable(() => import("./RouteProject/RouteProjectPage/RouteProjectPage"), {
+    fallback: <Loading />
+});
+
+const RouteLogin = loadable(() => import("./RouteLogin/RouteLogin"), {
+    fallback: <Loading />
+});
+
+const RouteLogout = loadable(() => import("./RouteLogout/RouteLogout"), {
+    fallback: <Loading />
+});
+
+const RouteSettings = loadable(() => import("./RouteSettings/RouteSettings"), {
+    fallback: <Loading />
+});
+
+const RouteCallback = loadable(() => import("./RoutesCallback/RoutesCallback"), {
+    fallback: <Loading />
+});
+
+const RoutesProjectsNew = loadable(() => import("./RouteProjectsCreate/RouteProjectsCreate"), {
+    fallback: <Loading />
+});
+
+const RouteProjectProvider = loadable(() => import("./RouteProject/RouteProjectProvider"), {
+    fallback: <Loading />
+});
 
 export enum RoutesParams {
     PROJECT_ID = ":projectId",

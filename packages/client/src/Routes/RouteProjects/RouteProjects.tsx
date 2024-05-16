@@ -1,7 +1,7 @@
 import React from "react"
 import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
-import { faker } from '@faker-js/faker';
+import { randImg } from '@ngneat/falso';
 
 import { ProjectsContext } from "../../Projects"
 import Thumbnail from "../../Components/Thumbnail/Thumbnail"
@@ -51,7 +51,7 @@ const RoutesProjects: React.FC = () => {
                                 {...{
                                     title: "Captivating Experiences Await",
                                     img: {
-                                        src: faker.image.urlPicsumPhotos(),
+                                        src: randImg(),
                                         alt: "",
                                     },
                                     content: "Launch Your Next Adventure",

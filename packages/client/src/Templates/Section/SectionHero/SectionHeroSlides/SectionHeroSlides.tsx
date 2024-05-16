@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { faker } from '@faker-js/faker';
+import { randImg, randSentence } from '@ngneat/falso';
 import { Button, Flex, Heading, Section } from '@radix-ui/themes';
 
 import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
@@ -83,43 +83,43 @@ export const SectionHeroSlidesItem: TemplateStruct<SectionHeroSlidesProps> = {
     props: {
         slides: [
             {
-                title: faker.lorem.words(5),
-                content: faker.lorem.sentence(),
+                title: randSentence(),
+                content: randSentence(),
                 img: {
-                    src: faker.image.urlPicsumPhotos(),
-                    alt: faker.word.words(3),
+                    src: randImg(),
+                    alt: randSentence(),
                 },
-                cta: faker.lorem.words(3),
+                cta: randSentence(),
                 ctaLink: "/about",
             },
             {
-                title: faker.lorem.words(5),
-                content: faker.lorem.sentence(),
+                title: randSentence(),
+                content: randSentence(),
                 img: {
-                    src: faker.image.urlPicsumPhotos(),
-                    alt: faker.word.words(3),
+                    src: randImg(),
+                    alt: randSentence(),
                 },
-                cta: faker.lorem.words(3),
+                cta: randSentence(),
                 ctaLink: "/contact",
             },
             {
-                title: faker.lorem.words(5),
-                content: faker.lorem.sentence(),
+                title: randSentence(),
+                content: randSentence(),
                 img: {
-                    src: faker.image.urlPicsumPhotos(),
-                    alt: faker.word.words(3),
+                    src: randImg(),
+                    alt: randSentence(),
                 },
-                cta: faker.lorem.words(3),
+                cta: randSentence(),
                 ctaLink: "/services",
             },
             {
-                title: faker.lorem.words(5),
-                content: faker.lorem.sentence(),
+                title: randSentence(),
+                content: randSentence(),
                 img: {
-                    src: faker.image.urlPicsumPhotos(),
-                    alt: faker.word.words(3),
+                    src: randImg(),
+                    alt: randSentence(),
                 },
-                cta: faker.lorem.words(3),
+                cta: randSentence(),
                 ctaLink: "/home",
             },
         ]

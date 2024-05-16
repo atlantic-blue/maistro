@@ -1,5 +1,5 @@
 import { Subject, Subscription } from "rxjs";
-import { faker } from '@faker-js/faker';
+import { randColor } from '@ngneat/falso';
 
 import { defaultColorScheme, defaultFontScheme } from "../PageContext";
 import {
@@ -57,7 +57,7 @@ class PageStore implements IPage {
     private id = `${Date.now()}`
     private projectId: string = ""
     private title = `Untitled-${Date.now()}`
-    private path = `path-${faker.color.human().replace(" ", "-")}`
+    private path = `path-${randColor().replaceAll(" ", "-")}`
     private description = "I am a Page description, edit me!"
     private keywords = ""
     private contentIds: string[] = []

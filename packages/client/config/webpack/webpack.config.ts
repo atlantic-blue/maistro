@@ -37,11 +37,15 @@ const createWebpackConfig = (args: WebpackArgs): Configuration => {
         devtool: env.isProduction() ? 'source-map' : 'cheap-module-source-map',
         cache: env.isProduction() ? false : true,
         optimization: {
+            runtimeChunk: 'single',
             splitChunks: {
                 chunks: 'initial',
                 cacheGroups: {
-                    vendors: false,
-                    default: false,
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: 'vendors',
+                        chunks: 'all'
+                    },
                 },
             },
             minimizer: [new TerserPlugin({

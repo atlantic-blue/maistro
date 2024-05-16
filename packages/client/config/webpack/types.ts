@@ -7,9 +7,9 @@ export interface WebpackEnv {
      */
     NODE_ENV: 'production' | 'development'
     /**
-     * webpack --env.ANALYZE
+     * webpack --env.ANALYSE
      */
-    analyze: boolean
+    ANALYSE: boolean
     isProduction: () => boolean
     isDevelopment: () => boolean
 }

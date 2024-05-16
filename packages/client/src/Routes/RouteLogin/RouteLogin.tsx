@@ -1,5 +1,5 @@
 import React from "react";
-import { faker } from '@faker-js/faker';
+import { randImg } from '@ngneat/falso';
 
 import SectionHeroBasic from "../../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
 import SectionAboutUsSimple from "../../Templates/Section/SectionAboutUs/SectionAboutUsSimple/SectionAboutUsSimple";
@@ -15,7 +15,7 @@ const RouteLogin: React.FC = () => {
                 {...{
                     title: "Maistro Ai",
                     img: {
-                        src: faker.image.urlPicsumPhotos(),
+                        src: randImg(),
                         alt: "img",
                     },
                     content: (

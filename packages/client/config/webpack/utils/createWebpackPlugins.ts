@@ -52,7 +52,7 @@ const createWebpackPlugins = (
         }),
     ]
 
-    if (env.analyze) {
+    if (env.ANALYSE) {
         plugins.push(
             new BundleAnalyzerPlugin({
                 openAnalyzer: true,

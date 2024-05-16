@@ -1,6 +1,6 @@
 import * as uuid from "uuid"
 import React from "react"
-import { faker } from '@faker-js/faker';
+import { randImg } from '@ngneat/falso';
 
 import { defaultFontScheme } from "../PageContext";
 import { PageStruct } from "../types";
@@ -16,14 +16,13 @@ export const CreateTemplateLogin = (): PageStruct[] => {
             title: "Login",
             description: "Login Page",
             path: `/login`,
-            contentActive: null,
             content: [
                 {
                     ...SectionHeroBasicItem,
                     props: {
                         title: "Login Page.",
                         img: {
-                            src: faker.image.urlPicsumPhotos(),
+                            src: randImg(),
                             alt: "img",
                         },
                         content: (

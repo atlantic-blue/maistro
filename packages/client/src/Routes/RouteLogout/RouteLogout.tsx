@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { faker } from '@faker-js/faker';
+import { randImg } from '@ngneat/falso';
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../Auth/AuthProvider";
@@ -27,7 +27,7 @@ const RouteLogout: React.FC = () => {
                 {...{
                     title: "Maistro Ai",
                     img: {
-                        src: faker.image.urlPicsumPhotos(),
+                        src: randImg(),
                         alt: "img",
                     },
                     content: (
