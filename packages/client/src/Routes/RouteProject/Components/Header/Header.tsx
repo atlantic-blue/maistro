@@ -19,7 +19,7 @@ const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
             ...{
                 logo: {
                     url: "https://maistro.website/assets/logo.svg",
-                    slogan: "",
+                    slogan: "Maistro",
                 },
                 links: [
                     {

@@ -213,6 +213,13 @@ export class Project implements IProject {
         return this.pages
     }
 
+    public getPagesMap(): Page[] {
+        return [
+            this.getPageByPathname("index"),
+            ...Object.values(this.pages).filter(page => "index" !== page.getPath())
+        ]
+    }
+
     public getPageById(id: string): Page {
         return this.pages[id]
     }

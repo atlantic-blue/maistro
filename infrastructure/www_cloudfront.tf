@@ -53,10 +53,11 @@ resource "aws_cloudfront_distribution" "www" {
       }
     }
 
+    // TODOD: Create release versions for client-js and tighten ttls
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 60    // 1minute
-    default_ttl            = 3600  // 1hour
-    max_ttl                = 86400 // 1day
+    min_ttl                = 60 // 1minute
+    default_ttl            = 60 // 1minute
+    max_ttl                = 60 // 1minute
     compress               = true
   }
 

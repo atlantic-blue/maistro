@@ -10,6 +10,7 @@ import { PaymentsContext } from "../../Payments/PaymentsProvider"
 
 import * as styles from "./RouteSettings.scss"
 import { Avatar, Card, Heading } from "@radix-ui/themes"
+import PaymentsAccountOnboarding from "../../Payments/PaymentsAccountOnboarding/PaymentsAccountOnboarding"
 
 const RoutesSettings: React.FC = () => {
     const { user } = React.useContext(ProjectsContext)

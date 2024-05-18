@@ -20,7 +20,7 @@ p {
     display: flex;
     justify-content: center;
     width: 100vw;
-    z-index: $global-z-index-4;
+    z-index: $global-z-index-5;
 
     &>div {
         width: 100%;
@@ -36,6 +36,7 @@ p {
     box-shadow: 0 2px 10px var(--black-a7);
     margin: 0;
     align-items: center;
+    gap: 20px;
 }
 
 .NavigationMenuTrigger,
@@ -81,6 +82,14 @@ p {
     width: 100%;
     animation-duration: 250ms;
     animation-timing-function: ease;
+}
+
+.NavigationMenuContentItem {
+    &-icon {
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+    }
 }
 
 .NavigationMenuContent[data-motion='from-start'] {

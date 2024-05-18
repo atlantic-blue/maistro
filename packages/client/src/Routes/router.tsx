@@ -63,10 +63,19 @@ const RouteProjectProvider = loadable(() => import("./RouteProject/RouteProjectP
     fallback: <Loading />
 });
 
+const RoutePaymentsAccounts = loadable(() => import("./RoutePaymentsAccounts/RoutePaymentsAccounts"), {
+    fallback: <Loading />
+});
+
+const RoutePaymentsAccountsLinkSuccess = loadable(() => import("./RoutePaymentsAccounts/RoutePaymentsAccountsLinkSuccess"), {
+    fallback: <Loading />
+});
+
 export enum RoutesParams {
     PROJECT_ID = ":projectId",
     PAGE_ID = ":pageId",
-    CONTENT_ID = ":contentId"
+    CONTENT_ID = ":contentId",
+    PAYMENTS_ACCOUNT_ID = ":paymentsAccountId"
 }
 
 export enum Routes {
@@ -77,6 +86,12 @@ export enum Routes {
     AUTHZ_CALLBACK = "/callback",
 
     SETTINGS = `/settings`,
+    PAYMENTS = `/payments`,
+
+    PAYMENTS_ACCOUNTS = `/payments/accounts`,
+    PAYMENTS_ACCOUNTS_LINK = `/payments/accounts`,
+    PAYMENTS_ACCOUNTS_LINK_SUCCESS = `/payments/accounts/success`,
+
     PROJECTS = `/projects`,
     PROJECTS_NEW = `/projects/new`,
 
@@ -168,6 +183,22 @@ const router = createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <RouteSettings />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: Routes.PAYMENTS_ACCOUNTS,
+        element: (
+            <ProtectedRoute>
+                <RoutePaymentsAccounts />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: Routes.PAYMENTS_ACCOUNTS_LINK_SUCCESS,
+        element: (
+            <ProtectedRoute>
+                <RoutePaymentsAccountsLinkSuccess />
             </ProtectedRoute>
         ),
     },

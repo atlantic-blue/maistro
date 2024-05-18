@@ -1,12 +1,12 @@
 import React from "react"
 import { useNavigate, useParams } from "react-router-dom";
+import { Avatar, Flex, Text } from "@radix-ui/themes";
 
 import {
     ColourPalette,
     ColourScheme,
     FontFamily,
     FontScheme,
-    PageMessageType,
     ProjectMessageType
 } from "../../../../types";
 import Menu from "../Menu/Menu"
@@ -14,10 +14,7 @@ import Menu from "../Menu/Menu"
 import { ProjectsContext } from "../../../../Projects";
 
 import { defaultColorScheme, defaultFontScheme } from "../../../../PageContext";
-import { Button, Flex, Section, Separator } from "@radix-ui/themes";
 import RouteProjectHeader from "../Header/Header";
-import ProjectDropDown from "../DropDownProject/DropDownProject";
-import DropDownPage from "../DropDownPage/DropDownPage";
 
 import * as styles from "./Helmet.scss"
 import { SubmitProject } from "../../RouteProjectSettings/Components/SubmitProject/SubmitProject";
@@ -27,9 +24,9 @@ import classNames from "classnames";
 import { appRoutes } from "../../../router";
 import { Project } from "../../../../Store/Project";
 import Page from "../../../../Store/Page";
-import useObservable from "../../../../Utils/Hooks/UseObservable";
-import { filter, tap } from "rxjs/operators";
 import AiAssistant from "../../../../Ai/Assistant/AiAssistant";
+import IconHome from "../../../../Components/Icons/Home/Home";
+import IconFile from "../../../../Components/Icons/File/File";
 
 
 const ListItem = React.forwardRef(({ className, children, title, ...props }, forwardedRef) => (
@@ -37,7 +34,7 @@ const ListItem = React.forwardRef(({ className, children, title, ...props }, for
         <NavigationMenu.Link asChild>
             <a className={classNames(styles.listItemLink, className)} {...props} ref={forwardedRef} aria-label={title}>
                 <div className={styles.listItemHeading}>{title}</div>
-                <p className={styles.listItemText}>{children}</p>
+                <div className={styles.listItemText}>{children}</div>
             </a>
         </NavigationMenu.Link>
     </li>
@@ -146,7 +143,16 @@ const Helmet: React.FC<HelmetProps> = (props) => {
                                             key={project.getId()}
                                             onClick={() => onProjectClick(project)}
                                         >
-                                            {project.getName()}
+
+                                            <Flex align="center" gap="1">
+                                                <Avatar
+                                                    size="1"
+                                                    fallback={project.getName().charAt(0)}
+                                                />
+                                                <Text>
+                                                    {project.getName()}
+                                                </Text>
+                                            </Flex>
                                         </ListItem>
                                     )
                                 })}
@@ -167,12 +173,25 @@ const Helmet: React.FC<HelmetProps> = (props) => {
                         </NavigationMenu.Trigger>
                         <NavigationMenu.Content className={styles.navigationMenuContent}>
                             <ul className={classNames(styles.list, styles.listTwo)}>
-                                {Object.values(project.getPages()).map(page => {
+                                {project.getPagesMap().map(page => {
+                                    if (!page) {
+                                        return null
+                                    }
+
                                     return (
                                         <ListItem
                                             key={page.getId()}
                                             onClick={() => onPageClick(page)}>
-                                            {page.getPath()}
+                                            <Flex>
+                                                {
+                                                    page.getPath() === "index" ?
+                                                        <IconHome className={styles.navigationMenuContentItemIcon} /> :
+                                                        <IconFile className={styles.navigationMenuContentItemIcon} />
+                                                }
+                                                <Text>
+                                                    {page.getPath()}
+                                                </Text>
+                                            </Flex>
                                         </ListItem>
                                     )
                                 })}

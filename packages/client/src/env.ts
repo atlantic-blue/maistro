@@ -46,6 +46,13 @@ interface Env {
             delete: string
         }
         payments: {
+            accounts: {
+                create: string
+                read: string
+            }
+            accountsLink: {
+                create: string
+            }
             subscriptions: {
                 read: string
             }
@@ -123,6 +130,13 @@ const createEnv = (): Env => {
                 delete: `${apiBaseUrl}/projects`,
             },
             payments: {
+                accounts: {
+                    create: `${apiBaseUrl}/payments/accounts`,
+                    read: `${apiBaseUrl}/payments/accounts`,
+                },
+                accountsLink: {
+                    create: `${apiBaseUrl}/payments/accounts/link`,
+                },
                 subscriptions: {
                     read: `${apiBaseUrl}/payments/subscriptions`,
                 }
