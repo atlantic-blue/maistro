@@ -76,7 +76,7 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
     return (
         <div className={styles.content}>
             <Button
-                size="2"
+                size="1"
                 className={classNames({
                     [styles.loading]: isLoading,
                     [styles.success]: viewLink,

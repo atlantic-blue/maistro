@@ -6,8 +6,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    border: 1px solid #DFE5EB;
-    background-color: #F3F3F3;
+    border-top: 1px solid #DFE5EB;
+    background-color: white;
     z-index: $global-z-index-4;
 
     &-content {
@@ -30,8 +30,8 @@
     }
 
     &-icon {
-        width: 20px;
-        height: 20px;
+        width: 15px;
+        height: 15px;
         cursor: pointer;
     }
 }
@@ -67,8 +67,8 @@
     }
 
     &-icon {
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         stroke-width: 2px;
 
         fill: #7c6161;

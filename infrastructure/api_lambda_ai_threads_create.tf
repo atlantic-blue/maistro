@@ -81,7 +81,7 @@ data "archive_file" "api_lambda_ai_threads_create" {
   type = "zip"
 
   source_dir  = "${path.module}/../packages/api/dist/ai-threads-create"
-  output_path = "${path.module}/ai-threads-create"
+  output_path = "${path.module}/ai-threads-create.zip"
 }
 
 

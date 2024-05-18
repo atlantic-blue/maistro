@@ -31,7 +31,7 @@ const MenuButton: React.FC<MenuButtonProps> = (props) => {
                 })
             }}
         >
-            <IconButton size="4" variant="ghost">
+            <IconButton size="1" variant="ghost">
                 <div className={styles.linkContainer}>
                     <props.Icon className={styles.linkStrokeIcon} />
                     <Text>

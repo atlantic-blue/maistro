@@ -81,14 +81,14 @@ data "archive_file" "api_lambda_payments_accounts_create" {
   type = "zip"
 
   source_dir  = "${path.module}/../packages/api/dist/payments-accounts-create"
-  output_path = "${path.module}/payments-accounts-create"
+  output_path = "${path.module}/payments-accounts-create.zip"
 }
 
 
 resource "aws_s3_object" "api_lambda_payments_accounts_create" {
   bucket = aws_s3_bucket.api.id
 
-  key    = "payments-accounts-create"
+  key    = "payments-accounts-create.zip"
   source = data.archive_file.api_lambda_payments_accounts_create.output_path
 
   etag = filemd5(data.archive_file.api_lambda_payments_accounts_create.output_path)

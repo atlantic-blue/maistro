@@ -24,17 +24,8 @@ const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
                 links: [
                     {
                         href: appRoutes.getSettingsRoute(),
-                        name: (
-                            <Box className={styles.headerLink}>
-                                <Avatar
-                                    size="2"
-                                    src={user.getAvatar()}
-                                    fallback={user.getName().charAt(0)}
-                                    alt={user.getName()}
-                                />
-                                <Text as="p" className={styles.headerText}>My Settings</Text>
-                            </Box>
-                        ),
+                        name: "My Settings",
+                        description: "My settings"
                     }
                 ]
             }

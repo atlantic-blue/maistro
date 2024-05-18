@@ -49,6 +49,7 @@ interface Env {
             accounts: {
                 create: string
                 read: string
+                readById: (accountId: string) => string
             }
             accountsLink: {
                 create: string
@@ -133,6 +134,7 @@ const createEnv = (): Env => {
                 accounts: {
                     create: `${apiBaseUrl}/payments/accounts`,
                     read: `${apiBaseUrl}/payments/accounts`,
+                    readById: (accountId: string) => `${apiBaseUrl}/payments/accounts/${accountId}`,
                 },
                 accountsLink: {
                     create: `${apiBaseUrl}/payments/accounts/link`,

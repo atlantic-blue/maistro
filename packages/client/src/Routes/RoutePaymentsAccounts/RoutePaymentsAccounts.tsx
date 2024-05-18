@@ -16,14 +16,22 @@ const RoutePaymentsAccounts: React.FC = () => {
     const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
     const [connectedAccount, setConnectedAccount] = useState<{ id: string }>();
     const [isLoading, setIsLoading] = React.useState(false)
-    const { paymentsAccountId } = useParams();
 
     useEffect(() => {
-        if (paymentsAccountId) {
-            setConnectedAccount({ id: paymentsAccountId })
+        if (!connectedAccount) {
             return
         }
 
+        api.payments.accounts.readById({
+            accountId: connectedAccount?.id,
+            token: user.getTokenId(),
+        }).then(response => {
+            console.log({ response })
+        })
+    }, [connectedAccount])
+
+    useEffect(() => {
+        setIsLoading(true)
         api.payments.accounts
             .read({ token: user.getTokenId() })
             .then(response => {
@@ -34,6 +42,8 @@ const RoutePaymentsAccounts: React.FC = () => {
                 if (response[0]) {
                     setConnectedAccount(response[0])
                 }
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [])
 

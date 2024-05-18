@@ -151,7 +151,7 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
                                     {Boolean(ComponentEditor) &&
                                         (
                                             <Dialog.Trigger>
-                                                <IconButton className={styles.itemHelperButton} onClick={() => setIsEditing(!isEditing)}>
+                                                <IconButton size="1" className={styles.itemHelperButton} onClick={() => setIsEditing(!isEditing)}>
                                                     <IconEdit className={styles.itemHelperIcon} />
                                                 </IconButton>
                                             </Dialog.Trigger>
@@ -160,18 +160,18 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
 
                                     {props.itemIndex ?
                                         (
-                                            <IconButton className={styles.itemHelperButton} onClick={() => props.onMoveContentUp(props.itemId)}>
+                                            <IconButton size="1" className={styles.itemHelperButton} onClick={() => props.onMoveContentUp(props.itemId)}>
                                                 <IconUp className={styles.itemHelperIcon} />
                                             </IconButton>
                                         ) : null
                                     }
 
-                                    <IconButton className={styles.itemHelperButton} onClick={() => props.onMoveContentDown(props.itemId)}>
+                                    <IconButton size="1" className={styles.itemHelperButton} onClick={() => props.onMoveContentDown(props.itemId)}>
                                         <IconUp className={classNames(styles.itemHelperIcon, styles.itemHelperIconDown)} />
                                     </IconButton>
 
 
-                                    <IconButton className={styles.itemHelperButton} onClick={() => props.onDeleteContent(props.itemId)}>
+                                    <IconButton size="1" className={styles.itemHelperButton} onClick={() => props.onDeleteContent(props.itemId)}>
                                         <IconBin className={styles.itemHelperIcon} />
                                     </IconButton>
                                 </div>

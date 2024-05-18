@@ -31,6 +31,7 @@ import { AiThreadsReadInput, AiThreadsReadOutput, aiThreadsRead } from "./Ai/aiT
 import { PaymentsAccountsCreateInput, PaymentsAccountsCreateOutput, paymentsAccountsCreate } from "./Payments/PaymentsAccountsCreate";
 import { PaymentsAccountsLinkCreateInput, PaymentsAccountsLinkCreateOutput, paymentsAccountsLinkCreate } from "./Payments/PaymentsAccountsLinkCreate";
 import { PaymentsAccountsReadInput, PaymentsAccountsReadOutput, paymentsAccountsRead } from "./Payments/PaymentsAccountsRead";
+import { PaymentsAccountsReadByIdInput, PaymentsAccountsReadByIdOutput, paymentsAccountsReadById } from "./Payments/PaymentsAccountsReadById";
 
 interface ApiContextState {
     api: {
@@ -81,6 +82,7 @@ interface ApiContextState {
             accounts: {
                 create: (input: PaymentsAccountsCreateInput) => Promise<PaymentsAccountsCreateOutput>
                 read: (input: PaymentsAccountsReadInput) => Promise<PaymentsAccountsReadOutput>
+                readById: (input: PaymentsAccountsReadByIdInput) => Promise<PaymentsAccountsReadByIdOutput>
             }
             accountsLink: {
                 create: (input: PaymentsAccountsLinkCreateInput) => Promise<PaymentsAccountsLinkCreateOutput>
@@ -141,6 +143,7 @@ const context: ApiContextState = {
             accounts: {
                 create: paymentsAccountsCreate,
                 read: paymentsAccountsRead,
+                readById: paymentsAccountsReadById,
             },
             accountsLink: {
                 create: paymentsAccountsLinkCreate,
