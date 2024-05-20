@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { randImg, randSentence } from '@ngneat/falso';
+import { randImg, randSentence, randWord } from '@ngneat/falso';
 import { Button, Flex, Heading, Section } from '@radix-ui/themes';
 
 import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
@@ -83,43 +83,43 @@ export const SectionHeroSlidesItem: TemplateStruct<SectionHeroSlidesProps> = {
     props: {
         slides: [
             {
-                title: randSentence(),
-                content: randSentence(),
+                title: randWord({ length: 3 }).join(" "),
+                content: randWord({ length: 10 }).join(" "),
                 img: {
                     src: randImg(),
-                    alt: randSentence(),
+                    alt: randWord({ length: 3 }).join(" "),
                 },
-                cta: randSentence(),
+                cta: randWord({ length: 3 }).join(" "),
                 ctaLink: "/about",
             },
             {
-                title: randSentence(),
-                content: randSentence(),
+                title: randWord({ length: 3 }).join(" "),
+                content: randWord({ length: 10 }).join(" "),
                 img: {
                     src: randImg(),
-                    alt: randSentence(),
+                    alt: randWord({ length: 3 }).join(" "),
                 },
-                cta: randSentence(),
+                cta: randWord({ length: 3 }).join(" "),
                 ctaLink: "/contact",
             },
             {
-                title: randSentence(),
-                content: randSentence(),
+                title: randWord({ length: 3 }).join(" "),
+                content: randWord({ length: 10 }).join(" "),
                 img: {
                     src: randImg(),
-                    alt: randSentence(),
+                    alt: randWord({ length: 3 }).join(" "),
                 },
-                cta: randSentence(),
+                cta: randWord({ length: 3 }).join(" "),
                 ctaLink: "/services",
             },
             {
-                title: randSentence(),
-                content: randSentence(),
+                title: randWord({ length: 3 }).join(" "),
+                content: randWord({ length: 10 }).join(" "),
                 img: {
                     src: randImg(),
-                    alt: randSentence(),
+                    alt: randWord({ length: 3 }).join(" "),
                 },
-                cta: randSentence(),
+                cta: randWord({ length: 3 }).join(" "),
                 ctaLink: "/home",
             },
         ]

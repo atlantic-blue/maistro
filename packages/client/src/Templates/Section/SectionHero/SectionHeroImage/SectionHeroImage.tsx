@@ -8,6 +8,8 @@ import { SectionHeroProps } from '../SectionHeroTypes';
 
 import * as styles from "./SectionHeroImage.scss"
 import TemplateWysiwyg from '../../../Components/TemplateWysiwyg/TemplateWysiwyg';
+import * as animationStyles from "../../../Styles/animation.scss"
+import classNames from 'classnames';
 
 const SectionHeroImage: React.FC<SectionHeroProps> = (props) => {
     return (
@@ -22,7 +24,7 @@ const SectionHeroImage: React.FC<SectionHeroProps> = (props) => {
                     <Heading
                         as="h1"
                         size="9"
-                        className={styles.heroTitle}
+                        className={classNames(styles.heroTitle, animationStyles.fadeIn)}
                     >
                         {props.title}
                     </Heading>
@@ -48,7 +50,8 @@ export const SectionHeroImageItem: TemplateStruct<SectionHeroProps> = {
     name: TemplateComponentType.HERO_IMAGE,
     Component: SectionHeroImage,
     classNames: [
-        ...Object.values(styles)
+        ...Object.values(styles),
+        ...Object.values(animationStyles)
     ],
     categories: [TemplateCategory.HERO],
     description: "Hero Image",

@@ -32,6 +32,7 @@ import { PaymentsAccountsCreateInput, PaymentsAccountsCreateOutput, paymentsAcco
 import { PaymentsAccountsLinkCreateInput, PaymentsAccountsLinkCreateOutput, paymentsAccountsLinkCreate } from "./Payments/PaymentsAccountsLinkCreate";
 import { PaymentsAccountsReadInput, PaymentsAccountsReadOutput, paymentsAccountsRead } from "./Payments/PaymentsAccountsRead";
 import { PaymentsAccountsReadByIdInput, PaymentsAccountsReadByIdOutput, paymentsAccountsReadById } from "./Payments/PaymentsAccountsReadById";
+import { ImagesGetInput, ImagesGetOutput, imagesGet } from "./Images/imagesGet";
 
 interface ApiContextState {
     api: {
@@ -51,6 +52,9 @@ interface ApiContextState {
             read: (input: ContentReadInput) => Promise<ContentReadOutput>
             readById: (input: ContentReadByIdInput) => Promise<ContentReadByIdOutput>
             updateById: (input: ContentUpdateByIdInput) => Promise<void>,
+        }
+        images: {
+            get: (input: ImagesGetInput) => Promise<ImagesGetOutput>
         }
         pages: {
             create: (input: PagesCreateInput) => Promise<PagesCreateOutput>,
@@ -115,6 +119,9 @@ const context: ApiContextState = {
             read: contentRead,
             readById: contentReadById,
             updateById: contentUpdateById,
+        },
+        images: {
+            get: imagesGet,
         },
         pages: {
             create: pagesCreate,

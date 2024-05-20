@@ -107,7 +107,7 @@ resource "aws_lambda_function" "api_lambda_payments_accounts_read" {
 
   environment {
     variables = {
-      TABLE_NAME          = "${aws_dynamodb_table.payments_accounts.name}"
+      TABLE_NAME = "${aws_dynamodb_table.payments_accounts.name}"
     }
   }
 

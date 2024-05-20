@@ -33,3 +33,7 @@ variable "google_site_verification_token" {
 variable "payments_secret_key" {
   type = string
 }
+
+variable "images_acces_key" {
+  type = string
+}

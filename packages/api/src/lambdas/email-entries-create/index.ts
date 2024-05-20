@@ -12,7 +12,7 @@ interface EmailEntryCreateInput {
     name: string
     email: string
     emailListId: string
-    redirectTo: string
+    redirectTo?: string
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -41,17 +41,24 @@ const emailEntryCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
 
     await dynamoDb.put(params).promise();
 
+    if (redirectTo) {
+        return {
+            statusCode: 302,
+            headers: {
+                'Location': new URL(redirectTo, event.headers.origin).toString()
+            }
+        };
+    }
+
     return {
-        statusCode: 302,
-        headers: {
-            'Location': new URL(redirectTo, event.headers.origin).toString()
-        }
+        statusCode: 202,
+        body: JSON.stringify({})
     };
 };
 
 const validationSchema = Joi.object<EmailEntryCreateInput>({
     emailListId: Joi.string().required(),
-    name: Joi.string().required(),
+    name: Joi.string().optional(),
     email: Joi.string().required(),
     redirectTo: Joi.string().optional(),
 })

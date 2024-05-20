@@ -23,6 +23,7 @@ export enum TemplateComponentType {
     HERO_IMAGE = "HERO_IMAGE",
     HERO_SLIDES = "HERO_SLIDES",
     HERO_VIDEO = "HERO_VIDEO",
+    HERO_SUBSCRIBE = "HERO_SUBSCRIBE",
 
     SUBSCRIBE_BASIC = "SUBSCRIBE_BASIC",
 }

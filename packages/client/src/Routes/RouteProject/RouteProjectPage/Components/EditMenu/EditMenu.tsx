@@ -37,12 +37,10 @@ const ContentMenu: React.FC<ContentMenuProps> = () => {
         })
     }
 
-    const contentActive = page.getContentActive()
     return true ? (
         <div className={styles.menu} ref={ref}>
             <EditMenuItem title="Content" show>
                 <SearchItem
-                    activeItem={contentActive}
                     templates={GetTemplates()}
                     onClick={onSearchClick}
                 />

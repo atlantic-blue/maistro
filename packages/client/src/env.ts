@@ -5,6 +5,9 @@ interface Env {
         file: {
             create: string
         }
+        images: {
+            get: string
+        }
         email: {
             lists: {
                 create: string
@@ -90,6 +93,9 @@ const createEnv = (): Env => {
             ping: `${apiBaseUrl}/ping`,
             file: {
                 create: `${apiBaseUrl}/upload`,
+            },
+            images: {
+                get: `${apiBaseUrl}/images`,
             },
             email: {
                 lists: {

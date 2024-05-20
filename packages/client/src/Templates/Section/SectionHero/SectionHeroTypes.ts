@@ -10,3 +10,10 @@ export interface SectionHeroProps {
     ctaLink?: string
     ctaOnClick?: () => void
 }
+
+export interface SectionHeroSubscribeProps extends SectionHeroProps {
+    url: string
+    emailListId: string
+    redirectTo?: string
+    successMessage: string
+}

@@ -7,6 +7,7 @@ import { EditorImageProps } from "./EditorData";
 import IconUpLoad from "../Icons/Upload/Upload";
 import AvatarMaistro from "../AvatarMaistro/AvatarMaistro";
 import EditorImageAi from "../../Ai/EditorImageAi/EditorImageAi";
+import ImagesGallery from "../ImagesGallery/ImagesGallery";
 
 const EditorImage: React.FC<EditorImageProps> = (props) => {
     const [preview, setPreview] = React.useState(props.value);
@@ -44,6 +45,7 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
                         <AvatarMaistro />
                     </Tabs.Trigger>
                     <Tabs.Trigger value="upload">Upload</Tabs.Trigger>
+                    <Tabs.Trigger value="gallery">Gallery</Tabs.Trigger>
                     <Tabs.Trigger value="url">URL</Tabs.Trigger>
                 </Tabs.List>
 
@@ -83,6 +85,15 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
                             </Flex>
                         )}
 
+                    </Tabs.Content>
+
+                    <Tabs.Content value="gallery">
+                        <ImagesGallery
+                            onChange={src => {
+                                setPreview(src);
+                                props.onChange(src);
+                            }}
+                        />
                     </Tabs.Content>
 
                     <Tabs.Content value="url">

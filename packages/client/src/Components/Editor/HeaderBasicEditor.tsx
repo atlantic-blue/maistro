@@ -88,7 +88,7 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
                                 <EditorData
                                     type={EditorDataType.TEXT}
                                     name="Link description"
-                                    value={link.href}
+                                    value={link.description}
                                     onChange={data => setLinks(prev => {
                                         prev[index] = {
                                             name: prev[index].name,

@@ -82,7 +82,12 @@ const RouteProjectPage: React.FC = () => {
         try {
             let data = template.props
 
-            if (template.name.includes(TemplateComponentType.SUBSCRIBE_BASIC)) {
+            if (
+                [
+                    TemplateComponentType.SUBSCRIBE_BASIC,
+                    TemplateComponentType.HERO_SUBSCRIBE,
+                ].includes(template.name)
+            ) {
                 let emailListId = Object.values(project.getEmailLists())[0]?.getId()
                 if (!emailListId) {
                     setProgressUpdate("Creating Mailing list...")
