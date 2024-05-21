@@ -13,6 +13,7 @@ const Logo: React.FC<LogoProps> = (props) => {
         <Box className={styles.logo}>
             <a href="/" aria-label={props.slogan}>
                 <Avatar
+                    size="1"
                     fallback={props.slogan}
                     src={props.imgUrl}
                     alt={props.slogan}

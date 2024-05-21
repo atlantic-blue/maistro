@@ -1,9 +1,10 @@
 import React from "react";
-import { SectionHeroProps, SectionHeroSubscribeProps } from "../../Templates/Section/SectionHero/SectionHeroTypes";
+import { useParams } from "react-router-dom";
 import { Button, DropdownMenu, Flex } from "@radix-ui/themes";
+
+import { SectionHeroSubscribeProps } from "../../Templates/Section/SectionHero/SectionHeroTypes";
 import EditorData, { EditorDataType } from "./EditorData";
 import { ProjectsContext } from "../../Projects";
-import { useParams } from "react-router-dom";
 import { ProjectEmailList } from "../../Store/EmailList";
 
 interface EditorProps {
@@ -19,7 +20,6 @@ const HeroSubscribeEditor: React.FC<SectionHeroSubscribeProps & EditorProps> = (
     const [emailList, setEmailList] = React.useState<ProjectEmailList | null>(project.getEmailListById(props.emailListId))
     const [state, setState] = React.useState(props)
 
-    console.log(props)
     const onSave = () => {
         props.onSaveData({
             content: state.content,

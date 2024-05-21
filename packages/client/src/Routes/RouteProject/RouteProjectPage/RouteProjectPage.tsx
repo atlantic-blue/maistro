@@ -199,9 +199,9 @@ const RouteProjectPage: React.FC = () => {
     return (
         <Helmet>
             <div className={styles.main}>
-                <Card m="2">
+                <div className={styles.dragDrop}>
                     <DragAndDrop />
-                </Card>
+                </div>
 
                 <Dialog.Root open={open} onOpenChange={setOpen}>
                     <Dialog.Trigger>

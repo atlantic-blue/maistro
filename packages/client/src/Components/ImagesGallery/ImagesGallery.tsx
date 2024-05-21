@@ -3,21 +3,10 @@ import { Avatar, Box, Button, Card, Flex, TextArea } from "@radix-ui/themes"
 
 import { ApiContext } from "../../Api/ApiProvider"
 import { ProjectsContext } from "../../Projects"
+import { ImagePreview } from "../../Api/Images/imagesGet"
 
 interface ImagesGalleryProps {
     onChange: (src: string) => void
-}
-
-interface ImagePreview {
-    asset_type: string
-    urls: {
-        raw: string
-        full: string
-        regular: string
-        small: string
-        thumb: string
-        small_s3: string
-    }
 }
 
 const ImagesGallery: React.FC<ImagesGalleryProps> = (props) => {
@@ -32,11 +21,11 @@ const ImagesGallery: React.FC<ImagesGalleryProps> = (props) => {
         try {
             const response = await api.images.get({
                 token: user.getTokenId(),
-                page: 1,
+                page: 4,
                 perPage: 5,
                 query: input
             })
-            setGallery(response.results[0].preview_photos)
+            setGallery(response.results)
         } catch (error) {
             // TODO app level error
             console.log({ error })

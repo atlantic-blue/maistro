@@ -26,16 +26,16 @@ const RouteProject: React.FC = () => {
         )
     }
 
-    const homePage = project.getPages()["home"]
-    if (homePage) {
+    const index = project.getPageByPathname("index")
+    if (index) {
         return (
-            <Navigate to={appRoutes.getProjectPageRoute(projectId, homePage.getId())} />
+            <Navigate to={appRoutes.getProjectPageRoute(projectId, index.getId())} />
         )
     }
 
-    const firstPage = Object.values(project.getPages())[0]
+    const firstAvailablePage = Object.values(project.getPages())[0]
     return (
-        <Navigate to={appRoutes.getProjectPageRoute(projectId, firstPage.getId())} />
+        <Navigate to={appRoutes.getProjectPageRoute(projectId, firstAvailablePage.getId())} />
     )
 }
 

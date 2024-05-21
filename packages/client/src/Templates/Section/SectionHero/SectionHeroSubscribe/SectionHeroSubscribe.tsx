@@ -5,7 +5,7 @@ import { Button, Callout, Flex, Heading, Section, TextField } from '@radix-ui/th
 
 import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
 
-import { SectionHeroProps, SectionHeroSubscribeProps } from '../SectionHeroTypes';
+import { SectionHeroSubscribeProps } from '../SectionHeroTypes';
 
 import TemplateWysiwyg from '../../../Components/TemplateWysiwyg/TemplateWysiwyg';
 import * as animationStyles from "../../../Styles/animation.scss"

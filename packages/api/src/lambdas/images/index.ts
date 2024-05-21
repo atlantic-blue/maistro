@@ -42,7 +42,7 @@ const images: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     });
     // https://unsplash.com/documentation#search-collections
     // https://github.com/unsplash/unsplash-js?tab=readme-ov-file#searchgetcollectionsarguments-additionalfetchoptions
-    const { response, errors } = await unsplash.search.getCollections({
+    const { response, errors } = await unsplash.search.getPhotos({
         query,
         page: Number(page) || 1,
         perPage: Number(page) || 10,

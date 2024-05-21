@@ -1,12 +1,12 @@
 import React from 'react';
+import { Flex, Heading, Section } from '@radix-ui/themes';
 
 import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
 import Button from '../../../Components/Button/Button';
-import * as ButtonStyles from '../../../Components/Button/Button.scss';
+import TemplateWysiwyg from '../../../Components/TemplateWysiwyg/TemplateWysiwyg';
 
 import * as styles from "./SectionHeroVideo.scss"
-import { Flex, Heading, Section } from '@radix-ui/themes';
-import TemplateWysiwyg from '../../../Components/TemplateWysiwyg/TemplateWysiwyg';
+import * as ButtonStyles from '../../../Components/Button/Button.scss';
 
 export interface SectionHeroVideoProps {
     "data-hydration-id"?: string

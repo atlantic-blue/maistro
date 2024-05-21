@@ -13,9 +13,8 @@ import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
 import { PaymentsContext } from '../../Payments/PaymentsProvider';
 import { templates } from "../../Templates"
-import { Box, Card, Flex, Text } from "@radix-ui/themes"
+import { Card } from "@radix-ui/themes"
 import * as styles from "./RouteProjects.scss"
-import SectionHeroBasic from "../../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
 import SectionHeroImage from "../../Templates/Section/SectionHero/SectionHeroImage/SectionHeroImage";
 
 const RoutesProjects: React.FC = () => {
@@ -69,13 +68,12 @@ const RoutesProjects: React.FC = () => {
                         const project = projects.getProjectById(projectId)
 
                         const Preview = () => {
-                            const pagesKey = Object.keys(project.getPages())
-                            const firstPage = project.getPageById(pagesKey[0])
-                            if (!firstPage) {
+                            const indexPage = project.getPageByPathname("index")
+                            if (!indexPage) {
                                 return
                             }
 
-                            const content = firstPage.getContentIds().map(contentId => {
+                            const content = indexPage.getContentIds().map(contentId => {
                                 const content = project.getContentById(contentId)
                                 if (!content) {
                                     return
@@ -97,7 +95,9 @@ const RoutesProjects: React.FC = () => {
 
                         const onClick = () => {
                             navigate(
-                                appRoutes.getProjectRoute(project.getId())
+                                project.getPageByPathname("index")?.getId() ?
+                                    appRoutes.getProjectPageRoute(project.getId(), project.getPageByPathname("index").getId())
+                                    : appRoutes.getProjectRoute(project.getId())
                             )
                         }
 
