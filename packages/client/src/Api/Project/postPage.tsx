@@ -32,7 +32,11 @@ const postPage = (
     const hydrationState: Record<string, Object | undefined> = {}
     contentIds.forEach(contentId => {
         const content = project.getContentById(contentId)
-        const data = content.getData()
+        if (!content) {
+            return
+        }
+
+        const data = content?.getData()
         const templateName = content.getTemplate()
         const id = content.getId()
         hydrationState[`${templateName}:${id}`] = data
@@ -40,16 +44,24 @@ const postPage = (
 
     const Components = () => contentIds.map(contentId => {
         const content = project.getContentById(contentId)
+        if (!content) {
+            return null
+        }
+
         return <content.Component />
     })
 
     const getContentStyles = () => contentIds.map(contentId => {
         const content = project.getContentById(contentId)
+        if (!content) {
+            return ""
+        }
+
         const styles = content.getStylesFromClassNames()
         if (!styles) {
             return ""
         }
-        return styles.join("\n")
+        return [...new Set(styles)].join("\n")
     })
 
     const Html = () => page.createHtml({

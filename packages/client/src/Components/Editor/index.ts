@@ -1,10 +1,13 @@
 import { TemplateComponentType } from "../../Templates/templateTypes";
+import AboutUsBasicEditor from "./AboutUsBasicEditor";
+import FooterBasicEditor from "./FooterBasicEditor";
 import HeaderBasicEditor from "./HeaderBasicEditor";
 import HeroBasicEditor from "./HeroBasicEditor";
 import HeroSlidesEditor from "./HeroSlidesEditor";
 import HeroSubscribeEditor from "./HeroSubscribeEditor";
 import HeroVideoEditor from "./HeroVideoEditor";
 import SectionBlankEditor from "./SectionBlankEditor";
+import ServicesBasicEditor from "./ServicesBasicEditor";
 import TestimonialsBasicEditor from "./TestimonialsBasicEditor";
 
 const editors: Record<TemplateComponentType, React.FC<any>> = {
@@ -18,7 +21,13 @@ const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.HERO_VIDEO]: HeroVideoEditor,
     [TemplateComponentType.HERO_SUBSCRIBE]: HeroSubscribeEditor,
 
+    [TemplateComponentType.ABOUT_US_BASIC]: AboutUsBasicEditor,
+
     [TemplateComponentType.TESTIMONIALS_BASIC]: TestimonialsBasicEditor,
+
+    [TemplateComponentType.SERVICE_BASIC]: ServicesBasicEditor,
+
+    [TemplateComponentType.FOOTER_BASIC]: FooterBasicEditor,
 
     [TemplateComponentType.SECTION_BLANK]: SectionBlankEditor,
 }

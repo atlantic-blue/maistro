@@ -24,7 +24,13 @@ const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
                 links: [
                     {
                         href: appRoutes.getSettingsRoute(),
-                        name: "My Settings",
+                        name: (
+                            <Avatar
+                                size="1"
+                                src={user.getAvatar()}
+                                fallback={user.getName().charAt(0)}
+                            />
+                        ),
                         description: "My settings"
                     }
                 ]

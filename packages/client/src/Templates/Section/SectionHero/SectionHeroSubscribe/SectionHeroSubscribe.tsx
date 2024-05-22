@@ -1,7 +1,7 @@
 import React from 'react';
 import { randImg, randWord } from '@ngneat/falso';
 import classNames from 'classnames';
-import { Button, Callout, Flex, Heading, Section, TextField } from '@radix-ui/themes';
+import { Button, Callout, Card, Flex, Heading, Section, TextField } from '@radix-ui/themes';
 
 import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
 
@@ -64,7 +64,7 @@ const SectionHeroSubscribe: React.FC<SectionHeroSubscribeProps> = (props) => {
                     />
 
                     {isSubmitted ? (
-                        <>
+                        <Card>
                             <Callout.Root color="green">
                                 <Callout.Icon>
                                     <InfoCircledIcon />
@@ -74,10 +74,10 @@ const SectionHeroSubscribe: React.FC<SectionHeroSubscribeProps> = (props) => {
                                 </Callout.Text>
                             </Callout.Root>
 
-                        </>
+                        </Card>
                     ) : (
                         <form action="" onSubmit={onSubmit}>
-                            <Flex align="stretch" direction="column" justify="center" gap="3">
+                            <Flex align="stretch" direction="column" justify="center" gap="3" width="300px">
                                 <TextField.Root
                                     size="3"
                                     required

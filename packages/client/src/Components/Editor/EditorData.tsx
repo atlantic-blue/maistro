@@ -3,12 +3,22 @@ import EditorText from "./EditorText";
 import EditorImage from "./EditorImage";
 import EditorWysiwyg from "./EditorWysiwyg";
 import EditorVideo from "./EditorVideo";
+import { NavigationItem } from "../../Templates/Components/Navigation/Navigation";
+import EditorLinks from "./EditorLinks";
 
 export enum EditorDataType {
     TEXT = "TEXT",
     IMAGE = "IMAGE",
     VIDEO = "VIDEO",
     WYSIWYG = "WYSIWYG",
+    LINKS = "LINKS",
+}
+
+export interface EditorLinksProps {
+    type: EditorDataType.LINKS
+    links: NavigationItem[]
+    onChange: React.Dispatch<React.SetStateAction<NavigationItem[]>>
+    onUploadFile: (file: File) => Promise<string>
 }
 
 export interface EditorWysiwygProps {
@@ -44,7 +54,7 @@ export interface EditorTextProps {
     section?: "headline" | "content" | "cta"
 }
 
-export type EditorDataProps = EditorTextProps | EditorImageProps | EditorVideoProps | EditorWysiwygProps
+export type EditorDataProps = EditorTextProps | EditorImageProps | EditorVideoProps | EditorWysiwygProps | EditorLinksProps
 
 const EditorData: React.FC<EditorDataProps> = (props) => {
     switch (props.type) {
@@ -63,6 +73,10 @@ const EditorData: React.FC<EditorDataProps> = (props) => {
         case EditorDataType.WYSIWYG:
             return (
                 <EditorWysiwyg {...props} />
+            )
+        case EditorDataType.LINKS:
+            return (
+                <EditorLinks {...props} />
             )
         default:
             return null

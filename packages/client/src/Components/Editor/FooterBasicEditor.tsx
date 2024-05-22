@@ -2,26 +2,24 @@ import React from "react"
 import { Button, Flex } from "@radix-ui/themes"
 
 import EditorData, { EditorDataType } from "../../Components/Editor/EditorData"
-import { HeaderProps } from "../../Templates/Header/HeaderTypes"
+import { FooterBasicProps } from "../../Templates/Footer/FooterTypes"
 
 interface EditorProps {
-    onSaveData: (props: HeaderProps) => void
+    onSaveData: (props: FooterBasicProps) => void
     onUploadFile: (file: File) => Promise<string>
     children: React.ReactNode
 }
 
-const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
-    const [logoUrl, setLogoUrl] = React.useState(props.logo.url)
-    const [logoSlogan, setLogoSlogan] = React.useState(props.logo.slogan)
+const FooterBasicEditor: React.FC<FooterBasicProps & EditorProps> = (props) => {
+    const [name, setName] = React.useState(props.name)
     const [links, setLinks] = React.useState(props.links || [])
+    const [mediaLinks, setMediaLinks] = React.useState(props.mediaLinks || [])
 
     const onSave = () => {
         props.onSaveData({
-            logo: {
-                url: logoUrl,
-                slogan: logoSlogan,
-            },
             links,
+            mediaLinks,
+            name,
         })
     }
 
@@ -29,30 +27,24 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
         <>
             <Flex direction="column" gap="3">
                 <EditorData
-                    type={EditorDataType.IMAGE}
-                    name="Logo"
-                    value={logoUrl}
-                    onChange={setLogoUrl}
-                    onUploadFile={props.onUploadFile}
-                />
-                <EditorData
                     type={EditorDataType.TEXT}
-                    name="Slogan"
-                    section="headline"
-                    aiEnabled
-                    value={logoSlogan}
-                    onChange={setLogoSlogan}
+                    name="Name"
+                    value={name}
+                    onChange={setName}
                 />
-
                 <EditorData
                     type={EditorDataType.LINKS}
                     links={links}
                     onChange={setLinks}
                     onUploadFile={props.onUploadFile}
                 />
-
+                <EditorData
+                    type={EditorDataType.LINKS}
+                    links={mediaLinks}
+                    onChange={setMediaLinks}
+                    onUploadFile={props.onUploadFile}
+                />
             </Flex>
-            {props.children}
 
             <Flex gap="3" mt="4" justify="end">
                 <Button onClick={() => onSave()}>Save</Button>
@@ -61,4 +53,4 @@ const HeaderBasicEditor: React.FC<HeaderProps & EditorProps> = (props) => {
     )
 };
 
-export default HeaderBasicEditor
+export default FooterBasicEditor

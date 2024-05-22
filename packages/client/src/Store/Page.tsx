@@ -259,15 +259,16 @@ class PageStore implements IPage {
                     <meta name="keywords" content=${this.getKeyWords()} />
                     <meta name="author" content="https://maistro.website" />
 
+                    ${this.getFontFamilyLinks().join('\n')}
+
+                    <link href="https://maistro.website/assets/radix-styles.css" rel="stylesheet" />
+
                     <style>
                         ${resetCss()}
                     </style>
                     <style>
                         ${Css()}
                     </style>
-                    <link href="https://maistro.website/assets/radix-styles.css" rel="stylesheet" />
-
-                    ${this.getFontFamilyLinks().join('\n')}
                 `,
                 body: {
                     main: `${Body()}`,

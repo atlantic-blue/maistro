@@ -3,10 +3,13 @@ import { CaretDownIcon } from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 import * as styles from "./Navigation.scss"
+import { Avatar } from "@radix-ui/themes";
 
 export interface NavigationItem {
     name: string | React.ReactNode
     href: string
+    isExternal?: boolean
+    imgSrc?: string
     children?: NavigationItem[]
     description: string
 }
@@ -46,8 +49,19 @@ const Navigation: React.FC<NavigationProps> = (props) => {
 
                     return (
                         <NavigationMenu.Item key={`NavigationMenu-${item.name}`}>
-                            <NavigationMenu.Link className={styles.navigationMenuLink} href={item.href} target="_blank" rel="noopener noreferrer" aria-label={item.description}>
-                                {item.name}
+                            <NavigationMenu.Link
+                                className={styles.navigationMenuLink}
+                                href={item.href}
+                                target={item.isExternal ? "_blank" : "_self"} rel="noopener noreferrer"
+                                aria-label={item.description}
+                            >
+                                {item.imgSrc ?
+                                    <Avatar
+                                        size="2"
+                                        src={item.imgSrc}
+                                        fallback={typeof item.name === "string" && item.name.charAt(0)}
+                                    /> :
+                                    item.name}
                             </NavigationMenu.Link>
                         </NavigationMenu.Item>
                     )

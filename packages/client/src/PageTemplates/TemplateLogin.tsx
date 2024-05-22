@@ -5,8 +5,8 @@ import { randImg } from '@ngneat/falso';
 import { defaultFontScheme } from "../PageContext";
 import { PageStruct } from "../types";
 import { SectionHeroBasicItem } from "../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
-import { FooterSimpleItem } from "../Templates/Footer/FooterSimple/FooterSimple";
-import { SectionAboutUsSimpleItem } from "../Templates/Section/SectionAboutUs/SectionAboutUsSimple/SectionAboutUsSimple";
+import { FooterSimpleItem } from "../Templates/Footer/FooterBasic/FooterBasic";
+import { SectionAboutUsSimpleItem } from "../Templates/Section/SectionAboutUs/SectionAboutUsBasic/SectionAboutUsBasic";
 
 
 export const CreateTemplateLogin = (): PageStruct[] => {

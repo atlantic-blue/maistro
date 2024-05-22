@@ -1,5 +1,5 @@
 import { templates } from "../Templates"
-import { FooterSimpleItem } from "../Templates/Footer/FooterSimple/FooterSimple"
+import { FooterSimpleItem } from "../Templates/Footer/FooterBasic/FooterBasic"
 import { HeaderBasicItem } from "../Templates/Header/HeaderBasic/HeaderBasic"
 import { SectionHeroBasicItem } from "../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic"
 import { PageStruct } from "../types"

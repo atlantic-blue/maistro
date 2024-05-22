@@ -1,0 +1,13 @@
+.main {
+    overflow: hidden;
+    position: relative;
+}
+
+.frame {
+    object-fit: cover;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}

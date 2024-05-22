@@ -2,8 +2,8 @@ import React from "react";
 import { randImg } from '@ngneat/falso';
 
 import SectionHeroBasic from "../../Templates/Section/SectionHero/SectionHeroBasic/SectionHeroBasic";
-import SectionAboutUsSimple from "../../Templates/Section/SectionAboutUs/SectionAboutUsSimple/SectionAboutUsSimple";
-import FooterSimple from "../../Templates/Footer/FooterSimple/FooterSimple";
+import SectionAboutUsSimple from "../../Templates/Section/SectionAboutUs/SectionAboutUsBasic/SectionAboutUsBasic";
+import FooterSimple from "../../Templates/Footer/FooterBasic/FooterBasic";
 import { AuthContext } from "../../Auth/AuthProvider";
 
 const RouteLogin: React.FC = () => {

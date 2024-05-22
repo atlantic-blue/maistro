@@ -12,18 +12,16 @@ import { SectionHeroSlidesItem } from './Section/SectionHero/SectionHeroSlides/S
 import { SectionAboutUsTeamItem } from './Section/SectionAboutUs/SectionAboutUsTeam/SectionAboutUsTeam'
 import { SectionAboutUsDetailedItem } from './Section/SectionAboutUs/SectionAboutUsDetailed/SectionAboutUsDetailed'
 import { SectionAboutUsInteractiveItem } from './Section/SectionAboutUs/SectionAboutUsInteractive/SectionAboutUsInteractive'
-import { SectionAboutUsSimpleItem } from "./Section/SectionAboutUs/SectionAboutUsSimple/SectionAboutUsSimple"
+import { SectionAboutUsBasicItem } from "./Section/SectionAboutUs/SectionAboutUsBasic/SectionAboutUsBasic"
 
-import { SectionServicesBasicItem } from './Section/SectionServices/SectionServicesBasic/SectionServicesBasic'
 import { SectionServicesAccordionItem } from './Section/SectionServices/SectionServicesAccordion/SectionServicesAccordion'
-import { SectionServicesDetailedItem } from './Section/SectionServices/SectionServicesDetailed/SectionServicesDetailed'
+import { SectionServicesBasicItem } from './Section/SectionServices/SectionServicesBasic/SectionServicesBasic'
 import { SectionServicesIconsItem } from './Section/SectionServices/SectionServicesIcons/SectionServicesIcons'
 
 import { SectionContactWithMapItem } from './Section/SectionContact/SectionContactWithMap/SectionContactWithMap'
 import { SectionContactDetailedItem } from './Section/SectionContact/SectionContactDetailed/SectionContactDetailed'
 import { SectionContactInteractiveItem } from './Section/SectionContact/SectionContactInteractive/SectionContactInteractive'
 
-import { FooterSimpleItem } from './Footer/FooterSimple/FooterSimple'
 import { FooterDetailedItem } from './Footer/FooterDetailed/FooterDetailed'
 import { FooterInteractiveItem } from './Footer/FooterInteractive/FooterInteractive'
 import { FooterWithNavigationItem } from './Footer/FooterWithNavigation/FooterWithNavigation'
@@ -31,6 +29,7 @@ import { SectionSubscribeBasicItem } from './Section/SectionContact/SectionSubsc
 import { SectionBlankItem } from './Section/SectionBlank'
 import { SectionHeroSubscribeItem } from './Section/SectionHero/SectionHeroSubscribe/SectionHeroSubscribe'
 import { SectionTestimonialsBasicItem } from './Section/SectionTestimonials/SectionTestimonialsBasic/SectionTestimonialsBasic'
+import { FooterBasicItem } from './Footer/FooterBasic/FooterBasic'
 
 export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>> => {
     const templatesRecord: Record<string, TemplateStruct<{}>> = {}
@@ -49,13 +48,14 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>
         SectionHeroSlidesItem,
         SectionHeroSubscribeItem,
 
-        SectionTestimonialsBasicItem
-        // SectionAboutUsSimpleItem,
+        SectionTestimonialsBasicItem,
+
+        SectionAboutUsBasicItem,
         // SectionAboutUsTeamItem,
         // SectionAboutUsDetailedItem,
         // SectionAboutUsInteractiveItem,
 
-        // SectionServicesBasicItem,
+        SectionServicesBasicItem,
         // SectionServicesAccordionItem,
         // SectionServicesDetailedItem,
         // SectionServicesIconsItem,
@@ -65,7 +65,7 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>
         // SectionContactDetailedItem,
         // SectionContactInteractiveItem,
 
-        // FooterSimpleItem,
+        FooterBasicItem,
         // FooterDetailedItem,
         // FooterWithNavigationItem,
         // FooterInteractiveItem,

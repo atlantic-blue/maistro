@@ -5,11 +5,11 @@ export enum TemplateCategory {
     HERO = "HERO",
     TEXT = "TEXT",
     SUBSCRIBE = "SUBSCRIBE",
-    TESTIMONIALS = "TESTIMONIALS"
-    // ABOUT = "ABOUT",
-    // SERVICES = "SERVICES",
+    TESTIMONIALS = "TESTIMONIALS",
+    ABOUT = "ABOUT",
+    SERVICES = "SERVICES",
     // CONTACT = "CONTACT",
-    // FOOTER = "FOOTER",
+    FOOTER = "FOOTER",
 }
 
 export enum TemplateComponentType {
@@ -27,6 +27,12 @@ export enum TemplateComponentType {
     HERO_SUBSCRIBE = "HERO_SUBSCRIBE",
 
     TESTIMONIALS_BASIC = "TESTIMONIALS_BASIC",
+
+    ABOUT_US_BASIC = "ABOUT_US_BASIC",
+
+    SERVICE_BASIC = "SERVICE_BASIC",
+
+    FOOTER_BASIC = "FOOTER_BASIC",
 
     SUBSCRIBE_BASIC = "SUBSCRIBE_BASIC",
 }
