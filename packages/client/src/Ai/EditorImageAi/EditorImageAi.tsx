@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 
 import { ApiContext } from "../../Api/ApiProvider"
 import { ProjectsContext } from "../../Projects"
-import { PaymentsContext } from "../../Payments/PaymentsProvider"
+import { PaymentsContext, canUseFeature } from "../../Payments/PaymentsProvider"
 import AiAssistantInput from "../Assistant/Input/AiAssistantInput"
 import { ProjectThreadMessage } from "../../types"
 import env from "../../env"
@@ -15,7 +15,7 @@ interface EditorImageAiProps {
 const EditorImageAi: React.FC<EditorImageAiProps> = (props) => {
     const { api } = React.useContext(ApiContext)
     const { projects, user } = React.useContext(ProjectsContext)
-    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
+    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
@@ -48,7 +48,7 @@ const EditorImageAi: React.FC<EditorImageAiProps> = (props) => {
     return (
         <AiAssistantInput
             placeholder="Describe the image you wish to see"
-            onSubmit={isSubscribed ? onSubmit : redirectToCheckout}
+            onSubmit={canUseFeature.aiImage[paymentPlan]() ? onSubmit : redirectToPaymentPlans}
             isLoading={isLoading}
         />
     )

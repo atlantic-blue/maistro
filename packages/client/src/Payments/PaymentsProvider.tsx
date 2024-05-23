@@ -1,30 +1,89 @@
 import React from "react";
 import { ApiContext } from "../Api/ApiProvider";
 import { AuthContext } from "../Auth/AuthProvider";
-import env from "../env";
-import { getStripe } from "./stripe";
+import { Routes } from "../Routes/router";
+
+export enum PaymentPlan {
+    FREE = "FREE",
+    BASIC = "BASIC",
+    STANDARD = "STANDARD",
+    PREMIUM = "PREMIUM",
+    VIP = "VIP"
+}
 
 interface PaymentsContextState {
     isLoading: boolean
-    isSubscribed: boolean
-    redirectToCheckout: () => void
+    redirectToPaymentPlans: () => void
+    paymentPlan: PaymentPlan
 }
 
 export const PaymentsContext = React.createContext<PaymentsContextState>({
     isLoading: false,
-    isSubscribed: false,
-    redirectToCheckout: () => null
+    redirectToPaymentPlans: () => null,
+    paymentPlan: PaymentPlan.FREE,
 })
 
 interface PaymentsProviderProps {
     children: React.ReactNode
 }
 
+export const canUseFeature = {
+    aiAssistant: {
+        [PaymentPlan.FREE]: (tokens: number) => tokens < 500,
+        [PaymentPlan.BASIC]: (tokens: number) => true,
+        [PaymentPlan.STANDARD]: (tokens: number) => true,
+        [PaymentPlan.PREMIUM]: (tokens: number) => true,
+        [PaymentPlan.VIP]: (tokens: number) => true,
+    },
+    aiImage: {
+        [PaymentPlan.FREE]: () => false,
+        [PaymentPlan.BASIC]: () => true,
+        [PaymentPlan.STANDARD]: () => true,
+        [PaymentPlan.PREMIUM]: () => true,
+        [PaymentPlan.VIP]: () => true,
+    },
+    aiText: {
+        [PaymentPlan.FREE]: () => false,
+        [PaymentPlan.BASIC]: () => true,
+        [PaymentPlan.STANDARD]: () => true,
+        [PaymentPlan.PREMIUM]: () => true,
+        [PaymentPlan.VIP]: () => true,
+    },
+    connectedAccount: {
+        [PaymentPlan.FREE]: () => false,
+        [PaymentPlan.BASIC]: () => true,
+        [PaymentPlan.STANDARD]: () => true,
+        [PaymentPlan.PREMIUM]: () => true,
+        [PaymentPlan.VIP]: () => true,
+    },
+    createPage: {
+        [PaymentPlan.FREE]: (currentPages: number) => false,
+        [PaymentPlan.BASIC]: (currentPages: number) => currentPages < 2,
+        [PaymentPlan.STANDARD]: (currentPages: number) => currentPages < 10,
+        [PaymentPlan.PREMIUM]: (currentPages: number) => true,
+        [PaymentPlan.VIP]: (currentPages: number) => true,
+    },
+    createProject: {
+        [PaymentPlan.FREE]: (currentProjects: number) => false,
+        [PaymentPlan.BASIC]: (currentProjects: number) => false,
+        [PaymentPlan.STANDARD]: (currentProjects: number) => currentProjects < 2,
+        [PaymentPlan.PREMIUM]: (currentProjects: number) => currentProjects < 9,
+        [PaymentPlan.VIP]: (currentProjects: number) => currentProjects < 9,
+    },
+    deleteProject: {
+        [PaymentPlan.FREE]: (currentProjects: number) => false,
+        [PaymentPlan.BASIC]: (currentProjects: number) => true,
+        [PaymentPlan.STANDARD]: (currentProjects: number) => true,
+        [PaymentPlan.PREMIUM]: (currentProjects: number) => true,
+        [PaymentPlan.VIP]: (currentProjects: number) => true,
+    }
+}
+
 const PaymentsProvider: React.FC<PaymentsProviderProps> = (props) => {
     const { api } = React.useContext(ApiContext)
     const { user } = React.useContext(AuthContext)
-    const [isSubscribed, setIsSubscribed] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
+    const [paymentPlan, setPaymentPlan] = React.useState(PaymentPlan.FREE)
 
     React.useEffect(() => {
         if (!user) {
@@ -37,8 +96,20 @@ const PaymentsProvider: React.FC<PaymentsProviderProps> = (props) => {
             .subscriptions
             .read({ token: user.getTokenId() })
             .then(response => {
-                if (response?.subscription?.status === 'active') {
-                    setIsSubscribed(true)
+                if (response?.subscription?.plan?.product === "prod_PtvxX1MS7QZNfx") {
+                    setPaymentPlan(PaymentPlan.BASIC)
+                }
+
+                if (response?.subscription?.plan?.product === "prod_Q9erVHJGpWNVeH") {
+                    setPaymentPlan(PaymentPlan.STANDARD)
+                }
+
+                if (response?.subscription?.plan?.product === "prod_Q9f0Ov40sNk555") {
+                    setPaymentPlan(PaymentPlan.PREMIUM)
+                }
+
+                if (response?.subscription?.plan?.product === "prod_Q9fd2lGxMkMYOa") {
+                    setPaymentPlan(PaymentPlan.VIP)
                 }
             })
             .finally(() => {
@@ -47,41 +118,13 @@ const PaymentsProvider: React.FC<PaymentsProviderProps> = (props) => {
 
     }, [user])
 
-    const redirectToCheckout = async () => {
-        if (!user) {
-            // TODO APP LEVEL ERROR
-            console.warn("USER NOT SET, CANNOT SET SUBSCRIPTION WITHOUT AN USER")
-            return null
-        }
-
-        const stripe = await getStripe();
-        if (!stripe) {
-            // TODO APP LEVEL ERROR
-            console.warn("STRIPE NOT SET INITIALISED")
-            return
-        }
-
-        const { error } = await stripe.redirectToCheckout({
-            mode: 'subscription',
-            lineItems: [
-                {
-                    price: env.payments.stripe.subscriptionPriceId,
-                    quantity: 1,
-                },
-            ],
-            successUrl: env.payments.successUrl,
-            cancelUrl: env.payments.cancelUrl,
-            customerEmail: user.getEmail(),
-            clientReferenceId: user.getId(),
-        });
-
-        // TODO APP LEVEL ERROR
-        console.warn(error.message);
+    const redirectToPaymentPlans = async () => {
+        window.open(Routes.PAYMENTS_PRICING)
     }
 
     return (
         <>
-            <PaymentsContext.Provider value={{ isSubscribed, redirectToCheckout, isLoading }}>
+            <PaymentsContext.Provider value={{ paymentPlan, redirectToPaymentPlans, isLoading }}>
                 {props.children}
             </PaymentsContext.Provider>
         </>

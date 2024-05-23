@@ -4,12 +4,9 @@ import { Navigate, useParams } from "react-router-dom"
 import { ProjectsContext } from "../../../Projects";
 
 import { appRoutes } from "../../router";
-import { ApiContext } from "../../../Api/ApiProvider";
-import { ProjectMessageType } from "../../../types";
 
 const RouteProject: React.FC = () => {
-    const { api } = React.useContext(ApiContext)
-    const { projects, user } = React.useContext(ProjectsContext)
+    const { projects } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 

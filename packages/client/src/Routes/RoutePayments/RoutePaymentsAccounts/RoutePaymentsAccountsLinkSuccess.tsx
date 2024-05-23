@@ -1,7 +1,7 @@
 import { Card, Flex, Heading, Section } from "@radix-ui/themes";
 import React from "react";
-import RouteProjectHeader from "../RouteProject/Components/Header/Header";
-import { ProjectsContext } from "../../Projects";
+import RouteProjectHeader from "../../RouteProject/Components/Header/Header";
+import { ProjectsContext } from "../../../Projects";
 
 const RoutePaymentsAccountsLinkSuccess = () => {
     const { user } = React.useContext(ProjectsContext)

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 
-import { ProjectMessageType, ProjectsMessageType, ProjectsState } from "./types";
+import { ProjectsMessageType, ProjectsState } from "./types";
 import { Projects } from "./Store/Projects";
 import router from "./Routes/router";
 

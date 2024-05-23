@@ -11,7 +11,7 @@ import { appRoutes } from "../router"
 import ProjectOptions from "./Components/ProjectOptions/ProjectOptions"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
-import { PaymentsContext } from '../../Payments/PaymentsProvider';
+import { PaymentsContext, canUseFeature } from '../../Payments/PaymentsProvider';
 import { templates } from "../../Templates"
 import { Card } from "@radix-ui/themes"
 import * as styles from "./RouteProjects.scss"
@@ -20,14 +20,13 @@ import SectionHeroImage from "../../Templates/Section/SectionHero/SectionHeroIma
 const RoutesProjects: React.FC = () => {
     const navigate = useNavigate();
     const { projects } = React.useContext(ProjectsContext)
-    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
+    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
 
     const onNewProjectClick = async () => {
         navigate(appRoutes.getProjectsNewRoute())
     }
 
     const projectsList = Object.keys(projects.getProjects())
-    const canCreateNewProjects = projectsList.length < 1 || isSubscribed
 
     return (
         <div className={styles.projects}>
@@ -35,7 +34,7 @@ const RoutesProjects: React.FC = () => {
             <div className={styles.projectsContent}>
                 <Card
                     className={classNames(styles.section, styles.sectionEmpty)}
-                    onClick={canCreateNewProjects ? onNewProjectClick : redirectToCheckout}
+                    onClick={canUseFeature.createProject[paymentPlan](Object.keys(projects.getProjects()).length) ? onNewProjectClick : redirectToPaymentPlans}
                     title="Create new Project"
                 >
                     <div className={styles.content}>

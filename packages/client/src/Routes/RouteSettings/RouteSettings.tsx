@@ -6,15 +6,17 @@ import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 import AuthLogoutButton from "../../Auth/AuthLogoutButton"
 
 import Button from "../../Templates/Components/Button/Button"
-import { PaymentsContext } from "../../Payments/PaymentsProvider"
+import { PaymentPlan, PaymentsContext } from "../../Payments/PaymentsProvider"
 
 import * as styles from "./RouteSettings.scss"
 import { Avatar, Card, Heading } from "@radix-ui/themes"
-import PaymentsAccountOnboarding from "../../Payments/PaymentsAccountOnboarding/PaymentsAccountOnboarding"
+import { useNavigate } from "react-router-dom"
+import { Routes } from "../router"
 
 const RoutesSettings: React.FC = () => {
     const { user } = React.useContext(ProjectsContext)
-    const { isSubscribed, isLoading, redirectToCheckout } = React.useContext(PaymentsContext)
+    const navigate = useNavigate();
+    const { paymentPlan, isLoading, redirectToPaymentPlans } = React.useContext(PaymentsContext)
 
     return (
         <div className={styles.main}>
@@ -43,14 +45,14 @@ const RoutesSettings: React.FC = () => {
                         size="3"
                         loading={isLoading}
                         onClick={() => {
-                            if (isSubscribed) {
+                            if (paymentPlan !== PaymentPlan.FREE) {
                                 window.open("https://billing.stripe.com/p/login/00g4i29gM9GOgz6dQQ", "_blank")
                             } else {
-                                redirectToCheckout()
+                                navigate(Routes.PAYMENTS_PRICING)
                             }
                         }}
                     >
-                        {isSubscribed ? "Manage Subscription" : "Subscribe"}
+                        {paymentPlan !== PaymentPlan.FREE ? "Manage Subscription" : "Subscribe Today!"}
                     </Button>
 
                 </Card>

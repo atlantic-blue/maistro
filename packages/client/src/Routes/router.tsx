@@ -63,11 +63,15 @@ const RouteProjectProvider = loadable(() => import("./RouteProject/RouteProjectP
     fallback: <Loading />
 });
 
-const RoutePaymentsAccounts = loadable(() => import("./RoutePaymentsAccounts/RoutePaymentsAccounts"), {
+const RoutePaymentsAccounts = loadable(() => import("./RoutePayments/RoutePaymentsAccounts/RoutePaymentsAccounts"), {
     fallback: <Loading />
 });
 
-const RoutePaymentsAccountsLinkSuccess = loadable(() => import("./RoutePaymentsAccounts/RoutePaymentsAccountsLinkSuccess"), {
+const RoutePaymentsAccountsLinkSuccess = loadable(() => import("./RoutePayments/RoutePaymentsAccounts/RoutePaymentsAccountsLinkSuccess"), {
+    fallback: <Loading />
+});
+
+const RoutePaymentsPricing = loadable(() => import("./RoutePayments/RoutePaymentsPricing/RoutePaymentsPricing"), {
     fallback: <Loading />
 });
 
@@ -86,7 +90,9 @@ export enum Routes {
     AUTHZ_CALLBACK = "/callback",
 
     SETTINGS = `/settings`,
+
     PAYMENTS = `/payments`,
+    PAYMENTS_PRICING = `/payments/pricing`,
 
     PAYMENTS_ACCOUNTS = `/payments/accounts`,
     PAYMENTS_ACCOUNTS_LINK = `/payments/accounts`,
@@ -112,25 +118,28 @@ export const appRoutes = {
     },
 
     getLoginRoute() {
-        return '/login'
+        return Routes.AUTHZ_LOGIN
     },
 
     getLogoutRoute() {
-        return '/logout'
+        return Routes.AUTHZ_LOGOUT
     },
 
     getSettingsRoute() {
-        return '/settings'
+        return Routes.SETTINGS
+    },
+
+    getPaymentsPricing() {
+        return Routes.PAYMENTS_PRICING
     },
 
     getProjectsRoute() {
-        return '/projects'
+        return Routes.PROJECTS
     },
 
     getProjectsNewRoute() {
-        return '/projects/new'
+        return Routes.PROJECTS_NEW
     },
-
 
     getProjectRoute(projectId: string) {
         return `/project/${projectId}`
@@ -183,6 +192,14 @@ const router = createBrowserRouter([
         element: (
             <ProtectedRoute>
                 <RouteSettings />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: Routes.PAYMENTS_PRICING,
+        element: (
+            <ProtectedRoute>
+                <RoutePaymentsPricing />
             </ProtectedRoute>
         ),
     },

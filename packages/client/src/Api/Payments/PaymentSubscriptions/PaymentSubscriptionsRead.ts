@@ -1,8 +1,21 @@
 import env from "../../../env"
 import { requestController } from "../../fetch"
 
-interface PaymentsSubscriptionsReadInput {
+export interface PaymentsSubscriptionsReadInput {
     token: string
+}
+
+export interface PaymentsSubscriptionsReadOutput {
+    subscription: {
+        id: string,
+        created: number,
+        currency: string,
+        customer: string,
+        status: string,
+        plan: {
+            product: string,
+        }
+    }
 }
 
 const paymentsSubscriptionsRead = async (
@@ -11,7 +24,7 @@ const paymentsSubscriptionsRead = async (
     }: PaymentsSubscriptionsReadInput,
     url = env.api.payments.subscriptions.read,
     request = requestController.fetch,
-): Promise<{ subscription: { status: string } }> => {
+): Promise<PaymentsSubscriptionsReadOutput> => {
     return request(url, {
         method: "GET",
         headers: {

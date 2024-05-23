@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react"
 
-import { ProjectsContext } from "../../Projects"
-import RouteProjectHeader from "../RouteProject/Components/Header/Header"
+import { ProjectsContext } from "../../../Projects"
+import RouteProjectHeader from "../../RouteProject/Components/Header/Header"
 
 import { Blockquote, Button, Card, Code, Flex, Heading, Text } from "@radix-ui/themes"
 
-import { ApiContext } from "../../Api/ApiProvider"
-import { PaymentsContext } from "../../Payments/PaymentsProvider"
+import { ApiContext } from "../../../Api/ApiProvider"
+import { PaymentsContext, canUseFeature } from "../../../Payments/PaymentsProvider"
 import * as styles from "./RoutePaymentsAccounts.scss"
 import { useParams } from "react-router-dom"
 
 const RoutePaymentsAccounts: React.FC = () => {
     const { api } = React.useContext(ApiContext)
     const { user } = React.useContext(ProjectsContext)
-    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
+    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
     const [connectedAccount, setConnectedAccount] = useState<{ id: string }>();
     const [isLoading, setIsLoading] = React.useState(false)
 
@@ -97,7 +97,7 @@ const RoutePaymentsAccounts: React.FC = () => {
                 <Flex direction="column" justify="center" align="center" gap="3">
                     {!connectedAccount && (
                         <Button
-                            onClick={isSubscribed ? onCreateConnectedAccount : redirectToCheckout}
+                            onClick={canUseFeature.connectedAccount[paymentPlan]() ? onCreateConnectedAccount : redirectToPaymentPlans}
                             loading={isLoading}
                         >
                             Upgrade to a payments account
@@ -125,7 +125,7 @@ const RoutePaymentsAccounts: React.FC = () => {
 
                     {connectedAccount && (
                         <Button
-                            onClick={isSubscribed ? onCreateConnectedAccountLink : redirectToCheckout}
+                            onClick={canUseFeature.connectedAccount[paymentPlan]() ? onCreateConnectedAccountLink : redirectToPaymentPlans}
                             loading={isLoading}
                         >
                             Add information

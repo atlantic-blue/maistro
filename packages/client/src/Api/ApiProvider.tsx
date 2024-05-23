@@ -5,7 +5,7 @@ import { projectsRead } from "./Projects/projectsRead";
 import { projectsReadById } from "./Projects/projectsReadById";
 import { projectsUpdateById } from "./Projects/projectsUpdateById";
 import { projectsDelete } from "./Projects/projectsDelete";
-import { paymentsSubscriptionsRead } from "./Payments/PaymentSubscriptions/PaymentSubscriptionsRead";
+import { PaymentsSubscriptionsReadInput, PaymentsSubscriptionsReadOutput, paymentsSubscriptionsRead } from "./Payments/PaymentSubscriptions/PaymentSubscriptionsRead";
 import { EmailListsCreateInput, EmailListsCreateOutput, emailListsCreate } from "./EmailLists/emailListsCreate";
 import { EmailListsReadInput, EmailListsReadOutput, emailListsRead } from "./EmailLists/emailListsRead";
 
@@ -92,7 +92,7 @@ interface ApiContextState {
                 create: (input: PaymentsAccountsLinkCreateInput) => Promise<PaymentsAccountsLinkCreateOutput>
             }
             subscriptions: {
-                read: ({ token }: { token: string }) => Promise<{ subscription: { status: string } }>
+                read: (input: PaymentsSubscriptionsReadInput) => Promise<PaymentsSubscriptionsReadOutput>
             }
         }
     }

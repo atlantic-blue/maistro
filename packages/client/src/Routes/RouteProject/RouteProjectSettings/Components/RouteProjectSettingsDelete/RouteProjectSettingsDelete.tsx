@@ -11,7 +11,7 @@ import IconBin from "../../../../../Components/Icons/Bin/Bin"
 import * as styles from "../../RouteProjectSettings.scss"
 import { ApiContext } from "../../../../../Api/ApiProvider"
 import { Box, Button, Heading, Text, Card, Callout } from "@radix-ui/themes"
-import { PaymentsContext } from "../../../../../Payments/PaymentsProvider"
+import { PaymentsContext, canUseFeature } from "../../../../../Payments/PaymentsProvider"
 
 interface RouteProjectSettingsDeleteProps {
     project: Project
@@ -22,7 +22,7 @@ const RouteProjectSettingsDelete: React.FC<RouteProjectSettingsDeleteProps> = (p
     const { api } = React.useContext(ApiContext)
     const { projects, user } = React.useContext(ProjectsContext)
     const [isLoading, setIsLoading] = React.useState(false)
-    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
+    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
 
     const onProjectDelete = (project: Project) => {
         // TODO offline mode
@@ -66,7 +66,7 @@ const RouteProjectSettingsDelete: React.FC<RouteProjectSettingsDeleteProps> = (p
                 </Text>
                 <Button
                     className={styles.buttonDanger}
-                    onClick={isSubscribed ? () => onProjectDelete(props.project) : redirectToCheckout}
+                    onClick={canUseFeature.deleteProject[paymentPlan]() ? () => onProjectDelete(props.project) : redirectToPaymentPlans}
                     loading={isLoading}
                 >
                     <IconBin className={styles.buttonDangerIcon} />

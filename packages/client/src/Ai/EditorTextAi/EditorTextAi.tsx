@@ -10,7 +10,7 @@ import { EditorTextProps } from "../../Components/Editor/EditorData"
 import { ProjectsContext } from "../../Projects"
 import { useParams } from "react-router-dom"
 import { ApiContext } from "../../Api/ApiProvider"
-import { PaymentsContext } from "../../Payments/PaymentsProvider"
+import { PaymentsContext, canUseFeature } from "../../Payments/PaymentsProvider"
 
 import * as styles from "./EditorTextAi.scss"
 import { createMaistroCopywritingPrompt } from "../prompts/MaistroCopywriting"
@@ -25,7 +25,7 @@ interface EditorTextAiProps {
 const EditorTextAi: React.FC<EditorTextAiProps> = (props) => {
     const { api } = React.useContext(ApiContext)
     const { projects, user } = React.useContext(ProjectsContext)
-    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
+    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
     const thread = project.getThreadByName(ProjectThreadName.COPYWRITING)
@@ -93,7 +93,7 @@ const EditorTextAi: React.FC<EditorTextAiProps> = (props) => {
             <DropdownMenu.Content>
                 <AiAssistantInput
                     placeholder="Describe any changes you wish to see"
-                    onSubmit={isSubscribed ? onSubmit : redirectToCheckout}
+                    onSubmit={canUseFeature.aiText[paymentPlan] ? onSubmit : redirectToPaymentPlans}
                     isLoading={isLoading}
                 />
             </DropdownMenu.Content>

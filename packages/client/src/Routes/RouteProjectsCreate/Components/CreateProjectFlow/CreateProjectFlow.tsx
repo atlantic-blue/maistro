@@ -15,7 +15,7 @@ import { templates } from '../../../../Templates';
 import { TemplateComponentType } from '../../../../Templates/templateTypes';
 import env from '../../../../env';
 import { appRoutes } from '../../../router';
-import { PaymentsContext } from '../../../../Payments/PaymentsProvider';
+import { PaymentsContext, canUseFeature } from '../../../../Payments/PaymentsProvider';
 import createSectionHeroPrompt from '../../../../Ai/prompts/SectionHero';
 import createSectionHeroImagesPrompt from '../../../../Ai/prompts/SectionHeroImage';
 import { createMaistroChatPrompt } from '../../../../Ai/prompts/Maistro';
@@ -103,13 +103,10 @@ const ProjectFlow: React.FC = () => {
     const navigate = useNavigate();
     const { api } = React.useContext(ApiContext)
     const { projects, user } = React.useContext(ProjectsContext)
-    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
+    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
 
     const [projectsCreateResponse, setProjectsCreateResponse] = React.useState<ProjectsCreateOutput | null>(null)
     const [progressMessage, setProgressMessage] = React.useState("")
-
-    const projectsList = Object.keys(projects.getProjects())
-    const canCreateNewProjects = projectsList.length < 1 || isSubscribed
 
     const createProject = async (currentId: string, values: Record<string, string>) => {
         const projectName = values[CreateProjectFlowId.NAME]
@@ -489,7 +486,7 @@ const ProjectFlow: React.FC = () => {
             <Flex direction="column" gap="2" justify="center" align="center">
                 <CreateProjectForms
                     questions={projectFlowQuestions}
-                    onSubmit={canCreateNewProjects ? onSubmit : async (currentId: string, values: Record<string, string>) => redirectToCheckout()}
+                    onSubmit={canUseFeature.createProject[paymentPlan](Object.keys(projects.getProjects()).length) ? onSubmit : async (currentId: string, values: Record<string, string>) => redirectToPaymentPlans()}
                 />
                 {progressMessage && (
                     <Box>

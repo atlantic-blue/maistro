@@ -9,7 +9,7 @@ import { ProjectMessageType } from "../../../types";
 import { ProjectsContext } from "../../../Projects";
 
 import { appRoutes } from "../../router";
-import { PaymentsContext } from "../../../Payments/PaymentsProvider";
+import { PaymentsContext, canUseFeature } from "../../../Payments/PaymentsProvider";
 import { ApiContext } from "../../../Api/ApiProvider";
 
 import useObservable from "../../../Utils/Hooks/UseObservable";
@@ -18,7 +18,7 @@ import * as styles from "./RouteProjectPageCreate.scss"
 const RouteProjectCreate: React.FC = () => {
     const navigate = useNavigate();
     const { api } = React.useContext(ApiContext)
-    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
+    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
 
     const { projects, user } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
@@ -80,9 +80,6 @@ const RouteProjectCreate: React.FC = () => {
         )
     }
 
-    const pagesList = Object.keys(project.getPages())
-    const canCreateNewPages = pagesList.length < 2 || isSubscribed
-
     return (
         <Helmet>
             <Section size="1">
@@ -102,7 +99,7 @@ const RouteProjectCreate: React.FC = () => {
                             </Text>
                         )}
 
-                        <Form.Root onSubmit={canCreateNewPages ? onCreateNewPage : redirectToCheckout}>
+                        <Form.Root onSubmit={canUseFeature.createPage[paymentPlan](Object.keys(project.getPages()).length) ? onCreateNewPage : redirectToPaymentPlans}>
                             <Flex gap="3" direction="column">
                                 <Form.Field name="projectName">
                                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>

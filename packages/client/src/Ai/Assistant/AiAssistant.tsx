@@ -11,7 +11,7 @@ import AiAssistantThread from "./Thread/AiAssistantThread";
 
 import { ProjectMessageType, ProjectThreadMessage, ProjectThreadMessageType } from "../../types";
 import useObservable from "../../Utils/Hooks/UseObservable";
-import { PaymentsContext } from "../../Payments/PaymentsProvider";
+import { PaymentsContext, canUseFeature } from "../../Payments/PaymentsProvider";
 import AvatarMaistro from "../../Components/AvatarMaistro/AvatarMaistro";
 
 import * as styles from "./AiAssistant.scss"
@@ -19,7 +19,7 @@ import * as styles from "./AiAssistant.scss"
 const AiAssistant: React.FC = () => {
     const { api } = React.useContext(ApiContext)
     const { projects, user } = React.useContext(ProjectsContext)
-    const { isSubscribed, redirectToCheckout } = React.useContext(PaymentsContext)
+    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
 
@@ -99,9 +99,10 @@ const AiAssistant: React.FC = () => {
 
                     <AiAssistantThread />
                     <AiAssistantInput onSubmit={
-                        !isSubscribed && thread.getOutputTokens() > 500 ?
-                            redirectToCheckout :
-                            onSubmit
+                        canUseFeature
+                            .aiAssistant[paymentPlan](thread.getOutputTokens()) ?
+                            onSubmit :
+                            redirectToPaymentPlans
                     }
                         isLoading={isLoading} />
                     {error && <Text>

@@ -2,10 +2,11 @@ import React from "react"
 
 import HeaderBurger from "../../../../Templates/Header/HeaderBurger/HeaderBurger"
 import { appRoutes } from "../../../router"
-import { Avatar, Box, Text } from "@radix-ui/themes"
+import { Avatar, Box, Flex, Text } from "@radix-ui/themes"
 import { ProjectsContext } from "../../../../Projects"
 
 import * as styles from "./Header.scss"
+import PaymentPlan from "../../../../Payments/PaymentPlan/PaymentPlan"
 
 interface RouteProjectHeaderProps {
 
@@ -25,11 +26,14 @@ const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
                     {
                         href: appRoutes.getSettingsRoute(),
                         name: (
-                            <Avatar
-                                size="1"
-                                src={user.getAvatar()}
-                                fallback={user.getName().charAt(0)}
-                            />
+                            <Flex align="center" gap="2" justify="center">
+                                <PaymentPlan />
+                                <Avatar
+                                    size="1"
+                                    src={user.getAvatar()}
+                                    fallback={user.getName().charAt(0)}
+                                />
+                            </Flex>
                         ),
                         description: "My settings"
                     }

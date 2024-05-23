@@ -77,6 +77,7 @@ interface Env {
         stripe: {
             publishableKey: string
             subscriptionPriceId: string
+            pricingTableId: string
         }
         successUrl: string
         cancelUrl: string
@@ -165,6 +166,7 @@ const createEnv = (): Env => {
             stripe: {
                 publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || "",
                 subscriptionPriceId: process.env.STRIPE_SUBSCRIPTION_PRICE_ID || "",
+                pricingTableId: process.env.STRIPE_PRICING_TABLE_ID || "",
             },
             successUrl: `${window.location.origin}/settings?success=true`,
             cancelUrl: window.location.origin,
