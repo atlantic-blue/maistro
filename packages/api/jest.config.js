@@ -24,6 +24,13 @@ const config = {
             statements: 98,
         },
     },
+
+    transform: {
+        "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    transformIgnorePatterns: [
+        "node_modules/(?!(stringify-entities|character-entities-legacy|character-entities-html4)/)"
+    ],
 }
 
 module.exports = config

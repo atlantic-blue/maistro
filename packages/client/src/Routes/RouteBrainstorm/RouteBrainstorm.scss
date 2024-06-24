@@ -1,0 +1,17 @@
+.main {
+    position: relative;
+    ;
+}
+
+.banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background-color: white;
+}
+
+.banner-container {
+    padding: 10px;
+}

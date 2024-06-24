@@ -18,6 +18,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const hostingRedirect: CloudFrontRequestHandler = async (event) => {
     const request = event.Records[0].cf.request;
     const hostHeader = request.headers.host[0].value;
+    console.log(JSON.stringify({ request }))
 
     if (!tableName) {
         console.log("process TABLE_NAME not specified")
@@ -32,11 +33,12 @@ const hostingRedirect: CloudFrontRequestHandler = async (event) => {
             "#url": "url"
         },
         ExpressionAttributeValues: {
-            ":urlValue": hostHeader // e.g test.hosting.maistro.website
+            ":urlValue": hostHeader // e.g test.maistro.live
         }
     };
 
     const data = await dynamoDb.query(params).promise();
+
     if (!data.Items || data.Items.length === 0) {
         // Continue with the original request if no mapping exists
         console.log("URL NOT FOUND", { hostHeader })

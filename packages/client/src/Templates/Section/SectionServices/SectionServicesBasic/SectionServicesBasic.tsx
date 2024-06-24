@@ -15,7 +15,7 @@ const SectionServicesBasic: React.FC<SectionServicesProps> = (props) => {
             data-hydration-id={props["data-hydration-id"]}
         >
             <Flex className={styles.services} justify="center">
-                {props.services.map((service, index) => (
+                {props.services?.map((service, index) => (
                     <Flex className={styles.service} key={index} direction={index % 2 ? "row-reverse" : "row"} align="center" justify="center" gap="2">
                         <Box className={styles.serviceFigure}>
                             <img className={styles.serviceImg} src={service.imageUrl} alt={service.title} />

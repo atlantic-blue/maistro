@@ -50,36 +50,56 @@ const createDefaultWebpackConfig = (): Configuration => {
 
 // TODO implement with fs.readdir
 const createMultipleWebpackConfigs = [
-    "ping",
-    "upload", // TODO move to projects
+    // "ping",
+    // "upload", // TODO move to projects
+    // "images",
 
-    "content-create",
-    "content-read",
-    "content-update-by-id",
-    // TODO "content-delete",
+    // "ai-assistant",
+    // "ai-components-create",
+    // "ai-templates-create",
+    "ai-templates-read",
+    "ai-templates-read-by-id",
 
-    "hosting-redirect",
+    // "ai-images-create",
+    // "ai-threads-create",
+    // "ai-threads-read",
+    // "ai-threads-read-by-id",
+    // "ai-threads-update-by-id",
 
-    "email-entries-create",
-    "email-entries-read-by-id",
+    // "content-create",
+    // "content-read",
+    // "content-update-by-id",
+    // // TODO "content-delete",
 
-    "email-lists-create",
-    "email-lists-read",
-    // TODO "email-lists-update-by-id",
+    // "hosting-redirect",
 
-    "pages-create",
-    "pages-read",
-    "pages-read-by-id",
-    "pages-update-by-id",
-    // TODO "pages-delete",
+    // "email-entries-create",
+    // "email-entries-read-by-id",
 
-    "projects-create",
-    "projects-read",
-    "projects-read-by-id",
-    "projects-update-by-id",
-    "projects-delete",
+    // "email-lists-create",
+    // "email-lists-read",
+    // // TODO "email-lists-update-by-id",
 
-    "payments-subscriptions-read"
+    // "pages-create",
+    // "pages-read",
+    // "pages-read-by-id",
+    // "pages-update-by-id",
+    // // TODO "pages-delete",
+
+    // "payments-accounts-create",
+    // "payments-accounts-read",
+    // "payments-accounts-read-by-id",
+
+    // "payments-accounts-link-create",
+    // "payments-subscriptions-read"
+
+    // "projects-create",
+    // "projects-read",
+    // "projects-read-by-id",
+    // "projects-update-by-id",
+    // "projects-delete",
+    // "projects-upload"
+
 ].map(api => {
     console.info(`BUILDING: ${api}\n`)
     return ({

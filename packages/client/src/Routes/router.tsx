@@ -5,12 +5,10 @@ import {
 import loadable from "@loadable/component";
 
 import Loading from "../Components/Loading/Loading";
+import RouteBrainstorm from "./RouteBrainstorm/RouteBrainstorm";
+import RoutesHome from "./RouteHome/RouteHome";
 
 // https://v5.reactrouter.com/web/guides/code-splitting
-const RoutesHome = loadable(() => import("./RouteHome/RouteHome"), {
-    fallback: <Loading />
-});
-
 const RoutesProjects = loadable(() => import("./RouteProjects/RouteProjects"), {
     fallback: <Loading />
 });
@@ -75,11 +73,16 @@ const RoutePaymentsPricing = loadable(() => import("./RoutePayments/RoutePayment
     fallback: <Loading />
 });
 
+const RouteTemplate = loadable(() => import("./RouteTemplate/RouteTemplate"), {
+    fallback: <Loading />
+});
+
 export enum RoutesParams {
     PROJECT_ID = ":projectId",
     PAGE_ID = ":pageId",
     CONTENT_ID = ":contentId",
-    PAYMENTS_ACCOUNT_ID = ":paymentsAccountId"
+    PAYMENTS_ACCOUNT_ID = ":paymentsAccountId",
+    TEMPLATE_ID = ":templateId"
 }
 
 export enum Routes {
@@ -98,23 +101,36 @@ export enum Routes {
     PAYMENTS_ACCOUNTS_LINK = `/payments/accounts`,
     PAYMENTS_ACCOUNTS_LINK_SUCCESS = `/payments/accounts/success`,
 
+    BRAINSTORM = "/brainstorm",
+
+    TEMPLATES = "/templates",
+    TEMPLATE_PAGE = `/templates/${RoutesParams.TEMPLATE_ID}`,
+
     PROJECTS = `/projects`,
     PROJECTS_NEW = `/projects/new`,
 
-    PROJECT = `/project/${RoutesParams.PROJECT_ID}`,
+    PROJECT = `/projects/${RoutesParams.PROJECT_ID}`,
 
-    PROJECT_PAGE = `/project/${RoutesParams.PROJECT_ID}/page/${RoutesParams.PAGE_ID}`,
-    PROJECT_PAGE_CREATE = `/project/${RoutesParams.PROJECT_ID}/page/create`,
+    PROJECT_PAGE = `/projects/${RoutesParams.PROJECT_ID}/page/${RoutesParams.PAGE_ID}`,
+    PROJECT_PAGE_CREATE = `/projects/${RoutesParams.PROJECT_ID}/page/create`,
 
-    PROJECT_CONTENT = `/project/${RoutesParams.PROJECT_ID}/content/${RoutesParams.CONTENT_ID}`,
-    PROJECT_CONTENT_CREATE = `/project/${RoutesParams.PROJECT_ID}/content/create`,
+    PROJECT_CONTENT = `/projects/${RoutesParams.PROJECT_ID}/content/${RoutesParams.CONTENT_ID}`,
+    PROJECT_CONTENT_CREATE = `/projects/${RoutesParams.PROJECT_ID}/content/create`,
 
-    PROJECT_SETTINGS = `/project/${RoutesParams.PROJECT_ID}/settings`,
+    PROJECT_SETTINGS = `/projects/${RoutesParams.PROJECT_ID}/settings`,
 }
 
 export const appRoutes = {
     getHomeRoute() {
         return '/'
+    },
+
+    getBrainstormRoute() {
+        return Routes.BRAINSTORM
+    },
+
+    getTemplateRoute(templateId: string) {
+        return `${Routes.TEMPLATES}/${templateId}`
     },
 
     getLoginRoute() {
@@ -142,19 +158,19 @@ export const appRoutes = {
     },
 
     getProjectRoute(projectId: string) {
-        return `/project/${projectId}`
+        return `${Routes.PROJECTS}/${projectId}`
     },
 
     getProjectPageRoute(projectId: string, pageId: string) {
-        return `/project/${projectId}/page/${pageId}`
+        return `${Routes.PROJECTS}/${projectId}/page/${pageId}`
     },
 
     getProjectSettingsRoute(projectId: string) {
-        return `/project/${projectId}/settings`
+        return `${Routes.PROJECTS}/${projectId}/settings`
     },
 
     getProjectPageTemplatesRoute(projectId: string) {
-        return `/project/${projectId}/page/create`
+        return `${Routes.PROJECTS}/${projectId}/page/create`
     },
 }
 
@@ -167,6 +183,22 @@ const router = createBrowserRouter([
             </RedirectRoute>
         ),
     },
+    {
+        path: Routes.BRAINSTORM,
+        element: (
+            <RedirectRoute navigateTo={appRoutes.getProjectsRoute()}>
+                <RouteBrainstorm />
+            </RedirectRoute>
+        ),
+    },
+    {
+        path: Routes.TEMPLATE_PAGE,
+        element: (
+            <RouteTemplate />
+        ),
+    },
+
+
     {
         path: Routes.AUTHZ_LOGIN,
         element: (

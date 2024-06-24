@@ -7,7 +7,8 @@ import { Avatar } from "@radix-ui/themes";
 
 export interface NavigationItem {
     name: string | React.ReactNode
-    href: string
+    href?: string
+    onClick?: () => void
     isExternal?: boolean
     imgSrc?: string
     children?: NavigationItem[]
@@ -50,6 +51,7 @@ const Navigation: React.FC<NavigationProps> = (props) => {
                     return (
                         <NavigationMenu.Item key={`NavigationMenu-${item.name}`}>
                             <NavigationMenu.Link
+                                onClick={item.onClick}
                                 className={styles.navigationMenuLink}
                                 href={item.href}
                                 target={item.isExternal ? "_blank" : "_self"} rel="noopener noreferrer"

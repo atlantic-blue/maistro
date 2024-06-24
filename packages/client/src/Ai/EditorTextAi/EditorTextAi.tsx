@@ -73,6 +73,7 @@ const EditorTextAi: React.FC<EditorTextAiProps> = (props) => {
                 ],
             })
 
+            // TODO wrap response in json and parse
             props.onChange(response.message.content[0].text.trim().replaceAll("\n", ""))
 
         } catch (error) {
@@ -86,7 +87,10 @@ const EditorTextAi: React.FC<EditorTextAiProps> = (props) => {
         <DropdownMenu.Root>
             <DropdownMenu.Trigger>
                 <Button variant="ghost">
-                    <AvatarMaistro classNames={{ icon: styles.avatarIcon }} />
+                    <AvatarMaistro
+                        classNames={{ icon: styles.avatarIcon }}
+                        isLoading={isLoading}
+                    />
                     <DropdownMenu.TriggerIcon />
                 </Button>
             </DropdownMenu.Trigger>

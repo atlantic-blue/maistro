@@ -20,7 +20,6 @@ interface AiThreadsMessage {
 }
 
 interface AiThreadsUpdateByIdInput {
-    name: string
     messages: AiThreadsMessage[]
 }
 
@@ -30,6 +29,7 @@ const client = new BedrockRuntimeClient();
 const MAX_INPUT_TOKENS = 500000; // 500 thousand per month
 const MAX_OUTPUT_TOKENS = 500000; // 500 thousand per month
 
+// TODO: count tokens even if the lambda fails
 const aiThreadsUpdateById: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableName = process.env.TABLE_NAME
     if (!tableName) {
@@ -136,7 +136,9 @@ const aiThreadsUpdateById: APIGatewayProxyHandler = async (event: APIGatewayProx
     // const modelId = "amazon.titan-text-premier-v1:0"
     // const modelId = "amazon.titan-text-express-v1"
     // https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-meta.html
+    // https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html
     const modelId = "meta.llama3-8b-instruct-v1:0"
+
     const maxTokenCount = 250
     const temperature = 0.7
     const topP = 0.9

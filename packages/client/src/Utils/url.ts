@@ -45,7 +45,7 @@ const isValidUrl = (url: string): [boolean, URL | null] => {
     }
 }
 
-const createUrl = (input: string, domain = ".hosting.maistro.website") => {
+const createUrl = (input: string, domain = ".maistro.live") => {
     const url = isValidUrl(input)[0] ? new URL(input).host : input
     let [domainName, ...topLevelDomain] = url.split(".")
 

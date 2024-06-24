@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Box, Button, Flex, Spinner, Tabs, Text, TextField } from "@radix-ui/themes";
+import { Avatar, Box, Flex, Spinner, Tabs, Text, TextField } from "@radix-ui/themes";
 
 import * as styles from "./EditorImage.scss"
 
@@ -42,7 +42,7 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
 
                 <Tabs.List size="2">
                     <Tabs.Trigger value="ai">
-                        <AvatarMaistro />
+                        <AvatarMaistro isLoading={isLoading} />
                     </Tabs.Trigger>
                     <Tabs.Trigger value="upload">Upload</Tabs.Trigger>
                     <Tabs.Trigger value="gallery">Gallery</Tabs.Trigger>

@@ -33,10 +33,22 @@ import { PaymentsAccountsLinkCreateInput, PaymentsAccountsLinkCreateOutput, paym
 import { PaymentsAccountsReadInput, PaymentsAccountsReadOutput, paymentsAccountsRead } from "./Payments/PaymentsAccountsRead";
 import { PaymentsAccountsReadByIdInput, PaymentsAccountsReadByIdOutput, paymentsAccountsReadById } from "./Payments/PaymentsAccountsReadById";
 import { ImagesGetInput, ImagesGetOutput, imagesGet } from "./Images/imagesGet";
+import { AiComponentsCreateInput, AiComponentsCreateOutput, aiComponentsCreate } from "./Ai/aiComponentsCreate";
+import { AiTemplatesCreateInput, AiTemplatesCreateOutput, aiTemplatesCreate } from "./Ai/aiTemplatesCreate";
+import { AiTemplatesReadByIdInput, AiTemplatesReadByIdOutput, aiTemplatesReadById } from "./Ai/aiTemplatesReadById";
+import { AiTemplatesReadInput, AiTemplatesReadOutput, aiTemplatesRead } from "./Ai/aiTemplatesRead";
 
 interface ApiContextState {
     api: {
         ai: {
+            aiTemplates: {
+                create: (input: AiTemplatesCreateInput) => Promise<AiTemplatesCreateOutput>,
+                read: (input: AiTemplatesReadInput) => Promise<AiTemplatesReadOutput>,
+                readById: (input: AiTemplatesReadByIdInput) => Promise<AiTemplatesReadByIdOutput>,
+            }
+            aiComponents: {
+                create: (input: AiComponentsCreateInput) => Promise<AiComponentsCreateOutput>,
+            }
             aiThreads: {
                 create: (input: AiThreadsCreateInput) => Promise<AiThreadsCreateOutput>,
                 read: (input: AiThreadsReadInput) => Promise<AiThreadsReadOutput>,
@@ -104,6 +116,14 @@ const context: ApiContextState = {
             createFile: fileCreate
         },
         ai: {
+            aiTemplates: {
+                create: aiTemplatesCreate,
+                read: aiTemplatesRead,
+                readById: aiTemplatesReadById,
+            },
+            aiComponents: {
+                create: aiComponentsCreate,
+            },
             aiThreads: {
                 create: aiThreadsCreate,
                 updateById: aiThreadsUpdateById,

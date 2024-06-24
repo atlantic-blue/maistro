@@ -1,15 +1,16 @@
 import React from 'react';
 import { Box, Flex, Text } from "@radix-ui/themes"
 
-import Navigation, { NavigationItem } from '../../Components/Navigation/Navigation';
+import Navigation from '../../Components/Navigation/Navigation';
 import { TemplateCategory, TemplateComponentType, TemplateStruct } from '../../templateTypes';
+import { FooterBasicProps } from '../FooterTypes';
 
 import * as styles from './FooterBasic.scss';
-import { FooterBasicProps } from '../FooterTypes';
+import * as NavigationStyles from "../../Components/Navigation/Navigation.scss"
 
 
 const FooterBasic: React.FC<FooterBasicProps> = (props) => (
-    <footer className={styles.simpleFooter}>
+    <footer className={styles.simpleFooter} data-hydration-id={props["data-hydration-id"]}>
         <Box ml='4' mr='4'>
             <Flex align="center" justify="center" direction="column" gap="3">
                 <Navigation
@@ -33,6 +34,7 @@ export const FooterBasicItem: TemplateStruct<FooterBasicProps> = {
     categories: [TemplateCategory.FOOTER],
     classNames: [
         ...Object.values(styles),
+        ...Object.values(NavigationStyles),
     ],
     props: {
         name: "Maistro",

@@ -16,7 +16,7 @@ export interface SectionHeroVideoProps {
         alt: string
     }
     content: string | React.ReactNode
-    cta: string
+    cta?: string
     ctaLink?: string
     ctaOnClick?: () => void
 }
@@ -37,7 +37,7 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
                 <source src={props.video?.src} type="video/mp4" />
             </video>
             <Flex className={styles.content} align="center" direction="column" justify="center" gap="3">
-                <Heading
+                {props.title && <Heading
                     as="h1"
                     align="center"
                     wrap="pretty"
@@ -45,14 +45,14 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
                     className={styles.heroTitle}
                 >
                     {props.title}
-                </Heading>
+                </Heading>}
 
                 <TemplateWysiwyg
                     content={props.content}
                     className={styles.heroText}
                 />
 
-                <Button
+                {props.cta && <Button
                     size="4"
                     onClick={props.ctaOnClick}
                     className={styles.heroButton}
@@ -64,7 +64,7 @@ const SectionHeroVideo: React.FC<SectionHeroVideoProps> = (props) => {
                             </a>
                         ) : props.cta
                     }
-                </Button>
+                </Button>}
 
             </Flex>
         </Section>

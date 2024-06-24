@@ -35,7 +35,7 @@ const HeaderSticky: React.FC<HeaderProps> = ({
 
     return (
         <Section size="1" className={`${styles.headerSticky} ${isScrolled ? styles.scrolled : ''}`} data-hydration-id={props["data-hydration-id"]}>
-            <Box ml='4' mr='4'>
+            <Box ml='6' mr='6'>
                 <Flex align="center" justify="between">
                     <Logo
                         imgUrl={logo.url}

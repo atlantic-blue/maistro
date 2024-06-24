@@ -36,6 +36,7 @@ const Nav: React.FC<NavProps> = (props) => {
                             <NavLink
                                 key={props.links[key].href}
                                 href={props.links[key].href}
+                                onClick={props.links[key].onClick}
                                 value={props.links[key].name}
                                 description={props.links[key].description}
                             />

@@ -19,6 +19,14 @@ interface Env {
             }
         }
         ai: {
+            aiTemplates: {
+                create: () => string
+                read: () => string
+                readById: (id: string) => string
+            }
+            aiComponents: {
+                create: (projectId: string) => string
+            }
             aiThreads: {
                 create: (projectId: string) => string
                 updateById: (projectId: string, threadId: string) => string
@@ -109,6 +117,16 @@ const createEnv = (): Env => {
                 }
             },
             ai: {
+                aiTemplates: {
+                    // create: () => `${apiBaseUrl}/templates`
+                    create: () => "https://4jido7pc4pukpdi7icw7tlg6mi0gogmq.lambda-url.us-east-1.on.aws",
+                    read: () => `${apiBaseUrl}/templates/`,
+                    readById: (id: string) => `${apiBaseUrl}/templates/${id}`
+                },
+                aiComponents: {
+                    // create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/ai/components`,
+                    create: () => "https://4jido7pc4pukpdi7icw7tlg6mi0gogmq.lambda-url.us-east-1.on.aws"
+                },
                 aiThreads: {
                     create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/ai/threads`,
                     updateById: (projectId: string, threadId: string) => `${apiBaseUrl}/projects/${projectId}/ai/threads/${threadId}`,

@@ -74,7 +74,7 @@ const AiAssistant: React.FC = () => {
             <Dialog.Root open={open} onOpenChange={setOpen}>
                 <Dialog.Trigger>
                     <IconButton variant="ghost" className={styles.iconButton}>
-                        <AvatarMaistro />
+                        <AvatarMaistro isLoading={isLoading} />
                     </IconButton>
                 </Dialog.Trigger>
 

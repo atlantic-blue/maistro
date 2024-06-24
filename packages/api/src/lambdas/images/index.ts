@@ -15,11 +15,11 @@ const images: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
         throw createError(500, "process IMAGES_ACCESS_KEY not specified")
     }
 
-    const { payload } = (event as any).auth.decodedJwt as jwt.Jwt
-    const userId = payload.sub
-    if (!userId) {
-        throw createError(500, "userId not specified")
-    }
+    // const { payload } = (event as any).auth.decodedJwt as jwt.Jwt
+    // // const userId = payload.sub
+    // // if (!userId) {
+    // //     throw createError(500, "userId not specified")
+    // // }
 
     const page = event.queryStringParameters && event.queryStringParameters['page']
     if (page && Number(page) === Number.NaN) {
@@ -68,7 +68,7 @@ const images: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
 };
 
 const handler = new LambdaMiddlewares()
-    .before(authJwt)
+    // .before(authJwt)
     .handler(images)
 
 export { handler }

@@ -1,24 +1,26 @@
 import { AiImagesCreateInput, AiImagesCreateOutput } from "../../Api/Ai/aiImagesCreate"
 
-interface CreateSectionHeroImagePromptInput {
+interface CreateImagePromptInput {
     projectName: string
     description: string
     targetAudience: string
     emotion: string
+    details?: string
 }
 
-interface CreateSectionHeroImagePromptOutput {
+interface CreateImagePromptOutput {
     src: string,
 }
 
-const createSectionHeroImagesPrompt = async (
-    input: CreateSectionHeroImagePromptInput,
+const createImagePrompt = async (
+    input: CreateImagePromptInput,
     token: string,
     projectId: string,
     request: (input: AiImagesCreateInput) => Promise<AiImagesCreateOutput>
-): Promise<CreateSectionHeroImagePromptOutput> => {
+): Promise<CreateImagePromptOutput> => {
     try {
         const prompt = `
+        ${input.details}.
         ${input.projectName} ${input.description}.
         The tone should be ${input.emotion}.
         Targeted at ${input.targetAudience}.
@@ -43,4 +45,4 @@ const createSectionHeroImagesPrompt = async (
     }
 }
 
-export default createSectionHeroImagesPrompt
+export default createImagePrompt

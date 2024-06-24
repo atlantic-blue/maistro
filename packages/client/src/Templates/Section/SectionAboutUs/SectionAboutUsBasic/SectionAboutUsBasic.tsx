@@ -15,7 +15,7 @@ const SectionAboutUsBasic: React.FC<SectionAboutUsProps> = (props) => {
         >
             <Heading
                 as="h2"
-                size="6"
+                size="8"
             >
                 {props.title}
             </Heading>

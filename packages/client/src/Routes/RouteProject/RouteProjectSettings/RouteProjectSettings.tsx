@@ -37,35 +37,6 @@ const RouteProjectSettings: React.FC = () => {
                     <SettingsMetadata project={project} />
                 </Card>
 
-                <Card className={styles.section}>
-                    <Heading className={styles.title} size="4" as="h4" align="center">
-                        Typography
-                    </Heading>
-                    <FontDesign
-                        onChange={fontScheme => {
-                            project.event$.next({
-                                type: ProjectMessageType.SET_FONT_SCHEME,
-                                data: fontScheme,
-                            })
-                        }}
-                    />
-                </Card>
-
-                <Card className={styles.section}>
-                    <Heading className={styles.title} size="4" as="h4" align="center">
-                        Colour Palette
-                    </Heading>
-                    <ColorScheme
-                        colourScheme={project.getColourScheme()}
-                        onChange={colourScheme => {
-                            project.event$.next({
-                                type: ProjectMessageType.SET_COLOUR_SCHEME,
-                                data: colourScheme,
-                            })
-                        }}
-                    />
-                </Card>
-
                 <RouteProjectSettingsMailList project={project} />
 
                 <RouteProjectSettingsDelete project={project} />

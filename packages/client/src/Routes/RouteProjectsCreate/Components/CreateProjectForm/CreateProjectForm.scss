@@ -1,4 +1,32 @@
 .card {
-    width: 100%;
     max-width: 800px;
+}
+
+.radioItem {
+    width: 100%;
+
+    span {
+        width: 100%;
+    }
+
+    button {
+        display: none;
+    }
+
+    &-selected {
+        padding: 3px;
+        border-radius: 10px;
+        background-color: var(--accent-10);
+    }
+}
+
+.heading {
+    font-size: 60px;
+}
+
+@media screen and (max-width: 600px) {
+    .heading {
+        font-size: 50px;
+        line-height: 50px;
+    }
 }

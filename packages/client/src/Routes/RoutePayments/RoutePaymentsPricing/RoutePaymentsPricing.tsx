@@ -13,9 +13,7 @@ const RoutePaymentsPricing = () => {
         <div className={styles.main}>
             <RouteProjectHeader user={user} />
 
-            <Section p="4">
-                <PricingPage />
-            </Section>
+            <PricingPage />
         </div>
     );
 }

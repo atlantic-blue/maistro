@@ -1,7 +1,8 @@
-import { Box, Flex } from '@radix-ui/themes';
+import { Box, Card, Checkbox, Container, Flex, Heading, Section, Skeleton, Text } from '@radix-ui/themes';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import * as yup from 'yup';
+import json5 from "json5"
 
 import { FormQuestion } from '../CreateProjectForm/CreateProjectForm';
 import CreateProjectForms from '../CreateProjectForms/CreateProjectForms';
@@ -11,14 +12,16 @@ import { ProjectsContext } from '../../../../Projects';
 import { ProjectsCreateOutput } from '../../../../Api/Projects/projectsCreate';
 import { Project } from '../../../../Store/Project';
 import { PageMessageType, ProjectMessageType, ProjectThreadMessageRole, ProjectsMessageType } from '../../../../types';
-import { templates } from '../../../../Templates';
-import { TemplateComponentType } from '../../../../Templates/templateTypes';
+import { TemplateCategory, TemplateComponentType } from '../../../../Templates/templateTypes';
 import env from '../../../../env';
 import { appRoutes } from '../../../router';
 import { PaymentsContext, canUseFeature } from '../../../../Payments/PaymentsProvider';
-import createSectionHeroPrompt from '../../../../Ai/prompts/SectionHero';
-import createSectionHeroImagesPrompt from '../../../../Ai/prompts/SectionHeroImage';
-import { createMaistroChatPrompt } from '../../../../Ai/prompts/Maistro';
+import createImagePrompt from '../../../../Ai/prompts/SectionHeroImage';
+import { CalendarCheck, FileSymlink, Headset, ShoppingCart, Users } from 'lucide-react';
+
+import * as styles from "./CreateProjectFlow.scss"
+import { fromMarkdown } from 'mdast-util-from-markdown';
+import brainstormPrompt from '../../../RouteBrainstorm/prompt';
 
 enum CreateProjectFlowId {
     NAME = "name",
@@ -26,7 +29,15 @@ enum CreateProjectFlowId {
     DESCRIPTION = "description",
     TARGET_AUDIENCE = "targetAudience",
     BENEFITS = "benefits",
-    CTA = "cta",
+    GOAL = "goal",
+}
+
+enum ProjectGoalType {
+    SELL = "SELL",
+    GROW = "GROW",
+    REDIRECT = "REDIRECT",
+    CONTACT = "CONTACT",
+    SCHEDULE = "SCHEDULE"
 }
 
 const projectFlowQuestions: FormQuestion[] = [
@@ -41,6 +52,7 @@ const projectFlowQuestions: FormQuestion[] = [
         initialValues: {
             [CreateProjectFlowId.NAME]: '',
         },
+        type: "textarea"
     },
     {
         id: CreateProjectFlowId.EMOTION,
@@ -52,6 +64,7 @@ const projectFlowQuestions: FormQuestion[] = [
         initialValues: {
             [CreateProjectFlowId.EMOTION]: '',
         },
+        type: "textarea"
     },
     {
         id: CreateProjectFlowId.TARGET_AUDIENCE,
@@ -63,6 +76,7 @@ const projectFlowQuestions: FormQuestion[] = [
         initialValues: {
             [CreateProjectFlowId.TARGET_AUDIENCE]: '',
         },
+        type: "textarea"
     },
     {
         id: CreateProjectFlowId.DESCRIPTION,
@@ -74,6 +88,7 @@ const projectFlowQuestions: FormQuestion[] = [
         initialValues: {
             [CreateProjectFlowId.DESCRIPTION]: '',
         },
+        type: "textarea"
     },
     {
         id: CreateProjectFlowId.BENEFITS,
@@ -85,17 +100,102 @@ const projectFlowQuestions: FormQuestion[] = [
         initialValues: {
             [CreateProjectFlowId.BENEFITS]: '',
         },
+        type: "textarea"
     },
     {
-        id: CreateProjectFlowId.CTA,
-        title: "What action do you want visitors to take upon seeing the hero section?",
+        type: "radio",
+        id: CreateProjectFlowId.GOAL,
+        title: "What is our main focus?",
         validationSchema: yup.object({
-            [CreateProjectFlowId.CTA]: yup
+            [CreateProjectFlowId.GOAL]: yup
                 .string()
+                .required('Business goal is required'),
         }),
         initialValues: {
-            [CreateProjectFlowId.CTA]: '',
+            [CreateProjectFlowId.GOAL]: '',
         },
+        options: [
+            {
+                value: ProjectGoalType.SELL,
+                child: (
+                    <Card className={styles.card}>
+                        <Flex gap="2" align="center">
+                            <ShoppingCart />
+                            <Box>
+                                <Heading className={styles.cardTitle}>
+                                    E-commerce
+                                </Heading>
+                                <Text>Sell your products online</Text>
+                            </Box>
+                        </Flex>
+                    </Card>
+                )
+            },
+            {
+                value: ProjectGoalType.GROW,
+                child: (
+                    <Card className={styles.card}>
+                        <Flex gap="2" align="center">
+                            <Users />
+                            <Box>
+                                <Heading className={styles.cardTitle}>
+                                    Collect subscribers
+                                </Heading>
+                                <Text>Grow your user base</Text>
+                            </Box>
+                        </Flex>
+                    </Card>
+                )
+            },
+            {
+                value: ProjectGoalType.REDIRECT,
+                child: (
+                    <Card className={styles.card}>
+                        <Flex gap="2" align="center">
+                            <FileSymlink />
+                            <Box>
+                                <Heading className={styles.cardTitle}>
+                                    Link to an existing site
+                                </Heading>
+                                <Text>Redirect to your product</Text>
+                            </Box>
+                        </Flex>
+                    </Card>
+                )
+            },
+            {
+                value: ProjectGoalType.CONTACT,
+                child: (
+                    <Card className={styles.card}>
+                        <Flex gap="2" align="center">
+                            <Headset />
+                            <Box>
+                                <Heading className={styles.cardTitle}>
+                                    Get Contacted
+                                </Heading>
+                                <Text>Get customers to call you</Text>
+                            </Box>
+                        </Flex>
+                    </Card>
+                )
+            },
+            {
+                value: ProjectGoalType.SCHEDULE,
+                child: (
+                    <Card className={styles.card}>
+                        <Flex gap="2" align="center">
+                            <CalendarCheck />
+                            <Box>
+                                <Heading className={styles.cardTitle}>
+                                    Schedule appointments
+                                </Heading>
+                                <Text>Book a appointments in your calendar</Text>
+                            </Box>
+                        </Flex>
+                    </Card>
+                )
+            }
+        ]
     },
 ]
 
@@ -107,8 +207,9 @@ const ProjectFlow: React.FC = () => {
 
     const [projectsCreateResponse, setProjectsCreateResponse] = React.useState<ProjectsCreateOutput | null>(null)
     const [progressMessage, setProgressMessage] = React.useState("")
+    const [progressList, setProgressList] = React.useState<string[]>([])
 
-    const createProject = async (currentId: string, values: Record<string, string>) => {
+    const createProject = async (values: Record<string, string>) => {
         const projectName = values[CreateProjectFlowId.NAME]
         if (!projectName) {
             return
@@ -126,24 +227,10 @@ const ProjectFlow: React.FC = () => {
             name: projectName,
             url: createUrl(projectName),
         })
-
-        const aiThreadResponse = await api.ai.aiThreads.create({
-            token: user.getTokenId(),
-            name: projectName,
-            projectId: response.id,
-            messages: [
-                {
-                    role: ProjectThreadMessageRole.SYSTEM,
-                    timestamp: new Date().toUTCString(),
-                    content: [
-                        {
-                            text: "Do not wrap responses with  \`\`\` and \`\`\`",
-                        },
-                        {
-                            text: createMaistroChatPrompt()
-                        }
-                    ]
-                }
+        setProgressList(prev => {
+            return [
+                ...prev,
+                "Project Created"
             ]
         })
 
@@ -159,17 +246,8 @@ const ProjectFlow: React.FC = () => {
         })
 
         const project = projects.getProjectById(response.id)
-        project.event$.next({
-            type: ProjectMessageType.SET_AI_THREAD,
-            data: {
-                createdAt: aiThreadResponse.createdAt,
-                id: aiThreadResponse.id,
-                projectId: aiThreadResponse.projectId,
-                name: aiThreadResponse.name,
-                messages: aiThreadResponse.messages,
-            },
-        })
 
+        setProgressMessage("Creating Home Page...")
         const pageResponse = await api.pages.create({
             token: user.getTokenId(),
             title: projectName,
@@ -178,8 +256,13 @@ const ProjectFlow: React.FC = () => {
             description: projectName,
             contentIds: [],
         })
-
-        setProgressMessage("Index page created...")
+        setProgressList(prev => {
+            return [
+                ...prev,
+                "Home page created"
+            ]
+        })
+        setProgressMessage("Home page created...")
         project.event$.next({
             type: ProjectMessageType.SET_PAGE,
             data: {
@@ -195,110 +278,38 @@ const ProjectFlow: React.FC = () => {
             },
         })
 
-        setProgressMessage("")
-        navigate(appRoutes.getProjectPageRoute(project.getId(), pageResponse.id))
+
+        setProgressMessage("Creating Email List...")
+        const emailListResponse = await api.email.lists.create({
+            token: user.getTokenId(),
+            title: projectName,
+            projectId: response.id,
+            description: projectName,
+        })
+        setProgressList(prev => {
+            return [
+                ...prev,
+                "Email list created"
+            ]
+        })
+        setProgressMessage("Email list created...")
+        project.event$.next({
+            type: ProjectMessageType.SET_EMAIL_LIST,
+            data: {
+                createdAt: emailListResponse.createdAt,
+                id: emailListResponse.id,
+                status: emailListResponse.status,
+                title: emailListResponse.title,
+                projectId: emailListResponse.projectId,
+                description: emailListResponse.description,
+            },
+        })
+
+        return response
     }
 
-    const createPages = async (currentId: string, values: Record<string, string>) => {
-        if (!projectsCreateResponse) {
-            console.error("PROJECT NOT CREATED")
-            return
-        }
-
-        const project = projects.getProjectById(projectsCreateResponse.id)
-        if (!project) {
-            console.error("PROJECT NOT FOUND")
-            return
-        }
-
-        const projectName = values[CreateProjectFlowId.NAME]
-        const description = values[CreateProjectFlowId.DESCRIPTION]
-
-        setProgressMessage("Creating Pages...")
-        const promises = () => [
-            api.pages.create({
-                token: user.getTokenId(),
-                path: 'index',
-                title: projectName,
-                description: description,
-                projectId: projectsCreateResponse.id,
-                contentIds: [],
-            }).then(pageResponse => {
-                setProgressMessage("Index page created...")
-                project.event$.next({
-                    type: ProjectMessageType.SET_PAGE,
-                    data: {
-                        id: pageResponse.id,
-                        projectId: pageResponse.projectId,
-                        path: pageResponse.path,
-                        title: pageResponse.title,
-                        description: pageResponse.description,
-                        contentIds: [],
-                        // TODO
-                        colourScheme: {},
-                        fontScheme: {}
-                    },
-                })
-                return pageResponse
-            }),
-            api.pages.create({
-                token: user.getTokenId(),
-                path: 'success',
-                title: projectName,
-                description: description,
-                projectId: projectsCreateResponse.id,
-                contentIds: [],
-            }).then(pageResponse => {
-                setProgressMessage("Success page created...")
-                project.event$.next({
-                    type: ProjectMessageType.SET_PAGE,
-                    data: {
-                        id: pageResponse.id,
-                        projectId: pageResponse.projectId,
-                        path: pageResponse.path,
-                        title: pageResponse.title,
-                        description: pageResponse.description,
-                        contentIds: [],
-                        // TODO
-                        colourScheme: {},
-                        fontScheme: {}
-                    },
-                })
-                return pageResponse
-            }),
-            api.email.lists.create({
-                token: user.getTokenId(),
-                title: projectName,
-                description: description,
-                projectId: projectsCreateResponse.id,
-            }).then(emailListResponse => {
-                setProgressMessage("Creating mailing list...")
-                project.event$.next({
-                    type: ProjectMessageType.SET_EMAIL_LIST,
-                    data: {
-                        createdAt: emailListResponse.createdAt,
-                        title: emailListResponse.title,
-                        status: emailListResponse.status,
-                        projectId: emailListResponse.projectId,
-                        id: emailListResponse.id,
-                        description: emailListResponse.description
-                    }
-                })
-                return emailListResponse
-            })
-        ]
-
-        await Promise.all(promises())
-        setProgressMessage("")
-    }
-
-    const createHeroContent = async (currentId: string, values: Record<string, string>) => {
-        if (!projectsCreateResponse) {
-            console.error("PROJECT NOT CREATED")
-            return
-        }
-
-        const project = projects.getProjectById(projectsCreateResponse.id)
+    const createContent = async (projectID: string, values: Record<string, string>) => {
+        const project = projects.getProjectById(projectID)
         if (!project) {
             console.error("PROJECT NOT FOUND")
             return
@@ -309,83 +320,157 @@ const ProjectFlow: React.FC = () => {
             console.error("PAGE NOT FOUND")
             return
         }
+        const projectName = values[CreateProjectFlowId.NAME]
+        const benefits = values[CreateProjectFlowId.BENEFITS]
+        const targetAudience = values[CreateProjectFlowId.TARGET_AUDIENCE]
+        const description = values[CreateProjectFlowId.DESCRIPTION]
+        const emotion = values[CreateProjectFlowId.EMOTION]
+        const goal = values[CreateProjectFlowId.GOAL]
+
+        setProgressMessage("Generating Ai Logo...")
+        const logoImgSrc = await createImagePrompt({
+            details: "Create a logo image",
+            description,
+            emotion,
+            projectName,
+            targetAudience,
+        },
+            user.getTokenId(),
+            project.getId(),
+            api.ai.aiImages.create,
+        )
+        const logoImgUrl = `${env.hosting.baseUrl}/${logoImgSrc.src}`
+        setProgressList(prev => {
+            return [
+                ...prev,
+                "Logo created"
+            ]
+        })
+
+        setProgressMessage("Searching for Stock Images...")
+        const imagesGallery = await api.images.get({
+            token: user.getTokenId(),
+            page: 4,
+            perPage: 5,
+            query: projectName.replaceAll(" ", ","),
+        })
+        const imageGalleryUrls = imagesGallery.results.map(i => i.urls.full).join(", ")
+        setProgressList(prev => {
+            return [
+                ...prev,
+                "Stock images found"
+            ]
+        })
 
         try {
             setProgressMessage("Generating Ai Copywriting...")
-            const projectName = values[CreateProjectFlowId.NAME]
-            const benefits = values[CreateProjectFlowId.BENEFITS]
-            const targetAudience = values[CreateProjectFlowId.TARGET_AUDIENCE]
-            const description = values[CreateProjectFlowId.DESCRIPTION]
-            const emotion = values[CreateProjectFlowId.EMOTION]
-            const cta = values[CreateProjectFlowId.CTA]
-
-            setProgressMessage("Generating Ai Copywriting & Images...")
-            const promises = () => [
-                createSectionHeroImagesPrompt({
-                    projectName,
-                    description,
-                    emotion,
-                    targetAudience
-                },
-                    user.getTokenId(),
-                    projectsCreateResponse.id,
-                    api.ai.aiImages.create,
-                ),
-                createSectionHeroPrompt({
-                    projectName,
-                    benefits,
-                    cta,
-                    description,
-                    emotion,
-                    targetAudience
-                },
-                    user.getTokenId(),
-                    projectsCreateResponse.id,
-                    api.ai.aiContents.create,
-                )
-            ]
-
-            const [imageResponse, sectionResponse] = await Promise.all(promises())
-
-            setProgressMessage("Creating content...")
-            const template = templates[TemplateComponentType.HERO_IMAGE]
-            const contentResponse = await api.content.create({
-                token: user.getTokenId(),
-                projectId: projectsCreateResponse.id,
-                template: template.name,
-                categories: template.categories,
-                description: template.description,
-                data: {
-                    ...template.props,
-                    ...(imageResponse.src && {
-                        img: {
-                            src: `${env.hosting.baseUrl}/${imageResponse.src}`,
-                            alt: cta,
-                        }
-                    }),
-                    title: sectionResponse.title,
-                    content: sectionResponse.content,
-                    cta: sectionResponse.cta,
-                    ctaLink: "/",
-                }
+            const response = await api.ai.aiComponents.create({
+                projectId: project.getId(),
+                messages: [
+                    {
+                        role: ProjectThreadMessageRole.SYSTEM,
+                        timestamp: new Date().toISOString(),
+                        content: [
+                            {
+                                text: brainstormPrompt
+                            }
+                        ]
+                    },
+                    {
+                        role: ProjectThreadMessageRole.USER,
+                        timestamp: new Date().toISOString(),
+                        content: [
+                            {
+                                text: `ProjectName: ${projectName}`
+                            },
+                            {
+                                text: `Benefits: ${benefits}`
+                            },
+                            {
+                                text: `Target Audience: ${targetAudience}`
+                            },
+                            {
+                                text: `Description: ${description}`
+                            },
+                            {
+                                text: `Emotion: ${emotion}`
+                            },
+                            {
+                                text: `Goal: ${goal}`
+                            },
+                            {
+                                text: `Logo image URL: ${logoImgUrl}`
+                            },
+                            {
+                                text: `image Gallery URLs: ${imageGalleryUrls}`
+                            }
+                        ]
+                    }
+                ]
             })
 
-            project.event$.next({
-                type: ProjectMessageType.SET_CONTENT,
-                data: {
-                    id: contentResponse.id,
-                    description: contentResponse.description,
-                    projectId: contentResponse.projectId,
-                    createdAt: contentResponse.createdAt,
-                    data: contentResponse.data,
-                    template: contentResponse.template,
-                    categories: contentResponse.categories,
-                },
+            interface Content {
+                template: TemplateComponentType,
+                description: string,
+                data: {}
+            }
+
+            let contentResponse: Record<TemplateCategory, Content> = {}
+            try {
+                const md = fromMarkdown(response?.data?.content[0]?.text)
+                const code = md.children.find(child => child.type === "code")
+
+                contentResponse = json5.parse(code?.value)
+            } catch (error) {
+                console.log({ error })
+            }
+
+            setProgressMessage("Creating content...")
+            const contentPromises = () => Object.keys(contentResponse).map((key: TemplateCategory) => {
+                return api.content.create({
+                    token: user.getTokenId(),
+                    projectId: project.getId(),
+
+                    categories: [key],
+                    template: contentResponse[key].template,
+                    description: contentResponse[key].description || key,
+                    data: contentResponse[key].data,
+                })
+            })
+
+            const contentResponses = await Promise.all(contentPromises())
+
+            contentResponses.map(r => {
+                project.event$.next({
+                    type: ProjectMessageType.SET_CONTENT,
+                    data: {
+                        id: r.id,
+                        description: r.description,
+                        projectId: r.projectId,
+                        createdAt: r.createdAt,
+                        data: r.data,
+                        template: r.template,
+                        categories: r.categories,
+                    },
+                })
             })
 
             page.event$.next({
-                type: PageMessageType.PUSH_CONTENT_IDS,
-                data: [contentResponse.id]
+                type: PageMessageType.SET_CONTENT_IDS,
+                data: Object.keys(contentResponse).map((dataKey: TemplateCategory) => {
+                    const c = contentResponses.find(r => {
+                        return r.template === contentResponse[dataKey].template
+                    })
+
+                    return c?.id || ""
+                }).filter(Boolean)
+            })
+
+            setProgressList(prev => {
+                return [
+                    ...prev,
+                    "Content created"
+                ]
             })
 
             setProgressMessage("Adding content to page...")
@@ -406,92 +491,62 @@ const ProjectFlow: React.FC = () => {
         }
     }
 
-    // const createSubscribeContent = async (currentId: string, values: Record<string, string>) => {
-    //     if (!projectsCreateResponse) {
-    //         console.error("PROJECT NOT CREATED")
-    //         return
-    //     }
-
-    //     const project = projects.getProjectById(projectsCreateResponse.id)
-    //     if (!project) {
-    //         console.error("PROJECT NOT FOUND")
-    //         return
-    //     }
-
-    //     const page = project.getPageByPathname("index")
-    //     if (!page) {
-    //         console.error("PAGE NOT FOUND")
-    //         return
-    //     }
-
-    //     setProgressMessage("Creating subscribe content...")
-    //     const template = templates[TemplateComponentType.SUBSCRIBE_BASIC]
-    //     const contentResponse = await api.content.create({
-    //         token: user.getTokenId(),
-    //         projectId: projectsCreateResponse.id,
-    //         template: template.name,
-    //         categories: template.categories,
-    //         description: template.description,
-    //         data: {
-    //             ...template.props,
-    //             url: env.api.email.entries.create,
-    //             emailListId: project.getEmailLists()[0].getId(),
-    //         }
-    //     })
-
-    //     project.event$.next({
-    //         type: ProjectMessageType.SET_CONTENT,
-    //         data: {
-    //             id: contentResponse.id,
-    //             description: contentResponse.description,
-    //             projectId: contentResponse.projectId,
-    //             createdAt: contentResponse.createdAt,
-    //             data: contentResponse.data,
-    //             template: contentResponse.template,
-    //             categories: contentResponse.categories,
-    //         },
-    //     })
-
-    //     page.event$.next({
-    //         type: PageMessageType.PUSH_CONTENT_IDS,
-    //         data: [contentResponse.id]
-    //     })
-
-    //     api.pages.updateById({
-    //         projectId: projectsCreateResponse.id,
-    //         pageId: page.getId(),
-    //         token: user.getTokenId(),
-    //         contentIds: [...page.getContentIds(), contentResponse.id]
-    //     })
-    //     setProgressMessage("")
-    // }
-
-    const onSubmit = async (currentId: string, values: Record<string, string>) => {
-        const stage = {
-            [CreateProjectFlowId.NAME]: createProject,
-            [CreateProjectFlowId.DESCRIPTION]: createPages,
-            [CreateProjectFlowId.CTA]: createHeroContent,
-            // [CreateProjectFlowId.CTA]: createSubscribeContent,
-        }[currentId]
-
-        if (!stage) {
-            return
-        }
-
-        await stage(currentId, values)
+    const onSubmit = async (state: Record<string, string>) => {
+        const project = await createProject(state)
+        await createContent(project?.id || "", state)
     }
 
     return (
         <>
             <Flex direction="column" gap="2" justify="center" align="center">
-                <CreateProjectForms
-                    questions={projectFlowQuestions}
-                    onSubmit={canUseFeature.createProject[paymentPlan](Object.keys(projects.getProjects()).length) ? onSubmit : async (currentId: string, values: Record<string, string>) => redirectToPaymentPlans()}
-                />
-                {progressMessage && (
-                    <Box>
-                        {progressMessage}
-                    </Box>
+                {!progressMessage ? (
+                    <CreateProjectForms
+                        questions={projectFlowQuestions}
+                        onSubmit={canUseFeature.createProject[paymentPlan](Object.keys(projects.getProjects()).length) ? onSubmit : async (currentId: string, values: Record<string, string>) => redirectToPaymentPlans()}
+                    />
+                ) : (
+                    <Section>
+                        <Card>
+                            <Flex justify="center" direction="column" gap="3" align="center">
+                                <Container size="1">
+                                    <Flex direction="column" gap="3">
+                                        <Text>
+                                            <Skeleton>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
+                                                felis tellus, efficitur id convallis a, viverra eget libero. Nam magna
+                                                erat, fringilla sed commodo sed, aliquet nec magna.
+                                            </Skeleton>
+                                        </Text>
+
+                                        <Skeleton>
+                                            <Text>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
+                                                felis tellus, efficitur id convallis a, viverra eget libero. Nam magna
+                                                erat, fringilla sed commodo sed, aliquet nec magna.
+                                            </Text>
+                                        </Skeleton>
+                                    </Flex>
+                                </Container>
+
+                                <Heading m="3" size="5">
+                                    {progressMessage}
+                                </Heading>
+
+                                <Flex gap="3" direction="column" justify="center">
+                                    {progressList.map(text => {
+                                        return (
+                                            <Text as="label" size="2">
+                                                <Flex gap="2">
+                                                    <Checkbox defaultChecked />
+                                                    {text}
+                                                </Flex>
+                                            </Text>
+                                        )
+                                    })}
+                                </Flex>
+                            </Flex>
+                        </Card>
+                    </Section>
                 )}
             </Flex>
         </>

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import env from '../../env';
+import { Section } from '@radix-ui/themes';
 
 declare global {
     namespace JSX {
@@ -12,9 +13,11 @@ declare global {
 
 const PricingPage: React.FC = () => {
     return (
-        <stripe-pricing-table pricing-table-id={env.payments.stripe.pricingTableId}
-            publishable-key={env.payments.stripe.publishableKey}>
-        </stripe-pricing-table>
+        <Section p="5" style={{ backgroundColor: "#FAFAFA" }}>
+            <stripe-pricing-table pricing-table-id={env.payments.stripe.pricingTableId}
+                publishable-key={env.payments.stripe.publishableKey}>
+            </stripe-pricing-table>
+        </Section>
     );
 }
 

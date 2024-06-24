@@ -1,26 +1,19 @@
 import React from "react"
-import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
-import { randImg } from '@ngneat/falso';
 
 import { ProjectsContext } from "../../Projects"
-import Thumbnail from "../../Components/Thumbnail/Thumbnail"
 
 import { appRoutes } from "../router"
 
-import ProjectOptions from "./Components/ProjectOptions/ProjectOptions"
 import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
-import { PaymentsContext, canUseFeature } from '../../Payments/PaymentsProvider';
-import { templates } from "../../Templates"
-import { Card } from "@radix-ui/themes"
+import { Box, Button, Card, Flex, Section, Text } from "@radix-ui/themes"
 import * as styles from "./RouteProjects.scss"
-import SectionHeroImage from "../../Templates/Section/SectionHero/SectionHeroImage/SectionHeroImage";
+import { CirclePlus } from "lucide-react";
 
 const RoutesProjects: React.FC = () => {
     const navigate = useNavigate();
     const { projects } = React.useContext(ProjectsContext)
-    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
 
     const onNewProjectClick = async () => {
         navigate(appRoutes.getProjectsNewRoute())
@@ -31,103 +24,49 @@ const RoutesProjects: React.FC = () => {
     return (
         <div className={styles.projects}>
             <RouteProjectHeader />
-            <div className={styles.projectsContent}>
-                <Card
-                    className={classNames(styles.section, styles.sectionEmpty)}
-                    onClick={canUseFeature.createProject[paymentPlan](Object.keys(projects.getProjects()).length) ? onNewProjectClick : redirectToPaymentPlans}
-                    title="Create new Project"
-                >
-                    <div className={styles.content}>
-                        <Thumbnail
-                            dimensions={{
-                                height: `350px`,
-                                width: `250px`,
-                                scale: 0.5
-                            }}
+            <Flex direction="column" align="center">
+                <Section size="2" m="2">
+                    <Flex direction="column" gap="4">
+                        <Button
+                            variant="outline"
+                            onClick={onNewProjectClick}
                         >
-                            <SectionHeroImage
-                                {...{
-                                    title: "Captivating Experiences Await",
-                                    img: {
-                                        src: randImg(),
-                                        alt: "",
-                                    },
-                                    content: "Launch Your Next Adventure",
-                                    cta: "Generate",
-                                    ctaLink: "#home"
-                                }}
-                            />
-                        </Thumbnail>
+                            <CirclePlus />
+                            Create a new project
+                        </Button>
 
-                    </div>
-                </Card>
+                        <Box>
+                            {
+                                projectsList.map(projectId => {
+                                    const project = projects.getProjectById(projectId)
 
-                {
-                    projectsList.map(projectId => {
-                        const project = projects.getProjectById(projectId)
+                                    const onClick = () => {
+                                        navigate(
+                                            project.getPageByPathname("index")?.getId() ?
+                                                appRoutes.getProjectPageRoute(project.getId(), project.getPageByPathname("index").getId())
+                                                : appRoutes.getProjectRoute(project.getId())
+                                        )
+                                    }
 
-                        const Preview = () => {
-                            const indexPage = project.getPageByPathname("index")
-                            if (!indexPage) {
-                                return
+                                    return (
+                                        <Card key={project.getId()} onClick={onClick} mb="3">
+                                            <Flex wrap="wrap" justify="start" align="center" gap="2">
+                                                <Text as="div" size="2" weight="bold">
+                                                    {project.getName()}
+                                                </Text>
+                                                <Text as="div" size="2" color="gray">
+                                                    {project.getUrl()}
+                                                </Text>
+                                            </Flex>
+                                        </Card>
+                                    )
+                                })
                             }
-
-                            const content = indexPage.getContentIds().map(contentId => {
-                                const content = project.getContentById(contentId)
-                                if (!content) {
-                                    return
-                                }
-                                const Component = templates[content.getTemplate()]?.Component
-                                if (!Component) {
-                                    return null
-                                }
-
-                                let props = content.getData()
-
-                                return (
-                                    <Component key={content.getId()} {...props as any} />
-                                )
-                            })
-
-                            return content
-                        }
-
-                        const onClick = () => {
-                            navigate(
-                                project.getPageByPathname("index")?.getId() ?
-                                    appRoutes.getProjectPageRoute(project.getId(), project.getPageByPathname("index").getId())
-                                    : appRoutes.getProjectRoute(project.getId())
-                            )
-                        }
-
-                        return (
-                            <div key={project.getId()}>
-                                <Card
-                                    className={styles.section}
-                                    onClick={onClick}
-                                    title={project.getId()}
-                                >
-                                    <div className={styles.content}>
-                                        <Thumbnail
-                                            dimensions={{
-                                                height: `350px`,
-                                                width: `250px`,
-                                                scale: 0.5
-                                            }}
-                                        >
-                                            <Preview />
-                                        </Thumbnail>
-                                    </div>
-                                </Card>
-                                <ProjectOptions
-                                    project={project}
-                                />
-                            </div>
-                        )
-                    })
-                }
-            </div >
-        </div >
+                        </Box>
+                    </Flex>
+                </Section>
+            </Flex>
+        </div>
     )
 }
 

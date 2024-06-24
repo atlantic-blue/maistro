@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, Flex, Text } from "@radix-ui/themes"
+import { Avatar, Box, Flex, Text } from "@radix-ui/themes"
 import React from "react"
 import { TemplateCategory, TemplateComponentType, TemplateStruct } from "../../../templateTypes"
 import { SectionTestimonialsProps } from "../SectionTestimonialsTypes"
@@ -38,7 +38,7 @@ export const SectionTestimonialsBasicItem: TemplateStruct<SectionTestimonialsPro
     props: {
         name: "Julian Tellez",
         testimonial: "It's the perfect companion for my active lifestyle!",
-        pictureUrl: "https://hosting.maistro.website/1498d438-d0d1-703a-53f2-d1b674fce02f/1be48130-9f7c-44f6-8e35-268c03cc148a/07084DBC-C427-497A-8B83-E3AA2E3EE770.jpeg",
+        pictureUrl: "https://maistro.live/1498d438-d0d1-703a-53f2-d1b674fce02f/1be48130-9f7c-44f6-8e35-268c03cc148a/07084DBC-C427-497A-8B83-E3AA2E3EE770.jpeg",
     },
 }
 

@@ -74,6 +74,17 @@ export class Projects implements IProjects {
         return this.projects[id]
     }
 
+    public getProjectByName(name: string): Project {
+        return Object.keys(this.projects)
+            .filter(Boolean)
+            .filter(projectKey => projectKey !== "undefined")
+            .filter(projectKey => {
+                return this.projects[projectKey].getName() === name
+            }).map(projectKey => {
+                return this.projects[projectKey]
+            })[0]
+    }
+
     public deleteProject(id: string): void {
         delete this.projects[id]
     }

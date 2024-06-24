@@ -20,7 +20,7 @@ const HeaderBasic: React.FC<HeaderProps> = ({
 }) => {
     return (
         <header className={classNames(styles.header)} data-hydration-id={props["data-hydration-id"]}>
-            <Box ml='4' mr='4'>
+            <Box ml="6" mr='6'>
                 <Flex align="center" justify="between">
                     <Logo
                         imgUrl={logo.url}
