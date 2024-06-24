@@ -10,6 +10,10 @@ variable "domain_name" {
   default = "maistro.website"
 }
 
+variable "domain_name_hosting" {
+  default = "maistro.live"
+}
+
 variable "aws_region" {
   default = "us-east-1"
 }

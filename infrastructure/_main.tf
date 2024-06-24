@@ -1,11 +1,15 @@
 terraform {
-  required_version = ">= v1.3.1"
+  required_version = ">= v1.5.7"
 
   backend "s3" {
-    bucket  = "abs-terraform"
-    key     = "website-builder"
-    region  = "us-east-1"
-    encrypt = true
-    profile = "atlantic-blue"
+    bucket                  = "abs-terraform"
+    key                     = "maistro"
+    region                  = "us-east-1"
+    profile                 = "atlantic-blue"
+    encrypt                 = true
   }
+
+    # backend "local" {
+    #   path = "./website-builder.json"
+    # }
 }

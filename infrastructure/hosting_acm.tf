@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "hosting_certificate" {
-  domain_name       = "hosting.${var.domain_name}"
+  domain_name       = "${var.domain_name_hosting}"
   validation_method = "DNS"
 
   tags = {
@@ -14,7 +14,7 @@ resource "aws_acm_certificate" "hosting_certificate" {
   }
 
   subject_alternative_names = [
-    "*.hosting.${var.domain_name}",
+    "*.${var.domain_name_hosting}",
   ]
 }
 

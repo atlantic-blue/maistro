@@ -73,8 +73,8 @@ resource "aws_cloudfront_distribution" "hosting" {
   }
 
   aliases = [
-    "hosting.${var.domain_name}",
-    "*.hosting.${var.domain_name}",
+    "${var.domain_name_hosting}",
+    "*.${var.domain_name_hosting}",
   ]
 
   viewer_certificate {
