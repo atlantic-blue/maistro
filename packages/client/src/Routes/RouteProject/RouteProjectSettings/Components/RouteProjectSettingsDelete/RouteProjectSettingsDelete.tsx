@@ -10,7 +10,7 @@ import IconBin from "../../../../../Components/Icons/Bin/Bin"
 
 import * as styles from "../../RouteProjectSettings.scss"
 import { ApiContext } from "../../../../../Api/ApiProvider"
-import { Box, Button, Heading, Text, Card, Callout } from "@radix-ui/themes"
+import { Box, Button, Heading, Text, Card, Callout, Flex } from "@radix-ui/themes"
 import { PaymentsContext, canUseFeature } from "../../../../../Payments/PaymentsProvider"
 
 interface RouteProjectSettingsDeleteProps {
@@ -52,26 +52,29 @@ const RouteProjectSettingsDelete: React.FC<RouteProjectSettingsDeleteProps> = (p
 
     return (
         <Callout.Root
-            className={styles.section}
             data-accent-color="ruby"
+            m="3"
+            style={{ display: "flex" }}
         >
-            <Heading as="h3" className={styles.title}>
-                Danger Zone
-            </Heading>
+            <Flex direction="column" align="center" justify="center" m="auto" wrap="wrap">
+                <Heading as="h3" className={styles.title}>
+                    Danger Zone
+                </Heading>
 
-            <Box className={styles.sectionDanger}>
-                <Text>
-                    Once you delete a project, there is no going back.
-                    Please be certain.
-                </Text>
-                <Button
-                    className={styles.buttonDanger}
-                    onClick={canUseFeature.deleteProject[paymentPlan]() ? () => onProjectDelete(props.project) : redirectToPaymentPlans}
-                    loading={isLoading}
-                >
-                    <IconBin className={styles.buttonDangerIcon} />
-                </Button>
-            </Box>
+                <Flex align="center" justify="center">
+                    <Text>
+                        Once you delete a project, there is no going back.
+                        Please be certain.
+                    </Text>
+                    <Button
+                        className={styles.buttonDanger}
+                        onClick={canUseFeature.deleteProject[paymentPlan]() ? () => onProjectDelete(props.project) : redirectToPaymentPlans}
+                        loading={isLoading}
+                    >
+                        <IconBin className={styles.buttonDangerIcon} />
+                    </Button>
+                </Flex>
+            </Flex>
         </Callout.Root>
     )
 }

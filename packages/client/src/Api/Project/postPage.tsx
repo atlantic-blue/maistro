@@ -68,7 +68,13 @@ const postPage = (
         state: hydrationState,
         Body() {
             return renderToString(
-                <Theme accentColor="amber" grayColor="mauve">
+                <Theme
+                    accentColor={project.getTheme()?.accentColor}
+                    grayColor={project.getTheme()?.grayColor}
+                    appearance={project.getTheme()?.appearance}
+                    radius={project.getTheme()?.radius}
+                    scaling={project.getTheme()?.scaling}
+                >
                     <Components />
                 </Theme>
             )

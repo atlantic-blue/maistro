@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react"
 import CreateProjectFlow from "../RouteHome/Components/CreateProjectFlow/CreateProjectFlow"
 import { ApiContext } from "../../Api/ApiProvider"
-import { Projects } from "../../Store/Projects"
 import { ProjectThreadMessageRole, ProjectsMessageType } from "../../types"
-import { defaultColorScheme, defaultFontScheme } from "../../PageContext"
-import { TemplateCategory, TemplateComponentType } from "../../Templates/templateTypes"
 import brainstormPrompt from "./prompt"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import RouteBrainstormSkeleton from "./RouteBrainstorm.skeleton"
@@ -18,14 +15,24 @@ const RouteBrainstorm = () => {
     const [searchParams] = useSearchParams()
     const paramsDescription = searchParams.get("description")
     const paramsGoal = searchParams.get("goal")
+    const paramsHeroImage = searchParams.get("imageHero")
+    const paramsBenefits = searchParams.get("benefits")
+    const paramsTargetAudience = searchParams.get("targetAudience")
 
-    const fetchData = async (description: string, goal: string) => {
+    const fetchData = async (
+        input: {
+            description: string,
+            goal: string,
+            imageHero: string,
+            benefits: string,
+            targetAudience: string,
+        }
+    ) => {
         setIsLoading(true)
         const imagesGallery = await api.images.get({
-            token: "", // TODO remove
             page: 4,
             perPage: 5,
-            query: description.replaceAll(" ", ","),
+            query: input.description.replaceAll(" ", ","),
         })
         const imageGalleryUrls = imagesGallery.results.map(i => i.urls.full).join(", ")
 
@@ -46,13 +53,22 @@ const RouteBrainstorm = () => {
                     timestamp: new Date().toISOString(),
                     content: [
                         {
-                            text: `Description: ${description}`
+                            text: `Description: ${input.description}`
                         },
                         {
-                            text: `Goal: ${goal}`
+                            text: `Goal: ${input.goal}`
                         },
                         {
-                            text: `image Gallery URLs: ${imageGalleryUrls}`
+                            text: `Target Audience: ${input.targetAudience}`
+                        },
+                        {
+                            text: `Benefits: ${input.benefits}`
+                        },
+                        {
+                            text: `Hero image: ${input.imageHero}`
+                        },
+                        {
+                            text: `Secondary images: ${imageGalleryUrls}`
                         }
                     ]
                 }
@@ -63,11 +79,33 @@ const RouteBrainstorm = () => {
     }
 
     useEffect(() => {
-        if (paramsDescription && paramsGoal) {
-            fetchData(paramsDescription, paramsGoal)
+        if (
+            !paramsDescription ||
+            !paramsGoal ||
+            !paramsHeroImage ||
+            !paramsBenefits ||
+            !paramsTargetAudience
+        ) {
+            return
         }
 
-    }, [paramsDescription, paramsGoal])
+        fetchData(
+            {
+                benefits: paramsBenefits,
+                description: paramsDescription,
+                imageHero: paramsHeroImage,
+                targetAudience: paramsTargetAudience,
+                goal: paramsTargetAudience,
+            }
+        )
+
+    }, [
+        paramsDescription,
+        paramsGoal,
+        paramsHeroImage,
+        paramsBenefits,
+        paramsTargetAudience,
+    ])
 
 
     if (isLoading) {

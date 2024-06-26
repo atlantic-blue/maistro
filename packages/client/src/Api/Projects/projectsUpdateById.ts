@@ -1,11 +1,13 @@
 import env from "../../env"
+import { ProjectTheme } from "../../types"
 import { requestController } from "../fetch"
 
-interface ProjectsReadInput {
+export interface ProjectsReadInput {
     projectId: string
     token: string
     name: string
     url: string
+    theme: ProjectTheme
 }
 
 const projectsUpdateById = async (
@@ -14,7 +16,9 @@ const projectsUpdateById = async (
         token,
 
         name,
-        url
+        url,
+        theme,
+
     }: ProjectsReadInput,
     apiUrl = env.api.projects.update,
     request = requestController.fetch,
@@ -27,7 +31,8 @@ const projectsUpdateById = async (
         },
         body: JSON.stringify({
             name,
-            url
+            url,
+            theme
         })
     }).then(response => response.json())
 }

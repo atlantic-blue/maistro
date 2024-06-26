@@ -1,12 +1,9 @@
 import React from "react"
-import { Card, Heading } from "@radix-ui/themes";
+import { Box, Card, Flex, Heading } from "@radix-ui/themes";
 import { useParams } from "react-router-dom"
 
 import { ProjectsContext } from "../../../Projects";
 import Helmet from "../Components/Helmet/Helmet";
-import ColorScheme from "../../../Components/ColourScheme/ColourScheme";
-import { ProjectMessageType } from "../../../types";
-import FontDesign from "../../../Components/FontScheme/FontScheme";
 
 import SettingsMetadata from "./Components/SettingsMetadata/SettingsMetadata";
 
@@ -14,6 +11,7 @@ import RouteProjectSettingsDelete from "./Components/RouteProjectSettingsDelete/
 
 import * as styles from "./RouteProjectSettings.scss"
 import RouteProjectSettingsMailList from "./Components/RouteProjectSettingsMailList/RouteProjectSettingsMailList";
+import RouteProjectSettingsTheme from "./Components/RouteProjectSettingsTheme/RouteProjectSettingsTheme";
 
 const RouteProjectSettings: React.FC = () => {
     const { projects } = React.useContext(ProjectsContext)
@@ -32,15 +30,10 @@ const RouteProjectSettings: React.FC = () => {
             </Heading>
             <br />
 
-            <div className={styles.content}>
-                <Card className={styles.section}>
-                    <SettingsMetadata project={project} />
-                </Card>
-
-                <RouteProjectSettingsMailList project={project} />
-
+            <Flex direction="column" maxWidth="800px" m="auto" mb="50px">
+                <SettingsMetadata project={project} />
                 <RouteProjectSettingsDelete project={project} />
-            </div>
+            </Flex>
         </Helmet>
     )
 }

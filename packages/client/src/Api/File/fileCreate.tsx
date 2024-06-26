@@ -2,7 +2,6 @@ import env from '../../env';
 import { requestController } from '../fetch';
 
 export interface CreateFileInput {
-    token: string,
     userId: string,
     projectId: string,
     fileName: string,
@@ -17,7 +16,6 @@ export interface CreateFileOutput {
 
 const fileCreate = (
     {
-        token,
         userId,
         projectId,
 
@@ -32,7 +30,6 @@ const fileCreate = (
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
             userId,

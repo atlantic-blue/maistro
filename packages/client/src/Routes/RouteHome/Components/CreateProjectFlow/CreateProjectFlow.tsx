@@ -8,11 +8,16 @@ import CreateProjectForms from "../../../RouteProjectsCreate/Components/CreatePr
 
 import * as styles from "./CreateProjectFlow.scss"
 import { useNavigate } from "react-router";
+import EditorImage from "../../../../Components/Editor/EditorImage";
+import { EditorDataType } from "../../../../Components/Editor/EditorData";
 import { appRoutes } from "../../../router";
 
 enum CreateProjectFlowId {
     DESCRIPTION = "description",
     GOAL = "goal",
+    IMAGE_HERO = "imageHero",
+    BENEFITS= "benefits",
+    TARGET_AUDIENCE = "targetAudience"
 }
 
 enum ProjectGoalType {
@@ -27,7 +32,7 @@ const projectFlowQuestions: FormQuestion[] = [
     {
         id: CreateProjectFlowId.DESCRIPTION,
         title: "Create Your Dream Website in Minutes",
-        subTitle: "What business would you like to create?",
+        subTitle: "What is the main product or service you are promoting?",
         validationSchema: yup.object({
             [CreateProjectFlowId.DESCRIPTION]: yup
                 .string()
@@ -37,6 +42,71 @@ const projectFlowQuestions: FormQuestion[] = [
             [CreateProjectFlowId.DESCRIPTION]: '',
         },
         type: "textarea",
+    },
+    {
+        id: CreateProjectFlowId.TARGET_AUDIENCE,
+        title: "Who is your target audience?",
+        subTitle: "Are they small business owners, entrepreneurs, freelancers, or another specific group?",
+        validationSchema: yup.object({
+            [CreateProjectFlowId.DESCRIPTION]: yup
+                .string()
+                .required('Business description is required'),
+        }),
+        initialValues: {
+            [CreateProjectFlowId.DESCRIPTION]: '',
+        },
+        type: "textarea",
+    },
+    {
+        id: CreateProjectFlowId.BENEFITS,
+        title: "Key features and benefits.",
+        subTitle: "What are the key features and benefits that you want to highlight on the landing page?",
+        validationSchema: yup.object({
+            [CreateProjectFlowId.DESCRIPTION]: yup
+                .string()
+                .required('Business description is required'),
+        }),
+        initialValues: {
+            [CreateProjectFlowId.DESCRIPTION]: '',
+        },
+        type: "textarea",
+    },
+    {
+        id: CreateProjectFlowId.IMAGE_HERO,
+        title: "Hero image",
+        subTitle: "What kind of visual style or specific elements would you like in the hero image?",
+        validationSchema: yup.object({
+            [CreateProjectFlowId.DESCRIPTION]: yup
+                .string()
+                .required('Business description is required'),
+        }),
+        initialValues: {
+            [CreateProjectFlowId.IMAGE_HERO]: '',
+        },
+        Component: (props: { onChange: (i: string) => void; value: string }) => {
+            const [value, setValue] = React.useState(props.value)
+            const onChange = (src: string) => {
+                console.log(props, src)
+                setValue(src)
+                props.onChange(src)
+            }
+
+            const onUploadFile = async (file: File): Promise<string> => {
+                return ""
+            }
+
+            return (
+                <Card className={styles.card}>
+                    <EditorImage
+                        value={value}
+                        onChange={onChange}
+                        onUploadFile={onUploadFile}
+                        type={EditorDataType.IMAGE}
+                        name=""
+                    />
+                </Card>
+            )
+        }
     },
     {
         type: "radio",

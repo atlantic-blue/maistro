@@ -4,7 +4,6 @@ import { Box, Button, Flex, Text } from "@radix-ui/themes";
 import { EditorWysiwygProps } from "./EditorData";
 import Wysiwyg, { WysiwygApi } from "../Wysiwyg/Wysiwyg";
 import ErrorBoundary from "../../Errors/ErrorBoundary";
-import { defaultColorScheme } from "../../PageContext";
 
 const EditorWysiwyg: React.FC<EditorWysiwygProps> = (props) => {
     const editorApiRef = React.useRef<WysiwygApi>(null);
@@ -23,7 +22,6 @@ const EditorWysiwyg: React.FC<EditorWysiwygProps> = (props) => {
 
                 <Wysiwyg
                     key={Date.now()}
-                    colourScheme={defaultColorScheme}
                     apiRef={editorApiRef}
                     onUploadFile={props.onUploadFile}
                     isEditable

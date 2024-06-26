@@ -3,7 +3,7 @@ import React from "react";
 import { ProjectsCreateInput, ProjectsCreateOutput, projectsCreate } from "./Projects/projectsCreate";
 import { projectsRead } from "./Projects/projectsRead";
 import { projectsReadById } from "./Projects/projectsReadById";
-import { projectsUpdateById } from "./Projects/projectsUpdateById";
+import { ProjectsReadInput, projectsUpdateById } from "./Projects/projectsUpdateById";
 import { projectsDelete } from "./Projects/projectsDelete";
 import { PaymentsSubscriptionsReadInput, PaymentsSubscriptionsReadOutput, paymentsSubscriptionsRead } from "./Payments/PaymentSubscriptions/PaymentSubscriptionsRead";
 import { EmailListsCreateInput, EmailListsCreateOutput, emailListsCreate } from "./EmailLists/emailListsCreate";
@@ -78,7 +78,7 @@ interface ApiContextState {
             create: (input: ProjectsCreateInput) => Promise<ProjectsCreateOutput>
             read: ({ token }: { token: string }) => Promise<Partial<ProjectStruct[]>>
             readById: ({ projectId, token }: { projectId: string, token: string }) => Promise<Partial<ProjectStruct>>
-            updateById: ({ projectId, token, name, url }: { projectId: string, token: string, name: string, url: string }) => Promise<void>,
+            updateById: (input: ProjectsReadInput) => Promise<void>,
             delete: ({ token, id }: { token: string, id: string }) => Promise<void>,
         }
         file: {

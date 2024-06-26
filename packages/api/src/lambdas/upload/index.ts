@@ -39,7 +39,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             !fileName ||
             !fileType
         ) {
-            console.log({ userId, projectId, fileContent, fileName, fileType })
             console.error('Invalid payload:', { event });
             return {
                 statusCode: 500,

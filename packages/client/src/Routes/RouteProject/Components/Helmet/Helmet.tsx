@@ -2,18 +2,10 @@ import React from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import { Avatar, Flex, Text } from "@radix-ui/themes";
 
-import {
-    ColourPalette,
-    ColourScheme,
-    FontFamily,
-    FontScheme,
-    ProjectMessageType
-} from "../../../../types";
 import Menu from "../Menu/Menu"
 
 import { ProjectsContext } from "../../../../Projects";
 
-import { defaultColorScheme, defaultFontScheme } from "../../../../PageContext";
 import RouteProjectHeader from "../Header/Header";
 
 import * as styles from "./Helmet.scss"
@@ -40,20 +32,6 @@ const ListItem = React.forwardRef(({ className, children, title, ...props }, for
     </li>
 ));
 
-const appendColourSchemeToDocument = (scheme: ColourScheme) => {
-    document.documentElement.style.setProperty(ColourPalette.ACCENT, scheme?.accent);
-    document.documentElement.style.setProperty(ColourPalette.BACKGROUND, scheme?.background);
-    document.documentElement.style.setProperty(ColourPalette.NEUTRAL, scheme?.neutral);
-    document.documentElement.style.setProperty(ColourPalette.PRIMARY, scheme?.primary);
-    document.documentElement.style.setProperty(ColourPalette.SECONDARY, scheme?.secondary);
-    document.documentElement.style.setProperty(ColourPalette.TEXT, scheme?.text);
-}
-
-const appendFontSchemeToDocument = (scheme: FontScheme) => {
-    document.documentElement.style.setProperty(FontFamily.BODY, scheme?.body?.css);
-    document.documentElement.style.setProperty(FontFamily.HEADING, scheme?.heading?.css);
-}
-
 interface HelmetProps {
     children: React.ReactNode
 }
@@ -64,49 +42,6 @@ const Helmet: React.FC<HelmetProps> = (props) => {
     const { projectId, pageId } = useParams()
     const project = projects.getProjectById(projectId || "")
     const page = project && project.getPageById(pageId || "")
-
-    const [colourScheme, setColourScheme] = React.useState(project?.getColourScheme() || defaultColorScheme)
-    const [fontScheme, setFontScheme] = React.useState(project?.getFontScheme() || defaultFontScheme)
-
-    React.useEffect(() => {
-        const subscription = project.event$.subscribe(event => {
-            if (event.type === ProjectMessageType.SET_COLOUR_SCHEME) {
-                setColourScheme(prev => {
-                    return ({
-                        ...prev,
-                        ...event.data,
-                    })
-                })
-            }
-
-            if (event.type === ProjectMessageType.SET_FONT_SCHEME) {
-                setFontScheme(prev => {
-                    return ({
-                        ...prev,
-                        ...event.data,
-                    })
-                })
-            }
-        })
-
-        return () => {
-            subscription.unsubscribe()
-        }
-    }, [])
-
-    React.useEffect(() => {
-        if (!colourScheme) {
-            return
-        }
-        appendColourSchemeToDocument(colourScheme)
-    }, [colourScheme])
-
-    React.useEffect(() => {
-        if (!fontScheme) {
-            return
-        }
-        appendFontSchemeToDocument(fontScheme)
-    }, [fontScheme])
 
     const onProjectClick = (project: Project) => {
         navigate(appRoutes.getProjectRoute(project.getId()))

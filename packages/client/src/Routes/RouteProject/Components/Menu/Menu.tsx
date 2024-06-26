@@ -13,6 +13,7 @@ import IconHome from "../../../../Components/Icons/Home/Home";
 import IconNew from "../../../../Components/Icons/New/New";
 import IconSettings from "../../../../Components/Icons/Settings/Settings";
 import { IconButton, Text } from "@radix-ui/themes";
+import { CirclePlus, Cog, Pencil, School } from "lucide-react";
 
 interface MenuButtonProps {
     link: string
@@ -31,7 +32,7 @@ const MenuButton: React.FC<MenuButtonProps> = (props) => {
                 })
             }}
         >
-            <IconButton size="1" variant="ghost">
+            <IconButton size="2" variant="ghost">
                 <div className={styles.linkContainer}>
                     <props.Icon className={styles.linkStrokeIcon} />
                     <Text>
@@ -54,28 +55,28 @@ const Menu: React.FC = () => {
                     <MenuButton
                         link={appRoutes.getProjectsRoute()}
                         text="Home"
-                        Icon={IconHome}
+                        Icon={School}
                     />
                 </li>
                 <li className={styles.link}>
                     <MenuButton
                         link={appRoutes.getProjectPageTemplatesRoute(project?.getId())}
                         text="New"
-                        Icon={IconNew}
+                        Icon={CirclePlus}
                     />
                 </li>
                 <li className={styles.link}>
                     <MenuButton
                         link={appRoutes.getProjectPageRoute(projectId, pageId)}
                         text="Edit"
-                        Icon={IconWireframe}
+                        Icon={Pencil}
                     />
                 </li>
                 <li className={styles.link}>
                     <MenuButton
                         link={appRoutes.getProjectSettingsRoute(project?.getId())}
                         text="Settings"
-                        Icon={IconSettings}
+                        Icon={Cog}
                     />
                 </li>
             </ul>

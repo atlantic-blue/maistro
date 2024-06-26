@@ -1,10 +1,7 @@
 import { Subject, Subscription } from "rxjs";
 import { randColor } from '@ngneat/falso';
 
-import { defaultColorScheme, defaultFontScheme } from "../PageContext";
 import {
-    ColourScheme,
-    FontScheme,
     PageStruct,
     PageEvent,
     PageMessageType,
@@ -37,12 +34,6 @@ interface IPage {
 
     setContentIds(content: string[]): void
 
-    getColourScheme(): ColourScheme
-    setColourScheme(colourScheme: ColourScheme): void
-
-    getFontScheme(): FontScheme
-    setFontScheme(fontScheme: FontScheme): void
-
     createHtml({
         Css,
         Body
@@ -61,8 +52,6 @@ class PageStore implements IPage {
     private description = "I am a Page description, edit me!"
     private keywords = ""
     private contentIds: string[] = []
-    private colourScheme: ColourScheme = defaultColorScheme
-    private fontScheme: FontScheme = defaultFontScheme
 
     private subscription: Subscription
     public event$ = new Subject<PageEvent>()
@@ -100,14 +89,6 @@ class PageStore implements IPage {
                     ...event.data
                 ])
             }
-
-            if (event.type === PageMessageType.SET_COLOUR_SCHEME) {
-                this.setColourScheme(event.data)
-            }
-
-            if (event.type === PageMessageType.SET_FONT_SCHEME) {
-                this.setFontScheme(event.data)
-            }
         })
     }
 
@@ -116,10 +97,8 @@ class PageStore implements IPage {
             id: this.getId(),
             title: this.getTitle(),
             path: this.getPath(),
-            colourScheme: this.getColourScheme(),
             contentIds: this.getContentIds(),
             description: this.getDescription(),
-            fontScheme: this.getFontScheme(),
             projectId: this.getProjectId()
         }
     }
@@ -133,8 +112,6 @@ class PageStore implements IPage {
         this.setTitle(page.title)
         this.setPath(page.path)
         this.setDescription(page.description)
-        this.setColourScheme(page.colourScheme)
-        this.setFontScheme(page.fontScheme)
         this.setContentIds(page.contentIds)
     }
 
@@ -195,22 +172,6 @@ class PageStore implements IPage {
         this.contentIds = [...new Set(contentIds.filter(Boolean))]
     }
 
-    public getColourScheme(): ColourScheme {
-        return this.colourScheme
-    }
-
-    public setColourScheme(colourScheme: ColourScheme) {
-        this.colourScheme = colourScheme || defaultColorScheme
-    }
-
-    public getFontScheme(): FontScheme {
-        return this.fontScheme
-    }
-
-    public setFontScheme(fontScheme: FontScheme) {
-        this.fontScheme = fontScheme || defaultFontScheme
-    }
-
     public getPath(): string {
         return this.path
     }
@@ -221,18 +182,18 @@ class PageStore implements IPage {
     }
 
     // HTML PAGE
-    public getFontFamilyLinks() {
-        return (
-            Object.values(this.fontScheme).map(fontfamily => {
-                return (`
-                    <link
-                        href=${getFontFamilyHref(fontfamily.family)}
-                        rel="stylesheet"
-                    />`
-                )
-            })
-        )
-    }
+    // public getFontFamilyLinks() {
+    //     return (
+    //         Object.values(this.fontScheme).map(fontfamily => {
+    //             return (`
+    //                 <link
+    //                     href=${getFontFamilyHref(fontfamily.family)}
+    //                     rel="stylesheet"
+    //                 />`
+    //             )
+    //         })
+    //     )
+    // }
 
     public createHtml({
         Css,
@@ -258,8 +219,6 @@ class PageStore implements IPage {
                     <meta name="description" content=${this.getDescription()} />
                     <meta name="keywords" content=${this.getKeyWords()} />
                     <meta name="author" content="https://maistro.website" />
-
-                    ${this.getFontFamilyLinks().join('\n')}
 
                     <link href="https://maistro.website/assets/radix-styles.css" rel="stylesheet" />
 

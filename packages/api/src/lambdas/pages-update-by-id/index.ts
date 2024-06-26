@@ -14,10 +14,8 @@ import sanitiseInput from "../../utils/sanitiseInput";
 interface PagesUpdateInput {
     title?: string
     path?: string
-    colourScheme?: string
     contentIds?: string[]
     description?: string
-    fontScheme?: string
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -71,9 +69,7 @@ const validationSchema = Joi.object<PagesUpdateInput>({
     title: Joi.string().optional(),
     path: Joi.string().optional(),
     description: Joi.string().optional(),
-    colourScheme: Joi.string().optional(),
     contentIds: Joi.array().optional(),
-    fontScheme: Joi.string().optional(),
 })
 
 const handler = new LambdaMiddlewares()

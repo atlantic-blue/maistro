@@ -140,9 +140,6 @@ const RouteProjectPage: React.FC = () => {
                                 title: pageResponse.title,
                                 description: pageResponse.description,
                                 contentIds: [],
-                                // TODO
-                                colourScheme: {},
-                                fontScheme: {}
                             },
                         })
                     })

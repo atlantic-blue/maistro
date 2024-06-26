@@ -32,8 +32,7 @@ export interface ProjectStruct {
     content: Record<string, ProjectContentStruct>
     emailLists: Record<string, ProjectEmailListStruct>
     threads: Record<string, ProjectThreadStruct>
-    colourScheme: ColourScheme
-    fontScheme: FontScheme
+    theme: ProjectTheme,
 }
 
 export interface ProjectEmailListStruct {
@@ -54,8 +53,6 @@ export interface PageStruct {
     path: string
     description: string
     contentIds: string[]
-    colourScheme: ColourScheme
-    fontScheme: FontScheme
 }
 
 export interface ProjectContentStruct {
@@ -98,90 +95,54 @@ export interface ProjectThreadMessage {
 }
 
 /**
- * Colours
+ * Theme
  */
-export interface ColourScheme {
-    /**
-     * This is the main color that represents the brand
-     * or the most dominant color in the website's palette. 
-     * It's used for major call-to-action (CTA) buttons, 
-     * links, and headlines to draw attention.
-     */
-    primary: string,
 
-    /**
-     * Supports the primary color and is used for secondary buttons, 
-     * highlights, and information boxes. 
-     * The secondary color should complement the primary color.
-     */
-    secondary: string,
-
-    /**
-     * Lighter shade of the primary color
-     * These are additional colors used sparingly to accentuate
-     * or highlight parts of the website.
-     * They can be used for icons,
-     * info graphics, or to highlight key information.
-     */
-    accent: string,
-
-    /**
-     * A fixed light grey
-     * These are usually neutral colors that
-     * don't compete with the primary and secondary colors.
-     */
-    background: string,
-
-
-    /**
-     * A fixed dark grey for text
-     * Besides the obvious black or white,
-     * you might have specific colors for headings,
-     * subheadings, and body text that fit within
-     * the overall color scheme.
-     */
-    text: string,
-
-    /**
-     * Lighter shade of the secondary color
-     * These include shades of gray, beige,
-     * or off-white used for text, background,
-     * borders, and shadows.
-     * They help create hierarchy and contrast in the design.
-     */
-    neutral: string,
-
-    palette: string[]
+export enum ProjectThemeAccentColour {
+    "gray" = "gray",
+    "gold" = "gold",
+    "bronze" = "bronze",
+    "brown" = "brown",
+    "yellow" = "yellow",
+    "amber" = "amber",
+    "orange" = "orange",
+    "tomato" = "tomato",
+    "red" = "red",
+    "ruby" = "ruby",
+    "crimson" = "crimson",
+    "pink" = "pink",
+    "plum" = "plum",
+    "purple" = "purple",
+    "violet" = "violet",
+    "iris" = "iris",
+    "indigo" = "indigo",
+    "blue" = "blue",
+    "cyan" = "cyan",
+    "teal" = "teal",
+    "jade" = "jade",
+    "green" = "green",
+    "grass" = "grass",
+    "lime" = "lime",
+    "mint" = "mint",
+    "sky" = "sky"
 }
 
-export enum ColourPalette {
-    ACCENT = '--color-accent',
-    BACKGROUND = '--color-background',
-    NEUTRAL = '--color-neutral',
-    PRIMARY = '--color-primary',
-    SECONDARY = '--color-secondary',
-    TEXT = '--color-text'
+export enum ProjectThemeGrayColour {
+    "auto" = "auto",
+    "gray" = "gray",
+    "mauve" = "mauve",
+    "slate" = "slate",
+    "sage" = "sage",
+    "olive" = "olive",
+    "sand" = "sand"
 }
 
-
-/**
- * Font
- */
-export interface FamilyFont {
-    name: string
-    family: string
-    css: string
-    description?: string
-}
-
-export interface FontScheme {
-    heading: FamilyFont
-    body: FamilyFont
-}
-
-export enum FontFamily {
-    HEADING = "--font-family-heading",
-    BODY = "--font-family-body"
+export interface ProjectTheme {
+    accentColor: ProjectThemeAccentColour
+    grayColor: ProjectThemeGrayColour
+    appearance: "inherit" | "light" | "dark"
+    radius: "none" | "small" | "medium" | "large" | "full"
+    scaling: "90%" | "95%" | "100%" | "105%" | "110%"
 }
 
 /**
@@ -222,9 +183,6 @@ export enum PageMessageType {
     PUSH_CONTENT_IDS = "PUT_CONTENT_IDS",
     SET_CONTENT_IDS = "SET_CONTENT_IDS",
 
-    SET_COLOUR_SCHEME = "SET_COLOUR_SCHEME",
-    SET_FONT_SCHEME = "SET_FONT_SCHEME",
-
     NOTIFY_CONTENT_UPDATED = "NOTIFY_CONTENT_UPDATED",
 }
 
@@ -243,12 +201,6 @@ export type PageEvent = {
 } | {
     type: PageMessageType.SET_DESCRIPTION
     data: string
-} | {
-    type: PageMessageType.SET_COLOUR_SCHEME
-    data: ColourScheme
-} | {
-    type: PageMessageType.SET_FONT_SCHEME
-    data: FontScheme
 } | {
     type: PageMessageType.NOTIFY_CONTENT_UPDATED
 }
@@ -307,8 +259,7 @@ export enum ProjectMessageType {
     SET_AI_THREAD = "SET_AI_THREAD",
     DELETE_AI_THREAD = "DELETE_AI_THREAD",
 
-    SET_COLOUR_SCHEME = "SET_COLOUR_SCHEME",
-    SET_FONT_SCHEME = "SET_FONT_SCHEME",
+    SET_THEME = "SET_THEME",
 }
 
 export type ProjectEvent = {
@@ -342,17 +293,14 @@ export type ProjectEvent = {
     type: ProjectMessageType.DELETE_AI_THREAD
     data: string
 } | {
-    type: ProjectMessageType.SET_COLOUR_SCHEME
-    data: ColourScheme
-} | {
-    type: ProjectMessageType.SET_FONT_SCHEME
-    data: FontScheme
-} | {
     type: ProjectMessageType.SET_NAME
     data: string
 } | {
     type: ProjectMessageType.SET_URL
     data: string
+} | {
+    type: ProjectMessageType.SET_THEME
+    data: ProjectTheme
 }
 
 export enum ProjectsMessageType {

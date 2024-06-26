@@ -1,8 +1,7 @@
 import React from "react"
-import { Avatar, Box, Button, Card, Flex, TextArea } from "@radix-ui/themes"
+import { Avatar, Box, Button, Flex, TextArea } from "@radix-ui/themes"
 
 import { ApiContext } from "../../Api/ApiProvider"
-import { ProjectsContext } from "../../Projects"
 import { ImagePreview } from "../../Api/Images/imagesGet"
 
 interface ImagesGalleryProps {
@@ -11,7 +10,6 @@ interface ImagesGalleryProps {
 
 const ImagesGallery: React.FC<ImagesGalleryProps> = (props) => {
     const { api } = React.useContext(ApiContext)
-    const { user } = React.useContext(ProjectsContext)
     const [input, setInput] = React.useState("")
     const [isLoading, setIsLoading] = React.useState(false)
     const [gallery, setGallery] = React.useState<ImagePreview[]>([])
@@ -20,7 +18,6 @@ const ImagesGallery: React.FC<ImagesGalleryProps> = (props) => {
         setIsLoading(true)
         try {
             const response = await api.images.get({
-                token: user.getTokenId(),
                 page: 4,
                 perPage: 5,
                 query: input

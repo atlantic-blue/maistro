@@ -1,8 +1,6 @@
 import React, { useRef } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import { Box, IconButton, Section } from '@radix-ui/themes';
-
-import { ColourScheme } from '../../types';
+import { Box, IconButton } from '@radix-ui/themes';
 
 import IconBold from '../Icons/Bold/Bold';
 import IconItalic from '../Icons/Italic/Italic';
@@ -26,7 +24,6 @@ export const wysiwyg$ = new BehaviorSubject<WysiwygData>({ content: "" })
 interface WysiwygProps {
     isEditable: boolean
     children: React.ReactNode
-    colourScheme: ColourScheme
     apiRef: React.RefObject<WysiwygApi>
     onUploadFile: (file: File) => Promise<string>
 }
@@ -112,7 +109,6 @@ const Wysiwyg: React.FC<WysiwygProps> = (props) => {
 
                     <ToolbarColour
                         execCommand={execCommand}
-                        colourScheme={props.colourScheme}
                     />
 
                     <ToolbarMedia

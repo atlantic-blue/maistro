@@ -3,7 +3,6 @@ import { PageStruct } from "../../types"
 import { requestController } from "../fetch"
 
 export interface ImagesGetInput {
-    token: string
     query: string
     page: number
     perPage: number
@@ -28,7 +27,6 @@ export type ImagesGetOutput = {
 
 const imagesGet = async (
     {
-        token,
         query,
         page,
         perPage,
@@ -45,7 +43,6 @@ const imagesGet = async (
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
         },
     }).then(response => response.json())
 }

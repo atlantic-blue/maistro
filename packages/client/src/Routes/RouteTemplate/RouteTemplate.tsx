@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { ApiContext } from "../../Api/ApiProvider"
 import { Projects } from "../../Store/Projects"
 import { PageMessageType, ProjectMessageType, ProjectsMessageType } from "../../types"
-import { defaultColorScheme, defaultFontScheme } from "../../PageContext"
 import useObservable from "../../Utils/Hooks/UseObservable"
 import { filter } from "rxjs"
 import { TemplateCategory, TemplateComponentType } from "../../Templates/templateTypes"
@@ -13,7 +12,6 @@ import { useParams } from "react-router-dom"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import json5 from "json5"
 import RouteBrainstormSkeleton from "../RouteBrainstorm/RouteBrainstorm.skeleton"
-import { partialParse } from "./parser"
 
 const projectsStore = new Projects()
 const PROJECT_NAME = "template"
@@ -54,12 +52,9 @@ const RouteTemplate = () => {
 
     const fetchData = async (templateId: string) => {
         const response = await api.ai.aiTemplates.readById({ templateId })
-        console.log({ response })
         try {
             const md = fromMarkdown(response?.data?.content[0]?.text)
             const code = md.children.find(child => child.type === "code")
-            const x = partialParse(code?.value)
-            console.log({ x })
             const pageData = json5.parse(code?.value)
             setData(pageData)
         } catch (error) {
@@ -90,79 +85,35 @@ const RouteTemplate = () => {
             return
         }
 
-        // HEADER
-        project.event$.next({
-            type: ProjectMessageType.SET_CONTENT,
-            data: {
-                createdAt: new Date().toISOString(),
-                projectId: project.getId(),
-                categories: [TemplateCategory.HEADER],
-
-                id: data[TemplateCategory.HEADER].template,
-                template: data[TemplateCategory.HEADER].template,
-                description: data[TemplateCategory.HEADER].description,
-                data: data[TemplateCategory.HEADER].data,
+        [
+            TemplateCategory.HEADER,
+            TemplateCategory.HERO,
+            TemplateCategory.TESTIMONIALS,
+            TemplateCategory.SERVICES,
+            TemplateCategory.FOOTER
+        ].forEach((category) => {
+            if(!data || !data[category]) {
+                return
             }
-        })
 
-        // HERO
-        project.event$.next({
-            type: ProjectMessageType.SET_CONTENT,
-            data: {
-                createdAt: new Date().toISOString(),
-                projectId: project.getId(),
-                categories: [TemplateCategory.HERO],
-
-                id: data[TemplateCategory.HERO].template,
-                template: data[TemplateCategory.HERO].template,
-                description: data[TemplateCategory.HERO].description,
-                data: data[TemplateCategory.HERO].data,
+            const item = data[category]
+            if(!item) {
+                return
             }
-        })
 
-        // TESTIMONIAL
-        project.event$.next({
-            type: ProjectMessageType.SET_CONTENT,
-            data: {
-                createdAt: new Date().toISOString(),
-                projectId: project.getId(),
-                categories: [TemplateCategory.TESTIMONIALS],
-
-                id: data[TemplateCategory.TESTIMONIALS].template,
-                template: data[TemplateCategory.TESTIMONIALS].template,
-                description: data[TemplateCategory.TESTIMONIALS].description,
-                data: data[TemplateCategory.TESTIMONIALS].data,
-            }
-        })
-
-        // SERVICES
-        project.event$.next({
-            type: ProjectMessageType.SET_CONTENT,
-            data: {
-                createdAt: new Date().toISOString(),
-                projectId: project.getId(),
-                categories: [TemplateCategory.SERVICES],
-
-                id: data[TemplateCategory.SERVICES].template,
-                template: data[TemplateCategory.SERVICES].template,
-                description: data[TemplateCategory.SERVICES].description,
-                data: data[TemplateCategory.SERVICES].data,
-            }
-        })
-
-        // FOOTER
-        project.event$.next({
-            type: ProjectMessageType.SET_CONTENT,
-            data: {
-                createdAt: new Date().toISOString(),
-                categories: [TemplateCategory.FOOTER],
-                projectId: project.getId(),
-
-                id: data[TemplateCategory.FOOTER].template,
-                template: data[TemplateCategory.FOOTER].template,
-                description: data[TemplateCategory.FOOTER].description,
-                data: data[TemplateCategory.FOOTER].data,
-            }
+            project.event$.next({
+                type: ProjectMessageType.SET_CONTENT,
+                data: {
+                    createdAt: new Date().toISOString(),
+                    projectId: project.getId(),
+                    categories: [category],
+    
+                    id: item.template,
+                    template: item.template,
+                    description: item.description,
+                    data: item.data,
+                }
+            })    
         })
 
         page.event$.next({
@@ -186,8 +137,6 @@ const RouteTemplate = () => {
                 description: "",
                 path: "index",
                 projectId: project.getId(),
-                colourScheme: project.getColourScheme(),
-                fontScheme: project.getFontScheme(),
                 contentIds: [],
             }
         })
@@ -209,8 +158,6 @@ const RouteTemplate = () => {
                 assets: {},
                 content: {},
                 emailLists: {},
-                colourScheme: defaultColorScheme,
-                fontScheme: defaultFontScheme
             },
         })
     }, [])
@@ -228,7 +175,6 @@ const RouteTemplate = () => {
                 <div>
                     {page.getContentIds().map(id => {
                         const content = project.getContentById(id)
-                        console.log({ content })
                         if (!content) {
 
                             return null

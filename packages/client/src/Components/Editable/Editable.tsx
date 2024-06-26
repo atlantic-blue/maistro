@@ -115,7 +115,6 @@ const EditableContent: React.FC<EditableContent> = ({ content }) => {
                 onClick={onClick}
             >
                 <Wysiwyg
-                    colourScheme={page.getColourScheme()}
                     isEditable={isEditable}
                     apiRef={editorApiRef}
                 >

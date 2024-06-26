@@ -5,18 +5,17 @@ import { ProjectMessageType } from "../../../../../types"
 
 import { ProjectsContext } from "../../../../../Projects"
 
-import { createUrl, isValidUrl } from "../../../../../Utils/url"
+import { createUrl } from "../../../../../Utils/url"
 
 import * as styles from "./SettingsMetadata.scss"
 import { ApiContext } from "../../../../../Api/ApiProvider"
-import { Box, Button, Flex, Text, TextField } from "@radix-ui/themes"
+import { Box, Button, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes"
+import RouteProjectSettingsTheme from "../RouteProjectSettingsTheme/RouteProjectSettingsTheme"
 
 interface SettingsMetadataProps {
     project: Project
     isDisabled?: boolean
 }
-
-const HOSTING_DOMAIN = ".maistro.website"
 
 const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled }) => {
     const { api } = React.useContext(ApiContext)
@@ -47,7 +46,8 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
             token: user.getTokenId(),
             projectId: project.getId(),
             name: name,
-            url: createUrl(projectUrl)
+            url: createUrl(projectUrl),
+            theme: project.getTheme(),
         })
             .finally(() => {
                 setIsLoading(false)
@@ -55,46 +55,56 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
     }
 
     return (
-        <Flex gap="3" className={styles.content}>
-            <Box p="2">
-                <Text
-                    className={styles.title}
-                >
-                    Project Name
-                </Text>
-                <TextField.Root
-                    size="2"
-                    type="text"
-                    variant="surface"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    disabled={isDisabled}
-                    className={styles.input}
-                />
-            </Box>
+        <Card m="3">
+            <Flex gap="3" direction="column" justify="center" align="center">
+                <Box p="2">
+                    <Text
+                        className={styles.title}
+                    >
+                        Title
+                    </Text>
+                    <TextField.Root
+                        size="2"
+                        type="text"
+                        variant="surface"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        disabled={isDisabled}
+                        className={styles.input}
+                    />
+                </Box>
 
-            <Box p="2">
-                <Text
-                    className={styles.title}
-                >
-                    Project URL
-                </Text>
-                <TextField.Root
-                    type="text"
-                    size="2"
-                    variant="surface"
-                    value={projectUrl}
-                    onChange={e => setProjectURl(e.target.value)}
-                    disabled={isDisabled}
-                    className={styles.input}
-                />
+                <Box p="2">
+                    <Text
+                        className={styles.title}
+                    >
+                        URL
+                    </Text>
+                    <TextField.Root
+                        type="text"
+                        size="2"
+                        variant="surface"
+                        value={projectUrl}
+                        onChange={e => setProjectURl(e.target.value)}
+                        disabled={isDisabled}
+                        className={styles.input}
+                    />
 
-            </Box>
+                </Box>
 
-            <Button onClick={onClick} size="3" loading={isLoading}>
-                Update
-            </Button>
-        </Flex>
+                <Box p="2">
+                    <Heading as="h6">
+                        Theme
+                    </Heading>
+                    <RouteProjectSettingsTheme />
+
+                </Box>
+
+                <Button onClick={onClick} size="3" loading={isLoading}>
+                    Update
+                </Button>
+            </Flex>
+        </Card>
     )
 }
 

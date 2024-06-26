@@ -6,7 +6,9 @@ import { useParams } from "react-router-dom"
 import { ProjectMessageType, ProjectThreadMessageRole, ProjectThreadName } from "../../types"
 import Loading from "../../Components/Loading/Loading"
 import { createMaistroChatPrompt } from "../../Ai/prompts/Maistro"
-import { createMaistroCopywritingPrompt } from "../../Ai/prompts/MaistroCopywriting"
+import { Theme } from "@radix-ui/themes"
+import useObservable from "../../Utils/Hooks/UseObservable"
+import { filter } from "rxjs"
 
 const ProjectContext = React.createContext({})
 
@@ -217,6 +219,8 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
         getThreads()
     }, [projectId])
 
+    useObservable(project.event$.pipe(filter(e => e.type === ProjectMessageType.SET_THEME)))
+
     if (isLoading) {
         return (
             <Loading>
@@ -227,7 +231,15 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
 
     return (
         <ProjectContext.Provider value={{}}>
-            {props.children}
+            <Theme
+                accentColor={project.getTheme()?.accentColor}
+                grayColor={project.getTheme()?.grayColor}
+                appearance={project.getTheme()?.appearance}
+                radius={project.getTheme()?.radius}
+                scaling={project.getTheme()?.scaling}
+            >
+                {props.children}
+            </Theme>
         </ProjectContext.Provider>
     )
 }

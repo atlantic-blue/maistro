@@ -23,12 +23,6 @@
 .linkStroke {
     list-style: none;
 
-    &-isActive {
-        svg {
-            stroke: #FF9900;
-        }
-    }
-
     &-icon {
         width: 15px;
         height: 15px;
@@ -42,13 +36,12 @@
 
     &-isActive {
         svg {
-            fill: #FF9900;
-            stroke: #FF9900;
+            stroke: var(--accent-12);
         }
 
         a,
         span {
-            color: #FF9900;
+            stroke: var(--accent-12);
         }
     }
 

@@ -42,6 +42,7 @@ const CreateProjectForms: React.FC<CreateProjectFormsProps> = ({ questions, onSu
                     initialValues={questions[index].initialValues}
                     title={questions[index].title}
                     subTitle={questions[index].subTitle}
+                    Component={questions[index].Component}
                     validationSchema={questions[index].validationSchema}
                     cta={index === questions.length - 1 ? "Submit" : "Next"}
                     isLoading={isLoading}

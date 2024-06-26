@@ -93,7 +93,7 @@ const RouteProjectSettingsMailList: React.FC<RouteProjectSettingsMailListProps> 
     }
 
     return (
-        <Card className={styles.section}>
+        <Card m="3">
             <Heading align="center">{emailList.getTitle()}</Heading>
             <Text as="p" size="1" align="center">
                 Created on {new Date(emailList.getCreatedAt()).toUTCString()}

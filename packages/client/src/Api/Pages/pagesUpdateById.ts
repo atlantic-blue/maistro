@@ -11,8 +11,6 @@ export interface PagesUpdateByIdInput {
     path?: string
     description?: string
     contentIds?: string[]
-    colourScheme?: string
-    fontScheme?: string
 }
 
 const pagesUpdateById = async (

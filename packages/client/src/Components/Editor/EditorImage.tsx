@@ -8,8 +8,10 @@ import IconUpLoad from "../Icons/Upload/Upload";
 import AvatarMaistro from "../AvatarMaistro/AvatarMaistro";
 import EditorImageAi from "../../Ai/EditorImageAi/EditorImageAi";
 import ImagesGallery from "../ImagesGallery/ImagesGallery";
+import { PaymentsContext, canUseFeature } from "../../Payments/PaymentsProvider";
 
 const EditorImage: React.FC<EditorImageProps> = (props) => {
+    const { paymentPlan, redirectToPaymentPlans } = React.useContext(PaymentsContext)
     const [preview, setPreview] = React.useState(props.value);
     const [isLoading, setLoading] = React.useState(false)
     const uploadId = `${props.name}-${Date.now()}`
@@ -28,7 +30,7 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
     };
 
     return (
-        <Tabs.Root defaultValue="ai">
+        <Tabs.Root defaultValue="gallery">
             <Flex justify="center" align="center" direction="column" width="100%">
                 <Text as="div" size="2" mb="1" weight="bold">
                     {props.name}
@@ -41,12 +43,12 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
                 />
 
                 <Tabs.List size="2">
+                    <Tabs.Trigger value="gallery">Gallery</Tabs.Trigger>
+                    <Tabs.Trigger value="url">URL</Tabs.Trigger>
+                    <Tabs.Trigger value="upload">Upload</Tabs.Trigger>
                     <Tabs.Trigger value="ai">
                         <AvatarMaistro isLoading={isLoading} />
                     </Tabs.Trigger>
-                    <Tabs.Trigger value="upload">Upload</Tabs.Trigger>
-                    <Tabs.Trigger value="gallery">Gallery</Tabs.Trigger>
-                    <Tabs.Trigger value="url">URL</Tabs.Trigger>
                 </Tabs.List>
 
                 <Box pt="3" width="100%">
@@ -63,19 +65,26 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
 
                         {!isLoading && (
                             <>
-                                <label htmlFor={uploadId} className={styles.uploadLabel}>
-                                    <span>
+                                {canUseFeature.aiImage[paymentPlan]() ? (
+                                    <label htmlFor={uploadId} className={styles.uploadLabel}>
+                                        <span>
+                                            <IconUpLoad className={styles.uploadIcon} />
+                                        </span>
+                                        <span>Upload</span>
+                                        <input
+                                            id={uploadId}
+                                            type="file"
+                                            accept="image/*"
+                                            className={styles.uploadInput}
+                                            onChange={handleFileChange}
+                                        />
+                                    </label>
+                                ) : (
+                                    <label htmlFor={uploadId} className={styles.uploadLabel} onClick={redirectToPaymentPlans}>
                                         <IconUpLoad className={styles.uploadIcon} />
-                                    </span>
-                                    <span>Upload</span>
-                                    <input
-                                        id={uploadId}
-                                        type="file"
-                                        accept="image/*"
-                                        className={styles.uploadInput}
-                                        onChange={handleFileChange}
-                                    />
-                                </label>
+                                    </label>
+                                )
+                                }
                             </>
                         )}
 
@@ -119,3 +128,4 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
 }
 
 export default EditorImage
+

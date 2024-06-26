@@ -272,9 +272,6 @@ const ProjectFlow: React.FC = () => {
                 title: pageResponse.title,
                 description: pageResponse.description,
                 contentIds: [],
-                // TODO
-                colourScheme: {},
-                fontScheme: {}
             },
         })
 
@@ -399,10 +396,10 @@ const ProjectFlow: React.FC = () => {
                                 text: `Goal: ${goal}`
                             },
                             {
-                                text: `Logo image URL: ${logoImgUrl}`
+                                text: `Logo image: ${logoImgUrl}`
                             },
                             {
-                                text: `image Gallery URLs: ${imageGalleryUrls}`
+                                text: `image Gallery: ${imageGalleryUrls}`
                             }
                         ]
                     }

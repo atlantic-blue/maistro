@@ -2,9 +2,7 @@ import { Subject, Subscription } from "rxjs"
 import { randAnimal } from '@ngneat/falso';
 
 import {
-    ColourScheme,
     ProjectContentStruct,
-    FontScheme,
     PageStruct,
     ProjectAssetStruct,
     ProjectEmailListStruct,
@@ -12,8 +10,10 @@ import {
     ProjectMessageType,
     ProjectStruct,
     ProjectThreadStruct,
+    ProjectTheme,
+    ProjectThemeAccentColour,
+    ProjectThemeGrayColour,
 } from "../types"
-import { defaultColorScheme, defaultFontScheme } from "../PageContext"
 
 import Page from "./Page"
 import { ProjectAsset } from "./ProjectAsset";
@@ -40,11 +40,8 @@ interface IProject {
     setAsset(id: string, asset: ProjectAssetStruct): void
     getAssetById(id: string): ProjectAsset
 
-    getColourScheme(): ColourScheme
-    setColourScheme(colourScheme: ColourScheme): void
-
-    getFontScheme(): FontScheme
-    setFontScheme(fontScheme: FontScheme): void
+    getTheme(): ProjectTheme
+    setTheme(theme: ProjectTheme): void
 
     unsubscribe(): void
 }
@@ -58,9 +55,13 @@ export class Project implements IProject {
     private assets: Record<string, ProjectAsset> = {}
     private emailLists: Record<string, ProjectEmailList> = {}
     private threads: Record<string, ProjectThread> = {}
-
-    private colourScheme: ColourScheme = defaultColorScheme
-    private fontScheme: FontScheme = defaultFontScheme
+    private theme: ProjectTheme = {
+        accentColor: ProjectThemeAccentColour.amber,
+        appearance: "solid",
+        grayColor: ProjectThemeGrayColour.auto,
+        radius: "small",
+        scaling: "100%",
+    }
 
     private subscriptions: Subscription[] = []
     public event$ = new Subject<ProjectEvent>()
@@ -112,20 +113,16 @@ export class Project implements IProject {
                 this.deleteThread(event.data)
             }
 
-            if (event.type === ProjectMessageType.SET_COLOUR_SCHEME) {
-                this.setColourScheme(event.data)
-            }
-
-            if (event.type === ProjectMessageType.SET_FONT_SCHEME) {
-                this.setFontScheme(event.data)
-            }
-
             if (event.type === ProjectMessageType.SET_NAME) {
                 this.setName(event.data)
             }
 
             if (event.type === ProjectMessageType.SET_URL) {
                 this.setUrl(event.data)
+            }
+
+            if (event.type === ProjectMessageType.SET_THEME) {
+                this.setTheme(event.data)
             }
         })
     }
@@ -139,8 +136,7 @@ export class Project implements IProject {
             id: this.getId(),
             name: this.getName(),
             url: this.getUrl(),
-            fontScheme: this.getFontScheme(),
-            colourScheme: this.getColourScheme(),
+            theme: this.getTheme(),
             pages: Object.keys(this.getPages())
                 .reduce<Record<string, PageStruct>>((acc, key) => {
                     acc[key] = this.getPageById(key).getStruct()
@@ -176,9 +172,8 @@ export class Project implements IProject {
     public set = (projectStruct: ProjectStruct) => {
         this.setId(projectStruct.id)
         this.setName(projectStruct.name)
-        this.setColourScheme(projectStruct.colourScheme)
-        this.setFontScheme(projectStruct.fontScheme)
         this.setUrl(projectStruct.url)
+        this.setTheme(projectStruct.theme)
 
         Object.keys(projectStruct.assets || {}).map(asset => {
             const assetStruct = projectStruct.assets[asset]
@@ -353,20 +348,12 @@ export class Project implements IProject {
         this.url = url
     }
 
-    public getColourScheme(): ColourScheme {
-        return this.colourScheme
+    public setTheme(theme: ProjectTheme): void {
+        this.theme = theme
     }
 
-    public setColourScheme(colourScheme: ColourScheme) {
-        this.colourScheme = colourScheme || defaultColorScheme
-    }
-
-    public getFontScheme(): FontScheme {
-        return this.fontScheme
-    }
-
-    public setFontScheme(fontScheme: FontScheme) {
-        this.fontScheme = fontScheme || defaultFontScheme
+    public getTheme(): ProjectTheme {
+        return this.theme
     }
 
     static createEmptyProject(id: string, title: string, url: string) {
@@ -379,8 +366,6 @@ export class Project implements IProject {
             content: {},
             emailLists: {},
             threads: {},
-            colourScheme: defaultColorScheme,
-            fontScheme: defaultFontScheme,
         })
     }
 }

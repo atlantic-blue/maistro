@@ -2,8 +2,6 @@ import React from "react"
 
 import { Command } from "../../Wysiwyg.types"
 
-import { ColourScheme } from "../../../../types"
-
 import classNames from "classnames"
 import IconColourText from "../../../Icons/ColourText/ColourText"
 import IconColourBackground from "../../../Icons/ColourBackground/ColourBackground"
@@ -13,11 +11,10 @@ import * as styles from "./Colour.scss"
 import * as WysiwygStyles from "../../Wysiwyg.scss"
 
 interface ToolbarJustifyProps {
-    colourScheme: ColourScheme
     execCommand: (cmd: Command, args?: string | Node) => void
 }
 
-const ToolbarColourGrid: React.FC<{ palette: string[]; onChange: (colour: string) => void }> = (props) => {
+export const ToolbarColourGrid: React.FC<{ palette: string[]; onChange: (colour: string) => void }> = (props) => {
     return (
         <div className={styles.grid}>
             {props.palette?.map(colour => {
@@ -91,13 +88,7 @@ const ToolbarColour: React.FC<ToolbarJustifyProps> = (props) => {
                 </button>
                 {textColourGridVisible && <ToolbarColourGrid
                     onChange={changeColour}
-                    palette={[
-                        props.colourScheme.text,
-                        props.colourScheme.neutral,
-                        props.colourScheme.accent,
-                        props.colourScheme.primary,
-                        props.colourScheme.secondary,
-                    ]}
+                    palette={[]}
                 />}
             </div>
             <div className={styles.section}>
@@ -106,7 +97,7 @@ const ToolbarColour: React.FC<ToolbarJustifyProps> = (props) => {
                 </button>
                 {bgColourGridVisible && <ToolbarColourGrid
                     onChange={changeBackgroundColour}
-                    palette={props.colourScheme.palette}
+                    palette={[]}
                 />}
             </div>
         </div>

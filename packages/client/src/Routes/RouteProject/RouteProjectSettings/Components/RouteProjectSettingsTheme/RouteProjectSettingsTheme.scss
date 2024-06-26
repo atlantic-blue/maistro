@@ -1,0 +1,25 @@
+.grid {
+    padding: 4px;
+    background-color: white;
+    border: 2px solid #cccccc;
+    width: 102px;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+
+    &-colour {
+        border: 1px solid #ff9a001c;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        transition: transform .15s, box-shadow .15s;
+
+        &:hover,
+        &:active {
+            box-shadow: 0 0 0 1px rgba(127, 127, 127, .3) inset;
+            transform: scale(.8);
+        }
+    }
+}

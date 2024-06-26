@@ -15,8 +15,9 @@ export interface FormQuestion {
         [key: string]: undefined;
     }, "">;
     initialValues: Record<string, string>
-    type: "input" | "textarea" | "radio"
-    options?: { value: string, child: React.ReactNode }[]
+    type?: "input" | "textarea" | "radio"
+    options?: { value: string, child: React.ReactNode | React.FC }[]
+    Component?: React.FC
     nextId?: string
 }
 
@@ -90,7 +91,7 @@ const CreateProjectForm: React.FC<FormProps> = (props) => {
                                             [styles.radioItemSelected]: value[props.id] === option.value
                                         })}
                                     >
-                                        {option.child || option.value}
+                                        {(React.isValidElement(option.child) ? option.child : <option.child />) || option.value}
                                     </RadioGroup.Item>
                                 )
                             })
@@ -107,7 +108,7 @@ const CreateProjectForm: React.FC<FormProps> = (props) => {
                         required
                     />
                 )
-            default:
+            case "textarea":
                 return (
                     <TextArea
                         id={props.id}
@@ -117,6 +118,10 @@ const CreateProjectForm: React.FC<FormProps> = (props) => {
                         required
                         maxLength={200}
                     />
+                )
+            default:
+                return (
+                    <props.Component onChange={onChange} value={value[props.id]}/>
                 )
         }
     }

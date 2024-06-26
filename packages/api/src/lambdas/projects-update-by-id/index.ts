@@ -9,10 +9,18 @@ import authJwt from '../../middlewares/auth-jwt';
 import jsonBodyParser from "../../middlewares/json-body-parser";
 import { validatorJoi } from "../../middlewares/validator-joi";
 import createUpdateParams from "../../utils/createUpdateParams";
+import sanitiseInput from "../../utils/sanitiseInput";
 
 interface ProjectsUpdateInput {
     name: string
     url: string
+    theme: {
+        accentColor: string,
+        appearance: string,
+        grayColor: string,
+        radius: string,
+        scaling: string,
+    }
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -34,13 +42,14 @@ const projectsReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
         throw createError(500, "projectId not specified")
     }
 
-    const { name, url } = event.body as unknown as ProjectsUpdateInput;
+    const { name, url, theme } = event.body as unknown as ProjectsUpdateInput;
 
-    const input = {
+    const input = sanitiseInput({
         name,
         url,
+        theme,
         updatedAt: new Date().toISOString(),
-    }
+    })
 
     const params = createUpdateParams(
         input,
@@ -63,6 +72,7 @@ const projectsReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
 const validationSchema = Joi.object<ProjectsUpdateInput>({
     name: Joi.string().optional(),
     url: Joi.string().optional(),
+    theme: Joi.object().optional(),
 })
 
 const handler = new LambdaMiddlewares()

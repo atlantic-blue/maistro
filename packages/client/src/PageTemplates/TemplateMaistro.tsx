@@ -1,7 +1,6 @@
 import * as uuid from "uuid"
 import React from "react"
 
-import { defaultFontScheme } from "../PageContext";
 import { PageStruct } from "../types";
 import { HeaderBurgerItem } from "../Templates/Header/HeaderBurger/HeaderBurger";
 import { SectionHeroVideoItem } from "../Templates/Section/SectionHero/SectionHeroVideo/SectionHeroVideo";
@@ -54,19 +53,6 @@ export const CreateTemplateMaistro = (): PageStruct[] => {
                     }
                 },
             ],
-            fontScheme: defaultFontScheme,
-            colourScheme: {
-                primary: "#FFC94A",
-                secondary: "#453F78",
-                accent: "#d9d9d9",
-                background: "#F0F0f0",
-                neutral: "#e6e6e6",
-                text: "#333333",
-                palette: [
-                    "#FFC94A",
-                    "#453F78"
-                ]
-            },
         }
     ]
 }
