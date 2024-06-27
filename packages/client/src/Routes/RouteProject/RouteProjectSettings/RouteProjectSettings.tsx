@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Card, Flex, Heading } from "@radix-ui/themes";
+import { Box, Card, Flex, Heading, Tabs } from "@radix-ui/themes";
 import { useParams } from "react-router-dom"
 
 import { ProjectsContext } from "../../../Projects";
@@ -30,8 +30,29 @@ const RouteProjectSettings: React.FC = () => {
             </Heading>
             <br />
 
+            <Tabs.Root defaultValue="seo">
+                <Tabs.List style={{ display: "flex", justifyContent: "center" }}>
+                    <Tabs.Trigger value="seo">SEO</Tabs.Trigger>
+                    <Tabs.Trigger value="email">Email</Tabs.Trigger>
+                    <Tabs.Trigger value="theme">Theme</Tabs.Trigger>
+                </Tabs.List>
+
+                <Box m="3">
+                    <Tabs.Content value="seo">
+                        <SettingsMetadata project={project} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="email">
+                        <RouteProjectSettingsMailList project={project} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="theme">
+                        <RouteProjectSettingsTheme />
+                    </Tabs.Content>
+                </Box>
+            </Tabs.Root>
+
             <Flex direction="column" maxWidth="800px" m="auto" mb="50px">
-                <SettingsMetadata project={project} />
                 <RouteProjectSettingsDelete project={project} />
             </Flex>
         </Helmet>

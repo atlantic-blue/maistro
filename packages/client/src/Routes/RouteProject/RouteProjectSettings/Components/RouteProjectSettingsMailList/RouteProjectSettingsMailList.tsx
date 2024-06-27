@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { filter } from "rxjs/operators"
-import { Box, Button, Callout, Card, Heading, Section, Skeleton, Table, Text, TextField } from "@radix-ui/themes"
+import { Box, Button, Callout, Card, Flex, Heading, Section, Skeleton, Table, Text, TextField } from "@radix-ui/themes"
 
 import { ApiContext } from "../../../../../Api/ApiProvider"
 import { ProjectsContext } from "../../../../../Projects"
@@ -88,47 +88,54 @@ const RouteProjectSettingsMailList: React.FC<RouteProjectSettingsMailListProps> 
 
     if (isLoading) {
         return (
-            <Skeleton className={styles.section} />
+            <Card>
+                <Flex gap="3" direction="column" justify="center" align="center">
+
+                    <Skeleton className={styles.section} />
+                </Flex>
+            </Card>
         )
     }
 
     return (
-        <Card m="3">
-            <Heading align="center">{emailList.getTitle()}</Heading>
-            <Text as="p" size="1" align="center">
-                Created on {new Date(emailList.getCreatedAt()).toUTCString()}
-            </Text>
-            <Text as="p" align="center">
-                {emailList.getDescription()}
-            </Text>
+        <Card>
+            <Flex gap="2" direction="column" justify="center" align="center">
+                <Heading align="center">{emailList.getTitle()}</Heading>
+                <Text as="p" size="1" align="center">
+                    Created on {new Date(emailList.getCreatedAt()).toUTCString()}
+                </Text>
+                <Text as="p" align="center">
+                    {emailList.getDescription()}
+                </Text>
 
-            <Section size="1">
-                <Callout.Root>
-                    <Callout.Text>
-                        Subscribers {emailEntriesCount}
-                    </Callout.Text>
-                </Callout.Root>
-            </Section>
+                <Section size="1">
+                    <Callout.Root>
+                        <Callout.Text>
+                            Subscribers {emailEntriesCount}
+                        </Callout.Text>
+                    </Callout.Root>
+                </Section>
 
-            <Table.Root>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-                        <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-                    </Table.Row>
-                </Table.Header>
+                <Table.Root>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+                            <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+                        </Table.Row>
+                    </Table.Header>
 
-                <Table.Body>
-                    {emailEntries.map(entry => {
-                        return (
-                            <Table.Row key={entry.id}>
-                                <Table.RowHeaderCell>{entry.name}</Table.RowHeaderCell>
-                                <Table.Cell>{entry.email}</Table.Cell>
-                            </Table.Row>
-                        )
-                    })}
-                </Table.Body>
-            </Table.Root>
+                    <Table.Body>
+                        {emailEntries.map(entry => {
+                            return (
+                                <Table.Row key={entry.id}>
+                                    <Table.RowHeaderCell>{entry.name}</Table.RowHeaderCell>
+                                    <Table.Cell>{entry.email}</Table.Cell>
+                                </Table.Row>
+                            )
+                        })}
+                    </Table.Body>
+                </Table.Root>
+            </Flex>
         </Card>
     )
 }

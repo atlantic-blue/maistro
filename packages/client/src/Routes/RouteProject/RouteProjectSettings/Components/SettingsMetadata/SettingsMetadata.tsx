@@ -92,14 +92,6 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
 
                 </Box>
 
-                <Box p="2">
-                    <Heading as="h6">
-                        Theme
-                    </Heading>
-                    <RouteProjectSettingsTheme />
-
-                </Box>
-
                 <Button onClick={onClick} size="3" loading={isLoading}>
                     Update
                 </Button>
