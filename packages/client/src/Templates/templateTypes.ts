@@ -11,6 +11,7 @@ export enum TemplateCategory {
     // CONTACT = "CONTACT",
     FOOTER = "FOOTER",
     PRODUCT = "PRODUCT",
+    CHECKOUT = "CHECKOUT",
 }
 
 export enum TemplateComponentType {
@@ -37,10 +38,12 @@ export enum TemplateComponentType {
 
     SUBSCRIBE_BASIC = "SUBSCRIBE_BASIC",
 
-    PRODUCTS_BASIC = "PRODUCT_BASIC",
+    PRODUCTS_BASIC = "PRODUCTS_BASIC",
+
+    CHECKOUT_BASIC = "CHECKOUT_BASIC",
 }
 
-export interface TemplateStruct<Props> {
+export interface TemplateStruct<Props = {}> {
     name: TemplateComponentType
     description: string
     categories: TemplateCategory[]

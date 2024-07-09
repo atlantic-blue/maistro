@@ -5,10 +5,11 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { LambdaMiddlewares } from '../../middlewares';
 import createError from '../../middlewares/error-handler';
 import authJwt from '../../middlewares/auth-jwt';
+import jsonBodyParser from "../../middlewares/json-body-parser";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const contentRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
+const contentDeleteById: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableName = process.env.TABLE_NAME
     if (!tableName) {
         throw createError(500, "process TABLE_NAME not specified")
@@ -25,33 +26,39 @@ const contentRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) 
         throw createError(500, "projectId not specified")
     }
 
-    const params: AWS.DynamoDB.DocumentClient.QueryInput = {
+    const contentId = event.pathParameters && event.pathParameters['content-id']
+    if (!contentId) {
+        throw createError(500, "contentId not specified")
+    }
+
+    const params: AWS.DynamoDB.DocumentClient.DeleteItemInput = {
         TableName: tableName,
-        IndexName: 'ProjectIdIndex',
-        KeyConditionExpression: "projectId = :projectId",
-        ExpressionAttributeValues: {
-            ':projectId': projectId
-        },
-        Limit: 50,
+        Key: {
+            projectId,
+            id: contentId,
+        }
     };
 
-    const data = await dynamoDb.query(params).promise();
-    if (!data || !data.Items || data.Items?.length === 0) {
+    const data = await dynamoDb.delete(params).promise()
+
+    const httpResponse = data.$response.httpResponse
+    if (httpResponse.statusCode >= 400) {
         return {
-            statusCode: 404,
-            body: JSON.stringify([])
+            statusCode: httpResponse.statusCode,
+            body: JSON.stringify({ message: httpResponse.statusMessage })
         };
     }
 
     return {
         statusCode: 200,
-        body: JSON.stringify(data.Items)
+        body: JSON.stringify({ message: "Project deleted successfully" })
     };
 };
 
 
 const handler = new LambdaMiddlewares()
     .before(authJwt)
-    .handler(contentRead)
+    .before(jsonBodyParser)
+    .handler(contentDeleteById)
 
 export { handler }

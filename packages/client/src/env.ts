@@ -42,7 +42,7 @@ interface Env {
             create: (projectId: string) => string
             read: (projectId: string) => string
             update: (projectId: string) => string
-            delete: (projectId: string) => string
+            deleteById: (projectId: string, id: string) => string
         }
         pages: {
             create: (projectId: string) => string
@@ -152,7 +152,7 @@ const createEnv = (): Env => {
                 create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
                 read: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
                 update: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
-                delete: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
+                deleteById: (projectId: string, contentId: string) => `${apiBaseUrl}/projects/${projectId}/content/${contentId}`,
             },
             pages: {
                 create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/pages`,

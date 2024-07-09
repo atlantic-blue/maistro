@@ -15,7 +15,7 @@ interface TemplateThumbnail {
     className?: string
 }
 
-const TemplateThumbnail: React.FC<TemplateThumbnail> = (props) => {
+export const TemplateThumbnail: React.FC<TemplateThumbnail> = (props) => {
     const template = Object.values(templates)
         .find(template => {
             return template.categories.includes(props.category)

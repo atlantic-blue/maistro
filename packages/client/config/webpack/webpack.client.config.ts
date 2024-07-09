@@ -2,6 +2,7 @@ import path from 'path'
 import { Configuration } from 'webpack'
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin"
 import TerserPlugin from 'terser-webpack-plugin'
+import Dotenv from "dotenv-webpack"
 
 import jsRule from './rules/jsRules'
 import cssRule from './rules/cssRule'
@@ -35,7 +36,8 @@ const createWebpackConfig = (args: WebpackArgs): Configuration => {
         plugins: [
             new MiniCssExtractPlugin({
                 filename: "css/[name].css",
-            })
+            }),
+            new Dotenv(),
         ],
         devtool: 'source-map',
         cache: false,

@@ -31,6 +31,7 @@ import { SectionHeroSubscribeItem } from './Section/SectionHero/SectionHeroSubsc
 import { SectionTestimonialsBasicItem } from './Section/SectionTestimonials/SectionTestimonialsBasic/SectionTestimonialsBasic'
 import { FooterBasicItem } from './Footer/FooterBasic/FooterBasic'
 import { SectionProductsBasicItem } from './Section/SectionProduct/SectionProductBasic/SectionProductBasic'
+import { SectionCheckoutBasicItem } from './Section/SectionCheckout/SectionCheckoutBasic/SectionCheckoutBasic'
 
 export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>> => {
     const templatesRecord: Record<string, TemplateStruct<{}>> = {}
@@ -66,6 +67,8 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>
         // SectionContactWithMapItem,
         // SectionContactDetailedItem,
         // SectionContactInteractiveItem,
+
+        SectionCheckoutBasicItem,
 
         FooterBasicItem,
         // FooterDetailedItem,

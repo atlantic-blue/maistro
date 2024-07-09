@@ -195,6 +195,7 @@ export enum PageMessageType {
 
     PUSH_CONTENT_IDS = "PUT_CONTENT_IDS",
     SET_CONTENT_IDS = "SET_CONTENT_IDS",
+    DELETE_CONTENT_IDS = "DELETE_CONTENT_IDS",
 
     NOTIFY_CONTENT_UPDATED = "NOTIFY_CONTENT_UPDATED",
 }
@@ -209,7 +210,7 @@ export type PageEvent = {
     type: PageMessageType.SET_ID
     data: string
 } | {
-    type: PageMessageType.SET_CONTENT_IDS | PageMessageType.PUSH_CONTENT_IDS
+    type: PageMessageType.SET_CONTENT_IDS | PageMessageType.PUSH_CONTENT_IDS | PageMessageType.DELETE_CONTENT_IDS
     data: string[]
 } | {
     type: PageMessageType.SET_DESCRIPTION

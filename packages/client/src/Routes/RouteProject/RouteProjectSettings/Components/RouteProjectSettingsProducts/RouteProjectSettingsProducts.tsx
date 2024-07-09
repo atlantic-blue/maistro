@@ -12,6 +12,8 @@ import { ApiContext } from "../../../../../Api/ApiProvider"
 import useObservable from "../../../../../Utils/Hooks/UseObservable"
 import { ProjectMessageType } from "../../../../../types"
 import { Project } from "../../../../../Store/Project"
+import { PlusCircle } from "lucide-react"
+import { DashIcon } from "@radix-ui/react-icons"
 
 const ProductViewer: React.FC<{ product: Product, projectId: string, project: Project }> = (props) => {
     const [product, setProduct] = React.useState(props.product)
@@ -64,86 +66,90 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
     }
 
     return (
-        <Card>
-            <Flex direction="row" gap="2" mb="2">
-                <Button onClick={() => setShow(!show)} mr="auto" variant="outline">
-                    {show ? "Less" : "More"}
-                </Button>
-                <Button onClick={onSave} ml="auto">
-                    Save
-                </Button>
-            </Flex>
+        <Box width="300px">
+            <Card>
+                <Flex direction="row" gap="2" mb="2">
+                    <Button size="1" onClick={() => setShow(!show)} ml="auto" variant="surface">
+                        {show ? (
+                            <DashIcon />
+                        ) : <PlusCircle style={{ height: "25px", width: "15px" }} />}
+                    </Button>
+                    <Button size="1" onClick={onSave}>
+                        Save
+                    </Button>
+                </Flex>
 
-            <Flex direction="column" gap="2" mb="2">
-                <Heading as="h3">Name</Heading>
-                <TextField.Root
-                    value={product.getName()}
-                    onChange={event => {
-                        setProduct(new Product({
-                            ...product.getStruct(),
-                            name: event.target.value
-                        }))
-                    }}
-                />
-            </Flex>
-
-            {show ? <>
-                <Flex direction="column" gap="2" mb="2">
-                    <Heading as="h3">Description</Heading>
+                <Flex gap="2" mb="2" justify="between">
+                    <Text weight="bold">Name</Text>
                     <TextField.Root
-                        value={product.getDescription()}
+                        value={product.getName()}
                         onChange={event => {
                             setProduct(new Product({
                                 ...product.getStruct(),
-                                description: event.target.value
+                                name: event.target.value
                             }))
                         }}
                     />
                 </Flex>
 
-                <Flex direction="column" gap="2" mb="2">
-                    <Heading as="h3">Currency</Heading>
-                    <TextField.Root
-                        value={product.getCurrency()}
-                        onChange={event => {
-                            setProduct(new Product({
-                                ...product.getStruct(),
-                                currency: event.target.value
-                            }))
-                        }}
-                    />
-                </Flex>
+                {show ?
+                    <Box>
+                        <Flex gap="2" mb="2" justify="between">
+                            <Text weight="bold">Description</Text>
+                            <TextField.Root
+                                value={product.getDescription()}
+                                onChange={event => {
+                                    setProduct(new Product({
+                                        ...product.getStruct(),
+                                        description: event.target.value
+                                    }))
+                                }}
+                            />
+                        </Flex>
 
-                <Flex direction="column" gap="2" mb="2">
-                    <Heading as="h3">Price</Heading>
-                    <TextField.Root
-                        value={product.getPrice()}
-                        type="number"
-                        onChange={event => {
-                            setProduct(new Product({
-                                ...product.getStruct(),
-                                price: Number(event.target.value)
-                            }))
-                        }}
-                    />
-                </Flex>
+                        <Flex gap="2" mb="2" justify="between">
+                            <Text weight="bold">Currency</Text>
+                            <TextField.Root
+                                value={product.getCurrency()}
+                                onChange={event => {
+                                    setProduct(new Product({
+                                        ...product.getStruct(),
+                                        currency: event.target.value
+                                    }))
+                                }}
+                            />
+                        </Flex>
 
-                <Flex direction="column" gap="2" mb="2">
-                    <Heading as="h3">Quantity</Heading>
-                    <TextField.Root
-                        value={product.getStockQuantity()}
-                        type="number"
-                        onChange={event => {
-                            setProduct(new Product({
-                                ...product.getStruct(),
-                                stockQuantity: Number(event.target.value)
-                            }))
-                        }}
-                    />
-                </Flex>
+                        <Flex gap="2" mb="2" justify="between">
+                            <Text weight="bold">Price</Text>
+                            <TextField.Root
+                                value={product.getPrice()}
+                                type="number"
+                                onChange={event => {
+                                    setProduct(new Product({
+                                        ...product.getStruct(),
+                                        price: Number(event.target.value)
+                                    }))
+                                }}
+                            />
+                        </Flex>
 
-                {/* <Flex direction="column" gap="2" mb="2">
-                <Heading as="h3">Options</Heading>
+                        <Flex gap="2" mb="2" justify="between">
+                            <Text weight="bold">Quantity</Text>
+                            <TextField.Root
+                                value={product.getStockQuantity()}
+                                type="number"
+                                onChange={event => {
+                                    setProduct(new Product({
+                                        ...product.getStruct(),
+                                        stockQuantity: Number(event.target.value)
+                                    }))
+                                }}
+                            />
+                        </Flex>
+
+                        {/* <Flex direction="column" gap="2" mb="2">
+                <Text weight="bold">Options</Text>
                 {
                     Object.values(product.getOptions()).map(option => {
                         return (
@@ -155,59 +161,61 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                 }
             </Flex> */}
 
-                <Flex direction="column" gap="2" mb="2">
-                    <Heading as="h3">Images</Heading>
+                        <Flex direction="column" gap="2" mb="2">
+                            <EditorImage
+                                type={EditorDataType.IMAGE}
+                                name="Image"
+                                onUploadFile={onUploadFile}
+                                onChange={value => {
+                                    setProduct(new Product({
+                                        ...product.getStruct(),
+                                        images: [
+                                            ...product.getImages(),
+                                            value
+                                        ]
+                                    }))
+                                }}
+                            />
 
-                    <EditorImage
-                        type={EditorDataType.IMAGE}
-                        name="Image"
-                        onUploadFile={onUploadFile}
-                        onChange={value => {
-                            setProduct(new Product({
-                                ...product.getStruct(),
-                                images: [
-                                    ...product.getImages(),
-                                    value
-                                ]
-                            }))
-                        }}
-                    />
+                            <Flex direction="row" gap="2" mb="2" style={{overflow: "scroll"}}>
+                                {
+                                    product.getImages().map(image => {
+                                        return (
+                                            <Flex direction="column" justify="center">
+                                                <Avatar
+                                                    key={image}
+                                                    size="9"
+                                                    src={image}
+                                                    fallback="Preview"
+                                                    alt="Preview"
+                                                    mb="2"
+                                                />
+                                                <Button variant="outline" size="1"
+                                                    onClick={() => {
+                                                        setProduct(new Product({
+                                                            ...product.getStruct(),
+                                                            images: [
+                                                                ...product.getImages().filter(i => i !== image),
+                                                            ]
+                                                        }))
+                                                    }}
+                                                >
+                                                    Remove
+                                                </Button>
+                                            </Flex>
+                                        )
+                                    })
+                                }
+                            </Flex>
 
-                    <Flex direction="row" gap="2" mb="2">
-                        {
-                            product.getImages().map(image => {
-                                return (
-                                    <Flex direction="column" justify="center">
-                                        <Avatar
-                                            key={image}
-                                            size="9"
-                                            src={image}
-                                            fallback="Preview"
-                                            alt="Preview"
-                                            mb="2"
-                                        />
-                                        <Button variant="outline" size="1"
-                                            onClick={() => {
-                                                setProduct(new Product({
-                                                    ...product.getStruct(),
-                                                    images: [
-                                                        ...product.getImages().filter(i => i !== image),
-                                                    ]
-                                                }))
-                                            }}
-                                        >
-                                            Remove
-                                        </Button>
-                                    </Flex>
-                                )
-                            })
-                        }
-                    </Flex>
-
-                </Flex>
-            </> :
-                null}
-        </Card>
+                        </Flex>
+                    </Box> :
+                    (
+                        null
+                    )
+                }
+            </Card>
+        </Box>
     )
 }
 
@@ -251,16 +259,18 @@ const RouteProjectSettingsProducts: React.FC = () => {
                         Add Product
                     </Button>
 
-                    {Object.values(project.getProducts())?.map(product => {
-                        return (
-                            <ProductViewer
-                                key={product.getId()}
-                                projectId={projectId}
-                                product={product}
-                                project={project}
-                            />
-                        )
-                    })}
+                    <Flex wrap="wrap" justify='center' gap="2">
+                        {Object.values(project.getProducts())?.map(product => {
+                            return (
+                                <ProductViewer
+                                    key={product.getId()}
+                                    projectId={projectId}
+                                    product={product}
+                                    project={project}
+                                />
+                            )
+                        })}
+                    </Flex>
                 </Flex>
             </Box>
         </>

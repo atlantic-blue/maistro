@@ -9,7 +9,7 @@ import { ProjectsContext } from "../../../Projects";
 
 import useObservable from "../../../Utils/Hooks/UseObservable";
 import { filter } from "rxjs/operators";
-import { Button, Card, Dialog, Flex, IconButton, Section, Spinner, Text } from "@radix-ui/themes";
+import { Box, Button, Card, Dialog, Flex, IconButton, Section, Spinner, Tabs, Text } from "@radix-ui/themes";
 import SearchItem from "../../../Components/SearchItem/SearchItem";
 import { templates } from "../../../Templates";
 import { ApiContext } from "../../../Api/ApiProvider";
@@ -22,6 +22,9 @@ import Loading from "../../../Components/Loading/Loading";
 import { TemplateComponentType, TemplateStruct } from "../../../Templates/templateTypes";
 import env from "../../../env";
 import SectionFlow from "./Components/SectionFlow/SectionFlow";
+import { CirclePlus } from "lucide-react";
+import SectionCustom from "./Components/SectionFlow/SectionCustom";
+import ProjectContent from "../../../Store/ProjectContent";
 
 const RouteProjectPage: React.FC = () => {
     const { api } = React.useContext(ApiContext)
@@ -76,12 +79,45 @@ const RouteProjectPage: React.FC = () => {
         )
     }
 
-    const onTemplateClick = async (template: TemplateStruct) => {
+    const onContentClick = async (content: ProjectContent) => {
+        try {
+            setIsLoading(true)
+            project.event$.next({
+                type: ProjectMessageType.SET_CONTENT,
+                data: {
+                    ...content.getStruct()
+                },
+            })
+
+            page.event$.next({
+                type: PageMessageType.PUSH_CONTENT_IDS,
+                data: [content.getId()]
+            })
+
+            setProgressUpdate("Updating page...")
+            await api.pages.updateById({
+                projectId,
+                pageId: page.getId(),
+                token: user.getTokenId(),
+                contentIds: [...page.getContentIds(), content.getId()]
+            })
+        } catch (error) {
+            // TODO app level message
+            console.error(error)
+        } finally {
+            setIsLoading(false)
+            setOpen(false)
+        }
+    }
+
+    const onTemplateClick = async (template: TemplateStruct<{}>) => {
         setIsLoading(true)
         setProgressUpdate("Creating Template...")
         try {
             let data = template.props
 
+            // TODO HACK
+            // intercepts template props to add compulsory data
             if (
                 [
                     TemplateComponentType.SUBSCRIBE_BASIC,
@@ -146,6 +182,18 @@ const RouteProjectPage: React.FC = () => {
                 }
             }
 
+            if (
+                [
+                    TemplateComponentType.CHECKOUT_BASIC,
+                ].includes(template.name)
+            ) {
+                data = {
+                    ...template.props,
+                    projectId,
+                    checkoutUrl: env.api.payments.checkouts.create,
+                }
+            }
+
             const response = await api.content.create({
                 token: user.getTokenId(),
                 projectId: projectId,
@@ -204,10 +252,12 @@ const RouteProjectPage: React.FC = () => {
                     <Dialog.Trigger>
                         <Card className={styles.section} onClick={onAddContentClick}>
                             <Button
-                                className={styles.sectionButton}
+                                size="4"
+                                variant="ghost"
+                                title="Add a section"
                             >
                                 <Flex direction="column" justify="center" align="center">
-                                    <IconNew className={styles.sectionImage} />
+                                    <CirclePlus />
                                     <Text as="div" className={styles.sectionContent}>
                                         Add a section
                                     </Text>
@@ -224,7 +274,6 @@ const RouteProjectPage: React.FC = () => {
                                 </IconButton>
                             </Dialog.Close>
                         </Flex>
-                        <Dialog.Title align="center">Add a section</Dialog.Title>
 
                         {isLoading ? (
                             <Flex direction="column" align="center" justify="center" gap="2">
@@ -234,7 +283,24 @@ const RouteProjectPage: React.FC = () => {
                                 </Text>
                             </Flex>
                         ) : (
-                            <SectionFlow onTemplateClick={onTemplateClick} />
+                            <Tabs.Root defaultValue="templates">
+                                <Tabs.List size="2" style={{ display: "flex", justifyContent: "center" }}>
+
+                                    <Tabs.Trigger value="templates">Templates</Tabs.Trigger>
+                                    <Tabs.Trigger value="custom">Custom</Tabs.Trigger>
+
+                                </Tabs.List>
+
+                                <Box pt="3">
+                                    <Tabs.Content value="templates">
+                                        <SectionFlow onTemplateClick={onTemplateClick} />
+                                    </Tabs.Content>
+
+                                    <Tabs.Content value="custom">
+                                        <SectionCustom onClick={onContentClick} />
+                                    </Tabs.Content>
+                                </Box>
+                            </Tabs.Root>
                         )}
                     </Dialog.Content>
                 </Dialog.Root>

@@ -89,6 +89,12 @@ class PageStore implements IPage {
                     ...event.data
                 ])
             }
+
+            if (event.type === PageMessageType.DELETE_CONTENT_IDS) {
+                this.setContentIds([
+                    ...this.contentIds.filter(id => !event.data.includes(id)),
+                ])
+            }
         })
     }
 
@@ -112,7 +118,7 @@ class PageStore implements IPage {
         this.setTitle(page.title)
         this.setPath(page.path)
         this.setDescription(page.description)
-        this.setContentIds(page.contentIds)
+        this.setContentIds([...new Set(page.contentIds)])
     }
 
     public getId(): string {

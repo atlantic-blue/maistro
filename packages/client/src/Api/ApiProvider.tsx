@@ -42,6 +42,7 @@ import { ProductsReadInput, productsRead } from "./Products/productsRead";
 import { ProductsReadByIdInput, productsReadById } from "./Products/productsReadById";
 import { ProductsUpdateByIdInput, ProductsUpdateByIdOutput, productsUpdateById } from "./Products/productsUpdateById";
 import { ProductsDeleteInput, productsDelete } from "./Products/productsDelete";
+import { ContentDeleteByIdInput, contentDeleteById } from "./Content/contentDeleteById";
 
 interface ApiContextState {
     api: {
@@ -69,6 +70,7 @@ interface ApiContextState {
             read: (input: ContentReadInput) => Promise<ContentReadOutput>
             readById: (input: ContentReadByIdInput) => Promise<ContentReadByIdOutput>
             updateById: (input: ContentUpdateByIdInput) => Promise<void>,
+            deleteById: (input: ContentDeleteByIdInput) => Promise<void>,
         }
         images: {
             get: (input: ImagesGetInput) => Promise<ImagesGetOutput>
@@ -151,6 +153,7 @@ const context: ApiContextState = {
             read: contentRead,
             readById: contentReadById,
             updateById: contentUpdateById,
+            deleteById: contentDeleteById,
         },
         images: {
             get: imagesGet,

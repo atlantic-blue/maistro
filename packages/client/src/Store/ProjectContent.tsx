@@ -77,6 +77,7 @@ class ProjectContent implements IProjectContent {
         this.setCategories(content.categories)
         this.setData(content.data)
         this.setTemplateName(content.template)
+        this.setCreatedAt(content.createdAt)
     }
 
     public getId(): string {

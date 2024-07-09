@@ -26,20 +26,25 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         throw createError(500, "process PAYMENTS_SECRET_KEY not specified")
     }
 
-    const { return_url, line_items, project_id } = event.body as unknown as PaymentsCheckoutsInput
+    const { return_url, line_items, project_id, account_id } = event.body as unknown as PaymentsCheckoutsInput
 
-    const session = await stripe.checkout.sessions.create({
-        mode: "payment",
-        ui_mode: "embedded",
-        return_url,
-        line_items,
-        payment_intent_data: {
-            application_fee_amount: calculateFeeAmount(line_items, TRANSACTION_FEE_PERCENTAGE)
+    const session = await stripe.checkout.sessions.create(
+        {
+            mode: "payment",
+            ui_mode: "embedded",
+            return_url,
+            line_items,
+            payment_intent_data: {
+                application_fee_amount: calculateFeeAmount(line_items, TRANSACTION_FEE_PERCENTAGE)
+            },
+            metadata: {
+                project_id
+            }
         },
-        metadata: {
-            project_id
+        {
+            stripeAccount: account_id,
         }
-    })
+    )
 
     const params = {
         TableName: tableName,
@@ -61,13 +66,14 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
 
 interface PaymentsCheckoutsInput {
     project_id: string
+    account_id: string
     return_url: string
     line_items: Stripe.Checkout.SessionCreateParams.LineItem[]
-    shipping: Stripe.Checkout.SessionCreateParams.PaymentIntentData.Shipping
 }
 
 const validationSchema = Joi.object<PaymentsCheckoutsInput>({
     project_id: Joi.string().required(),
+    account_id: Joi.string().required(),
     return_url: Joi.string().required(),
     line_items: Joi.array().items(
         Joi.object({

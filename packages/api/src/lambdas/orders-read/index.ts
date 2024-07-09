@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk';
-import jwt from "jsonwebtoken"
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
 import { LambdaMiddlewares } from '../../middlewares';
@@ -8,16 +7,10 @@ import authJwt from '../../middlewares/auth-jwt';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const contentRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
+const productsRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableName = process.env.TABLE_NAME
     if (!tableName) {
         throw createError(500, "process TABLE_NAME not specified")
-    }
-
-    const { payload } = (event as any).auth.decodedJwt as jwt.Jwt
-    const userId = payload.sub
-    if (!userId) {
-        throw createError(500, "userId not specified")
     }
 
     const projectId = event.pathParameters && event.pathParameters['project-id']
@@ -32,7 +25,7 @@ const contentRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) 
         ExpressionAttributeValues: {
             ':projectId': projectId
         },
-        Limit: 50,
+        Limit: 25,
     };
 
     const data = await dynamoDb.query(params).promise();
@@ -52,6 +45,6 @@ const contentRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) 
 
 const handler = new LambdaMiddlewares()
     .before(authJwt)
-    .handler(contentRead)
+    .handler(productsRead)
 
 export { handler }
