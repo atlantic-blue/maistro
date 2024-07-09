@@ -2,6 +2,7 @@ import React from "react";
 import { ApiContext } from "../Api/ApiProvider";
 import { AuthContext } from "../Auth/AuthProvider";
 import { Routes } from "../Routes/router";
+import { ConnectedAccount } from "../Api/Payments/PaymentsAccountsRead";
 
 export enum PaymentPlan {
     FREE = "FREE",
@@ -15,12 +16,16 @@ interface PaymentsContextState {
     isLoading: boolean
     redirectToPaymentPlans: () => void
     paymentPlan: PaymentPlan
+    connectedAccount: null | ConnectedAccount
+    setConnectedAccount: (acc: ConnectedAccount) => void
 }
 
 export const PaymentsContext = React.createContext<PaymentsContextState>({
     isLoading: false,
     redirectToPaymentPlans: () => null,
     paymentPlan: PaymentPlan.FREE,
+    connectedAccount: null,
+    setConnectedAccount: (acc: ConnectedAccount) => null
 })
 
 interface PaymentsProviderProps {
@@ -84,7 +89,11 @@ const PaymentsProvider: React.FC<PaymentsProviderProps> = (props) => {
     const { user } = React.useContext(AuthContext)
     const [isLoading, setIsLoading] = React.useState(false)
     const [paymentPlan, setPaymentPlan] = React.useState(PaymentPlan.FREE)
+    const [connectedAccount, setConnectedAccount] = React.useState<ConnectedAccount | null>(null)
 
+    /**
+     * Subscription plan
+     */
     React.useEffect(() => {
         if (!user) {
             return
@@ -118,13 +127,49 @@ const PaymentsProvider: React.FC<PaymentsProviderProps> = (props) => {
 
     }, [user])
 
+    /**
+     * Connected account
+     * https://docs.stripe.com/connect/onboarding/quickstart
+     */
+    React.useEffect(() => {
+        if (!user) {
+            return
+        }
+        if (connectedAccount) {
+            return
+        }
+
+        setIsLoading(true)
+        api.payments.accounts
+            .read({ token: user.getTokenId() })
+            .then(response => {
+                if (!response) {
+                    return
+                }
+
+                if (response[0]) {
+                    setConnectedAccount(response[0])
+                }
+            }).finally(() => {
+                setIsLoading(false)
+            })
+    }, [user])
+
     const redirectToPaymentPlans = async () => {
         window.open(Routes.PAYMENTS_PRICING)
     }
 
     return (
         <>
-            <PaymentsContext.Provider value={{ paymentPlan, redirectToPaymentPlans, isLoading }}>
+            <PaymentsContext.Provider value={{
+                paymentPlan,
+                redirectToPaymentPlans,
+
+                connectedAccount,
+                setConnectedAccount,
+
+                isLoading,
+            }}>
                 {props.children}
             </PaymentsContext.Provider>
         </>

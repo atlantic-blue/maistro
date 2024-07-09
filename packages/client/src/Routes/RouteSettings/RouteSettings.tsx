@@ -9,7 +9,7 @@ import Button from "../../Templates/Components/Button/Button"
 import { PaymentPlan, PaymentsContext } from "../../Payments/PaymentsProvider"
 
 import * as styles from "./RouteSettings.scss"
-import { Avatar, Card, Heading } from "@radix-ui/themes"
+import { Avatar, Card, Flex, Heading } from "@radix-ui/themes"
 import { useNavigate } from "react-router-dom"
 import { Routes } from "../router"
 
@@ -20,7 +20,7 @@ const RoutesSettings: React.FC = () => {
 
     return (
         <div className={styles.main}>
-            <RouteProjectHeader user={user} />
+            <RouteProjectHeader />
 
             <br />
             <Heading size="4" as="h3" align="center">
@@ -41,19 +41,34 @@ const RoutesSettings: React.FC = () => {
 
 
                 <Card className={styles.section}>
-                    <Button
-                        size="3"
-                        loading={isLoading}
-                        onClick={() => {
-                            if (paymentPlan !== PaymentPlan.FREE) {
-                                window.open("https://billing.stripe.com/p/login/00g4i29gM9GOgz6dQQ", "_blank")
-                            } else {
-                                navigate(Routes.PAYMENTS_PRICING)
-                            }
-                        }}
-                    >
-                        {paymentPlan !== PaymentPlan.FREE ? "Manage Subscription" : "Subscribe Today!"}
-                    </Button>
+                    <Flex gap="2">
+                        <Button
+                            size="3"
+                            loading={isLoading}
+                            onClick={() => {
+                                if (paymentPlan !== PaymentPlan.FREE) {
+                                    window.open("https://billing.stripe.com/p/login/00g4i29gM9GOgz6dQQ", "_blank")
+                                } else {
+                                    navigate(Routes.PAYMENTS_PRICING)
+                                }
+                            }}
+                        >
+                            {paymentPlan !== PaymentPlan.FREE ? "Subscription" : "Subscribe Today!"}
+                        </Button>
+
+                        <Button
+                            size="3"
+                            onClick={() => {
+                                if (paymentPlan === PaymentPlan.FREE) {
+                                    navigate(Routes.PAYMENTS_PRICING)
+                                } else {
+                                    navigate(Routes.PAYMENTS_ACCOUNTS)
+                                }
+                            }}
+                        >
+                            Payments
+                        </Button>
+                    </Flex>
 
                 </Card>
 

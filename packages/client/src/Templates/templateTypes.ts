@@ -10,6 +10,7 @@ export enum TemplateCategory {
     SERVICES = "SERVICES",
     // CONTACT = "CONTACT",
     FOOTER = "FOOTER",
+    PRODUCT = "PRODUCT",
 }
 
 export enum TemplateComponentType {
@@ -35,6 +36,8 @@ export enum TemplateComponentType {
     FOOTER_BASIC = "FOOTER_BASIC",
 
     SUBSCRIBE_BASIC = "SUBSCRIBE_BASIC",
+
+    PRODUCTS_BASIC = "PRODUCT_BASIC",
 }
 
 export interface TemplateStruct<Props> {

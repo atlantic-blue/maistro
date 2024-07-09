@@ -12,6 +12,7 @@ import RouteProjectSettingsDelete from "./Components/RouteProjectSettingsDelete/
 import * as styles from "./RouteProjectSettings.scss"
 import RouteProjectSettingsMailList from "./Components/RouteProjectSettingsMailList/RouteProjectSettingsMailList";
 import RouteProjectSettingsTheme from "./Components/RouteProjectSettingsTheme/RouteProjectSettingsTheme";
+import RouteProjectSettingsProducts from "./Components/RouteProjectSettingsProducts/RouteProjectSettingsProducts";
 
 const RouteProjectSettings: React.FC = () => {
     const { projects } = React.useContext(ProjectsContext)
@@ -35,6 +36,7 @@ const RouteProjectSettings: React.FC = () => {
                     <Tabs.Trigger value="seo">SEO</Tabs.Trigger>
                     <Tabs.Trigger value="email">Email</Tabs.Trigger>
                     <Tabs.Trigger value="theme">Theme</Tabs.Trigger>
+                    <Tabs.Trigger value="products">Products</Tabs.Trigger>
                 </Tabs.List>
 
                 <Box m="3">
@@ -48,6 +50,10 @@ const RouteProjectSettings: React.FC = () => {
 
                     <Tabs.Content value="theme">
                         <RouteProjectSettingsTheme />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="products">
+                        <RouteProjectSettingsProducts />
                     </Tabs.Content>
                 </Box>
             </Tabs.Root>

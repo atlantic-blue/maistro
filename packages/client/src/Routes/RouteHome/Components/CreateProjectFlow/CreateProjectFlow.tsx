@@ -86,7 +86,6 @@ const projectFlowQuestions: FormQuestion[] = [
         Component: (props: { onChange: (i: string) => void; value: string }) => {
             const [value, setValue] = React.useState(props.value)
             const onChange = (src: string) => {
-                console.log(props, src)
                 setValue(src)
                 props.onChange(src)
             }

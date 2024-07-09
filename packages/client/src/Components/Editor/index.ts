@@ -6,6 +6,7 @@ import HeroBasicEditor from "./HeroBasicEditor";
 import HeroSlidesEditor from "./HeroSlidesEditor";
 import HeroSubscribeEditor from "./HeroSubscribeEditor";
 import HeroVideoEditor from "./HeroVideoEditor";
+import SectionProductsEditor from "./ProductsBasicEditor";
 import SectionBlankEditor from "./SectionBlankEditor";
 import ServicesBasicEditor from "./ServicesBasicEditor";
 import TestimonialsBasicEditor from "./TestimonialsBasicEditor";
@@ -30,6 +31,8 @@ const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.FOOTER_BASIC]: FooterBasicEditor,
 
     [TemplateComponentType.SECTION_BLANK]: SectionBlankEditor,
+
+    [TemplateComponentType.PRODUCTS_BASIC]: SectionProductsEditor
 }
 
 export default editors

@@ -13,6 +13,7 @@ import {
     ProjectTheme,
     ProjectThemeAccentColour,
     ProjectThemeGrayColour,
+    ProductStruct,
 } from "../types"
 
 import Page from "./Page"
@@ -20,6 +21,7 @@ import { ProjectAsset } from "./ProjectAsset";
 import { ProjectEmailList } from "./EmailList";
 import ProjectContent from "./ProjectContent";
 import ProjectThread from "./ProjectThread";
+import { Product } from "./Product";
 
 interface IProject {
     setId(id: string): void
@@ -55,9 +57,10 @@ export class Project implements IProject {
     private assets: Record<string, ProjectAsset> = {}
     private emailLists: Record<string, ProjectEmailList> = {}
     private threads: Record<string, ProjectThread> = {}
+    private products: Record<string, Product> = {}
     private theme: ProjectTheme = {
         accentColor: ProjectThemeAccentColour.amber,
-        appearance: "solid",
+        appearance: "light",
         grayColor: ProjectThemeGrayColour.auto,
         radius: "small",
         scaling: "100%",
@@ -113,6 +116,14 @@ export class Project implements IProject {
                 this.deleteThread(event.data)
             }
 
+            if (event.type === ProjectMessageType.SET_PRODUCT) {
+                this.setProduct(event.data.id, event.data)
+            }
+
+            if (event.type === ProjectMessageType.DELETE_PRODUCT) {
+                this.deleteProduct(event.data)
+            }
+
             if (event.type === ProjectMessageType.SET_NAME) {
                 this.setName(event.data)
             }
@@ -160,6 +171,11 @@ export class Project implements IProject {
             threads: Object.keys(this.getThreads())
                 .reduce<Record<string, ProjectThreadStruct>>((acc, key) => {
                     acc[key] = this.getThreadById(key).getStruct()
+                    return acc
+                }, {}),
+            products: Object.keys(this.getProducts())
+                .reduce<Record<string, ProductStruct>>((acc, key) => {
+                    acc[key] = this.getProductById(key).getStruct()
                     return acc
                 }, {}),
         }
@@ -323,6 +339,26 @@ export class Project implements IProject {
         delete this.emailLists[id]
     }
 
+    /**
+    * Products
+    */
+    public setProduct(id: string, struct: ProductStruct): void {
+        const product = new Product(struct)
+        this.products[id] = product
+    }
+
+    public getProducts(): Record<string, Product> {
+        return this.products
+    }
+
+    public getProductById(id: string): Product {
+        return this.products[id]
+    }
+
+    public deleteProduct(id: string): void {
+        delete this.products[id]
+    }
+
     //
     public getId(): string {
         return this.id
@@ -366,6 +402,8 @@ export class Project implements IProject {
             content: {},
             emailLists: {},
             threads: {},
+            products: {},
+            theme: {},
         })
     }
 }

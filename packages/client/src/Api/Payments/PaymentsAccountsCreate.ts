@@ -1,12 +1,13 @@
 import env from "../../env"
 import { requestController } from "../fetch"
+import { ConnectedAccount } from "./PaymentsAccountsRead"
 
 export interface PaymentsAccountsCreateInput {
     token: string
 }
 
 export interface PaymentsAccountsCreateOutput {
-    account: { id: string }
+    account: ConnectedAccount
 }
 
 const paymentsAccountsCreate = async (

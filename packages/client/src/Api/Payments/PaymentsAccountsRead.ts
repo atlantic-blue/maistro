@@ -5,7 +5,7 @@ export interface PaymentsAccountsReadInput {
     token: string
 }
 
-interface ConnectedAccount {
+export interface ConnectedAccount {
     createdAt: number
     email: string
     id: string

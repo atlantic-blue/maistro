@@ -32,7 +32,20 @@ export interface ProjectStruct {
     content: Record<string, ProjectContentStruct>
     emailLists: Record<string, ProjectEmailListStruct>
     threads: Record<string, ProjectThreadStruct>
+    products: Record<string, ProductStruct>
     theme: ProjectTheme,
+}
+
+export interface ProductStruct {
+    id: string
+    name: string
+    description: string
+    price: number
+    priceDecimal: string
+    stockQuantity: number
+    currency: string
+    images: string[]
+    options: Record<string, string[]>
 }
 
 export interface ProjectEmailListStruct {
@@ -259,6 +272,9 @@ export enum ProjectMessageType {
     SET_AI_THREAD = "SET_AI_THREAD",
     DELETE_AI_THREAD = "DELETE_AI_THREAD",
 
+    SET_PRODUCT = "SET_PRODUCT",
+    DELETE_PRODUCT = "DELETE_PRODUCT",
+
     SET_THEME = "SET_THEME",
 }
 
@@ -293,6 +309,12 @@ export type ProjectEvent = {
     type: ProjectMessageType.DELETE_AI_THREAD
     data: string
 } | {
+    type: ProjectMessageType.SET_PRODUCT
+    data: ProductStruct
+} | {
+    type: ProjectMessageType.DELETE_PRODUCT
+    data: string
+} | {
     type: ProjectMessageType.SET_NAME
     data: string
 } | {
@@ -301,6 +323,15 @@ export type ProjectEvent = {
 } | {
     type: ProjectMessageType.SET_THEME
     data: ProjectTheme
+}
+
+export enum ProductMessageType {
+    SET = "SET"
+}
+
+export type ProductEvent = {
+    type: ProductMessageType.SET
+    data: ProductStruct
 }
 
 export enum ProjectsMessageType {

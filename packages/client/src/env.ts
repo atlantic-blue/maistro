@@ -50,6 +50,13 @@ interface Env {
             update: (projectId: string) => string
             delete: (projectId: string) => string
         }
+        products: {
+            create: (projectId: string) => string
+            read: (projectId: string) => string
+            readById: (projectId: string, id: string) => string
+            updateById: (projectId: string, id: string) => string
+            deleteById: (projectId: string, id: string) => string
+        }
         projects: {
             create: string
             read: string
@@ -67,6 +74,9 @@ interface Env {
             }
             subscriptions: {
                 read: string
+            }
+            checkouts: {
+                create: string
             }
         }
     }
@@ -112,6 +122,7 @@ const createEnv = (): Env => {
                     read: `${apiBaseUrl}/email/lists`,
                 },
                 entries: {
+                    // Public
                     create: `${apiBaseUrl}/email/entries`,
                     read: `${apiBaseUrl}/email/list-entries`,
                 }
@@ -149,6 +160,13 @@ const createEnv = (): Env => {
                 update: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/pages`,
                 delete: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/pages`,
             },
+            products: {
+                create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/products`,
+                read: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/products`,
+                readById: (projectId: string, id: string) => `${apiBaseUrl}/projects/${projectId}/products/${id}`,
+                updateById: (projectId: string, id: string) => `${apiBaseUrl}/projects/${projectId}/products/${id}`,
+                deleteById: (projectId: string, id: string) => `${apiBaseUrl}/projects/${projectId}/products/${id}`,
+            },
             projects: {
                 create: `${apiBaseUrl}/projects`,
                 read: `${apiBaseUrl}/projects`,
@@ -166,7 +184,11 @@ const createEnv = (): Env => {
                 },
                 subscriptions: {
                     read: `${apiBaseUrl}/payments/subscriptions`,
-                }
+                },
+                // Public
+                checkouts: {
+                    create: `${apiBaseUrl}/payments/checkouts`,
+                },
             }
         },
         hosting: {

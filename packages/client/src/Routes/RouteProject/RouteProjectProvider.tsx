@@ -200,6 +200,39 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
         })
     }
 
+    const getProduct = async () => {
+        if (!projectId) {
+            return
+        }
+        const response = await api.products.read({
+            token: user.getTokenId(),
+            projectId,
+
+        })
+
+        if (!response || !Array.isArray(response)) {
+            return
+        }
+
+        response?.filter(Boolean)
+            .map(productStruct => {
+                project.event$.next({
+                    type: ProjectMessageType.SET_PRODUCT,
+                    data: {
+                        id: productStruct.id,
+                        description: productStruct.description,
+                        currency: productStruct.currency,
+                        images: productStruct.images,
+                        name: productStruct.name,
+                        options: productStruct.options,
+                        price: productStruct.price,
+                        priceDecimal: productStruct.priceDecimal,
+                        stockQuantity: productStruct.stockQuantity
+                    }
+                })
+            })
+    }
+
     React.useEffect(() => {
         getPages()
             .then(() => {
@@ -209,6 +242,10 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
 
     React.useEffect(() => {
         getContent()
+    }, [projectId])
+
+    React.useEffect(() => {
+        getProduct()
     }, [projectId])
 
     React.useEffect(() => {
