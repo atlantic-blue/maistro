@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import * as uuid from "uuid"
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
 import jsonBodyParser from '../../middlewares/json-body-parser';
@@ -24,44 +25,50 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
         throw createError(500, "process TABLE_NAME not specified")
     }
 
-    const signature = event.headers['stripe-signature'];
-    const stripeEvent = stripe.webhooks.constructEvent(event.body, signature, paymentsWebhookKey);
+    try {
+        const signature = event.headers['stripe-signature'];
+        const stripeEvent = stripe.webhooks.constructEvent(event.body, signature, paymentsWebhookKey);
 
-    console.log(JSON.stringify(stripeEvent, void 0, 4))
+        if (stripeEvent.type !== "checkout.session.completed") {
+            throw createError(500, `${stripeEvent.type} not supported`)
+        }
 
-    // const {
+        const data = extractDataFromEvent(stripeEvent)
+        const id = uuid.v4()
+        const createdAt = new Date().toISOString()
+        const status = OrderStatus.PENDING
 
-    // } = event.body as unknown as OrdersCreateInput;
+        const params = {
+            TableName: tableName,
+            Item: {
+                id,
+                createdAt,
 
-    // const id = uuid.v4()
-    // const createdAt = new Date().toISOString()
-    // const status = OrderStatus.PENDING
+                customerId: data.customerId,
+                status,
+                history: [
+                    {
+                        status,
+                        timestamp: createdAt,
+                    }
+                ],
 
-    // const params = {
-    //     TableName: tableName,
-    //     Item: {
-    //         id,
-    //         createdAt,
+                ...data
+            }
+        };
 
-    //         customerId,
-    //         status,
-    //         history: [
-    //             {
-    //                 status,
-    //                 timestamp: createdAt,
-    //             }
-    //         ],
-    //     }
-    // };
+        await dynamoDb.put(params).promise();
 
-    // await dynamoDb.put(params).promise();
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
+            })
+        };
+    } catch {
+        throw createError(500, "Failed to unmarshall event with stripe-signature")
 
-        })
-    };
+    }
 };
 
 

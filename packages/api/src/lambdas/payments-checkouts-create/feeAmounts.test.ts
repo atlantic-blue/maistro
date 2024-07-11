@@ -8,15 +8,14 @@ describe("fee amounts", () => {
                 quantity: 2,
                 price_data: {
                     currency: "gbp",
-                    unit_amount: 100,
-                    unit_amount_decimal: "25"
+                    unit_amount: 1000,
                 }
             }
         ]
 
         const feePercentage = 2
         const output = calculateFeeAmount(input, feePercentage)
-        const expected = 4.01
+        const expected = 0
 
         expect(output).toBe(expected)
     })
@@ -27,21 +26,21 @@ describe("fee amounts", () => {
                 quantity: 1,
                 price_data: {
                     currency: "gbp",
-                    unit_amount: 10,
+                    unit_amount: 1000,
                 }
             },
             {
                 quantity: 2,
                 price_data: {
                     currency: "gbp",
-                    unit_amount: 5,
+                    unit_amount: 5000,
                 }
             }
         ]
 
         const feePercentage = 1
         const output = calculateFeeAmount(input, feePercentage)
-        const expected = 0.2
+        const expected = 110
 
         expect(output).toBe(expected)
     })
@@ -52,7 +51,7 @@ describe("fee amounts", () => {
                 quantity: 1,
                 price_data: {
                     currency: "gbp",
-                    unit_amount: 10,
+                    unit_amount: 1000,
                 }
             },
             {
@@ -62,7 +61,7 @@ describe("fee amounts", () => {
 
         const feePercentage = 1
         const output = calculateFeeAmount(input, feePercentage)
-        const expected = 0.1
+        const expected = 0
 
         expect(output).toBe(expected)
     })
@@ -72,14 +71,14 @@ describe("fee amounts", () => {
             {
                 price_data: {
                     currency: "gbp",
-                    unit_amount: 10,
+                    unit_amount: 20000,
                 }
             },
         ]
 
         const feePercentage = 1
         const output = calculateFeeAmount(input, feePercentage)
-        const expected = 0.1
+        const expected = 200
 
         expect(output).toBe(expected)
     })

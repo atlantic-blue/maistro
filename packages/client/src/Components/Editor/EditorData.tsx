@@ -52,6 +52,7 @@ export interface EditorTextProps {
     onChange: (value: string) => void
     aiEnabled?: boolean
     section?: "headline" | "content" | "cta"
+    disabled?: boolean
 }
 
 export type EditorDataProps = EditorTextProps | EditorImageProps | EditorVideoProps | EditorWysiwygProps | EditorLinksProps

@@ -28,6 +28,7 @@ const EditorText: React.FC<EditorTextProps> = (props) => {
                 value={props.value}
                 onChange={e => props.onChange(e.target.value)}
                 required
+                disabled={props.disabled}
             />
         </Box>
     )

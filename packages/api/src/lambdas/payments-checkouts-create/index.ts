@@ -26,7 +26,15 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         throw createError(500, "process PAYMENTS_SECRET_KEY not specified")
     }
 
-    const { return_url, line_items, project_id, account_id } = event.body as unknown as PaymentsCheckoutsInput
+    const {
+        return_url,
+        line_items,
+        project_id,
+        account_id,
+        enable_shipping,
+        allowed_countries,
+        shipping_options
+    } = event.body as unknown as PaymentsCheckoutsInput
 
     const session = await stripe.checkout.sessions.create(
         {
@@ -38,8 +46,16 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
                 application_fee_amount: calculateFeeAmount(line_items, TRANSACTION_FEE_PERCENTAGE)
             },
             metadata: {
-                project_id
-            }
+                project_id,
+                account_id,
+            },
+            ...(enable_shipping ? {
+                shipping_address_collection: {
+                    allowed_countries,
+                },
+                shipping_options,
+            } : {}
+            ),
         },
         {
             stripeAccount: account_id,
@@ -69,6 +85,18 @@ interface PaymentsCheckoutsInput {
     account_id: string
     return_url: string
     line_items: Stripe.Checkout.SessionCreateParams.LineItem[]
+    enable_shipping: boolean
+    allowed_countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[]
+    shipping_options: Array<{
+        shipping_rate_data: {
+            display_name: string
+            type: string
+            fixed_amount: {
+                amount: number
+                currency: string
+            }
+        }
+    }>
 }
 
 const validationSchema = Joi.object<PaymentsCheckoutsInput>({
@@ -89,8 +117,25 @@ const validationSchema = Joi.object<PaymentsCheckoutsInput>({
                     images: Joi.array().items(Joi.string()).optional()
                 }).required()
             }).required()
-        })
+        }),
     ).required(),
+    enable_shipping: Joi.boolean().required(),
+    allowed_countries: Joi.array().items(Joi.string()).optional(),
+    shipping_options: Joi.array()
+        .items(
+            Joi.object({
+                shipping_rate_data: Joi.object({
+                    display_name: Joi.string().required(),
+                    type: Joi.string().required(),
+                    fixed_amount: {
+                        amount: Joi.number().required(),
+                        currency: Joi.string().required()
+                    }
+                }).required()
+            }))
+        .max(5)
+        .optional()
+
 })
 
 const handler = new LambdaMiddlewares()

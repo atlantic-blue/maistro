@@ -1,10 +1,11 @@
 import React from "react"
-import { Stripe, loadStripe } from '@stripe/stripe-js';
-
+import * as uuid from "uuid"
 import { Avatar, Box, Button, Card, Flex, Heading, Text } from "@radix-ui/themes"
 import { TemplateCategory, TemplateComponentType, TemplateStruct } from "../../../templateTypes"
-import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import env from "../../../../env";
+
+import { Stripe, loadStripe } from '@stripe/stripe-js';
+import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 
 let stripePromise: Promise<Stripe | null> | null = null
 const getStripePromise = (accountId: string) => {
@@ -37,10 +38,31 @@ export interface SectionCheckoutBasicProps {
     returnUrl: string
     checkoutUrl: string
     items: SectionCheckoutBasicItem[]
+    enableShipping: boolean
+    allowedCountries: string[]
+    shippingOptions: Array<{
+        shipping_rate_data: {
+            display_name: string
+            type: string
+            fixed_amount: {
+                amount: number
+                currency: string
+            }
+        }
+    }>
 }
 
 const SectionCheckoutBasic: React.FC<SectionCheckoutBasicProps> = (props) => {
-    const { accountId, projectId, returnUrl, items, checkoutUrl } = props
+    const {
+        accountId,
+        projectId,
+        returnUrl,
+        items,
+        checkoutUrl,
+        enableShipping,
+        shippingOptions,
+        allowedCountries,
+    } = props
 
     const [clientSecret, setClientSecret] = React.useState("")
     const stripePromise = getStripePromise(accountId)
@@ -56,11 +78,13 @@ const SectionCheckoutBasic: React.FC<SectionCheckoutBasicProps> = (props) => {
                     account_id: accountId,
                     return_url: returnUrl,
                     line_items: items,
+                    enable_shipping: enableShipping,
+                    shipping_options: shippingOptions,
+                    allowed_countries: allowedCountries,
                 })
             }).then(response => response.json())
 
-            console.log({ response })
-            setClientSecret(response.client_secret)
+            setClientSecret(response.session.client_secret)
         } catch (error) {
 
         } finally {
@@ -84,33 +108,36 @@ const SectionCheckoutBasic: React.FC<SectionCheckoutBasicProps> = (props) => {
             direction="column" justify='center' align="center" mb="2"
             data-hydration-id={props["data-hydration-id"]}
         >
-            <Box>
-                {items?.map(item => {
+            <Flex m="2" gap="2">
+                {items?.map((item, key) => {
                     return (
-                        <Card key={`${item.price_data?.product_data.name}-${Date.now()}`}>
-                            <Flex justify="between" gap="2" >
+                        <Card key={`${uuid.v1()}`}>
+                            <Flex justify="between" gap="2">
                                 <Avatar
-                                    size="9"
+                                    size="8"
                                     src={item.price_data?.product_data?.images[0]}
                                     fallback={item.price_data?.product_data?.name}
                                 />
                                 <Flex direction="column">
-                                    <Heading>{item.price_data?.product_data?.name}</Heading>
+                                    <Text as="div" size="2" weight="bold">
+                                        {item.price_data?.product_data?.name}
+                                    </Text>
                                     <Box>
                                         <Flex>
-                                            <Text>{item.price_data.currency}</Text>
+                                            {/* <Text>{item.price_data.currency}</Text> */}
+                                            <Text>$</Text>
                                             <Text>{item.price_data.unit_amount}</Text>
                                         </Flex>
+                                        <Text size="1">Quantity: {item.quantity}</Text>
                                     </Box>
                                 </Flex>
-                                <Text m="auto">{item.quantity}</Text>
                             </Flex>
                         </Card>
                     )
                 })}
-            </Box>
-            <Button onClick={onClick} loading={loading}>
-                Order now!
+            </Flex>
+            <Button onClick={onClick} loading={loading} variant='outline'>
+                Order now
             </Button>
         </Flex>
     )
@@ -132,7 +159,7 @@ export const SectionCheckoutBasicItem: TemplateStruct<SectionCheckoutBasicProps>
         checkoutUrl: env.api.payments.checkouts.create,
         items: [
             {
-                quantity: 1,
+                quantity: 10,
                 price_data: {
                     currency: "gbp",
                     unit_amount: "10",
@@ -144,6 +171,30 @@ export const SectionCheckoutBasicItem: TemplateStruct<SectionCheckoutBasicProps>
                         ]
                     }
                 },
+            }
+        ],
+        enableShipping: true,
+        allowedCountries: ["GB"],
+        shippingOptions: [
+            {
+                shipping_rate_data: {
+                    display_name: "Store Pickup",
+                    type: "fixed_amount",
+                    fixed_amount: {
+                        amount: 0,
+                        currency: "gbp"
+                    }
+                }
+            },
+            {
+                shipping_rate_data: {
+                    display_name: "Local Delivery",
+                    type: "fixed_amount",
+                    fixed_amount: {
+                        amount: 500,
+                        currency: "gbp"
+                    }
+                }
             }
         ]
     },
