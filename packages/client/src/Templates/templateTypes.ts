@@ -41,6 +41,7 @@ export enum TemplateComponentType {
     PRODUCTS_BASIC = "PRODUCTS_BASIC",
 
     CHECKOUT_BASIC = "CHECKOUT_BASIC",
+    CHECKOUT_MERCADO_PAGO = "CHECKOUT_MERCADO_PAGO",
 }
 
 export interface TemplateStruct<Props = {}> {

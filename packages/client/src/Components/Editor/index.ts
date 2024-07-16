@@ -1,6 +1,7 @@
 import { TemplateComponentType } from "../../Templates/templateTypes";
 import AboutUsBasicEditor from "./AboutUsBasicEditor";
 import SectionCheckoutBasicEditor from "./CheckoutBasicEditor";
+import SectionCheckoutMercadoPagoEditor from "./CheckoutMercadoPagoEditor";
 import FooterBasicEditor from "./FooterBasicEditor";
 import HeaderBasicEditor from "./HeaderBasicEditor";
 import HeroBasicEditor from "./HeroBasicEditor";
@@ -36,6 +37,7 @@ const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.PRODUCTS_BASIC]: SectionProductsEditor,
 
     [TemplateComponentType.CHECKOUT_BASIC]: SectionCheckoutBasicEditor,
+    [TemplateComponentType.CHECKOUT_MERCADO_PAGO]: SectionCheckoutMercadoPagoEditor,
 }
 
 export default editors

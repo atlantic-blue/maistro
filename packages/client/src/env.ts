@@ -77,6 +77,10 @@ interface Env {
             }
             checkouts: {
                 create: string
+                createLatam: string
+            }
+            process: {
+                createLatam: string
             }
         }
     }
@@ -188,7 +192,12 @@ const createEnv = (): Env => {
                 // Public
                 checkouts: {
                     create: `${apiBaseUrl}/payments/checkouts`,
+                    createLatam: `${apiBaseUrl}/payments/checkouts/latam`,
                 },
+                // Public
+                process: {
+                    createLatam: `${apiBaseUrl}/payments/process/latam`,
+                }
             }
         },
         hosting: {

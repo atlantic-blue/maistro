@@ -6,10 +6,8 @@ import SectionHeroVideo from "../../Templates/Section/SectionHero/SectionHeroVid
 import SectionAboutUsBasic from "../../Templates/Section/SectionAboutUs/SectionAboutUsBasic/SectionAboutUsBasic";
 import SectionServicesBasic from "../../Templates/Section/SectionServices/SectionServicesBasic/SectionServicesBasic";
 import FooterBasic from "../../Templates/Footer/FooterBasic/FooterBasic";
-import PricingPage from "../../Payments/PricingPage/PricingPage";
 import CreateProjectFlow from "./Components/CreateProjectFlow/CreateProjectFlow";
 import HeaderBasic from "../../Templates/Header/HeaderBasic/HeaderBasic";
-import HeaderSticky from "../../Templates/Header/HeaderSticky/HeaderSticky";
 
 // https://mixkit.co/free-stock-video/going-down-a-curved-highway-through-a-mountain-range-41576/
 const videoURLS = [
@@ -58,7 +56,7 @@ const RoutesHome: React.FC = () => {
                     content: "Maistro is an innovative platform that leverages advanced AI technology to simplify the website creation process. Whether you’re a small business owner, freelancer, or entrepreneur, Maistro empowers you to build stunning websites with ease and efficiency.",
                 }}
             />
-            <PricingPage />
+
             <SectionServicesBasic
                 {...{
                     services: [

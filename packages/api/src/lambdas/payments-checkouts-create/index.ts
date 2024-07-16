@@ -80,6 +80,18 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
     };
 };
 
+interface PaymentShippingOptions {
+    shipping_rate: string
+    shipping_rate_data: {
+        display_name: string
+        type: string
+        fixed_amount: {
+            amount: number
+            currency: string
+        }
+    }
+}
+
 interface PaymentsCheckoutsInput {
     project_id: string
     account_id: string
@@ -87,16 +99,7 @@ interface PaymentsCheckoutsInput {
     line_items: Stripe.Checkout.SessionCreateParams.LineItem[]
     enable_shipping: boolean
     allowed_countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[]
-    shipping_options: Array<{
-        shipping_rate_data: {
-            display_name: string
-            type: string
-            fixed_amount: {
-                amount: number
-                currency: string
-            }
-        }
-    }>
+    shipping_options: PaymentShippingOptions[]
 }
 
 const validationSchema = Joi.object<PaymentsCheckoutsInput>({
@@ -135,7 +138,6 @@ const validationSchema = Joi.object<PaymentsCheckoutsInput>({
             }))
         .max(5)
         .optional()
-
 })
 
 const handler = new LambdaMiddlewares()
