@@ -1,7 +1,7 @@
 import React from "react"
 
 interface IconBinProps {
-    className: string
+    className?: string
 }
 
 const IconBin: React.FC<IconBinProps> = (props) => {

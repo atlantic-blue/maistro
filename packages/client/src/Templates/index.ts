@@ -33,6 +33,7 @@ import { FooterBasicItem } from './Footer/FooterBasic/FooterBasic'
 import { SectionProductsBasicItem } from './Section/SectionProduct/SectionProductBasic/SectionProductBasic'
 import { SectionCheckoutBasicItem } from './Section/SectionCheckout/SectionCheckoutBasic/SectionCheckoutBasic'
 import { SectionCheckoutMercadoPagoItem } from './Section/SectionCheckout/SectionCheckoutMercadoPago/SectionCheckoutMercadoPago'
+import { SectionShoppingCartsBasicItem } from './Section/SectionShoppingCart/SectionShoppingCartBasic/SectionShoppingCartBasic'
 
 export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>> => {
     const templatesRecord: Record<string, TemplateStruct<{}>> = {}
@@ -71,6 +72,8 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>
 
         SectionCheckoutBasicItem,
         SectionCheckoutMercadoPagoItem,
+
+        SectionShoppingCartsBasicItem,
 
         FooterBasicItem,
         // FooterDetailedItem,

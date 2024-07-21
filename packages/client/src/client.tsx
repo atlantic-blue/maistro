@@ -5,8 +5,10 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import parser, { HTMLReactParserOptions } from "html-react-parser"
 import { templates } from './Templates';
+import { Theme } from '@radix-ui/themes';
 
 const appState = window.__STATE__
+const maistroTheme = window.__MAISTRO_THEME__
 
 export const AppClient = () => {
     const input = document.getElementById("main")?.innerHTML || ""
@@ -50,7 +52,17 @@ export const AppClient = () => {
         },
     }
 
-    return parser(input, options)
+    return (
+        <Theme
+            accentColor={maistroTheme?.accentColor}
+            grayColor={maistroTheme?.grayColor}
+            appearance={maistroTheme?.appearance}
+            radius={maistroTheme?.radius}
+            scaling={maistroTheme?.scaling}
+        >
+            {parser(input, options)}
+        </Theme>
+    )
 }
 
 const container = document.getElementById('main') as HTMLElement

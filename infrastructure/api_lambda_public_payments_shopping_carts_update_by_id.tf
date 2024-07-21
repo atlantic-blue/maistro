@@ -61,7 +61,9 @@ resource "aws_iam_policy" "api_lambda_payments_shopping_carts_update_by_id_dynam
     "Statement" : [
       {
         Action : [
-          "dynamodb:PutItem"
+          "dynamodb:Query",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
         ],
         Effect : "Allow",
         Resource : [
@@ -110,7 +112,6 @@ resource "aws_lambda_function" "api_lambda_payments_shopping_carts_update_by_id"
 
   environment {
     variables = {
-      PAYMENTS_SECRET_KEY = "${var.payments_secret_key}"
       TABLE_NAME          = "${aws_dynamodb_table.payments_shopping_carts.name}"
     }
   }
@@ -150,7 +151,7 @@ resource "aws_apigatewayv2_integration" "api_lambda_payments_shopping_carts_upda
 
 resource "aws_apigatewayv2_route" "api_lambda_payments_shopping_carts_update_by_id" {
   api_id    = aws_apigatewayv2_api.api.id
-  route_key = "PATCH /payments/shopping-carts/{shopping-cart-id}"
+  route_key = "PUT /payments/shopping-carts/{shopping-cart-id}"
 
   target = "integrations/${aws_apigatewayv2_integration.api_lambda_payments_shopping_carts_update_by_id.id}"
 }

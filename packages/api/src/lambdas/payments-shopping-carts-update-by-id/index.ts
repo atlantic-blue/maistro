@@ -1,8 +1,6 @@
-import Stripe from "stripe"
 import Joi from "joi";
 import AWS from 'aws-sdk';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
-import * as uuid from "uuid"
 
 import { LambdaMiddlewares } from '../../middlewares';
 import createError from "../../middlewares/error-handler";
@@ -24,20 +22,70 @@ const paymentsShoppingCartsCreate: APIGatewayProxyHandler = async (event: APIGat
         throw createError(500, "shoppingCartId not specified")
     }
 
-    const createdAt = new Date().toISOString()
-    const { projectId, items } = event.body as unknown as PaymentsShoppingCartsInput
+    const queryParams: AWS.DynamoDB.DocumentClient.QueryInput = {
+        TableName: tableName,
+        IndexName: 'IdIndex',
+        KeyConditionExpression: 'id = :id',
+        ExpressionAttributeValues: {
+            ':id': shoppingCartId,
+        },
+        Limit: 25,
+    };
+    const data = await dynamoDb.query(queryParams).promise();
 
-    const input = sanitiseInput({
-        items,
-        updatedAt: new Date().toISOString(),
+    if (
+        !data ||
+        !data.Items ||
+        data.Items?.length === 0
+    ) {
+        return {
+            statusCode: 404,
+            body: JSON.stringify([])
+        };
+    }
+
+    const shoppingCartIndex = data.Items.findIndex(i => i.id === shoppingCartId)
+    const shoppingCart = data.Items[shoppingCartIndex] as ShoppingCart
+    if (!shoppingCart) {
+        return {
+            statusCode: 404,
+            body: JSON.stringify([])
+        };
+    }
+
+    // Create Map
+    const itemsMap = new Map<string, {
+        quantity: number,
+        productId: string
+    }>();
+    (shoppingCart.items || []).forEach(i => itemsMap.set(i.productId, i))
+
+    const { items } = event.body as unknown as PaymentsShoppingCartsInput;
+
+    // Update Map
+    (items || []).forEach(i => {
+        if (i.quantity === 0) {
+            itemsMap.delete(i.productId)
+        } else {
+            itemsMap.set(i.productId, i)
+        }
     })
 
+    // Return Map
+    const nextItems: ShoppingCart["items"] = [];
+    itemsMap.forEach(i => nextItems.push(i));
+
+    const updatedAt = new Date().toISOString()
+    const input = sanitiseInput({
+        items: nextItems,
+        updatedAt,
+    })
 
     const params = createUpdateParams(
         input,
         {
             id: shoppingCartId,
-            projectId,
+            projectId: shoppingCart.projectId,
         },
         tableName
     )
@@ -48,30 +96,33 @@ const paymentsShoppingCartsCreate: APIGatewayProxyHandler = async (event: APIGat
         statusCode: 200,
         body: JSON.stringify({
             id: shoppingCartId,
-            projectId,
-            createdAt,
-            items,
+            updatedAt,
+            items: nextItems,
         })
     };
 };
 
-interface PaymentsShoppingCartsInput {
+interface ShoppingCart {
+    id: string,
+    createdAt: string,
     projectId: string
-    items: {
+    items: Array<{
+        quantity: number,
         productId: string
-        price: number
-        priceDecimal: string
-        quantity: number
-    }[]
+    }>
+}
+
+interface PaymentsShoppingCartsInput {
+    items: Array<{
+        quantity: number,
+        productId: string
+    }>
 }
 
 const validationSchema = Joi.object<PaymentsShoppingCartsInput>({
-    projectId: Joi.string().required(),
     items: Joi.array().items(
         Joi.object({
             productId: Joi.string().required(),
-            price: Joi.number().required(),
-            priceDecimal: Joi.string().optional(),
             quantity: Joi.number().required()
         })
     ).required()

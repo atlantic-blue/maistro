@@ -5,6 +5,7 @@ import {
     PageStruct,
     PageEvent,
     PageMessageType,
+    ProjectTheme,
 } from "../types";
 
 import { getFontFamilyHref } from "../Components/FontScheme/FontScheme";
@@ -205,10 +206,12 @@ class PageStore implements IPage {
         Css,
         Body,
         state,
+        theme,
     }: {
         Css: () => string,
         Body: () => string,
-        state: Object
+        state: Object,
+        theme: ProjectTheme
     }): string {
         return (
             Html({
@@ -240,6 +243,7 @@ class PageStore implements IPage {
                     scripts: `
                     <script id="hydration-sate">
                         window.__STATE__ = ${JSON.stringify(state)};
+                        window.__MAISTRO_THEME__ = ${JSON.stringify(theme)};
                     </script>
                     <script src="https://maistro.website/assets/client-js/main.js"></script>
                     `,

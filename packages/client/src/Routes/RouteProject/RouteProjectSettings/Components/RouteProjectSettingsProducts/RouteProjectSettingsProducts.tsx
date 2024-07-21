@@ -181,7 +181,7 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                                 {
                                     product.getImages().map(image => {
                                         return (
-                                            <Flex direction="column" justify="center">
+                                            <Flex direction="column" justify="center" key={image}>
                                                 <Avatar
                                                     key={image}
                                                     size="9"

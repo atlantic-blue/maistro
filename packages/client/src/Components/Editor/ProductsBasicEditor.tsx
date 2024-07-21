@@ -21,6 +21,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
     const onSave = () => {
         props.onSaveData({
             products: state.products,
+            projectId: projectId || "",
         })
     }
 
@@ -37,109 +38,58 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                         </Button>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content>
-                        {
-                            Object.values(
-                                project.getProducts()
-                            ).map(product => {
-                                return (
-                                    <DropdownMenu.Item
-                                        key={product.getId()}
-                                        onClick={() => {
-                                            setState(prev => {
-                                                prev.products?.push({
-                                                    title: product.getName(),
-                                                    price: String(product.getPrice()),
-                                                    imgSrc: product.getImages()[0],
-                                                    description: product.getDescription(),
-                                                    currency: product.getCurrency(),
-                                                    cta: "Order Now!",
-                                                })
-
-                                                return {
-                                                    ...prev,
-                                                }
-                                            })
-                                        }}
-                                    >
-                                        <Flex align="center" gap="1">
-                                            <Avatar
-                                                size="2"
-                                                src={product.getImages()[0]}
-                                                fallback={product.getName()}
-                                            />
-                                            <Text>{product.getName()}</Text>
-                                        </Flex>
-                                    </DropdownMenu.Item>
+                        <Flex align="center" gap="1">
+                            {
+                                Object.values(
+                                    project.getProducts()
                                 )
-                            })
-                        }
+                                    .filter(p => !state.products.find(sp => sp.id === p.getId()))
+                                    .map(product => {
+                                        return (
+                                            <DropdownMenu.Item
+                                                key={product.getId()}
+                                                onClick={() => {
+                                                    setState(prev => {
+                                                        prev.products?.push({
+                                                            id: product.getId(),
+                                                            title: product.getName(),
+                                                            price: String(product.getPrice()),
+                                                            imgSrc: product.getImages()[0],
+                                                            description: product.getDescription(),
+                                                            currency: product.getCurrency(),
+                                                            cta: "Order Now!",
+                                                        })
+
+                                                        return {
+                                                            ...prev,
+                                                        }
+                                                    })
+                                                }}
+                                            >
+                                                <Flex align="center" gap="1">
+                                                    <Avatar
+                                                        size="2"
+                                                        src={product.getImages()[0]}
+                                                        fallback={product.getName()}
+                                                    />
+                                                    <Text>{product.getName()}</Text>
+                                                </Flex>
+                                            </DropdownMenu.Item>
+                                        )
+                                    })
+                            }
+                        </Flex>
                     </DropdownMenu.Content>
                 </DropdownMenu.Root>
 
                 <Box>
                     {
-                        props.products?.map((product, index) => {
+                        state.products?.map((product, index) => {
                             return (
-                                <Card key={index} mb="2">
+                                <Card key={index} mb="2" key={product.id}>
                                     <Text as="div" size="1" mb="1" weight="bold">
                                         Product
                                     </Text>
-
-                                    <EditorData
-                                        type={EditorDataType.TEXT}
-                                        name="Title"
-                                        value={product.title}
-                                        onChange={data => {
-                                            setState(prev => {
-                                                prev.products[index] = {
-                                                    ...prev.products[index],
-                                                    title: data,
-                                                }
-
-                                                return {
-                                                    ...prev,
-                                                }
-                                            })
-                                        }}
-                                    />
-
-
-                                    <EditorData
-                                        type={EditorDataType.IMAGE}
-                                        name="Image"
-                                        value={product.imgSrc}
-                                        onChange={data => {
-                                            setState(prev => {
-                                                prev.products[index] = {
-                                                    ...prev.products[index],
-                                                    imgSrc: data,
-                                                }
-
-                                                return {
-                                                    ...prev,
-                                                }
-                                            })
-                                        }}
-                                        onUploadFile={props.onUploadFile}
-                                    />
-
-                                    <EditorData
-                                        type={EditorDataType.TEXT}
-                                        name="Description"
-                                        value={product.description}
-                                        onChange={data => {
-                                            setState(prev => {
-                                                prev.products[index] = {
-                                                    ...prev.products[index],
-                                                    description: data,
-                                                }
-
-                                                return {
-                                                    ...prev,
-                                                }
-                                            })
-                                        }}
-                                    />
 
                                     <EditorData
                                         type={EditorDataType.TEXT}
@@ -159,7 +109,70 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                         }}
                                     />
 
+                                    <Flex gap="2" align="center" wrap="wrap" justify="center">
+                                        {project?.getProductById(product.id)?.getImages()?.map(image => {
+                                            return (
+                                                <Avatar
+                                                    size={product.imgSrc === image ? "7" : "8"}
+                                                    key={image}
+                                                    src={image}
+                                                    fallback={"Not Available"}
+                                                    onClick={() => {
+                                                        setState(prev => {
+                                                            prev.products[index] = {
+                                                                ...prev.products[index],
+                                                                imgSrc: image,
+                                                            }
+
+                                                            return {
+                                                                ...prev,
+                                                            }
+                                                        })
+                                                    }}
+                                                />
+                                            )
+                                        })}
+                                    </Flex>
                                     <EditorData
+                                        disabled
+                                        type={EditorDataType.TEXT}
+                                        name="Title"
+                                        value={product.title}
+                                        onChange={data => {
+                                            setState(prev => {
+                                                prev.products[index] = {
+                                                    ...prev.products[index],
+                                                    title: data,
+                                                }
+
+                                                return {
+                                                    ...prev,
+                                                }
+                                            })
+                                        }}
+                                    />
+
+                                    <EditorData
+                                        disabled
+                                        type={EditorDataType.TEXT}
+                                        name="Description"
+                                        value={product.description}
+                                        onChange={data => {
+                                            setState(prev => {
+                                                prev.products[index] = {
+                                                    ...prev.products[index],
+                                                    description: data,
+                                                }
+
+                                                return {
+                                                    ...prev,
+                                                }
+                                            })
+                                        }}
+                                    />
+
+                                    <EditorData
+                                        disabled
                                         type={EditorDataType.TEXT}
                                         name="Price"
                                         value={product.price}

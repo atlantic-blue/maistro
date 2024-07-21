@@ -21,7 +21,6 @@ const ordersReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         TableName: tableName,
         Key: {
             id: productId,
-            accountId,
         }
     };
 

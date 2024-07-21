@@ -3,7 +3,6 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
 import { LambdaMiddlewares } from '../../middlewares';
 import createError from '../../middlewares/error-handler';
-import authJwt from '../../middlewares/auth-jwt';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -31,7 +30,7 @@ const productsRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
     const data = await dynamoDb.query(params).promise();
     if (!data || !data.Items || data.Items?.length === 0) {
         return {
-            statusCode: 404,
+            statusCode: 200,
             body: JSON.stringify([])
         };
     }
@@ -44,7 +43,6 @@ const productsRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
 
 
 const handler = new LambdaMiddlewares()
-    .before(authJwt)
     .handler(productsRead)
 
 export { handler }

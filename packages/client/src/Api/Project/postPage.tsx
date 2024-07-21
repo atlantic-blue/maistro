@@ -66,6 +66,7 @@ const postPage = (
 
     const Html = () => page.createHtml({
         state: hydrationState,
+        theme: project.getTheme(),
         Body() {
             return renderToString(
                 <Theme

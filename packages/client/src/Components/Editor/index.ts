@@ -11,6 +11,7 @@ import HeroVideoEditor from "./HeroVideoEditor";
 import SectionProductsEditor from "./ProductsBasicEditor";
 import SectionBlankEditor from "./SectionBlankEditor";
 import ServicesBasicEditor from "./ServicesBasicEditor";
+import SectionShoppingCartBasicEditor from "./ShoppingCartBasicEditor";
 import TestimonialsBasicEditor from "./TestimonialsBasicEditor";
 
 const editors: Record<TemplateComponentType, React.FC<any>> = {
@@ -38,6 +39,8 @@ const editors: Record<TemplateComponentType, React.FC<any>> = {
 
     [TemplateComponentType.CHECKOUT_BASIC]: SectionCheckoutBasicEditor,
     [TemplateComponentType.CHECKOUT_MERCADO_PAGO]: SectionCheckoutMercadoPagoEditor,
+
+    [TemplateComponentType.SHOPPING_CART_BASIC]: SectionShoppingCartBasicEditor,
 }
 
 export default editors

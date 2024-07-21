@@ -57,8 +57,8 @@ const createMultipleWebpackConfigs = [
     // "ai-assistant",
     // "ai-components-create",
     // "ai-templates-create",
-    "ai-templates-read",
-    "ai-templates-read-by-id",
+    // "ai-templates-read",
+    // "ai-templates-read-by-id",
 
     // "ai-images-create",
     // "ai-threads-create",
@@ -69,7 +69,7 @@ const createMultipleWebpackConfigs = [
     // "content-create",
     // "content-read",
     // "content-update-by-id",
-    // // TODO "content-delete",
+    // "content-delete",
 
     // "hosting-redirect",
 
@@ -80,26 +80,45 @@ const createMultipleWebpackConfigs = [
     // "email-lists-read",
     // // TODO "email-lists-update-by-id",
 
+    // "orders-create",
+
     // "pages-create",
     // "pages-read",
     // "pages-read-by-id",
     // "pages-update-by-id",
     // // TODO "pages-delete",
 
+    // STRIPE
     // "payments-accounts-create",
     // "payments-accounts-read",
     // "payments-accounts-read-by-id",
 
+    // "payments-checkouts-create",
+    // MERCADO-PAGO
+    // "payments-checkouts-mercado-pago-create",
+    // "payments-process-mercado-pago-create",
+
+    // "payments-shopping-carts-create",
+    // "payments-shopping-carts-read-by-id"
+
+    "payments-shopping-carts-patch-by-id",
+    // "payments-shopping-carts-update-by-id",
+
     // "payments-accounts-link-create",
     // "payments-subscriptions-read"
+
+    // "products-create",
+    // "products-read",
+    // "products-read-by-id",
+    // "products-update-by-id",
+    // "products-delete-by-id",
 
     // "projects-create",
     // "projects-read",
     // "projects-read-by-id",
     // "projects-update-by-id",
     // "projects-delete",
-    // "projects-upload"
-
+    // "projects-upload",
 ].map(api => {
     console.info(`BUILDING: ${api}\n`)
     return ({

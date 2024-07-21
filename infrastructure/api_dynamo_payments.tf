@@ -59,6 +59,14 @@ resource "aws_dynamodb_table" "payments_shopping_carts" {
     name = "projectId"
     type = "S"
   }
+
+  global_secondary_index {
+    name            = "IdIndex"
+    hash_key        = "id"
+    read_capacity   = 1
+    write_capacity  = 1
+    projection_type = "ALL"
+  }
 }
 
 # Currently used for mercado pago

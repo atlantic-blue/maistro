@@ -1,0 +1,9 @@
+:global(.COMPONENT_WRAPPER) {
+    .Button {
+        width: 100% !important;
+        position: relative !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        z-index: 0 !important;
+    }
+}

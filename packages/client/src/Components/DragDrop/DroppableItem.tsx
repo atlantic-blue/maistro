@@ -37,26 +37,27 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
     const [isEditing, setIsEditing] = React.useState(false)
     const [open, setOpen] = React.useState(false);
 
-    useEffect(() => {
-        const componentWrappers = Array.from(document.getElementsByClassName(COMPONENT_WRAPPER_CLASS))
-        componentWrappers.forEach(componentWrapper => {
-            const anchors = Array.from(componentWrapper.getElementsByTagName('a'));
-            const buttons = Array.from(componentWrapper.getElementsByTagName('button'));
+    // TODO undo
+    // useEffect(() => {
+    //     const componentWrappers = Array.from(document.getElementsByClassName(COMPONENT_WRAPPER_CLASS))
+    //     componentWrappers.forEach(componentWrapper => {
+    //         const anchors = Array.from(componentWrapper.getElementsByTagName('a'));
+    //         const buttons = Array.from(componentWrapper.getElementsByTagName('button'));
 
-            [
-                ...anchors,
-                ...buttons,
-            ].forEach(element => {
-                element.onclick = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.stopImmediatePropagation();
-                    // TODO add a toast message
-                    alert("Publish your page test the link.")
-                }
-            });
-        })
-    }, [])
+    //         [
+    //             ...anchors,
+    //             ...buttons,
+    //         ].forEach(element => {
+    //             element.onclick = (e) => {
+    //                 e.preventDefault();
+    //                 e.stopPropagation();
+    //                 e.stopImmediatePropagation();
+    //                 // TODO add a toast message
+    //                 alert("Publish your page test the link.")
+    //             }
+    //         });
+    //     })
+    // }, [])
 
     if (!projectId) {
         return null

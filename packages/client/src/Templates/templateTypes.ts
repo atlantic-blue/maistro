@@ -12,6 +12,7 @@ export enum TemplateCategory {
     FOOTER = "FOOTER",
     PRODUCT = "PRODUCT",
     CHECKOUT = "CHECKOUT",
+    SHOPPING_CART = "SHOPPING_CART",
 }
 
 export enum TemplateComponentType {
@@ -42,6 +43,8 @@ export enum TemplateComponentType {
 
     CHECKOUT_BASIC = "CHECKOUT_BASIC",
     CHECKOUT_MERCADO_PAGO = "CHECKOUT_MERCADO_PAGO",
+
+    SHOPPING_CART_BASIC = "SHOPPING_CART_BASIC"
 }
 
 export interface TemplateStruct<Props = {}> {

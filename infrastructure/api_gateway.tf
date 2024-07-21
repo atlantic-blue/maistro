@@ -10,9 +10,10 @@ resource "aws_apigatewayv2_api" "api" {
       "HEAD",
       "OPTIONS",
       "GET",
-      "POST",
       "PATCH",
-      "DELETE"
+      "POST",
+      "PUT",
+      "DELETE",
     ]
     allow_headers = [
       "Content-Type",
