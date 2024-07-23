@@ -1,5 +1,10 @@
 import { Subject, Subscription } from "rxjs"
-import { ProductEvent, ProductMessageType, ProductStruct } from "../types"
+import {
+    ProductEvent,
+    ProductMessageType,
+    ProductModifierStruct,
+    ProductStruct
+} from "../types"
 
 interface IProduct {
     setId(id: string): void
@@ -22,6 +27,7 @@ export class Product implements IProduct {
     private currency = ""
     private images: string[] = []
     private options: Record<string, string[]> = {}
+    private modifiers: ProductModifierStruct[] = []
 
     private subscriptions: Subscription[] = []
     public event$ = new Subject<ProductEvent>()
@@ -57,6 +63,7 @@ export class Product implements IProduct {
         this.setImages(product.images)
         this.setDescription(product.description)
         this.setCurrency(product.currency)
+        this.setModifiers(product.modifiers)
     }
 
     public getStruct(): ProductStruct {
@@ -70,6 +77,7 @@ export class Product implements IProduct {
             description: this.getDescription(),
             currency: this.getCurrency(),
             stockQuantity: this.getStockQuantity(),
+            modifiers: this.getModifiers(),
         }
     }
 
@@ -150,5 +158,15 @@ export class Product implements IProduct {
 
     public getImages() {
         return this.images
+    }
+
+    public getModifiers() {
+        return this.modifiers
+    }
+
+    public setModifiers(modifiers: ProductModifierStruct[]) {
+        if (!modifiers) return
+
+        this.modifiers = modifiers
     }
 }

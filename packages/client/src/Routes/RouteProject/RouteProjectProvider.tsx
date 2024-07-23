@@ -227,7 +227,8 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
                         options: productStruct.options,
                         price: productStruct.price,
                         priceDecimal: productStruct.priceDecimal,
-                        stockQuantity: productStruct.stockQuantity
+                        stockQuantity: productStruct.stockQuantity,
+                        modifiers: productStruct.modifiers,
                     }
                 })
             })

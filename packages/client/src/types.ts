@@ -36,6 +36,14 @@ export interface ProjectStruct {
     theme: ProjectTheme,
 }
 
+export interface ProductModifierStruct {
+    id: string
+    imgSrc: string
+    name: string
+    description: string
+    price: number
+}
+
 export interface ProductStruct {
     id: string
     name: string
@@ -46,6 +54,7 @@ export interface ProductStruct {
     currency: string
     images: string[]
     options: Record<string, string[]>
+    modifiers: ProductModifierStruct[]
 }
 
 export interface ProjectEmailListStruct {

@@ -1,5 +1,5 @@
 import env from "../../env"
-import { ProductStruct } from "../../types"
+import { ProductModifierStruct, ProductStruct } from "../../types"
 import { requestController } from "../fetch"
 
 export interface Product {
@@ -11,6 +11,7 @@ export interface Product {
     currency: string
     images: string[]
     options: Record<string, string[]>
+    modifiers: ProductModifierStruct[]
 }
 
 export interface ProductsUpdateByIdInput extends Product {
@@ -37,6 +38,7 @@ const productsUpdateById = async (
         images,
         description,
         currency,
+        modifiers,
     }: ProductsUpdateByIdInput,
     apiUrl = env.api.products.updateById,
     request = requestController.fetch,
@@ -56,6 +58,7 @@ const productsUpdateById = async (
             stockQuantity,
             options,
             images,
+            modifiers,
         })
     }).then(response => response.json())
 }

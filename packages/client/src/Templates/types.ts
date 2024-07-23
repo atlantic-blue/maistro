@@ -1,23 +1,21 @@
-export interface IShoppingCart {
+export interface ShoppingCartItemModifierStruct {
+    id: string,
+    quantity: number,
+}
+
+export interface ShoppingCartItemStruct {
+    quantity: number,
+    productId: string
+    modifiers: ShoppingCartItemModifierStruct[]
+}
+
+export interface ShoppingCartStruct {
     id: string
     createdAt: string,
-    items: Array<{
-        quantity: number,
-        productId: string
-    }>
+    items: ShoppingCartItemStruct[]
 }
 
-export interface Product {
-    id: string
-    price: number
-    name: string
-    description: string
-    images: string[]
-    stockQuantity: number
-    updatedAt: string
-}
-
-export interface Modifier {
+export interface ProductModifierStruct {
     id: string
     imgSrc: string
     name: string
@@ -25,37 +23,24 @@ export interface Modifier {
     price: number
 }
 
-export interface Item {
-    quantity: number,
-    product: Product,
-    modifierItems: Array<{
-        id: string
-        quantity: number
-        modifier: Modifier
-    }>
-}
-
-
-export interface ProductProps {
-    children: React.ReactNode
-    item: Item
-    currencySymbol: "$"
-    onUpdate: (item: Item) => void
-    modifiers: Modifier[]
+export interface ProductStruct {
+    id: string
+    price: number
+    name: string
+    description: string
+    images: string[]
+    stockQuantity: number
+    updatedAt: string
+    modifiers: ProductModifierStruct[]
 }
 
 export interface MaistroClientStorage {
-    shoppingCart: {
-        id: string
-        createdAt: string
-        items: Array<{
-            productId: string
-            quantity: number
-        }>
-    }
-    products: Array<{
-        id: string
-        name: string
-        description: string
-    }>
+    shoppingCart: ShoppingCartStruct
+    products: ProductStruct[]
+}
+
+export interface ShoppingCartItem {
+    quantity: number,
+    product: ProductStruct,
+    modifiers: ShoppingCartItemModifierStruct[]
 }

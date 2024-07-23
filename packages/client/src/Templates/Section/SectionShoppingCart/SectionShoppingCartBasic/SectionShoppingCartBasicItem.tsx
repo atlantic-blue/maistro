@@ -1,14 +1,21 @@
-import { Avatar, Button, Checkbox, Dialog, Flex, Heading, ScrollArea, Text } from "@radix-ui/themes"
+import { Avatar, Badge, Button, Checkbox, Dialog, Flex, Heading, ScrollArea, Text } from "@radix-ui/themes"
 import { MinusCircle, PlusCircle, Trash2, X } from "lucide-react"
 import React, { useState } from "react"
 import { calculateItemTotal } from "./SectionShoppingCartBasic"
-import { Item, Modifier, ProductProps } from "../../../types"
+import { ShoppingCartStruct, ShoppingCartItem } from "../../../types"
 
-const ProductItem: React.FC<ProductProps> = (props) => {
-    const [item, setItem] = useState(props.item)
+interface ShoppingItemModifiersProps {
+    shoppingCartItem: ShoppingCartItem
+    currencySymbol: "$"
+    onUpdate: (item: ShoppingCartItem) => void
+    children: React.ReactNode
+}
+
+export const ShoppingItemModifiers: React.FC<ShoppingItemModifiersProps> = (props) => {
+    const [shoppingCartItem, setShoppingCartItem] = useState(props.shoppingCartItem)
 
     const onItemSubtractQuantity = () => {
-        setItem(prev => {
+        setShoppingCartItem(prev => {
             return {
                 ...prev,
                 quantity: prev.quantity - 1
@@ -17,7 +24,7 @@ const ProductItem: React.FC<ProductProps> = (props) => {
     }
 
     const onItemIncrementQuantity = () => {
-        setItem(prev => {
+        setShoppingCartItem(prev => {
             return {
                 ...prev,
                 quantity: prev.quantity + 1
@@ -26,7 +33,7 @@ const ProductItem: React.FC<ProductProps> = (props) => {
     }
 
     const onItemUpdate = () => {
-        props.onUpdate(item)
+        props.onUpdate(shoppingCartItem)
     }
 
     return (
@@ -49,18 +56,18 @@ const ProductItem: React.FC<ProductProps> = (props) => {
                 <ScrollArea type="always" scrollbars="vertical" style={{ maxHeight: 600 }}>
                     <Flex direction="column" gap="1" justify="center">
                         <Avatar
-                            src={item.product.images[0]}
-                            fallback={item.product.name}
+                            src={shoppingCartItem.product.images[0]}
+                            fallback={shoppingCartItem.product.name}
                             size="9"
                             style={{ margin: "auto" }}
                         />
 
                         <Heading as="h3">
-                            {item.product.name}
+                            {shoppingCartItem.product.name}
                         </Heading>
 
                         <Text as="div" mb="2">
-                            {item.product.description}
+                            {shoppingCartItem.product.description}
                         </Text>
 
                         <Heading as="h6" mb="1">
@@ -69,29 +76,29 @@ const ProductItem: React.FC<ProductProps> = (props) => {
 
 
                         <Flex direction="column" gap="1">
-                            {props.modifiers.map(modifier => {
+                            {shoppingCartItem.product.modifiers.map(modifier => {
                                 return (
                                     <Button
+                                        key={modifier.id}
                                         variant="ghost"
                                         style={{ width: "100%", padding: "10px 0" }}
                                         onClick={() => {
-                                            if (item.modifierItems.find(mi => mi.modifier.id === modifier.id)) {
-                                                setItem(prev => {
+                                            if (shoppingCartItem.modifiers.find(im => im.id === modifier.id)) {
+                                                setShoppingCartItem(prev => {
                                                     return {
                                                         ...prev,
-                                                        modifierItems: prev.modifierItems.filter(i => i.modifier.id !== modifier.id)
+                                                        modifiers: prev.modifiers.filter(i => i.id !== modifier.id)
                                                     }
                                                 })
                                             } else {
-                                                setItem(prev => {
+                                                setShoppingCartItem(prev => {
                                                     return {
                                                         ...prev,
-                                                        modifierItems: [
-                                                            ...prev.modifierItems,
+                                                        modifiers: [
+                                                            ...prev.modifiers,
                                                             {
-                                                                id: new Date().toISOString(),
+                                                                id: modifier.id,
                                                                 quantity: 1,
-                                                                modifier,
                                                             }
                                                         ]
                                                     }
@@ -101,7 +108,7 @@ const ProductItem: React.FC<ProductProps> = (props) => {
                                     >
                                         <Flex direction="row" justify="between" align="center" gap="2" style={{ width: "90%" }}>
                                             <Checkbox
-                                                checked={Boolean(item.modifierItems.find(mi => mi.modifier.id === modifier.id))}
+                                                checked={Boolean(shoppingCartItem.modifiers.find(im => im.id === modifier.id))}
                                             />
                                             <Avatar
                                                 src={modifier.imgSrc}
@@ -131,13 +138,13 @@ const ProductItem: React.FC<ProductProps> = (props) => {
                     <Button
                         size="2"
                         variant="ghost"
-                        disabled={item.quantity === 1}
+                        disabled={shoppingCartItem.quantity === 1}
                         onClick={onItemSubtractQuantity}
                     >
                         <MinusCircle />
                     </Button>
                     <Text weight="bold" size="3" m="3">
-                        {item.quantity}
+                        {shoppingCartItem.quantity}
                     </Text>
                     <Button
                         size="2"
@@ -159,7 +166,7 @@ const ProductItem: React.FC<ProductProps> = (props) => {
                             </Text>
                             <Text>
                                 {props.currencySymbol} {' '}
-                                {calculateItemTotal(item)}
+                                {calculateItemTotal(shoppingCartItem)}
                             </Text>
                         </Button>
                     </Dialog.Close>
@@ -170,22 +177,22 @@ const ProductItem: React.FC<ProductProps> = (props) => {
 }
 
 interface ShoppingItemProps {
-    item: Item
-    modifiers: Modifier[]
+    item: ShoppingCartItem
+    shoppingCart: ShoppingCartStruct
     children: React.ReactNode
-    onItemRemove: (item: Item) => void
-    onItemUpdate: (item: Item) => Promise<void>
+    onItemRemove: (item: ShoppingCartItem) => void
+    onItemUpdate: (item: ShoppingCartItem) => Promise<void>
 }
 
 export const ShoppingItem: React.FC<ShoppingItemProps> = (props) => {
-    const [item, setItem] = React.useState(props.item)
+    const [shoppingCartItem, setItem] = React.useState(props.item)
     const [isLoading, setIsLoading] = React.useState(false)
-    const onItemUpdate = (item: Item) => {
+    const onItemUpdate = (item: ShoppingCartItem) => {
         setItem(item)
     }
 
     const onItemRemove = () => {
-        props.onItemRemove(item)
+        props.onItemRemove(shoppingCartItem)
     }
 
     const onItemSubtractQuantity = () => {
@@ -209,7 +216,7 @@ export const ShoppingItem: React.FC<ShoppingItemProps> = (props) => {
     const onUpdate = async () => {
         try {
             setIsLoading(true)
-            props.onItemUpdate(item)
+            props.onItemUpdate(shoppingCartItem)
         } catch (error) {
 
         } finally {
@@ -234,7 +241,7 @@ export const ShoppingItem: React.FC<ShoppingItemProps> = (props) => {
                             <Trash2 />
                         </Button>
                         <Text>
-                            {item.product.name}
+                            {shoppingCartItem.product.name}
                         </Text>
                         <Dialog.Close>
                             <Button
@@ -246,20 +253,22 @@ export const ShoppingItem: React.FC<ShoppingItemProps> = (props) => {
                     </Flex>
                 </Dialog.Title>
 
-                <Flex direction="column" gap="1" justify="center">
-                    {item.modifierItems.map(modifierItem => {
+                <Flex direction="row" gap="1" justify="center">
+                    {shoppingCartItem.modifiers.map(modifier => {
+                        const productModifier = shoppingCartItem.product.modifiers.find(m => m.id === modifier.id)
                         return (
-                            <Text align="center">
-                                {modifierItem.modifier.name}
-                            </Text>
+                            <Badge key={modifier.id} color="green">
+                                {productModifier?.name}
+                            </Badge>
                         )
                     })}
+                </Flex>
 
-                    {props.modifiers.length > 0 ? (
-                        <ProductItem
-                            item={item}
+                <Flex direction="row" gap="1" justify="center">
+                    {props.item.product.modifiers.length > 0 ? (
+                        <ShoppingItemModifiers
+                            shoppingCartItem={shoppingCartItem}
                             currencySymbol={"$"}
-                            modifiers={props.modifiers}
                             onUpdate={onItemUpdate}
                         >
                             <Button
@@ -269,9 +278,8 @@ export const ShoppingItem: React.FC<ShoppingItemProps> = (props) => {
                             >
                                 Customise Item
                             </Button>
-                        </ProductItem>
+                        </ShoppingItemModifiers>
                     ) : null}
-
                 </Flex>
 
                 <Flex gap="3" justify="center" align="center">
@@ -279,12 +287,12 @@ export const ShoppingItem: React.FC<ShoppingItemProps> = (props) => {
                         size="2"
                         variant="ghost"
                         onClick={onItemSubtractQuantity}
-                        disabled={item.quantity === 1}
+                        disabled={shoppingCartItem.quantity === 1}
                     >
                         <MinusCircle />
                     </Button>
                     <Text weight="bold" size="3" m="3">
-                        {item.quantity}
+                        {shoppingCartItem.quantity}
                     </Text>
                     <Button
                         size="2"
@@ -307,6 +315,6 @@ export const ShoppingItem: React.FC<ShoppingItemProps> = (props) => {
                     </Dialog.Close>
                 </Flex>
             </Dialog.Content>
-        </Dialog.Root>
+        </Dialog.Root >
     )
 }

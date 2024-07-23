@@ -58,7 +58,7 @@ resource "aws_iam_policy" "api_lambda_products_delete_by_id_dynamo" {
     "Statement" : [
       {
         Action : [
-          "dynamodb:PutItem"
+          "dynamodb:DeleteItem",
         ],
         Effect : "Allow",
         Resource : [
@@ -107,7 +107,7 @@ resource "aws_lambda_function" "api_lambda_products_delete_by_id" {
 
   environment {
     variables = {
-      TABLE_NAME          = "${aws_dynamodb_table.products.name}"
+      TABLE_NAME = "${aws_dynamodb_table.products.name}"
     }
   }
 

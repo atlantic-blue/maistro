@@ -103,6 +103,7 @@ const RouteProjectSettingsContent: React.FC = () => {
                                         <Badge
                                             size="2"
                                             color="green"
+                                            key={page.getId()}
                                             onClick={() => {
                                                 navigate(
                                                     appRoutes.getProjectPageRoute(projectId, page.getId())

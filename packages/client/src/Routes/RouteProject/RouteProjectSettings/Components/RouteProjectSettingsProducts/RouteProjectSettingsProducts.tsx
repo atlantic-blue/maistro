@@ -2,6 +2,7 @@ import React from "react"
 import { filter } from "rxjs"
 import { useParams } from "react-router-dom"
 import { Avatar, Box, Button, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes"
+import * as uuid from "uuid"
 
 import { ProjectsContext } from "../../../../../Projects"
 import { Product } from "../../../../../Store/Product"
@@ -12,7 +13,7 @@ import { ApiContext } from "../../../../../Api/ApiProvider"
 import useObservable from "../../../../../Utils/Hooks/UseObservable"
 import { ProjectMessageType } from "../../../../../types"
 import { Project } from "../../../../../Store/Project"
-import { PlusCircle } from "lucide-react"
+import { Delete, PlusCircle, Trash2 } from "lucide-react"
 import { DashIcon } from "@radix-ui/react-icons"
 
 const ProductViewer: React.FC<{ product: Product, projectId: string, project: Project }> = (props) => {
@@ -20,22 +21,52 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
     const { user } = React.useContext(ProjectsContext)
     const { api } = React.useContext(ApiContext)
     const [show, setShow] = React.useState(false)
+    const [loading, setIsLoading] = React.useState(false)
 
     const onSave = async () => {
-        const response = await api.products.updateById({
-            token: user.getTokenId(),
-            projectId: props.projectId,
-            productId: product.getId(),
-            ...product.getStruct(),
-        })
+        try {
+            setIsLoading(true)
+            const response = await api.products.updateById({
+                token: user.getTokenId(),
+                projectId: props.projectId,
+                productId: product.getId(),
+                ...product.getStruct(),
+            })
 
-        props.project.event$.next({
-            type: ProjectMessageType.SET_PRODUCT,
-            data: {
-                ...response,
-                id: product.getId(),
-            }
-        })
+            props.project.event$.next({
+                type: ProjectMessageType.SET_PRODUCT,
+                data: {
+                    ...response,
+                    id: product.getId(),
+                }
+            })
+        } catch (error) {
+
+        } finally {
+            setIsLoading(false)
+        }
+
+    }
+
+    const onDelete = async () => {
+        try {
+            setIsLoading(true)
+            await api.products.delete({
+                token: user.getTokenId(),
+                projectId: props.projectId,
+                productId: product.getId(),
+            })
+
+            props.project.event$.next({
+                type: ProjectMessageType.DELETE_PRODUCT,
+                data: product.getId()
+            })
+        } catch (error) {
+
+        } finally {
+            setIsLoading(false)
+        }
+
     }
 
     const onUploadFile = async (file: File): Promise<string> => {
@@ -66,15 +97,20 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
     }
 
     return (
-        <Box width="300px">
+        <Box width="400px">
             <Card>
-                <Flex direction="row" gap="2" mb="2">
-                    <Button size="1" onClick={() => setShow(!show)} ml="auto" variant="surface">
+                <Flex direction="row" gap="3" mb="2">
+                    <Button size="1" onClick={() => setShow(!show)} ml="auto" variant="surface" loading={loading}>
                         {show ? (
                             <DashIcon />
                         ) : <PlusCircle style={{ height: "25px", width: "15px" }} />}
                     </Button>
-                    <Button size="1" onClick={onSave}>
+                    <Button size="1" onClick={onDelete} variant="ghost" loading={loading}>
+                        <Flex gap="1" align="center">
+                            <Trash2 />
+                        </Flex>
+                    </Button>
+                    <Button size="1" onClick={onSave} loading={loading}>
                         Save
                     </Button>
                 </Flex>
@@ -148,36 +184,9 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                             />
                         </Flex>
 
-                        {/* <Flex direction="column" gap="2" mb="2">
-                <Text weight="bold">Options</Text>
-                {
-                    Object.values(product.getOptions()).map(option => {
-                        return (
-                            <Flex key={option}>
-                                <Text>{option}</Text>
-                            </Flex>
-                        )
-                    })
-                }
-            </Flex> */}
-
                         <Flex direction="column" gap="2" mb="2">
-                            <EditorImage
-                                type={EditorDataType.IMAGE}
-                                name="Image"
-                                onUploadFile={onUploadFile}
-                                onChange={value => {
-                                    setProduct(new Product({
-                                        ...product.getStruct(),
-                                        images: [
-                                            ...product.getImages(),
-                                            value
-                                        ]
-                                    }))
-                                }}
-                            />
-
-                            <Flex direction="row" gap="2" mb="2" style={{overflow: "scroll"}}>
+                            <Text weight="bold">Images</Text>
+                            <Flex direction="row" gap="2" mb="2" style={{ overflow: "scroll" }}>
                                 {
                                     product.getImages().map(image => {
                                         return (
@@ -207,7 +216,164 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                                     })
                                 }
                             </Flex>
+                            <EditorImage
+                                type={EditorDataType.IMAGE}
+                                name="Image"
+                                onUploadFile={onUploadFile}
+                                onChange={value => {
+                                    setProduct(new Product({
+                                        ...product.getStruct(),
+                                        images: [
+                                            ...product.getImages(),
+                                            value
+                                        ]
+                                    }))
+                                }}
+                            />
+                        </Flex>
+                        <Flex direction="column">
+                            <Flex gap="2" mb="2" justify="between">
+                                <Text weight="bold">Modifiers</Text>
 
+                                <Button
+                                    size="1"
+                                    onClick={() => {
+                                        setProduct(new Product({
+                                            ...product.getStruct(),
+                                            modifiers: [
+                                                {
+                                                    id: uuid.v1(),
+                                                    name: "Edit me!",
+                                                    imgSrc: "",
+                                                    price: 0,
+                                                    description: "Edit me!"
+                                                },
+                                                ...product.getStruct().modifiers,
+                                            ]
+                                        }))
+                                    }}
+                                >
+                                    Create Modifier
+                                </Button>
+                            </Flex>
+
+                            <Flex direction="column" gap="2">
+                                {
+                                    product.getModifiers().map(m => {
+                                        return (
+                                            <Card key={m.id}>
+                                                <Flex direction="column" gap="2">
+                                                    <Text weight="bold" size="2">Name</Text>
+                                                    <TextField.Root
+                                                        value={m.name}
+                                                        type="text"
+                                                        onChange={event => {
+                                                            setProduct(new Product({
+                                                                ...product.getStruct(),
+                                                                modifiers: product.getStruct().modifiers.map(mod => {
+                                                                    if (m.id === mod.id) {
+                                                                        return {
+                                                                            ...mod,
+                                                                            name: event.target.value
+                                                                        }
+                                                                    } else {
+                                                                        return mod
+                                                                    }
+                                                                })
+                                                            }))
+                                                        }}
+                                                    />
+
+                                                    <Text weight="bold" size="2">Price</Text>
+                                                    <TextField.Root
+                                                        value={m.price}
+                                                        type="number"
+                                                        onChange={event => {
+                                                            setProduct(new Product({
+                                                                ...product.getStruct(),
+                                                                modifiers: product.getStruct().modifiers.map(mod => {
+                                                                    if (m.id === mod.id) {
+                                                                        return {
+                                                                            ...mod,
+                                                                            price: Number(event.target.value)
+                                                                        }
+                                                                    } else {
+                                                                        return mod
+                                                                    }
+                                                                })
+                                                            }))
+                                                        }}
+                                                    />
+
+                                                    <Text weight="bold" size="2">Description</Text>
+                                                    <TextField.Root
+                                                        value={m.description}
+                                                        type="text"
+                                                        onChange={event => {
+                                                            setProduct(new Product({
+                                                                ...product.getStruct(),
+                                                                modifiers: product.getStruct().modifiers.map(mod => {
+                                                                    if (m.id === mod.id) {
+                                                                        return {
+                                                                            ...mod,
+                                                                            description: event.target.value
+                                                                        }
+                                                                    } else {
+                                                                        return mod
+                                                                    }
+                                                                })
+                                                            }))
+                                                        }}
+                                                    />
+
+                                                    <Text weight="bold" size="2">Image</Text>
+                                                    <Avatar
+                                                        src={m.imgSrc}
+                                                        size="5"
+                                                        fallback={m.name}
+                                                        alt="Preview"
+                                                        m="auto"
+                                                    />
+                                                    <EditorImage
+                                                        type={EditorDataType.IMAGE}
+                                                        name="Image"
+                                                        onUploadFile={onUploadFile}
+                                                        onChange={value => {
+                                                            setProduct(new Product({
+                                                                ...product.getStruct(),
+                                                                modifiers: product.getStruct().modifiers.map(mod => {
+                                                                    if (m.id === mod.id) {
+                                                                        return {
+                                                                            ...mod,
+                                                                            imgSrc: value
+                                                                        }
+                                                                    } else {
+                                                                        return mod
+                                                                    }
+                                                                })
+                                                            }))
+                                                        }}
+                                                    />
+
+                                                    <Button
+                                                        variant="outline"
+                                                        size="1"
+                                                        m="2"
+                                                        onClick={() => {
+                                                            setProduct(new Product({
+                                                                ...product.getStruct(),
+                                                                modifiers: product.getStruct().modifiers.filter(mod => mod.id === m.id)
+                                                            }))
+                                                        }}
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </Flex>
+                                            </Card>
+                                        )
+                                    })
+                                }
+                            </Flex>
                         </Flex>
                     </Box> :
                     (
@@ -225,7 +391,10 @@ const RouteProjectSettingsProducts: React.FC = () => {
     const project = projects.getProjectById(projectId || "")
     const { api } = React.useContext(ApiContext)
 
-    useObservable(project.event$.pipe(filter(event => event.type === ProjectMessageType.SET_PRODUCT)))
+    useObservable(project.event$.pipe(filter(event => (
+        event.type === ProjectMessageType.SET_PRODUCT ||
+        event.type === ProjectMessageType.DELETE_PRODUCT
+    ))))
 
     if (!projectId) {
         return
@@ -242,7 +411,8 @@ const RouteProjectSettingsProducts: React.FC = () => {
             name: "Edit ME!",
             options: {},
             price: 0,
-            stockQuantity: 0
+            stockQuantity: 0,
+            modifiers: []
         })
 
         project.event$.next({

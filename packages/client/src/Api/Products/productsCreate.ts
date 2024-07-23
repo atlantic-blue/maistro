@@ -1,3 +1,4 @@
+import { ProductModifierStruct } from "../../Templates/types"
 import env from "../../env"
 import { ProductStruct } from "../../types"
 import { requestController } from "../fetch"
@@ -11,6 +12,7 @@ export interface Product {
     currency: string
     images: string[]
     options: Record<string, string[]>
+    modifiers: ProductModifierStruct[]
 }
 
 export interface ProductsCreateInput extends Product {
@@ -35,6 +37,7 @@ const productsCreate = async (
         images,
         description,
         currency,
+        modifiers,
     }: ProductsCreateInput,
     apiUrl = env.api.products.create,
     request = requestController.fetch,
@@ -54,6 +57,7 @@ const productsCreate = async (
             stockQuantity,
             options,
             images,
+            modifiers,
         })
     }).then(response => response.json())
 }

@@ -102,7 +102,7 @@ const createMultipleWebpackConfigs = [
     // "payments-shopping-carts-read-by-id"
 
     "payments-shopping-carts-patch-by-id",
-    // "payments-shopping-carts-update-by-id",
+    "payments-shopping-carts-update-by-id",
 
     // "payments-accounts-link-create",
     // "payments-subscriptions-read"

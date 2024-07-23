@@ -6,11 +6,12 @@ import { ShoppingCart, } from 'lucide-react';
 import { ShoppingItem } from './SectionShoppingCartBasicItem';
 import * as styles from "./SectionShoppingCartBasic.scss"
 import { MaistroEvent } from '../../SectionProduct/SectionProductBasic/SectionProductBasic';
-import { IShoppingCart, Item, MaistroClientStorage, Modifier, Product } from '../../../types';
+import { ShoppingCartStruct, ShoppingCartItem, MaistroClientStorage, ProductStruct } from '../../../types';
 
-export const calculateItemTotal = (item: Item) => {
-    const modifiersTotal = item.modifierItems.reduce((prev, nextModifier) => {
-        const modifiersTotal = item.quantity * nextModifier.modifier.price
+export const calculateItemTotal = (item: ShoppingCartItem) => {
+    const modifiersTotal = item.modifiers.reduce((prev, nextModifier) => {
+        const modifierPrice = item.product.modifiers.filter(m => item.modifiers.findIndex(im => im.id === m.id)).map(m => m.price)[0] || 0
+        const modifiersTotal = modifierPrice ? item.quantity * modifierPrice : item.quantity;
         const amount = prev + modifiersTotal
         return amount
     }, 0)
@@ -23,9 +24,7 @@ export interface SectionShoppingCartBasicProps {
     "data-hydration-id"?: string
     projectId: string
 
-    items: Item[]
-    // TODO: this needs to be fetched later from the product modifiers
-    modifiers: Modifier[]
+    items: ShoppingCartItem[]
     currencySymbol: string
     deliveryFee: number
     serviceFee: number
@@ -65,13 +64,13 @@ enum ShoppingCartErrors {
 
 const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps> = (props) => {
     const [error, setError] = React.useState("")
-    const [products, setProducts] = React.useState<Product[]>([])
-    const [shoppingCart, setShoppingCart] = React.useState<IShoppingCart>({
+    const [products, setProducts] = React.useState<ProductStruct[]>([])
+    const [shoppingCart, setShoppingCart] = React.useState<ShoppingCartStruct>({
         id: "",
         createdAt: "",
         items: [],
     })
-    const [shoppingCartItems, setShoppingCartItems] = React.useState<Item[]>([])
+    const [shoppingCartItems, setShoppingCartItems] = React.useState<ShoppingCartItem[]>([])
 
     const shoppingCartCreate = async () => {
         await fetch("https://api.maistro.website/payments/shopping-carts", {
@@ -110,7 +109,7 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
             method: "GET",
         })
             .then(response => response.json())
-            .then((response: IShoppingCart[]) => {
+            .then((response: ShoppingCartStruct[]) => {
                 if (!response) {
                     return setError(ShoppingCartErrors.UNABLE_TO_GET)
                 }
@@ -124,17 +123,11 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
             })
     }
 
-    const shoppingCartUpdate = async (
-        shoppingCartId: string,
-        items: Array<{
-            quantity: number,
-            productId: string
-        }>
-    ) => {
-        await fetch(`https://api.maistro.website/payments/shopping-carts/${shoppingCartId}`, {
+    const shoppingCartUpdate = async (input: ShoppingCartStruct) => {
+        await fetch(`https://api.maistro.website/payments/shopping-carts/${input.id}`, {
             method: "PUT",
             body: JSON.stringify({
-                items
+                items: input.items
             })
         })
             .then(response => response.json())
@@ -167,7 +160,7 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
             method: "GET",
         })
             .then(response => response.json())
-            .then((response: Product[]) => {
+            .then((response: ProductStruct[]) => {
                 if (response && Array.isArray(response)) {
                     clientStorage.set({
                         ...clientStorage.get(),
@@ -201,7 +194,7 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
         if (!shoppingCart?.id || products.length === 0) {
             return
         }
-        const shoppingCartItems: Item[] = [];
+        const shoppingCartItems: ShoppingCartItem[] = [];
         shoppingCart?.items?.reduce((prev, next) => {
             const p = products.find(p => p.id === next.productId)
             if (p) {
@@ -215,9 +208,9 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
                         images: p.images,
                         stockQuantity: p.stockQuantity,
                         updatedAt: p.updatedAt,
+                        modifiers: p.modifiers,
                     },
-                    // TODO
-                    modifierItems: []
+                    modifiers: next.modifiers,
                 })
                 return prev
             }
@@ -251,18 +244,12 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
 }
 
 const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
-    shoppingCartUpdate: (
-        shoppingCartId: string,
-        items: Array<{
-            quantity: number;
-            productId: string;
-        }>) => Promise<void>
-    shoppingCart: IShoppingCart
+    shoppingCartUpdate: (shoppingCart: ShoppingCartStruct) => Promise<void>
+    shoppingCart: ShoppingCartStruct
 }> = (props) => {
     const [items, setItems] = React.useState(props.items)
     const [loading, setIsLoading] = React.useState(false)
     const currencySymbol = props.currencySymbol
-
 
     // TODO toggle fees
     const totalItems = items.length
@@ -280,13 +267,19 @@ const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
         setItems(props.items)
     }, [JSON.stringify(props.items)])
 
-    const onItemRemove = async (item: Item) => {
+    const onItemRemove = async (item: ShoppingCartItem) => {
         try {
             setIsLoading(true)
-            await props.shoppingCartUpdate(props.shoppingCart.id, [{
-                productId: item.product.id,
-                quantity: 0,
-            }])
+            await props.shoppingCartUpdate({
+                id: props.shoppingCart.id,
+                items: [{
+                    productId: item.product.id,
+                    quantity: 0,
+                    modifiers: item.modifiers
+                }],
+                createdAt: props.shoppingCart.createdAt,
+            })
+
             setItems(prev => {
                 return prev.filter(i => i !== item)
             })
@@ -297,15 +290,18 @@ const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
         }
     }
 
-    const onItemUpdate = async (item: Item) => {
+    const onItemUpdate = async (item: ShoppingCartItem) => {
         try {
             setIsLoading(true)
-            await props.shoppingCartUpdate(
-                props.shoppingCart.id, [{
+            await props.shoppingCartUpdate({
+                id: props.shoppingCart.id,
+                items: [{
                     productId: item.product.id,
                     quantity: item.quantity,
-                }]
-            )
+                    modifiers: item.modifiers
+                }],
+                createdAt: props.shoppingCart.createdAt,
+            })
             setItems(prev => {
                 return prev.map(i => i.product.id === item.product.id ? item : i)
             })
@@ -361,7 +357,7 @@ const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
                                     <ShoppingItem
                                         key={item.product.id}
                                         item={item}
-                                        modifiers={props.modifiers}
+                                        shoppingCart={props.shoppingCart}
                                         onItemRemove={onItemRemove}
                                         onItemUpdate={onItemUpdate}
                                     >
@@ -382,7 +378,11 @@ const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
                                                         {item.product.name}
                                                     </Heading>
                                                     <Text as="span" size="2">
-                                                        {item.modifierItems.map(mi => mi.modifier.name).join(", ")}
+                                                        {item.product.modifiers.filter(m => {
+                                                            return item.modifiers.findIndex(im => im.id === m.id) >= 0
+                                                        })
+                                                            .map(m => m.name).join(", ")
+                                                        }
                                                     </Text>
                                                 </Flex>
                                                 <Text>
@@ -461,22 +461,6 @@ export const SectionShoppingCartsBasicItem: TemplateStruct<SectionShoppingCartBa
         currencySymbol: "$",
         deliveryFee: 5,
         serviceFee: 0.99,
-        modifiers: [
-            {
-                id: "12345",
-                imgSrc: "https://images.unsplash.com/photo-1505253892657-6fcc8796949c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8c3dlZXQlMkNzaW58ZW58MHx8fHwxNzE5OTYwMzg3fDA&ixlib=rb-4.0.3&q=85",
-                name: "sauce",
-                description: "best sauce in town",
-                price: 0.20
-            },
-            {
-                id: "123456",
-                imgSrc: "https://images.unsplash.com/photo-1485745655111-3272a37e76a5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNHx8c3dlZXQlMkNzaW58ZW58MHx8fHwxNzE5OTYwMzg3fDA&ixlib=rb-4.0.3&q=85",
-                name: "cheese",
-                description: "best cheese in town",
-                price: 1
-            }
-        ],
         items: [
             {
                 quantity: 2,
@@ -489,21 +473,21 @@ export const SectionShoppingCartsBasicItem: TemplateStruct<SectionShoppingCartBa
                     description: "best tarts in town",
                     price: 20,
                     updatedAt: "",
-                    stockQuantity: 1
-                },
-                modifierItems: [
-                    {
-                        id: new Date().toISOString(),
-                        quantity: 1,
-                        modifier: {
+                    stockQuantity: 1,
+                    modifiers: [
+                        {
                             id: "12345",
                             imgSrc: "https://images.unsplash.com/photo-1505253892657-6fcc8796949c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8c3dlZXQlMkNzaW58ZW58MHx8fHwxNzE5OTYwMzg3fDA&ixlib=rb-4.0.3&q=85",
                             name: "sauce",
                             description: "best sauce in town",
                             price: 0.20
                         }
-                    }
-                ]
+                    ]
+                },
+                modifiers: [{
+                    id: "12345",
+                    quantity: 2,
+                }]
             }
         ]
     },

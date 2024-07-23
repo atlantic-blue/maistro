@@ -11,7 +11,10 @@ import createUpdateParams from "../../utils/createUpdateParams";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const paymentsShoppingCartsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
+/**
+ * Idempotent update
+ */
+const paymentsShoppingCartsUpdate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableName = process.env.TABLE_NAME
     if (!tableName) {
         throw createError(500, "process TABLE_NAME not specified")
@@ -56,7 +59,11 @@ const paymentsShoppingCartsCreate: APIGatewayProxyHandler = async (event: APIGat
     // Create Map
     const itemsMap = new Map<string, {
         quantity: number,
-        productId: string
+        productId: string,
+        modifiers: Array<{
+            id: string;
+            quantity: number;
+        }>
     }>();
     (shoppingCart.items || []).forEach(i => itemsMap.set(i.productId, i))
 
@@ -109,13 +116,21 @@ interface ShoppingCart {
     items: Array<{
         quantity: number,
         productId: string
+        modifiers: Array<{
+            id: string,
+            quantity: number,
+        }>
     }>
 }
 
 interface PaymentsShoppingCartsInput {
     items: Array<{
         quantity: number,
-        productId: string
+        productId: string,
+        modifiers: Array<{
+            id: string,
+            quantity: number,
+        }>
     }>
 }
 
@@ -123,7 +138,13 @@ const validationSchema = Joi.object<PaymentsShoppingCartsInput>({
     items: Joi.array().items(
         Joi.object({
             productId: Joi.string().required(),
-            quantity: Joi.number().required()
+            quantity: Joi.number().required(),
+            modifiers: Joi.array().items(
+                Joi.object({
+                    id: Joi.string().required(),
+                    quantity: Joi.number().required()
+                })
+            ).required()
         })
     ).required()
 })
@@ -131,6 +152,6 @@ const validationSchema = Joi.object<PaymentsShoppingCartsInput>({
 const handler = new LambdaMiddlewares()
     .before(jsonBodyParser)
     .before(validatorJoi(validationSchema))
-    .handler(paymentsShoppingCartsCreate)
+    .handler(paymentsShoppingCartsUpdate)
 
 export { handler }

@@ -1,7 +1,8 @@
+import { ShoppingCartItemStruct } from "../../types"
+
 interface ShoppingCartPatchInput {
     shoppingCartId: string,
-    productId: string,
-    quantity: number
+    item: ShoppingCartItemStruct
 }
 
 interface ShoppingCartPatchOutput {
@@ -21,8 +22,9 @@ export const shoppingCartPatch = async (input: ShoppingCartPatchInput): Promise<
         body: JSON.stringify({
             items: [
                 {
-                    productId: input.productId,
-                    quantity: input.quantity,
+                    productId: input.item.productId,
+                    quantity: input.item.quantity,
+                    modifiers: input.item.modifiers
                 }
             ]
         })

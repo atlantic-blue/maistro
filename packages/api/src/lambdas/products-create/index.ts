@@ -40,6 +40,7 @@ const projectsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         currency,
         images,
         options,
+        modifiers,
     } = event.body as unknown as ProductsCreateInput;
 
     const params = {
@@ -57,6 +58,7 @@ const projectsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             images,
             options,
             createdAt,
+            modifiers,
         }
     };
 
@@ -75,6 +77,7 @@ const projectsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             images,
             options,
             createdAt,
+            modifiers,
         })
     };
 };
@@ -89,6 +92,13 @@ interface ProductsCreateInput {
     currency: string
     images: string[]
     options: Record<string, string[]>
+    modifiers: Array<{
+        id: string
+        name: string
+        description: string
+        price: number
+        imgSrc: string
+    }>
 }
 
 const validationSchema = Joi.object<ProductsCreateInput>({
@@ -99,7 +109,16 @@ const validationSchema = Joi.object<ProductsCreateInput>({
     stockQuantity: Joi.number().required(),
     currency: Joi.string().required(),
     images: Joi.array().items(Joi.string()).required(),
-    options: Joi.object().optional()
+    options: Joi.object().optional(),
+    modifiers: Joi.array().items(
+        Joi.object({
+            id: Joi.string().required(),
+            name: Joi.string().required(),
+            description: Joi.string().required(),
+            price: Joi.number().required(),
+            imgSrc: Joi.string().required(),
+        })
+    ).required()
 })
 
 const handler = new LambdaMiddlewares()

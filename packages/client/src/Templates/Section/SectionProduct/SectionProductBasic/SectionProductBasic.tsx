@@ -5,18 +5,16 @@ import { clientStorage } from "../../SectionShoppingCart/SectionShoppingCartBasi
 import { MinusCircle, PlusCircle, Trash2, X } from "lucide-react"
 import { shoppingCartCreate } from "../../../Api/ShoppingCart/shoppingCartCreate"
 import { shoppingCartGet } from "../../../Api/ShoppingCart/ShoppingCartGet"
-import { IShoppingCart, Modifier } from "../../../types"
+import { ShoppingCartStruct, ProductStruct, ShoppingCartItemModifierStruct, ProductModifierStruct } from "../../../types"
 import { shoppingCartPatch } from "../../../Api/ShoppingCart/ShoppingCartPatch"
+import { ShoppingItemModifiers } from "../../SectionShoppingCart/SectionShoppingCartBasic/SectionShoppingCartBasicItem"
 
 interface Product {
-    id: string
-
-    title: string
-    description: string
     imgSrc: string
-    price: string
     currency: string
     cta: string
+
+    metadata: ProductStruct
 }
 
 export enum MaistroEvent {
@@ -24,14 +22,15 @@ export enum MaistroEvent {
     CART_UPDATED = "__MAISTRO_SHOPPING_CART_UPDATED__"
 }
 
-interface ProductQuantityProps {
+interface SectionProductBasicQuantityProps {
     projectId: string
     productId: string
     quantity: number
     cta: string
+    shoppingCart?: ShoppingCartStruct,
 }
 
-const ProductQuantity: React.FC<ProductQuantityProps> = (props) => {
+const SectionProductBasicQuantity: React.FC<SectionProductBasicQuantityProps> = (props) => {
     const [loading, setLoading] = React.useState(false)
     const [quantity, setQuantity] = React.useState(props.quantity)
 
@@ -59,9 +58,14 @@ const ProductQuantity: React.FC<ProductQuantityProps> = (props) => {
                 }
             }
             await shoppingCartPatch({
-                productId: props.productId,
                 shoppingCartId: shoppingCart.id,
-                quantity: 1
+                item: {
+                    productId: props.productId,
+                    quantity: 1,
+                    modifiers: props.shoppingCart?.
+                        items?.filter(i => i.productId === props.productId)
+                        .map(i => i.modifiers).flat() || [],
+                }
             })
             setQuantity(quantity + 1)
             const event = new Event(MaistroEvent.PRODUCT_UPDATED)
@@ -83,9 +87,14 @@ const ProductQuantity: React.FC<ProductQuantityProps> = (props) => {
             }
 
             await shoppingCartPatch({
-                productId: props.productId,
                 shoppingCartId: shoppingCart.id,
-                quantity: -1
+                item: {
+                    productId: props.productId,
+                    quantity: -1,
+                    modifiers: props.shoppingCart?.
+                        items?.filter(i => i.productId === props.productId)
+                        .map(i => i.modifiers).flat() || [],
+                }
             })
             const event = new Event(MaistroEvent.PRODUCT_UPDATED)
             window.dispatchEvent(event);
@@ -142,14 +151,113 @@ const ProductQuantity: React.FC<ProductQuantityProps> = (props) => {
     )
 }
 
-const Product: React.FC<Product & {
-    projectId: string,
-    shoppingCart?: IShoppingCart,
-    modifiers: Modifier[]
+const SectionProductModifiersBasic: React.FC<{
+    product: Product,
+    shoppingCart?: ShoppingCartStruct,
 }> = (props) => {
+    const [isLoading, setIsLoading] = React.useState(false)
+    const itemModifiers = props.shoppingCart?.items
+        .filter(i => i.productId === props?.product?.metadata?.id)
+        .map(i => i.modifiers).flat() || []
+    const [nextModifiers, setNextModifiers] = React.useState<ShoppingCartItemModifierStruct[]>(itemModifiers)
+
+    const checked = (modifier: ProductModifierStruct) => nextModifiers.find(im => im.id === modifier.id)
+
+    const onSelectModifier = async (modifier: ProductModifierStruct) => {
+        if (checked(modifier)) {
+            setNextModifiers(prev => {
+                return prev.filter(i => i.id !== modifier.id)
+            })
+        } else {
+            setNextModifiers(prev => {
+                return [
+                    ...prev,
+                    {
+                        id: modifier.id,
+                        quantity: 1,
+                    }
+                ]
+            })
+        }
+    }
+
+    const onUpdate = async () => {
+        try {
+            setIsLoading(true)
+            await shoppingCartPatch({
+                shoppingCartId: props.shoppingCart?.id || "",
+                item: {
+                    quantity: 0,
+                    productId: props?.product?.metadata?.id,
+                    modifiers: nextModifiers,
+                }
+            })
+            const event = new Event(MaistroEvent.PRODUCT_UPDATED)
+            window.dispatchEvent(event);
+        } catch (error) {
+
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    return (
+        <Flex direction="column" gap="1">
+            {props?.product?.metadata?.modifiers?.map(modifier => {
+                return (
+                    <Button
+                        key={modifier.id}
+                        variant="ghost"
+                        style={{ width: "100%", padding: "10px 0" }}
+                        onClick={() => onSelectModifier(modifier)}
+                    >
+                        <Flex direction="row" justify="between" align="center" gap="2" style={{ width: "90%" }}>
+                            <Checkbox
+                                checked={Boolean(checked(modifier))}
+                            />
+                            <Avatar
+                                src={modifier?.imgSrc}
+                                fallback={modifier?.name?.charAt(0)}
+                                size="3"
+                            />
+                            <Flex direction="column" style={{ marginRight: "auto", textAlign: "left" }}>
+                                <Text>{modifier?.name}</Text>
+                                <Text>{modifier?.description}</Text>
+                            </Flex>
+
+                            <Flex justify="center" align="center" gap="1">
+                                <Text>+</Text>
+                                <Text>{props?.product?.currency}</Text>
+                                <Text>{modifier?.price}</Text>
+                            </Flex>
+
+                        </Flex>
+                    </Button>
+                )
+            })}
+
+            <Flex direction="column" gap="1" justify="center">
+                <Button
+                    size="2"
+                    onClick={onUpdate}
+                    loading={isLoading}
+                >
+                    Update
+                </Button>
+            </Flex>
+        </Flex>
+    )
+}
+
+const SectionProductBasic: React.FC<{
+    projectId: string,
+    shoppingCart?: ShoppingCartStruct,
+    product: Product
+}> = (props) => {
+    const [currentImage, setCurrentImage] = React.useState(props.product.imgSrc)
     let quantity = 0
     if (props?.shoppingCart?.items) {
-        quantity = props?.shoppingCart?.items.filter(i => i.productId === props.id)[0]?.quantity || 0
+        quantity = props?.shoppingCart?.items.filter(i => i.productId === props.product?.metadata?.id)[0]?.quantity || 0
     }
 
     return (
@@ -159,8 +267,8 @@ const Product: React.FC<Product & {
                     <Box width="300px">
                         <Flex mb="2" position="relative">
                             <img
-                                src={props.imgSrc}
-                                alt={props.title}
+                                src={props.product.imgSrc}
+                                alt={props.product?.metadata?.name}
                                 style={{
                                     display: 'block',
                                     objectFit: 'cover',
@@ -173,26 +281,26 @@ const Product: React.FC<Product & {
                         <Flex mb="2" justify="between">
                             <Box>
                                 <Heading size="4">
-                                    {props.title}
+                                    {props.product?.metadata?.name}
                                 </Heading>
                             </Box>
                             <Text size="6" weight="bold">
-                                {props.currency}{props.price}
+                                {props?.product?.currency}{props.product?.metadata?.price}
                             </Text>
                         </Flex>
 
                         <Flex mb="1">
                             <Text as="p" size="2" mb="10px">
-                                {props.description}
+                                {props?.product?.metadata?.description}
                             </Text>
                         </Flex>
 
                     </Box>
                 </Dialog.Trigger>
-                <ProductQuantity
-                    cta={props.cta}
-                    productId={props.id}
-                    projectId={props.projectId}
+                <SectionProductBasicQuantity
+                    cta={props?.product?.cta}
+                    productId={props?.product?.metadata?.id}
+                    projectId={props?.projectId}
                     quantity={quantity}
                 />
             </Card>
@@ -211,81 +319,58 @@ const Product: React.FC<Product & {
 
                 <ScrollArea type="always" scrollbars="vertical" style={{ maxHeight: 600 }}>
                     <Flex direction="column" gap="1" justify="center">
-                        <Avatar
-                            src={props.imgSrc}
-                            fallback={props.title}
-                            size="9"
-                            style={{ margin: "auto" }}
+                        <img
+                            src={currentImage}
+                            alt={props.product?.metadata?.name}
+                            style={{
+                                display: 'block',
+                                objectFit: 'cover',
+                                width: '80%',
+                                height: 200,
+                                margin: "auto",
+                                backgroundColor: 'var(--gray-5)',
+                            }}
                         />
 
+                        <Flex m="2" gap="2" justify="center">
+                            {props.product.metadata.images.map(i => {
+                                return (
+                                    <Avatar
+                                        size="3"
+                                        src={i}
+                                        key={i}
+                                        fallback={props.product.metadata.name}
+                                        alt={props.product.metadata.name}
+                                        onClick={() => {
+                                            setCurrentImage(i)
+                                        }}
+                                    />
+                                )
+                            })}
+                        </Flex>
+
                         <Heading as="h3">
-                            {props.title}
+                            {props?.product?.metadata?.name}
                         </Heading>
 
                         <Text as="div" mb="2">
-                            {props.description}
+                            {props?.product?.metadata?.description}
                         </Text>
 
-                        <Heading as="h6" mb="1" size="3">
-                            Add Ons
-                        </Heading>
+                        {
+                            props?.product?.metadata?.modifiers?.length ? (
+                                <Heading as="h6" mb="1" size="3">
+                                    Add Ons
+                                </Heading>
+                            ) : null
+                        }
 
-                        {/* <Flex direction="column" gap="1">
-                            {props.modifiers.map(modifier => {
-                                return (
-                                    <Button
-                                        variant="ghost"
-                                        style={{ width: "100%", padding: "10px 0" }}
-                                        onClick={() => {
-                                            if (item.modifierItems.find(mi => mi.modifier.id === modifier.id)) {
-                                                setItem(prev => {
-                                                    return {
-                                                        ...prev,
-                                                        modifierItems: prev.modifierItems.filter(i => i.modifier.id !== modifier.id)
-                                                    }
-                                                })
-                                            } else {
-                                                setItem(prev => {
-                                                    return {
-                                                        ...prev,
-                                                        modifierItems: [
-                                                            ...prev.modifierItems,
-                                                            {
-                                                                id: new Date().toISOString(),
-                                                                quantity: 1,
-                                                                modifier,
-                                                            }
-                                                        ]
-                                                    }
-                                                })
-                                            }
-                                        }}
-                                    >
-                                        <Flex direction="row" justify="between" align="center" gap="2" style={{ width: "90%" }}>
-                                            <Checkbox
-                                                checked={Boolean(item.modifierItems.find(mi => mi.modifier.id === modifier.id))}
-                                            />
-                                            <Avatar
-                                                src={modifier.imgSrc}
-                                                fallback={modifier.name.charAt(0)}
-                                                size="3"
-                                            />
-                                            <Flex direction="column" style={{ marginRight: "auto", textAlign: "left" }}>
-                                                <Text>{modifier.name}</Text>
-                                                <Text>{modifier.description}</Text>
-                                            </Flex>
+                        <SectionProductModifiersBasic
+                            key={props.product?.metadata?.id}
+                            product={props.product}
+                            shoppingCart={props.shoppingCart}
+                        />
 
-                                            <Flex justify="center" align="center" gap="1">
-                                                <Text>+</Text>
-                                                <Text>{props.currencySymbol}</Text>
-                                                <Text>{modifier.price}</Text>
-                                            </Flex>
-
-                                        </Flex>
-                                    </Button>
-                                )
-                            })}
-                        </Flex> */}
                     </Flex>
                 </ScrollArea>
 
@@ -301,9 +386,9 @@ export interface SectionProductsBasicProps {
 }
 
 const SectionProductsBasic: React.FC<SectionProductsBasicProps> = (props) => {
-    const [shoppingCart, setShoppingCart] = React.useState<IShoppingCart>()
+    const [shoppingCart, setShoppingCart] = React.useState<ShoppingCartStruct>()
 
-    const shoppingCartUpdate = () => {
+    const shoppingCartSet = () => {
         const { shoppingCart } = clientStorage.get()
         if (!shoppingCart.id) {
             return
@@ -329,13 +414,13 @@ const SectionProductsBasic: React.FC<SectionProductsBasicProps> = (props) => {
     }
 
     useEffect(() => {
-        shoppingCartUpdate()
+        shoppingCartSet()
     }, [])
 
     useEffect(() => {
-        window.addEventListener(MaistroEvent.PRODUCT_UPDATED, shoppingCartUpdate);
+        window.addEventListener(MaistroEvent.PRODUCT_UPDATED, shoppingCartSet);
         return () => {
-            window.removeEventListener(MaistroEvent.PRODUCT_UPDATED, shoppingCartUpdate);
+            window.removeEventListener(MaistroEvent.PRODUCT_UPDATED, shoppingCartSet);
         }
     }, [])
 
@@ -344,12 +429,11 @@ const SectionProductsBasic: React.FC<SectionProductsBasicProps> = (props) => {
             <Flex wrap="wrap" m="2" gap="3" align="stretch" justify="center">
                 {props.products?.map(product => {
                     return (
-                        <Product
-                            key={`${product.title}-${Date.now()}`}
-                            {...product}
+                        <SectionProductBasic
+                            key={`${product.metadata?.id}-${Date.now()}`}
                             projectId={props.projectId}
                             shoppingCart={shoppingCart}
-                            modifiers={[]}
+                            product={product}
                         />
                     )
                 })}
@@ -371,40 +455,78 @@ export const SectionProductsBasicItem: TemplateStruct<SectionProductsBasicProps>
         projectId: "",
         products: [
             {
-                id: "1",
-                title: "Brownies",
-                description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",
-                currency: "$",
-                price: "123",
                 imgSrc: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxM3x8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
-                cta: "Add to cart"
+                cta: "Add to cart",
+                currency: "$",
+                metadata: {
+                    id: "1",
+                    name: "Brownies",
+                    description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",
+                    stockQuantity: 100,
+                    price: 123,
+                    images: [
+                        "https://images.unsplash.com/photo-1558326567-98ae2405596b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
+                    ],
+                    modifiers: [],
+                    updatedAt: new Date().toISOString(),
+                },
             },
             {
-                id: "2",
-                title: "Macaroons",
-                description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",
+                metadata: {
+                    id: "2",
+                    name: "Macaroons",
+                    description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",
+                    images: [
+                        "https://images.unsplash.com/photo-1558326567-98ae2405596b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
+                    ],
+                    modifiers: [{
+                        id: "1",
+                        description: "peach flavour",
+                        imgSrc: "https://images.unsplash.com/photo-1558326567-98ae2405596b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
+                        name: "peach",
+                        price: 20
+                    }],
+                    stockQuantity: 11,
+                    price: 123,
+                    updatedAt: new Date().toISOString(),
+                },
                 currency: "$",
-                price: "123",
                 imgSrc: "https://images.unsplash.com/photo-1558326567-98ae2405596b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
-                cta: "Add to cart"
+                cta: "Add to cart",
             },
             {
-                id: "3",
-                title: "Tart",
-                description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",
                 currency: "$",
-                price: "123",
                 imgSrc: "https://images.unsplash.com/photo-1519915028121-7d3463d20b13?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxM3x8ZGVzc2VydHN8ZW58MHx8fHwxNzIwMzEzMjk5fDA&ixlib=rb-4.0.3&q=85",
-                cta: "Add to cart"
+                cta: "Add to cart",
+                metadata: {
+                    id: "3",
+                    stockQuantity: 11,
+                    price: 123,
+                    updatedAt: new Date().toISOString(),
+                    name: "Tart",
+                    description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",
+                    images: [
+                        "https://images.unsplash.com/photo-1558326567-98ae2405596b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
+                    ],
+                    modifiers: [],
+                }
             },
             {
-                id: "4",
-                title: "Pie",
-                description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",
                 currency: "$",
-                price: "123",
                 imgSrc: "https://images.unsplash.com/photo-1560180474-e8563fd75bab?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNHx8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
-                cta: "Add to cart"
+                cta: "Add to cart",
+                metadata: {
+                    id: "4",
+                    name: "Pie",
+                    images: [
+                        "https://images.unsplash.com/photo-1558326567-98ae2405596b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
+                    ],
+                    description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",
+                    stockQuantity: 11,
+                    price: 123,
+                    updatedAt: new Date().toISOString(),
+                    modifiers: []
+                }
             }
         ],
     },

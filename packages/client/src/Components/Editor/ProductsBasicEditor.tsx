@@ -43,7 +43,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                 Object.values(
                                     project.getProducts()
                                 )
-                                    .filter(p => !state.products.find(sp => sp.id === p.getId()))
+                                    .filter(p => !state.products.find(sp => sp.metadata.id === p.getId()))
                                     .map(product => {
                                         return (
                                             <DropdownMenu.Item
@@ -51,13 +51,19 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                                 onClick={() => {
                                                     setState(prev => {
                                                         prev.products?.push({
-                                                            id: product.getId(),
-                                                            title: product.getName(),
-                                                            price: String(product.getPrice()),
                                                             imgSrc: product.getImages()[0],
-                                                            description: product.getDescription(),
                                                             currency: product.getCurrency(),
                                                             cta: "Order Now!",
+                                                            metadata: {
+                                                                id: product.getId(),
+                                                                name: product.getName(),
+                                                                description: product.getDescription(),
+                                                                images: product.getImages(),
+                                                                updatedAt: new Date().toISOString(),
+                                                                price: product.getPrice(),
+                                                                stockQuantity: product.getStockQuantity(),
+                                                                modifiers: product.getModifiers(),
+                                                            }
                                                         })
 
                                                         return {
@@ -86,7 +92,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                     {
                         state.products?.map((product, index) => {
                             return (
-                                <Card key={index} mb="2" key={product.id}>
+                                <Card mb="2" key={product.metadata.id}>
                                     <Text as="div" size="1" mb="1" weight="bold">
                                         Product
                                     </Text>
@@ -110,7 +116,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                     />
 
                                     <Flex gap="2" align="center" wrap="wrap" justify="center">
-                                        {project?.getProductById(product.id)?.getImages()?.map(image => {
+                                        {project?.getProductById(product.metadata.id)?.getImages()?.map(image => {
                                             return (
                                                 <Avatar
                                                     size={product.imgSrc === image ? "7" : "8"}
@@ -137,57 +143,24 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                         disabled
                                         type={EditorDataType.TEXT}
                                         name="Title"
-                                        value={product.title}
-                                        onChange={data => {
-                                            setState(prev => {
-                                                prev.products[index] = {
-                                                    ...prev.products[index],
-                                                    title: data,
-                                                }
-
-                                                return {
-                                                    ...prev,
-                                                }
-                                            })
-                                        }}
+                                        value={product.metadata.name}
+                                        onChange={data => { }}
                                     />
 
                                     <EditorData
                                         disabled
                                         type={EditorDataType.TEXT}
                                         name="Description"
-                                        value={product.description}
-                                        onChange={data => {
-                                            setState(prev => {
-                                                prev.products[index] = {
-                                                    ...prev.products[index],
-                                                    description: data,
-                                                }
-
-                                                return {
-                                                    ...prev,
-                                                }
-                                            })
-                                        }}
+                                        value={product.metadata.description}
+                                        onChange={data => { }}
                                     />
 
                                     <EditorData
                                         disabled
                                         type={EditorDataType.TEXT}
                                         name="Price"
-                                        value={product.price}
-                                        onChange={data => {
-                                            setState(prev => {
-                                                prev.products[index] = {
-                                                    ...prev.products[index],
-                                                    price: data,
-                                                }
-
-                                                return {
-                                                    ...prev,
-                                                }
-                                            })
-                                        }}
+                                        value={String(product.metadata.price)}
+                                        onChange={data => { }}
                                     />
 
                                     <Flex justify="end" m="2">

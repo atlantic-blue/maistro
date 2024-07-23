@@ -1,11 +1,11 @@
-import { IShoppingCart } from "../../types"
+import { ShoppingCartStruct } from "../../types"
 
 interface ShoppingCartGetInput {
     shoppingCartId: string
 }
 
 interface ShoppingCartGetOutput {
-    data?: IShoppingCart,
+    data?: ShoppingCartStruct,
     errors?: Array<{ description: string }>
 }
 
@@ -14,7 +14,7 @@ export const shoppingCartGet = async (input: ShoppingCartGetInput): Promise<Shop
         method: "GET",
     })
         .then(response => response.json())
-        .then((response: IShoppingCart[]) => {
+        .then((response: ShoppingCartStruct[]) => {
             if (!response) {
                 return {
                     errors: [
