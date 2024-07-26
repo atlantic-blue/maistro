@@ -1,24 +1,62 @@
 import React from 'react';
-import { Box, Flex, Text } from "@radix-ui/themes"
+import { Avatar, Box, Flex, Link, Text } from "@radix-ui/themes"
 
-import Navigation from '../../Components/Navigation/Navigation';
 import { TemplateCategory, TemplateComponentType, TemplateStruct } from '../../templateTypes';
 import { FooterBasicProps } from '../FooterTypes';
 
 import * as styles from './FooterBasic.scss';
-import * as NavigationStyles from "../../Components/Navigation/Navigation.scss"
-
 
 const FooterBasic: React.FC<FooterBasicProps> = (props) => (
     <footer className={styles.simpleFooter} data-hydration-id={props["data-hydration-id"]}>
         <Box ml='4' mr='4'>
             <Flex align="center" justify="center" direction="column" gap="3">
-                <Navigation
-                    items={props.links}
-                />
-                <Navigation
-                    items={props.mediaLinks}
-                />
+                <Flex justify="center" align="center" wrap="wrap" gap="4" m="2">
+                    {
+                        props?.links?.map(item => {
+                            return (
+                                <Link
+                                    key={item.href}
+                                    onClick={item.onClick}
+                                    href={item.href}
+                                    target={item.isExternal ? "_blank" : "_self"} rel="noopener noreferrer"
+                                    aria-label={item.description}
+                                >
+                                    {item.imgSrc ?
+                                        <Avatar
+                                            size="2"
+                                            src={item.imgSrc}
+                                            fallback={typeof item.name === "string" && item.name.charAt(0)}
+                                        /> :
+                                        item.name}
+                                </Link>
+                            )
+                        })
+                    }
+                </Flex>
+
+                <Flex justify="center" align="center" wrap="wrap" gap="2" m="2">
+                    {
+                        props?.mediaLinks?.map(item => {
+                            return (
+                                <Link
+                                    key={item.href}
+                                    onClick={item.onClick}
+                                    href={item.href}
+                                    target={item.isExternal ? "_blank" : "_self"} rel="noopener noreferrer"
+                                    aria-label={item.description}
+                                >
+                                    {item.imgSrc ?
+                                        <Avatar
+                                            size="2"
+                                            src={item.imgSrc}
+                                            fallback={typeof item.name === "string" && item.name.charAt(0)}
+                                        /> :
+                                        item.name}
+                                </Link>
+                            )
+                        })
+                    }
+                </Flex>
             </Flex>
         </Box>
         <Text as="p">
@@ -34,7 +72,6 @@ export const FooterBasicItem: TemplateStruct<FooterBasicProps> = {
     categories: [TemplateCategory.FOOTER],
     classNames: [
         ...Object.values(styles),
-        ...Object.values(NavigationStyles),
     ],
     props: {
         name: "Maistro",

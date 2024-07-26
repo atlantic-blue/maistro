@@ -38,7 +38,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                         </Button>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content>
-                        <Flex align="center" gap="1">
+                        <Flex align="center" gap="3" direction="column" justify="center">
                             {
                                 Object.values(
                                     project.getProducts()
@@ -63,6 +63,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                                                 price: product.getPrice(),
                                                                 stockQuantity: product.getStockQuantity(),
                                                                 modifiers: product.getModifiers(),
+                                                                currency: product.getCurrency(),
                                                             }
                                                         })
 
@@ -93,13 +94,17 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                         state.products?.map((product, index) => {
                             return (
                                 <Card mb="2" key={product.metadata.id}>
-                                    <Text as="div" size="1" mb="1" weight="bold">
-                                        Product
-                                    </Text>
+                                    <EditorData
+                                        disabled
+                                        type={EditorDataType.TEXT}
+                                        name="Title"
+                                        value={product.metadata.name}
+                                        onChange={data => { }}
+                                    />
 
                                     <EditorData
                                         type={EditorDataType.TEXT}
-                                        name="CTA"
+                                        name="Button CTA"
                                         value={product.cta}
                                         onChange={data => {
                                             setState(prev => {
@@ -139,29 +144,6 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                             )
                                         })}
                                     </Flex>
-                                    <EditorData
-                                        disabled
-                                        type={EditorDataType.TEXT}
-                                        name="Title"
-                                        value={product.metadata.name}
-                                        onChange={data => { }}
-                                    />
-
-                                    <EditorData
-                                        disabled
-                                        type={EditorDataType.TEXT}
-                                        name="Description"
-                                        value={product.metadata.description}
-                                        onChange={data => { }}
-                                    />
-
-                                    <EditorData
-                                        disabled
-                                        type={EditorDataType.TEXT}
-                                        name="Price"
-                                        value={String(product.metadata.price)}
-                                        onChange={data => { }}
-                                    />
 
                                     <Flex justify="end" m="2">
                                         <Button size="1" variant="ghost"

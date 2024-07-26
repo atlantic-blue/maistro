@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useQuery } from "react-query";
 import classNames from "classnames";
-import { Button, Callout } from "@radix-ui/themes";
+import { Button, Callout, Flex } from "@radix-ui/themes";
 import { postProject } from "../../../../../Api/Project/postProject";
 import { withHttps } from "../../../../../Utils/url";
 
 import { Project } from "../../../../../Store/Project";
 import PageStore from "../../../../../Store/Page";
-import { filter, tap } from "rxjs/operators";
+import { filter } from "rxjs/operators";
 
 import * as styles from "./SubmitProject.scss";
 import { PageMessageType } from "../../../../../types";
@@ -39,7 +39,6 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
             });
         }
     });
-
 
     useEffect(() => {
         const subscription = page?.event$.pipe(
@@ -74,16 +73,26 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
     };
 
     return (
-        <div className={styles.content}>
+        <Flex gap="2" align="center" justify="center">
             <Button
                 size="1"
+                loading={isLoading}
                 className={classNames({
                     [styles.loading]: isLoading,
                     [styles.success]: viewLink,
                     [styles.error]: isError,
-                })} onClick={viewLink ? onSeeProject : onPublish}>
-                {isLoading ? "Publishing..." : viewLink ? "See Project" : "Publish"}
+                })} onClick={onPublish}>
+                Publish
             </Button>
+
+            {viewLink ? (
+                <Button
+                    size="1"
+                    variant="outline"
+                    onClick={onSeeProject}>
+                    See Project
+                </Button>
+            ) : null}
 
             {/* TODO use a toaster */}
             {isError &&
@@ -97,6 +106,6 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
                     </div>
                 )}
 
-        </div>
+        </Flex>
     );
 };

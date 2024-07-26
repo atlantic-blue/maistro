@@ -14,7 +14,7 @@ const Preview: React.FC = () => {
     const { items } = React.useContext(PageContext)
     const [toggle, setToggle] = React.useState<boolean>(false)
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         if (!items) {
             return
         }

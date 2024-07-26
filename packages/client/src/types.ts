@@ -6,6 +6,7 @@ import { Projects } from "./Store/Projects"
 import Page from "./Store/Page"
 import { User } from "./Store/User"
 import { TemplateComponentType } from "./Templates/templateTypes"
+import { Currency } from "./Utils/currency"
 
 export interface UserStruct {
     id: string
@@ -34,6 +35,7 @@ export interface ProjectStruct {
     threads: Record<string, ProjectThreadStruct>
     products: Record<string, ProductStruct>
     theme: ProjectTheme,
+    currency: Currency
 }
 
 export interface ProductModifierStruct {
@@ -49,9 +51,8 @@ export interface ProductStruct {
     name: string
     description: string
     price: number
-    priceDecimal: string
     stockQuantity: number
-    currency: string
+    currency: Currency
     images: string[]
     options: Record<string, string[]>
     modifiers: ProductModifierStruct[]
@@ -286,6 +287,7 @@ export enum ProjectMessageType {
     DELETE_PRODUCT = "DELETE_PRODUCT",
 
     SET_THEME = "SET_THEME",
+    SET_CURRENCY = "SET_CURRENCY",
 }
 
 export type ProjectEvent = {
@@ -333,6 +335,9 @@ export type ProjectEvent = {
 } | {
     type: ProjectMessageType.SET_THEME
     data: ProjectTheme
+} | {
+    type: ProjectMessageType.SET_CURRENCY
+    data: Currency
 }
 
 export enum ProductMessageType {

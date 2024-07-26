@@ -1,17 +1,15 @@
 import React from "react"
+import { CirclePlus } from "lucide-react";
 import { Navigate, useParams } from 'react-router-dom';
 
 import Helmet from "../Components/Helmet/Helmet"
-import IconNew from "../../../Components/Icons/New/New";
 import { PageMessageType, ProjectMessageType } from "../../../types";
 
 import { ProjectsContext } from "../../../Projects";
 
 import useObservable from "../../../Utils/Hooks/UseObservable";
 import { filter } from "rxjs/operators";
-import { Box, Button, Card, Dialog, Flex, IconButton, Section, Spinner, Tabs, Text } from "@radix-ui/themes";
-import SearchItem from "../../../Components/SearchItem/SearchItem";
-import { templates } from "../../../Templates";
+import { Box, Button, Card, Dialog, Flex, IconButton, Spinner, Tabs, Text } from "@radix-ui/themes";
 import { ApiContext } from "../../../Api/ApiProvider";
 
 import * as styles from "./RouteProjectPage.scss"
@@ -22,7 +20,6 @@ import Loading from "../../../Components/Loading/Loading";
 import { TemplateComponentType, TemplateStruct } from "../../../Templates/templateTypes";
 import env from "../../../env";
 import SectionFlow from "./Components/SectionFlow/SectionFlow";
-import { CirclePlus } from "lucide-react";
 import SectionCustom from "./Components/SectionFlow/SectionCustom";
 import ProjectContent from "../../../Store/ProjectContent";
 
@@ -184,13 +181,26 @@ const RouteProjectPage: React.FC = () => {
 
             if (
                 [
-                    TemplateComponentType.CHECKOUT_BASIC,
+                    TemplateComponentType.CHECKOUT_STRIPE,
                 ].includes(template.name)
             ) {
                 data = {
                     ...template.props,
                     projectId,
                     checkoutUrl: env.api.payments.checkouts.create,
+                }
+            }
+
+            if (
+                [
+                    TemplateComponentType.SHOPPING_CART_BASIC,
+                    TemplateComponentType.CHECKOUT_STRIPE,
+                    TemplateComponentType.CHECKOUT_MERCADO_PAGO,
+                ].includes(template.name)
+            ) {
+                data = {
+                    ...template.props,
+                    projectId,
                 }
             }
 

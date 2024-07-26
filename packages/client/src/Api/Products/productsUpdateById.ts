@@ -1,3 +1,4 @@
+import { Currency } from "../../Utils/currency"
 import env from "../../env"
 import { ProductModifierStruct, ProductStruct } from "../../types"
 import { requestController } from "../fetch"
@@ -6,9 +7,8 @@ export interface Product {
     name: string
     description: string
     price: number
-    priceDecimal: string
     stockQuantity: number
-    currency: string
+    currency: Currency
     images: string[]
     options: Record<string, string[]>
     modifiers: ProductModifierStruct[]

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react"
+import React, { useEffect } from "react"
 import { createPortal } from "react-dom"
 import { Subject } from "rxjs"
 
@@ -40,11 +40,8 @@ const Iframe: React.FC<IframeProps> = (props) => {
 
     useEffect(() => {
         copyStylesFromParent(documentNode)
-    }, [documentNode])
-
-    useLayoutEffect(() => {
         setContent(props.children)
-    }, [])
+    }, [documentNode])
 
     return (
         <iframe ref={ref as any}>

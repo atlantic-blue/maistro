@@ -1,7 +1,7 @@
 import React from "react"
 import { filter } from "rxjs"
 import { useParams } from "react-router-dom"
-import { Avatar, Box, Button, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes"
+import { Avatar, Box, Button, Card, Flex, Heading, Select, Text, TextField } from "@radix-ui/themes"
 import * as uuid from "uuid"
 
 import { ProjectsContext } from "../../../../../Projects"
@@ -13,8 +13,9 @@ import { ApiContext } from "../../../../../Api/ApiProvider"
 import useObservable from "../../../../../Utils/Hooks/UseObservable"
 import { ProjectMessageType } from "../../../../../types"
 import { Project } from "../../../../../Store/Project"
-import { Delete, PlusCircle, Trash2 } from "lucide-react"
+import { Copy, PlusCircle, Trash2 } from "lucide-react"
 import { DashIcon } from "@radix-ui/react-icons"
+import { Currency, fromSmallestUnit, toSmallestUnit } from "../../../../../Utils/currency"
 
 const ProductViewer: React.FC<{ product: Product, projectId: string, project: Project }> = (props) => {
     const [product, setProduct] = React.useState(props.product)
@@ -31,6 +32,7 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                 projectId: props.projectId,
                 productId: product.getId(),
                 ...product.getStruct(),
+                currency: props.project.getCurrency(),
             })
 
             props.project.event$.next({
@@ -46,6 +48,29 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
             setIsLoading(false)
         }
 
+    }
+
+    const onCopy = async () => {
+        try {
+            setIsLoading(true)
+            const response = await api.products.create({
+                token: user.getTokenId(),
+                projectId: props.projectId,
+                ...product.getStruct(),
+                name: `${product.getName()} (copy)`,
+                currency: props.project.getCurrency(),
+            })
+
+            props.project.event$.next({
+                type: ProjectMessageType.SET_PRODUCT,
+                data: response
+            })
+
+        } catch (error) {
+
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const onDelete = async () => {
@@ -97,7 +122,7 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
     }
 
     return (
-        <Box width="400px">
+        <Box width="300px">
             <Card>
                 <Flex direction="row" gap="3" mb="2">
                     <Button size="1" onClick={() => setShow(!show)} ml="auto" variant="surface" loading={loading}>
@@ -108,6 +133,12 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                     <Button size="1" onClick={onDelete} variant="ghost" loading={loading}>
                         <Flex gap="1" align="center">
                             <Trash2 />
+                        </Flex>
+                    </Button>
+                    <Button size="1" onClick={onCopy} loading={loading} variant="ghost">
+                        <Flex gap="1" align="center">
+                            <Copy />
+                            <Text as="span">Copy</Text>
                         </Flex>
                     </Button>
                     <Button size="1" onClick={onSave} loading={loading}>
@@ -144,27 +175,20 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                         </Flex>
 
                         <Flex gap="2" mb="2" justify="between">
-                            <Text weight="bold">Currency</Text>
-                            <TextField.Root
-                                value={product.getCurrency()}
-                                onChange={event => {
-                                    setProduct(new Product({
-                                        ...product.getStruct(),
-                                        currency: event.target.value
-                                    }))
-                                }}
-                            />
-                        </Flex>
-
-                        <Flex gap="2" mb="2" justify="between">
                             <Text weight="bold">Price</Text>
                             <TextField.Root
-                                value={product.getPrice()}
+                                value={
+                                    fromSmallestUnit(
+                                        product.getPrice(),
+                                        product.getCurrency()
+                                    )
+                                }
                                 type="number"
+                                min={0}
                                 onChange={event => {
                                     setProduct(new Product({
                                         ...product.getStruct(),
-                                        price: Number(event.target.value)
+                                        price: Number(toSmallestUnit(Number(event.target.value), product.getCurrency()))
                                     }))
                                 }}
                             />
@@ -175,6 +199,7 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                             <TextField.Root
                                 value={product.getStockQuantity()}
                                 type="number"
+                                min={0}
                                 onChange={event => {
                                     setProduct(new Product({
                                         ...product.getStruct(),
@@ -286,7 +311,7 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
 
                                                     <Text weight="bold" size="2">Price</Text>
                                                     <TextField.Root
-                                                        value={m.price}
+                                                        value={fromSmallestUnit(m.price, product.getCurrency())}
                                                         type="number"
                                                         onChange={event => {
                                                             setProduct(new Product({
@@ -295,7 +320,7 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                                                                     if (m.id === mod.id) {
                                                                         return {
                                                                             ...mod,
-                                                                            price: Number(event.target.value)
+                                                                            price: toSmallestUnit(Number(event.target.value), product.getCurrency())
                                                                         }
                                                                     } else {
                                                                         return mod
@@ -390,6 +415,7 @@ const RouteProjectSettingsProducts: React.FC = () => {
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
     const { api } = React.useContext(ApiContext)
+    const [isLoading, setIsLoading] = React.useState(false)
 
     useObservable(project.event$.pipe(filter(event => (
         event.type === ProjectMessageType.SET_PRODUCT ||
@@ -405,7 +431,7 @@ const RouteProjectSettingsProducts: React.FC = () => {
             token: user.getTokenId(),
             projectId,
 
-            currency: "$",
+            currency: project.getCurrency(),
             description: "Edit ME!",
             images: [],
             name: "Edit ME!",
@@ -421,13 +447,64 @@ const RouteProjectSettingsProducts: React.FC = () => {
         })
     }
 
+    // TODO ERROR HANDLING
+    const onSetCurrency = async (currency: Currency) => {
+        setIsLoading(true)
+        api.projects.updateById({
+            token: user.getTokenId(),
+            projectId: project.getId(),
+            name: project.getName(),
+            url: project.getUrl(),
+            theme: project.getTheme(),
+            currency: currency,
+        })
+            .then(() => {
+                project.event$.next({
+                    type: ProjectMessageType.SET_CURRENCY,
+                    data: currency
+                })
+            })
+            .finally(() => {
+                setIsLoading(false)
+
+            })
+    }
+
     return (
         <>
             <Box>
-                <Flex direction="column" gap="2" mb="2" justify="center">
-                    <Button onClick={createProduct}>
-                        Add Product
-                    </Button>
+                <Flex direction="column" gap="2" mb="2" justify="center" align="center">
+                    <Flex gap="2" align="center" justify="center">
+                        <Button onClick={createProduct} style={{ maxWidth: "300px" }} loading={isLoading}>
+                            Add Product
+                        </Button>
+                        <Flex gap="2" mb="2" justify="between" align='center'>
+                            <Text weight="bold">Currency</Text>
+                            <Select.Root defaultValue={project.getCurrency()}
+                                onValueChange={onSetCurrency}
+                            >
+                                <Select.Trigger />
+                                <Select.Content>
+                                    <Select.Group>
+                                        {
+                                            Object
+                                                .values(Currency)
+                                                .map(currency => {
+                                                    return (
+                                                        <Select.Item
+                                                            key={currency}
+                                                            value={currency}
+                                                        >
+                                                            {currency}
+                                                        </Select.Item>
+                                                    )
+                                                })
+                                        }
+                                    </Select.Group>
+                                </Select.Content>
+                            </Select.Root>
+                        </Flex>
+                    </Flex>
 
                     <Flex wrap="wrap" justify='center' gap="2">
                         {Object.values(project.getProducts())?.map(product => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Avatar, Box, Button, Card, Dialog, Flex, Heading, Text } from '@radix-ui/themes';
 
 import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../../templateTypes';
@@ -7,27 +7,28 @@ import { ShoppingItem } from './SectionShoppingCartBasicItem';
 import * as styles from "./SectionShoppingCartBasic.scss"
 import { MaistroEvent } from '../../SectionProduct/SectionProductBasic/SectionProductBasic';
 import { ShoppingCartStruct, ShoppingCartItem, MaistroClientStorage, ProductStruct } from '../../../types';
+import { shoppingCartGet } from '../../../Api/ShoppingCart/ShoppingCartGet';
+import { productsGet } from '../../../Api/Products/productsGet';
+import { Currency, CurrencySymbol, fromSmallestUnit } from '../../../../Utils/currency';
 
-export const calculateItemTotal = (item: ShoppingCartItem) => {
-    const modifiersTotal = item.modifiers.reduce((prev, nextModifier) => {
-        const modifierPrice = item.product.modifiers.filter(m => item.modifiers.findIndex(im => im.id === m.id)).map(m => m.price)[0] || 0
-        const modifiersTotal = modifierPrice ? item.quantity * modifierPrice : item.quantity;
+export const calculateItemTotal = (shoppingCartItem: ShoppingCartItem) => {
+    const modifiersTotal = shoppingCartItem.modifiers.reduce((prev, nextModifier) => {
+        const productModifier = shoppingCartItem.product.modifiers.find(pm => pm.id === nextModifier.id)
+        const modifierPrice = productModifier?.price || 0
+        const modifiersTotal = modifierPrice ? shoppingCartItem.quantity * modifierPrice : modifierPrice;
         const amount = prev + modifiersTotal
         return amount
     }, 0)
 
-    const itemTotal = item.quantity * item.product.price
+    const itemTotal = shoppingCartItem.quantity * shoppingCartItem.product.price
     return itemTotal + modifiersTotal
 }
 
 export interface SectionShoppingCartBasicProps {
     "data-hydration-id"?: string
     projectId: string
-
-    items: ShoppingCartItem[]
-    currencySymbol: string
-    deliveryFee: number
-    serviceFee: number
+    currency: Currency
+    checkoutUrl: string
 }
 
 class CartStorage {
@@ -104,25 +105,6 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
             })
     }
 
-    const shoppingCartGet = async (shoppingCartId: string) => {
-        await fetch(`https://api.maistro.website/payments/shopping-carts/${shoppingCartId}`, {
-            method: "GET",
-        })
-            .then(response => response.json())
-            .then((response: ShoppingCartStruct[]) => {
-                if (!response) {
-                    return setError(ShoppingCartErrors.UNABLE_TO_GET)
-                }
-
-                setShoppingCart({
-                    ...response.filter(r => r.id === shoppingCartId)[0],
-                })
-            })
-            .catch(e => {
-                setError(ShoppingCartErrors.UNABLE_TO_GET)
-            })
-    }
-
     const shoppingCartUpdate = async (input: ShoppingCartStruct) => {
         await fetch(`https://api.maistro.website/payments/shopping-carts/${input.id}`, {
             method: "PUT",
@@ -155,38 +137,33 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
             })
     }
 
-    const productsGet = async (projectId: string) => {
-        await fetch(`https://api.maistro.website/v1/projects/${projectId}/products`, {
-            method: "GET",
-        })
-            .then(response => response.json())
-            .then((response: ProductStruct[]) => {
-                if (response && Array.isArray(response)) {
-                    clientStorage.set({
-                        ...clientStorage.get(),
-                        products: response
-                    })
-                    setProducts(response)
-                    return
-                }
-                setError(ShoppingCartErrors.PRODUCTS_UNABLE_TO_GET)
-            })
-            .catch(e => {
-                setError(ShoppingCartErrors.PRODUCTS_UNABLE_TO_GET)
-            })
-    }
-
     useEffect(() => {
         const { shoppingCart } = clientStorage.get()
         if (shoppingCart && shoppingCart.id) {
-            shoppingCartGet(shoppingCart.id)
+            shoppingCartGet({
+                shoppingCartId: shoppingCart.id
+            }).then(response => {
+                if (response && response?.data) {
+                    setShoppingCart(response.data)
+                }
+            })
         } else {
             shoppingCartCreate()
         }
     }, [])
 
     useEffect(() => {
-        productsGet(props.projectId)
+        productsGet({
+            projectId: props.projectId
+        }).then(response => {
+            if (response?.data) {
+                clientStorage.set({
+                    ...clientStorage.get(),
+                    products: response.data
+                })
+                setProducts(response.data)
+            }
+        })
     }, [])
 
 
@@ -224,7 +201,13 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
         const setListener = () => {
             const { shoppingCart } = clientStorage.get()
             if (shoppingCart && shoppingCart.id) {
-                shoppingCartGet(shoppingCart.id)
+                shoppingCartGet({
+                    shoppingCartId: shoppingCart.id
+                }).then(response => {
+                    if (response && response?.data) {
+                        setShoppingCart(response.data)
+                    }
+                })
             }
         }
         window.addEventListener(MaistroEvent.PRODUCT_UPDATED, setListener);
@@ -236,36 +219,36 @@ const SectionShoppingCartBasicContainer: React.FC<SectionShoppingCartBasicProps>
     return (
         <SectionShoppingCartBasic
             {...props}
-            items={shoppingCartItems}
             shoppingCart={shoppingCart}
+            shoppingCartItems={shoppingCartItems}
             shoppingCartUpdate={shoppingCartUpdate}
         />
     )
 }
 
+export const PARAMS_SHOPPING_CART_ID = "shoppingCartId"
+
 const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
     shoppingCartUpdate: (shoppingCart: ShoppingCartStruct) => Promise<void>
     shoppingCart: ShoppingCartStruct
+    shoppingCartItems: ShoppingCartItem[]
 }> = (props) => {
-    const [items, setItems] = React.useState(props.items)
+    const [items, setItems] = React.useState(props.shoppingCartItems)
     const [loading, setIsLoading] = React.useState(false)
-    const currencySymbol = props.currencySymbol
 
-    // TODO toggle fees
     const totalItems = items.length
     const totalAmount = items.reduce((prev, nextItem) => {
         const amount = prev + calculateItemTotal(nextItem)
         return amount
-    }, 0) + props.deliveryFee + props.serviceFee
+    }, 0)
 
     const onGoToCheckout = () => {
-        // TODO redirect to checkout
-        alert("checkout")
+        window.location.assign(`${props.checkoutUrl}?${PARAMS_SHOPPING_CART_ID}=${props.shoppingCart.id}`)
     }
 
     useEffect(() => {
-        setItems(props.items)
-    }, [JSON.stringify(props.items)])
+        setItems(props.shoppingCartItems)
+    }, [JSON.stringify(props.shoppingCartItems)])
 
     const onItemRemove = async (item: ShoppingCartItem) => {
         try {
@@ -312,6 +295,12 @@ const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
         }
     }
 
+    if (totalItems < 1) {
+        return (
+            <Box data-hydration-id={props["data-hydration-id"]}></Box>
+        )
+    }
+
     return (
         <Box data-hydration-id={props["data-hydration-id"]}>
             <Dialog.Root>
@@ -335,7 +324,7 @@ const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
                                 </Text>
                             </Flex>
                             <Text weight="bold">
-                                {currencySymbol} {totalAmount.toFixed(2)}
+                                {CurrencySymbol[props.currency]} {fromSmallestUnit(totalAmount, props.currency)}
                             </Text>
                         </Flex>
                     </Button>
@@ -357,6 +346,7 @@ const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
                                     <ShoppingItem
                                         key={item.product.id}
                                         item={item}
+                                        currency={props.currency}
                                         shoppingCart={props.shoppingCart}
                                         onItemRemove={onItemRemove}
                                         onItemUpdate={onItemUpdate}
@@ -386,8 +376,8 @@ const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
                                                     </Text>
                                                 </Flex>
                                                 <Text>
-                                                    {currencySymbol} {' '}
-                                                    {calculateItemTotal(item)}
+                                                    {CurrencySymbol[props.currency]}{' '}
+                                                    {fromSmallestUnit(calculateItemTotal(item), props.currency)}
                                                 </Text>
                                             </Flex>
                                         </Button>
@@ -396,38 +386,13 @@ const SectionShoppingCartBasic: React.FC<SectionShoppingCartBasicProps & {
                             })}
                         </Flex>
 
-                        <Flex gap="3" direction='column'>
-                            <Heading as="h6">
-                                Fees
-                            </Heading>
-                            <Card>
-                                <Flex direction='column' justify="between" align="stretch" gap="2">
-                                    <Flex direction="row" justify="between" align="center">
-                                        <Text>Delivery Fee</Text>
-                                        <Text>
-                                            {currencySymbol} {' '}
-                                            {props.deliveryFee}
-                                        </Text>
-                                    </Flex>
-                                    <Flex direction="row" justify="between" align="center">
-                                        <Text>Service Fee</Text>
-                                        <Text>
-                                            {currencySymbol} {' '}
-                                            {props.serviceFee}
-                                        </Text>
-                                    </Flex>
-                                </Flex>
-                            </Card>
-                        </Flex>
-
-
                         <Card mt="2">
                             <Flex direction='column' justify="between" align="stretch" gap="2">
                                 <Flex direction="row" justify="between" align="center">
-                                    <Text>Order Total</Text>
+                                    <Text>SubTotal</Text>
                                     <Text>
-                                        {currencySymbol} {' '}
-                                        {totalAmount.toFixed(2)}
+                                        {CurrencySymbol[props.currency]} {' '}
+                                        {fromSmallestUnit(totalAmount, props.currency)}
                                     </Text>
                                 </Flex>
 
@@ -458,38 +423,8 @@ export const SectionShoppingCartsBasicItem: TemplateStruct<SectionShoppingCartBa
     ],
     props: {
         projectId: "",
-        currencySymbol: "$",
-        deliveryFee: 5,
-        serviceFee: 0.99,
-        items: [
-            {
-                quantity: 2,
-                product: {
-                    id: "1",
-                    images: [
-                        "https://images.unsplash.com/photo-1468218620578-e8d78dcda7b1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNnx8c3dlZXQlMkNzaW58ZW58MHx8fHwxNzE5OTYwMzg3fDA&ixlib=rb-4.0.3&q=85",
-                    ],
-                    name: "tart",
-                    description: "best tarts in town",
-                    price: 20,
-                    updatedAt: "",
-                    stockQuantity: 1,
-                    modifiers: [
-                        {
-                            id: "12345",
-                            imgSrc: "https://images.unsplash.com/photo-1505253892657-6fcc8796949c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8c3dlZXQlMkNzaW58ZW58MHx8fHwxNzE5OTYwMzg3fDA&ixlib=rb-4.0.3&q=85",
-                            name: "sauce",
-                            description: "best sauce in town",
-                            price: 0.20
-                        }
-                    ]
-                },
-                modifiers: [{
-                    id: "12345",
-                    quantity: 2,
-                }]
-            }
-        ]
+        currency: Currency.GBP,
+        checkoutUrl: "/checkout"
     },
 }
 

@@ -52,6 +52,7 @@ const RouteProjectSettingsTheme: React.FC = () => {
             name: project.getName(),
             url: project.getUrl(),
             theme: project.getTheme(),
+            currency: project.getCurrency(),
         })
             .finally(() => {
                 setIsLoading(false)

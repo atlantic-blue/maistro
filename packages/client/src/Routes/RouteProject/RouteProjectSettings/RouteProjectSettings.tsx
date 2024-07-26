@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Card, Flex, Heading, Tabs } from "@radix-ui/themes";
+import { Box, Flex, Heading, Tabs } from "@radix-ui/themes";
 import { useParams } from "react-router-dom"
 
 import { ProjectsContext } from "../../../Projects";
@@ -9,7 +9,6 @@ import SettingsMetadata from "./Components/SettingsMetadata/SettingsMetadata";
 
 import RouteProjectSettingsDelete from "./Components/RouteProjectSettingsDelete/RouteProjectSettingsDelete";
 
-import * as styles from "./RouteProjectSettings.scss"
 import RouteProjectSettingsMailList from "./Components/RouteProjectSettingsMailList/RouteProjectSettingsMailList";
 import RouteProjectSettingsTheme from "./Components/RouteProjectSettingsTheme/RouteProjectSettingsTheme";
 import RouteProjectSettingsProducts from "./Components/RouteProjectSettingsProducts/RouteProjectSettingsProducts";

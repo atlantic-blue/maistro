@@ -5,6 +5,7 @@ import {
     ProductModifierStruct,
     ProductStruct
 } from "../types"
+import { Currency } from "../Utils/currency"
 
 interface IProduct {
     setId(id: string): void
@@ -22,9 +23,8 @@ export class Product implements IProduct {
     private name = ""
     private description = ""
     private price = 0
-    private priceDecimal = ""
     private stockQuantity = 0
-    private currency = ""
+    private currency: Currency = Currency.GBP
     private images: string[] = []
     private options: Record<string, string[]> = {}
     private modifiers: ProductModifierStruct[] = []
@@ -57,7 +57,6 @@ export class Product implements IProduct {
         this.setId(product.id)
         this.setPrice(product.price)
         this.setStockQuantity(product.stockQuantity)
-        this.setPriceDecimal(product.priceDecimal)
         this.setOptions(product.options)
         this.setName(product.name)
         this.setImages(product.images)
@@ -70,7 +69,6 @@ export class Product implements IProduct {
         return {
             id: this.getId(),
             price: this.getPrice(),
-            priceDecimal: this.getPriceDecimal(),
             options: this.getOptions(),
             name: this.getName(),
             images: this.getImages(),
@@ -105,7 +103,7 @@ export class Product implements IProduct {
         return this.description
     }
 
-    public setCurrency(currency: string) {
+    public setCurrency(currency: Currency) {
         this.currency = currency
     }
 
@@ -119,14 +117,6 @@ export class Product implements IProduct {
 
     public getPrice(): number {
         return this.price
-    }
-
-    public setPriceDecimal(priceDecimal: string) {
-        this.priceDecimal = priceDecimal
-    }
-
-    public getPriceDecimal(): string {
-        return this.priceDecimal
     }
 
     public setStockQuantity(stockQuantity: number) {

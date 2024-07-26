@@ -7,7 +7,12 @@ import {
 
 import { TPaymentType } from '@mercadopago/sdk-react/bricks/payment/type';
 import { TemplateCategory, TemplateComponentType, TemplateStruct } from '../../../templateTypes';
-import { Avatar, Box, Button, Card, Flex, Text } from '@radix-ui/themes';
+import { Avatar, Box, Button, Card, Flex, Heading, Separator, Text, TextField } from '@radix-ui/themes';
+import { PARAMS_SHOPPING_CART_ID, calculateItemTotal, clientStorage } from '../../SectionShoppingCart/SectionShoppingCartBasic/SectionShoppingCartBasic';
+import { Currency, CurrencySymbol, fromSmallestUnit } from '../../../../Utils/currency';
+import { ProductStruct, ShoppingCartItem, ShoppingCartStruct } from '../../../types';
+import { shoppingCartGet } from '../../../Api/ShoppingCart/ShoppingCartGet';
+import { productsGet } from '../../../Api/Products/productsGet';
 
 let started = false
 const getMercadoPago = (key: string) => {
@@ -18,19 +23,7 @@ const getMercadoPago = (key: string) => {
     initMercadoPago(key)
 }
 
-export interface SectionCheckoutMercadoPagoProps {
-    "data-hydration-id"?: string
-    projectId: string
-    checkoutUrl: string
-    paymentUrl: string
-
-    publicKey: string
-    accessToken: string
-    statementDescriptor: string
-
-    returnUrl: string
-    enableShipping: boolean
-
+interface MercadoPagoData {
     payer: {
         first_name: string
         last_name: string
@@ -38,6 +31,14 @@ export interface SectionCheckoutMercadoPagoProps {
             area_code: string
             number: string
         },
+    }
+    shippingOptions: {
+        receiver_address: {
+            zip_code: string
+            street_name: string
+            city_name: string
+        },
+        cost: number,
     }
     items: Array<{
         id: string,
@@ -49,20 +50,24 @@ export interface SectionCheckoutMercadoPagoProps {
         currency_id: string,
         category_id: string,
     }>,
-    shippingOptions: {
-        receiver_address: {
-            zip_code: string
-            street_name: string
-            city_name: string
-        },
-        cost: number,
-    }
 }
 
-const calculateCost = (items: SectionCheckoutMercadoPagoProps["items"], shippingCost = 0) => {
-    return items.reduce((prev, item) => {
-        return (item.unit_price * item.quantity) + prev
-    }, 0) + shippingCost
+export interface SectionCheckoutMercadoPagoProps {
+    "data-hydration-id"?: string
+    projectId: string
+    checkoutUrl: string
+
+    returnUrl: string
+    paymentUrl: string
+
+    /**
+     * Mercado Pago 
+     */
+    publicKey: string
+    accessToken: string
+    statementDescriptor: string
+
+    enableShipping: boolean
 }
 
 const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (props) => {
@@ -71,9 +76,112 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
     const [preferenceId, setPreferenceId] = React.useState("")
     const [paymentId, setPaymentId] = React.useState("")
 
+    const params = new URLSearchParams(window.location.search)
+    const shoppingCartId = params.get(PARAMS_SHOPPING_CART_ID)
+    const [products, setProducts] = React.useState<ProductStruct[]>([])
+    const [shoppingCart, setShoppingCart] = React.useState<ShoppingCartStruct>({
+        id: "",
+        createdAt: "",
+        items: [],
+    })
+    const [shoppingCartItems, setShoppingCartItems] = React.useState<ShoppingCartItem[]>([])
+    const [currency, setCurrency] = React.useState<Currency>(Currency.GBP)
+    const [mercadoPagoData, setMercadoPagoData] = React.useState<MercadoPagoData>({
+        items: [],
+        payer: {
+            first_name: "",
+            last_name: "",
+            phone: {
+                area_code: "",
+                number: "",
+            }
+        },
+        shippingOptions: {
+            cost: 0,
+            receiver_address: {
+                city_name: "",
+                street_name: "",
+                zip_code: ""
+            }
+        }
+    })
+
+    const totalAmount = shoppingCartItems.reduce((prev, nextItem) => {
+        const amount = prev + calculateItemTotal(nextItem)
+        return amount
+    }, 0)
+
+    const init = async () => {
+        if (!shoppingCartId) {
+            return
+        }
+
+        const response = await shoppingCartGet({
+            shoppingCartId,
+        })
+
+        if (response && response?.data) {
+            setShoppingCart(response.data)
+        } else {
+            // TODO could not find shopping cart ID
+        }
+    }
+
+    React.useEffect(() => {
+        init()
+    }, [shoppingCartId])
+
+
+    React.useEffect(() => {
+        productsGet({
+            projectId: props.projectId
+        }).then(response => {
+            if (response?.data) {
+                clientStorage.set({
+                    ...clientStorage.get(),
+                    products: response.data
+                })
+                setProducts(response.data)
+            }
+        })
+    }, [])
+
+    React.useEffect(() => {
+        if (!shoppingCart?.id || products.length === 0) {
+            return
+        }
+
+        const shoppingCartItems: ShoppingCartItem[] = []
+        shoppingCart?.items?.reduce((prev, next) => {
+            const p = products.find(p => p.id === next.productId)
+            if (p) {
+                prev.push({
+                    quantity: next.quantity,
+                    product: {
+                        currency: p.currency,
+                        description: p.description,
+                        id: p.id,
+                        images: p.images,
+                        name: p.name,
+                        price: p.price,
+                        stockQuantity: p.stockQuantity,
+                        updatedAt: p.updatedAt,
+                        modifiers: p.modifiers,
+                    },
+                    modifiers: next.modifiers,
+                })
+                return prev
+            }
+
+            return prev
+        }, shoppingCartItems)
+
+        setShoppingCartItems(shoppingCartItems)
+        setCurrency(shoppingCartItems[0].product.currency)
+    }, [shoppingCart?.id, products.length > 0, JSON.stringify(shoppingCart.items)])
 
     const initialization: TPaymentType["initialization"] = {
-        amount: calculateCost(props.items, props.enableShipping ? props.shippingOptions.cost : 0),
+        amount: totalAmount,
         preferenceId,
     };
 
@@ -86,7 +194,7 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
         },
     };
 
-    const onClick = async () => {
+    const onCreateOrder = async () => {
         try {
             setIsLoading(true)
             const response = await fetch(props.checkoutUrl, {
@@ -95,15 +203,15 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
                     token_id: props.accessToken,
                     project_id: props.projectId,
                     return_url: props.returnUrl,
-                    line_items: props.items.map(item => {
+                    line_items: shoppingCartItems.map(item => {
                         return {
-                            id: item.id,
-                            title: item.title,
-                            description: item.description,
-                            picture_url: item.picture_url,
+                            id: item.product.id,
+                            title: item.product.name,
+                            description: item.product.description,
+                            picture_url: item.product.images[0],
                             quantity: item.quantity,
-                            unit_price: item.unit_price,
-                            currency_id: item.currency_id,
+                            unit_price: item.product.price,
+                            currency_id: item.product.currency,
                         }
                     }),
                     enable_shipping: props.enableShipping,
@@ -139,26 +247,26 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
                 form_data: data.formData,
                 statement_descriptor: props.statementDescriptor,
                 checkout_id: preferenceId,
-                line_items: props.items.map(item => {
+                line_items: shoppingCartItems.map(item => {
                     return {
-                        id: item.id,
-                        title: item.title,
-                        description: item.description,
-                        picture_url: item.picture_url,
+                        id: item.product.id,
+                        title: item.product.name,
+                        description: item.product.description,
+                        picture_url: item.product.images[0],
                         quantity: item.quantity,
-                        unit_price: item.unit_price,
-                        category_id: item.category_id
+                        unit_price: item.product.price,
+                        category_id: "maistro" // TODO do we need this?
                     }
                 }),
                 shipping_options: {
-                    receiver_address: props.shippingOptions.receiver_address,
+                    receiver_address: mercadoPagoData.shippingOptions.receiver_address,
                 },
                 payer: {
-                    first_name: props.payer.first_name,
-                    last_name: props.payer.last_name,
+                    first_name: mercadoPagoData.payer.first_name,
+                    last_name: mercadoPagoData.payer.last_name,
                     phone: {
-                        area_code: props.payer.phone.area_code,
-                        number: props.payer.phone.number,
+                        area_code: mercadoPagoData.payer.phone.area_code,
+                        number: mercadoPagoData.payer.phone.number,
                     },
                 }
             }),
@@ -199,14 +307,187 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
 
     if (preferenceId) {
         return (
-            <>
+            <Flex direction="column" gap="2" maxWidth="600px" style={{ margin: "auto" }}>
+                <Card m="2">
+                    <Flex direction="row" gap="2">
+                        <Flex direction="column" gap="2">
+                            <Text weight="bold" size="1">
+                                First Name
+                            </Text>
+                            <TextField.Root
+                                value={mercadoPagoData.payer.first_name}
+                                required
+                                onChange={e => {
+                                    setMercadoPagoData(prev => {
+                                        return {
+                                            ...prev,
+                                            payer: {
+                                                ...prev.payer,
+                                                first_name: e.target.value
+                                            }
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+
+                        <Flex direction="column" gap="2">
+                            <Text weight="bold" size="1">
+                                Last Name
+                            </Text>
+                            <TextField.Root
+                                value={mercadoPagoData.payer.last_name}
+                                required
+                                onChange={e => {
+                                    setMercadoPagoData(prev => {
+                                        return {
+                                            ...prev,
+                                            payer: {
+                                                ...prev.payer,
+                                                last_name: e.target.value
+                                            }
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+                    </Flex>
+                    <Flex direction="row" gap="2">
+                        <Flex direction="column" gap="2">
+                            <Text weight="bold" size="1">
+                                Phone Area Code
+                            </Text>
+                            <TextField.Root
+                                value={mercadoPagoData.payer.phone.area_code}
+                                maxLength={5}
+                                required
+                                onChange={e => {
+                                    setMercadoPagoData(prev => {
+                                        return {
+                                            ...prev,
+                                            payer: {
+                                                ...prev.payer,
+                                                phone: {
+                                                    ...prev.payer.phone,
+                                                    area_code: e.target.value
+                                                }
+                                            }
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+                        <Flex direction="column" gap="2">
+                            <Text weight="bold" size="1">
+                                Phone Number
+                            </Text>
+                            <TextField.Root
+                                type="tel"
+                                required
+                                value={mercadoPagoData.payer.phone.number}
+                                maxLength={5}
+                                onChange={e => {
+                                    setMercadoPagoData(prev => {
+                                        return {
+                                            ...prev,
+                                            payer: {
+                                                ...prev.payer,
+                                                phone: {
+                                                    ...prev.payer.phone,
+                                                    number: e.target.value
+                                                }
+                                            }
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+                    </Flex>
+
+                    <Flex direction="column" gap="2" mt="2">
+                        <Text weight="bold" size="1">
+                            Address
+                        </Text>
+                        <Flex direction="column" gap="2">
+                            <Text weight="bold" size="1">
+                                Street name
+                            </Text>
+                            <TextField.Root
+                                value={mercadoPagoData.shippingOptions.receiver_address.street_name}
+                                required
+                                onChange={e => {
+                                    setMercadoPagoData(prev => {
+                                        return {
+                                            ...prev,
+                                            shippingOptions: {
+                                                ...prev.shippingOptions,
+                                                receiver_address: {
+                                                    ...prev.shippingOptions.receiver_address,
+                                                    street_name: e.target.value
+                                                }
+                                            }
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+
+                        <Flex direction="column" gap="2">
+                            <Text weight="bold" size="1">
+                                City
+                            </Text>
+                            <TextField.Root
+                                value={mercadoPagoData.shippingOptions.receiver_address.city_name}
+                                required
+                                onChange={e => {
+                                    setMercadoPagoData(prev => {
+                                        return {
+                                            ...prev,
+                                            shippingOptions: {
+                                                ...prev.shippingOptions,
+                                                receiver_address: {
+                                                    ...prev.shippingOptions.receiver_address,
+                                                    city_name: e.target.value
+                                                }
+                                            }
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+                        <Flex direction="column" gap="2">
+                            <Text weight="bold" size="1">
+                                Zip Code
+                            </Text>
+                            <TextField.Root
+                                value={mercadoPagoData.shippingOptions.receiver_address.zip_code}
+                                required
+                                onChange={e => {
+                                    setMercadoPagoData(prev => {
+                                        return {
+                                            ...prev,
+                                            shippingOptions: {
+                                                ...prev.shippingOptions,
+                                                receiver_address: {
+                                                    ...prev.shippingOptions.receiver_address,
+                                                    zip_code: e.target.value
+                                                }
+                                            }
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+                    </Flex>
+                </Card>
+
                 <Payment
                     initialization={initialization}
                     customization={customization}
                     onSubmit={onSubmit}
                     onError={onError}
                 />
-            </>
+            </Flex>
         )
     }
 
@@ -218,37 +499,69 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
             align="center"
             mb="2"
         >
-            <Flex m="2" gap="2">
-                {props.items?.map((item, key) => {
-                    return (
-                        <Card key={item.id}>
-                            <Flex justify="between" gap="2">
-                                <Avatar
-                                    size="8"
-                                    src={item.picture_url}
-                                    fallback={item.title}
-                                />
-                                <Flex direction="column">
-                                    <Text as="div" size="2" weight="bold">
-                                        {item.title}
+            <Card m="3" size="3">
+                <Flex direction="column" gap="2">
+                    <Flex direction="column" gap="2">
+                        {shoppingCartItems.map(shoppingCartItem => {
+                            return (
+                                <Flex key={shoppingCartItem?.product?.id} justify="between" align="center" gap="2" style={{ width: "100%" }}>
+                                    <Text >{shoppingCartItem?.quantity}x</Text>
+                                    <Avatar
+                                        src={shoppingCartItem?.product?.images[0]}
+                                        fallback={shoppingCartItem.product.name.charAt(0)}
+                                        size="2"
+                                    />
+                                    <Flex direction="column" style={{ flex: "1", marginRight: "auto", textAlign: "left" }}>
+                                        <Heading as="h4" size="4">
+                                            {shoppingCartItem.product.name}
+                                        </Heading>
+                                        <Text as="span" size="2">
+                                            {shoppingCartItem.product.modifiers.filter(m => {
+                                                return shoppingCartItem.modifiers.findIndex(im => im.id === m.id) >= 0
+                                            })
+                                                .map(m => m.name).join(", ")
+                                            }
+                                        </Text>
+                                    </Flex>
+                                    <Text>
+                                        {CurrencySymbol[shoppingCartItem.product.currency]}{' '}
+                                        {
+                                            fromSmallestUnit(calculateItemTotal(shoppingCartItem),
+                                                shoppingCartItem.product.currency
+                                            )
+                                        }
                                     </Text>
-                                    <Box>
-                                        <Flex>
-                                            {/* <Text>{item.price_data.currency}</Text> */}
-                                            <Text>$</Text>
-                                            <Text>{item.unit_price}</Text>
-                                        </Flex>
-                                        <Text size="1">Quantity: {item.quantity}</Text>
-                                    </Box>
                                 </Flex>
-                            </Flex>
-                        </Card>
-                    )
-                })}
-            </Flex>
-            <Button onClick={onClick} loading={loading} variant='outline'>
-                Order now
-            </Button>
+                            )
+                        })}
+                    </Flex>
+                    <Separator my="3" size="4" />
+
+                    <Flex direction='column' justify="between" align="stretch" gap="2">
+                        <Flex direction="row" justify="between" align="center">
+                            <Text>SubTotal</Text>
+                            <Text>
+                                {CurrencySymbol[currency]} {' '}
+                                {
+                                    fromSmallestUnit(
+                                        totalAmount,
+                                        currency
+                                    )
+                                }
+                            </Text>
+                        </Flex>
+
+                        <Button
+                            onClick={onCreateOrder}
+                            size="2"
+                            loading={loading}
+                        >
+                            Confirm order & Authorize payment
+                        </Button>
+                    </Flex>
+
+                </Flex>
+            </Card>
         </Flex>
     )
 }

@@ -31,7 +31,7 @@ import { SectionHeroSubscribeItem } from './Section/SectionHero/SectionHeroSubsc
 import { SectionTestimonialsBasicItem } from './Section/SectionTestimonials/SectionTestimonialsBasic/SectionTestimonialsBasic'
 import { FooterBasicItem } from './Footer/FooterBasic/FooterBasic'
 import { SectionProductsBasicItem } from './Section/SectionProduct/SectionProductBasic/SectionProductBasic'
-import { SectionCheckoutBasicItem } from './Section/SectionCheckout/SectionCheckoutBasic/SectionCheckoutBasic'
+import { SectionCheckoutStripeItem } from './Section/SectionCheckout/SectionCheckoutStripe/SectionCheckoutStripe'
 import { SectionCheckoutMercadoPagoItem } from './Section/SectionCheckout/SectionCheckoutMercadoPago/SectionCheckoutMercadoPago'
 import { SectionShoppingCartsBasicItem } from './Section/SectionShoppingCart/SectionShoppingCartBasic/SectionShoppingCartBasic'
 
@@ -70,7 +70,7 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>
         // SectionContactDetailedItem,
         // SectionContactInteractiveItem,
 
-        SectionCheckoutBasicItem,
+        SectionCheckoutStripeItem,
         SectionCheckoutMercadoPagoItem,
 
         SectionShoppingCartsBasicItem,

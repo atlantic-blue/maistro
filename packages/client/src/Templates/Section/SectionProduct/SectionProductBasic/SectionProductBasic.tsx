@@ -7,11 +7,11 @@ import { shoppingCartCreate } from "../../../Api/ShoppingCart/shoppingCartCreate
 import { shoppingCartGet } from "../../../Api/ShoppingCart/ShoppingCartGet"
 import { ShoppingCartStruct, ProductStruct, ShoppingCartItemModifierStruct, ProductModifierStruct } from "../../../types"
 import { shoppingCartPatch } from "../../../Api/ShoppingCart/ShoppingCartPatch"
-import { ShoppingItemModifiers } from "../../SectionShoppingCart/SectionShoppingCartBasic/SectionShoppingCartBasicItem"
+import { Currency, CurrencySymbol, fromSmallestUnit } from "../../../../Utils/currency"
 
 interface Product {
     imgSrc: string
-    currency: string
+    currency: Currency
     cta: string
 
     metadata: ProductStruct
@@ -156,12 +156,14 @@ const SectionProductModifiersBasic: React.FC<{
     shoppingCart?: ShoppingCartStruct,
 }> = (props) => {
     const [isLoading, setIsLoading] = React.useState(false)
+    const shoppingCartItem = props.shoppingCart?.items?.find(i => i.productId === props?.product?.metadata?.id)
+
     const itemModifiers = props.shoppingCart?.items
-        .filter(i => i.productId === props?.product?.metadata?.id)
-        .map(i => i.modifiers).flat() || []
+        ?.filter(i => i.productId === props?.product?.metadata?.id)
+        ?.map(i => i.modifiers).flat() || []
     const [nextModifiers, setNextModifiers] = React.useState<ShoppingCartItemModifierStruct[]>(itemModifiers)
 
-    const checked = (modifier: ProductModifierStruct) => nextModifiers.find(im => im.id === modifier.id)
+    const checked = (modifier: ProductModifierStruct) => nextModifiers?.find(im => im.id === modifier.id)
 
     const onSelectModifier = async (modifier: ProductModifierStruct) => {
         if (checked(modifier)) {
@@ -187,7 +189,48 @@ const SectionProductModifiersBasic: React.FC<{
             await shoppingCartPatch({
                 shoppingCartId: props.shoppingCart?.id || "",
                 item: {
-                    quantity: 0,
+                    // add item if it doesn't exist
+                    quantity: (shoppingCartItem?.quantity || 0) > 0 ? 0 : 1,
+                    productId: props?.product?.metadata?.id,
+                    modifiers: nextModifiers,
+                }
+            })
+            const event = new Event(MaistroEvent.PRODUCT_UPDATED)
+            window.dispatchEvent(event);
+        } catch (error) {
+
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const onItemSubtractQuantity = async () => {
+        try {
+            setIsLoading(true)
+            await shoppingCartPatch({
+                shoppingCartId: props.shoppingCart?.id || "",
+                item: {
+                    quantity: -1,
+                    productId: props?.product?.metadata?.id,
+                    modifiers: nextModifiers,
+                }
+            })
+            const event = new Event(MaistroEvent.PRODUCT_UPDATED)
+            window.dispatchEvent(event);
+        } catch (error) {
+
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const onItemIncrementQuantity = async () => {
+        try {
+            setIsLoading(true)
+            await shoppingCartPatch({
+                shoppingCartId: props.shoppingCart?.id || "",
+                item: {
+                    quantity: 1,
                     productId: props?.product?.metadata?.id,
                     modifiers: nextModifiers,
                 }
@@ -227,14 +270,37 @@ const SectionProductModifiersBasic: React.FC<{
 
                             <Flex justify="center" align="center" gap="1">
                                 <Text>+</Text>
-                                <Text>{props?.product?.currency}</Text>
-                                <Text>{modifier?.price}</Text>
+                                <Text>{CurrencySymbol[props?.product?.currency]}</Text>
+                                <Text>{fromSmallestUnit(modifier?.price, props?.product?.currency)}</Text>
                             </Flex>
 
                         </Flex>
                     </Button>
                 )
             })}
+
+
+            <Flex gap="3" justify="center" align="center">
+                <Button
+                    size="2"
+                    variant="ghost"
+                    onClick={onItemSubtractQuantity}
+                    disabled={!shoppingCartItem?.quantity || (shoppingCartItem?.quantity < 1)}
+                >
+                    <MinusCircle />
+                </Button>
+                <Text weight="bold" size="3" m="3">
+                    {shoppingCartItem?.quantity || 0}
+                </Text>
+                <Button
+                    size="2"
+                    variant="ghost"
+                    onClick={onItemIncrementQuantity}
+                >
+                    <PlusCircle />
+                </Button>
+            </Flex>
+
 
             <Flex direction="column" gap="1" justify="center">
                 <Button
@@ -285,7 +351,7 @@ const SectionProductBasic: React.FC<{
                                 </Heading>
                             </Box>
                             <Text size="6" weight="bold">
-                                {props?.product?.currency}{props.product?.metadata?.price}
+                                {CurrencySymbol[props?.product?.currency]}{fromSmallestUnit(props.product?.metadata?.price, props?.product?.currency)}
                             </Text>
                         </Flex>
 
@@ -333,14 +399,14 @@ const SectionProductBasic: React.FC<{
                         />
 
                         <Flex m="2" gap="2" justify="center">
-                            {props.product.metadata.images.map(i => {
+                            {props?.product?.metadata?.images.map(i => {
                                 return (
                                     <Avatar
                                         size="3"
                                         src={i}
                                         key={i}
-                                        fallback={props.product.metadata.name}
-                                        alt={props.product.metadata.name}
+                                        fallback={props?.product?.metadata?.name}
+                                        alt={props?.product?.metadata?.name}
                                         onClick={() => {
                                             setCurrentImage(i)
                                         }}
@@ -390,7 +456,7 @@ const SectionProductsBasic: React.FC<SectionProductsBasicProps> = (props) => {
 
     const shoppingCartSet = () => {
         const { shoppingCart } = clientStorage.get()
-        if (!shoppingCart.id) {
+        if (!shoppingCart || !shoppingCart?.id) {
             return
         }
 
@@ -457,7 +523,7 @@ export const SectionProductsBasicItem: TemplateStruct<SectionProductsBasicProps>
             {
                 imgSrc: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxM3x8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
                 cta: "Add to cart",
-                currency: "$",
+                currency: Currency.GBP,
                 metadata: {
                     id: "1",
                     name: "Brownies",
@@ -490,12 +556,12 @@ export const SectionProductsBasicItem: TemplateStruct<SectionProductsBasicProps>
                     price: 123,
                     updatedAt: new Date().toISOString(),
                 },
-                currency: "$",
+                currency: Currency.GBP,
                 imgSrc: "https://images.unsplash.com/photo-1558326567-98ae2405596b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNXx8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
                 cta: "Add to cart",
             },
             {
-                currency: "$",
+                currency: Currency.GBP,
                 imgSrc: "https://images.unsplash.com/photo-1519915028121-7d3463d20b13?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxM3x8ZGVzc2VydHN8ZW58MHx8fHwxNzIwMzEzMjk5fDA&ixlib=rb-4.0.3&q=85",
                 cta: "Add to cart",
                 metadata: {
@@ -512,7 +578,7 @@ export const SectionProductsBasicItem: TemplateStruct<SectionProductsBasicProps>
                 }
             },
             {
-                currency: "$",
+                currency: Currency.GBP,
                 imgSrc: "https://images.unsplash.com/photo-1560180474-e8563fd75bab?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNHx8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
                 cta: "Add to cart",
                 metadata: {

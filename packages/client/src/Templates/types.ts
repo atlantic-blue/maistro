@@ -1,3 +1,5 @@
+import { Currency } from "../Utils/currency"
+
 export interface ShoppingCartItemModifierStruct {
     id: string,
     quantity: number,
@@ -27,6 +29,7 @@ export interface ProductStruct {
     id: string
     price: number
     name: string
+    currency: Currency
     description: string
     images: string[]
     stockQuantity: number

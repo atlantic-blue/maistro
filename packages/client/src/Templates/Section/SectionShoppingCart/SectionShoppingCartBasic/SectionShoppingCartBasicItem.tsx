@@ -3,10 +3,11 @@ import { MinusCircle, PlusCircle, Trash2, X } from "lucide-react"
 import React, { useState } from "react"
 import { calculateItemTotal } from "./SectionShoppingCartBasic"
 import { ShoppingCartStruct, ShoppingCartItem } from "../../../types"
+import { Currency, CurrencySymbol, fromSmallestUnit } from "../../../../Utils/currency"
 
 interface ShoppingItemModifiersProps {
     shoppingCartItem: ShoppingCartItem
-    currencySymbol: "$"
+    currency: Currency
     onUpdate: (item: ShoppingCartItem) => void
     children: React.ReactNode
 }
@@ -108,22 +109,22 @@ export const ShoppingItemModifiers: React.FC<ShoppingItemModifiersProps> = (prop
                                     >
                                         <Flex direction="row" justify="between" align="center" gap="2" style={{ width: "90%" }}>
                                             <Checkbox
-                                                checked={Boolean(shoppingCartItem.modifiers.find(im => im.id === modifier.id))}
+                                                checked={Boolean(shoppingCartItem?.modifiers?.find(im => im.id === modifier.id))}
                                             />
                                             <Avatar
-                                                src={modifier.imgSrc}
-                                                fallback={modifier.name.charAt(0)}
+                                                src={modifier?.imgSrc}
+                                                fallback={modifier?.name?.charAt(0)}
                                                 size="3"
                                             />
                                             <Flex direction="column" style={{ marginRight: "auto", textAlign: "left" }}>
-                                                <Text>{modifier.name}</Text>
-                                                <Text>{modifier.description}</Text>
+                                                <Text>{modifier?.name}</Text>
+                                                <Text>{modifier?.description}</Text>
                                             </Flex>
 
                                             <Flex justify="center" align="center" gap="1">
                                                 <Text>+</Text>
-                                                <Text>{props.currencySymbol}</Text>
-                                                <Text>{modifier.price}</Text>
+                                                <Text>{CurrencySymbol[props?.currency]}</Text>
+                                                <Text>{fromSmallestUnit(modifier?.price, props?.currency)}</Text>
                                             </Flex>
 
                                         </Flex>
@@ -138,13 +139,13 @@ export const ShoppingItemModifiers: React.FC<ShoppingItemModifiersProps> = (prop
                     <Button
                         size="2"
                         variant="ghost"
-                        disabled={shoppingCartItem.quantity === 1}
+                        disabled={shoppingCartItem?.quantity === 1}
                         onClick={onItemSubtractQuantity}
                     >
                         <MinusCircle />
                     </Button>
                     <Text weight="bold" size="3" m="3">
-                        {shoppingCartItem.quantity}
+                        {shoppingCartItem?.quantity}
                     </Text>
                     <Button
                         size="2"
@@ -165,8 +166,12 @@ export const ShoppingItemModifiers: React.FC<ShoppingItemModifiersProps> = (prop
                                 Add for
                             </Text>
                             <Text>
-                                {props.currencySymbol} {' '}
-                                {calculateItemTotal(shoppingCartItem)}
+                                {CurrencySymbol[props.currency]} {' '}
+                                {
+                                    fromSmallestUnit(
+                                        calculateItemTotal(shoppingCartItem),
+                                        props.currency)
+                                }
                             </Text>
                         </Button>
                     </Dialog.Close>
@@ -178,6 +183,7 @@ export const ShoppingItemModifiers: React.FC<ShoppingItemModifiersProps> = (prop
 
 interface ShoppingItemProps {
     item: ShoppingCartItem
+    currency: Currency
     shoppingCart: ShoppingCartStruct
     children: React.ReactNode
     onItemRemove: (item: ShoppingCartItem) => void
@@ -268,7 +274,7 @@ export const ShoppingItem: React.FC<ShoppingItemProps> = (props) => {
                     {props.item.product.modifiers.length > 0 ? (
                         <ShoppingItemModifiers
                             shoppingCartItem={shoppingCartItem}
-                            currencySymbol={"$"}
+                            currency={props.currency}
                             onUpdate={onItemUpdate}
                         >
                             <Button

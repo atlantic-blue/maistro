@@ -1,3 +1,4 @@
+import { Currency } from "../../Utils/currency"
 import env from "../../env"
 import { ProjectTheme } from "../../types"
 import { requestController } from "../fetch"
@@ -8,6 +9,7 @@ export interface ProjectsReadInput {
     name: string
     url: string
     theme: ProjectTheme
+    currency: Currency
 }
 
 const projectsUpdateById = async (
@@ -18,7 +20,7 @@ const projectsUpdateById = async (
         name,
         url,
         theme,
-
+        currency,
     }: ProjectsReadInput,
     apiUrl = env.api.projects.update,
     request = requestController.fetch,
@@ -32,7 +34,8 @@ const projectsUpdateById = async (
         body: JSON.stringify({
             name,
             url,
-            theme
+            theme,
+            currency,
         })
     }).then(response => response.json())
 }

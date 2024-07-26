@@ -22,6 +22,7 @@ import { ProjectEmailList } from "./EmailList";
 import ProjectContent from "./ProjectContent";
 import ProjectThread from "./ProjectThread";
 import { Product } from "./Product";
+import { Currency } from "../Utils/currency";
 
 interface IProject {
     setId(id: string): void
@@ -52,6 +53,7 @@ export class Project implements IProject {
     private id = `${Date.now()}`
     private name = `Untitled-${randAnimal().replace(" ", "-")}`
     private url = ""
+    private currency: Currency = Currency.GBP
     private pages: Record<string, Page> = {}
     private content: Record<string, ProjectContent> = {}
     private assets: Record<string, ProjectAsset> = {}
@@ -135,6 +137,10 @@ export class Project implements IProject {
             if (event.type === ProjectMessageType.SET_THEME) {
                 this.setTheme(event.data)
             }
+
+            if (event.type === ProjectMessageType.SET_CURRENCY) {
+                this.setCurrency(event.data)
+            }
         })
     }
 
@@ -148,6 +154,8 @@ export class Project implements IProject {
             name: this.getName(),
             url: this.getUrl(),
             theme: this.getTheme(),
+            currency: this.getCurrency(),
+
             pages: Object.keys(this.getPages())
                 .reduce<Record<string, PageStruct>>((acc, key) => {
                     acc[key] = this.getPageById(key).getStruct()
@@ -190,6 +198,7 @@ export class Project implements IProject {
         this.setName(projectStruct.name)
         this.setUrl(projectStruct.url)
         this.setTheme(projectStruct.theme)
+        this.setCurrency(projectStruct.currency)
 
         Object.keys(projectStruct.assets || {}).map(asset => {
             const assetStruct = projectStruct.assets[asset]
@@ -210,6 +219,14 @@ export class Project implements IProject {
             const struct = projectStruct.threads[key]
             this.setThread(struct.id, struct)
         })
+    }
+
+    public setCurrency(currency: Currency) {
+        this.currency = currency
+    }
+
+    public getCurrency() {
+        return this.currency
     }
 
     /**
