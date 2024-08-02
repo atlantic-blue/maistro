@@ -22,6 +22,8 @@ import env from "../../../env";
 import SectionFlow from "./Components/SectionFlow/SectionFlow";
 import SectionCustom from "./Components/SectionFlow/SectionCustom";
 import ProjectContent from "../../../Store/ProjectContent";
+import PageNavigationDropdown from "./PageNavigationDropdown/PageNavigationDropdown";
+import Menu from "../Components/Menu/Menu";
 
 const RouteProjectPage: React.FC = () => {
     const { api } = React.useContext(ApiContext)
@@ -253,6 +255,8 @@ const RouteProjectPage: React.FC = () => {
 
     return (
         <Helmet>
+            <PageNavigationDropdown />
+
             <div className={styles.main}>
                 <div className={styles.dragDrop}>
                     <DragAndDrop />
@@ -315,6 +319,8 @@ const RouteProjectPage: React.FC = () => {
                     </Dialog.Content>
                 </Dialog.Root>
             </div>
+
+            <Menu />
         </Helmet>
     )
 }

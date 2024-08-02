@@ -6,6 +6,7 @@ import Projects from './Projects'
 import AuthProvider from './Auth/AuthProvider';
 import ApiProvider from './Api/ApiProvider';
 import PaymentsProvider from './Payments/PaymentsProvider';
+import ResourceStringsProvider from './ResourceStrings/ResourceStringsProvider';
 
 const queryClient = new QueryClient()
 
@@ -13,15 +14,17 @@ const App: React.FC = () => {
 
     return (
         <Theme accentColor="amber" grayColor="mauve">
-            <ApiProvider>
-                <AuthProvider>
-                    <PaymentsProvider>
-                        <QueryClientProvider client={queryClient}>
+            <ResourceStringsProvider>
+                <ApiProvider>
+                    <AuthProvider>
+                        <PaymentsProvider>
+                            <QueryClientProvider client={queryClient}>
                                 <Projects />
-                        </QueryClientProvider>
-                    </PaymentsProvider>
-                </AuthProvider>
-            </ApiProvider>
+                            </QueryClientProvider>
+                        </PaymentsProvider>
+                    </AuthProvider>
+                </ApiProvider>
+            </ResourceStringsProvider>
         </Theme>
     )
 }

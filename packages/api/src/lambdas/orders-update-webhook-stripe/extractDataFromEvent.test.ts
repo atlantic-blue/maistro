@@ -65,7 +65,8 @@ const fixture = {
         "livemode": true,
         "locale": null,
         "metadata": {
-            "project_id": "1f8418a9-527f-4856-b231-e523f6468025"
+            "project_id": "1f8418a9-527f-4856-b231-e523f6468025",
+            "checkout_id": ""
         },
         "mode": "payment",
         "payment_intent": "pi_3Pap5LQWfdmP9UpQ2Z4w1qg3",

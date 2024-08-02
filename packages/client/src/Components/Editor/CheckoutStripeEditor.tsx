@@ -27,6 +27,8 @@ const SectionCheckoutStripeEditor: React.FC<SectionCheckoutStripeProps & EditorP
             accountId: state.accountId || connectedAccount?.id || "",
             projectId: projectId || "",
             checkoutUrl: env.api.payments.checkouts.create,
+            orderUrl: env.api.orders.create,
+
             returnUrl: state.returnUrl,
             // Shipping
             enableShipping: state.enableShipping || false,

@@ -8,11 +8,8 @@ import Helmet from "../Components/Helmet/Helmet";
 import SettingsMetadata from "./Components/SettingsMetadata/SettingsMetadata";
 
 import RouteProjectSettingsDelete from "./Components/RouteProjectSettingsDelete/RouteProjectSettingsDelete";
-
-import RouteProjectSettingsMailList from "./Components/RouteProjectSettingsMailList/RouteProjectSettingsMailList";
-import RouteProjectSettingsTheme from "./Components/RouteProjectSettingsTheme/RouteProjectSettingsTheme";
-import RouteProjectSettingsProducts from "./Components/RouteProjectSettingsProducts/RouteProjectSettingsProducts";
-import RouteProjectSettingsContent from "./Components/RouteProjectSettingsContent/RouteProjectSettingsContent";
+import PageNavigationDropdown from "../RouteProjectPage/PageNavigationDropdown/PageNavigationDropdown";
+import Menu from "../Components/Menu/Menu";
 
 const RouteProjectSettings: React.FC = () => {
     const { projects } = React.useContext(ProjectsContext)
@@ -25,6 +22,7 @@ const RouteProjectSettings: React.FC = () => {
 
     return (
         <Helmet>
+
             <br />
             <Heading size="4" as="h3" align="center">
                 Project Settings
@@ -34,31 +32,11 @@ const RouteProjectSettings: React.FC = () => {
             <Tabs.Root defaultValue="seo">
                 <Tabs.List style={{ display: "flex", justifyContent: "center" }}>
                     <Tabs.Trigger value="seo">SEO</Tabs.Trigger>
-                    <Tabs.Trigger value="email">Email</Tabs.Trigger>
-                    <Tabs.Trigger value="products">Products</Tabs.Trigger>
-                    <Tabs.Trigger value="theme">Theme</Tabs.Trigger>
-                    <Tabs.Trigger value="content">Content</Tabs.Trigger>
                 </Tabs.List>
 
                 <Box m="3">
                     <Tabs.Content value="seo">
                         <SettingsMetadata project={project} />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="email">
-                        <RouteProjectSettingsMailList project={project} />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="products">
-                        <RouteProjectSettingsProducts />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="theme">
-                        <RouteProjectSettingsTheme />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="content">
-                        <RouteProjectSettingsContent />
                     </Tabs.Content>
                 </Box>
             </Tabs.Root>
@@ -66,6 +44,7 @@ const RouteProjectSettings: React.FC = () => {
             <Flex direction="column" maxWidth="800px" m="auto" mb="50px">
                 <RouteProjectSettingsDelete project={project} />
             </Flex>
+
         </Helmet>
     )
 }

@@ -14,6 +14,7 @@ import {
     ProjectThemeAccentColour,
     ProjectThemeGrayColour,
     ProductStruct,
+    OrderStruct,
 } from "../types"
 
 import Page from "./Page"
@@ -23,6 +24,7 @@ import ProjectContent from "./ProjectContent";
 import ProjectThread from "./ProjectThread";
 import { Product } from "./Product";
 import { Currency } from "../Utils/currency";
+import { Order } from "./Order";
 
 interface IProject {
     setId(id: string): void
@@ -54,12 +56,15 @@ export class Project implements IProject {
     private name = `Untitled-${randAnimal().replace(" ", "-")}`
     private url = ""
     private currency: Currency = Currency.GBP
+
     private pages: Record<string, Page> = {}
     private content: Record<string, ProjectContent> = {}
     private assets: Record<string, ProjectAsset> = {}
     private emailLists: Record<string, ProjectEmailList> = {}
     private threads: Record<string, ProjectThread> = {}
     private products: Record<string, Product> = {}
+    private orders: Record<string, Order> = {}
+
     private theme: ProjectTheme = {
         accentColor: ProjectThemeAccentColour.amber,
         appearance: "light",
@@ -126,6 +131,14 @@ export class Project implements IProject {
                 this.deleteProduct(event.data)
             }
 
+            if (event.type === ProjectMessageType.SET_ORDER) {
+                this.setOrder(event.data.id, event.data)
+            }
+
+            if (event.type === ProjectMessageType.DELETE_ORDER) {
+                this.deleteOrder(event.data)
+            }
+
             if (event.type === ProjectMessageType.SET_NAME) {
                 this.setName(event.data)
             }
@@ -184,6 +197,11 @@ export class Project implements IProject {
             products: Object.keys(this.getProducts())
                 .reduce<Record<string, ProductStruct>>((acc, key) => {
                     acc[key] = this.getProductById(key).getStruct()
+                    return acc
+                }, {}),
+            orders: Object.keys(this.getOrders())
+                .reduce<Record<string, OrderStruct>>((acc, key) => {
+                    acc[key] = this.getOrderById(key).getStruct()
                     return acc
                 }, {}),
         }
@@ -376,6 +394,26 @@ export class Project implements IProject {
         delete this.products[id]
     }
 
+    /**
+    * Orders
+    */
+    public setOrder(id: string, struct: OrderStruct): void {
+        const order = new Order(struct)
+        this.orders[id] = order
+    }
+
+    public getOrders(): Record<string, Order> {
+        return this.orders
+    }
+
+    public getOrderById(id: string): Order {
+        return this.orders[id]
+    }
+
+    public deleteOrder(id: string): void {
+        delete this.orders[id]
+    }
+
     //
     public getId(): string {
         return this.id
@@ -420,6 +458,7 @@ export class Project implements IProject {
             emailLists: {},
             threads: {},
             products: {},
+            orders: {},
             theme: {},
         })
     }

@@ -24,6 +24,12 @@ export interface ProjectAssetStruct {
     contentType: string
 }
 
+export interface OrderStruct {
+    id: string
+    shoppingCartId: string
+    status: OrderStatus
+}
+
 export interface ProjectStruct {
     id: string
     name: string
@@ -34,6 +40,7 @@ export interface ProjectStruct {
     emailLists: Record<string, ProjectEmailListStruct>
     threads: Record<string, ProjectThreadStruct>
     products: Record<string, ProductStruct>
+    orders: Record<string, OrderStruct>
     theme: ProjectTheme,
     currency: Currency
 }
@@ -198,6 +205,8 @@ export type PageContentEvent = {
 }
 
 export enum PageMessageType {
+    SET = "SET",
+
     SET_ID = "SET_ID",
     SET_PATH = "SET_PATH",
     SET_TITLE = "SET_TITLE",
@@ -211,6 +220,9 @@ export enum PageMessageType {
 }
 
 export type PageEvent = {
+    type: PageMessageType.SET
+    data: PageStruct
+} | {
     type: PageMessageType.SET_PATH
     data: string
 } | {
@@ -286,6 +298,9 @@ export enum ProjectMessageType {
     SET_PRODUCT = "SET_PRODUCT",
     DELETE_PRODUCT = "DELETE_PRODUCT",
 
+    SET_ORDER = "SET_ORDER",
+    DELETE_ORDER = "DELETE_ORDER",
+
     SET_THEME = "SET_THEME",
     SET_CURRENCY = "SET_CURRENCY",
 }
@@ -327,6 +342,12 @@ export type ProjectEvent = {
     type: ProjectMessageType.DELETE_PRODUCT
     data: string
 } | {
+    type: ProjectMessageType.SET_ORDER
+    data: OrderStruct
+} | {
+    type: ProjectMessageType.DELETE_ORDER
+    data: string
+} | {
     type: ProjectMessageType.SET_NAME
     data: string
 } | {
@@ -340,6 +361,9 @@ export type ProjectEvent = {
     data: Currency
 }
 
+/**
+ * Product
+ */
 export enum ProductMessageType {
     SET = "SET"
 }
@@ -347,6 +371,30 @@ export enum ProductMessageType {
 export type ProductEvent = {
     type: ProductMessageType.SET
     data: ProductStruct
+}
+
+/**
+ * Order
+ */
+export enum OrderStatus {
+    CREATED = "CREATED",
+    PAYMENT_ACCEPTED = "PAYMENT_ACCEPTED",
+
+    ACKNOWLEDGED = "ACKNOWLEDGED",
+    PENDING = "PENDING",
+    PROCESSING = "PROCESSING",
+    SHIPPED = "SHIPPED",
+    DELIVERED = "DELIVERED",
+    COMPLETED = "COMPLETED",
+}
+
+export enum OrderMessageType {
+    SET = "SET"
+}
+
+export type OrderEvent = {
+    type: OrderMessageType.SET
+    data: OrderStruct
 }
 
 export enum ProjectsMessageType {

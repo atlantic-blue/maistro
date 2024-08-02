@@ -25,7 +25,7 @@ const productsRead: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
         ExpressionAttributeValues: {
             ':projectId': projectId
         },
-        Limit: 25,
+        Limit: 100,
     };
 
     const data = await dynamoDb.query(params).promise();

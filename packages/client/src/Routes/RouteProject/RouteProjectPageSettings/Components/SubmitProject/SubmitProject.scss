@@ -1,0 +1,61 @@
+@import "../../../../../Variables.scss";
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.button {
+    cursor: pointer;
+    min-width: 300px;
+    padding: 10px 40px;
+    font-size: 1rem;
+
+    transition: color 0.3s ease, transform 0.5s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+
+        &>.link {
+            color: #cbd5e1;
+        }
+    }
+
+    &:active {
+        transform: translateY(1px);
+    }
+}
+
+.loading {
+    color: white;
+    background-color: #0090ff;
+}
+
+.success {
+    color: white;
+    background-color: #46a758;
+}
+
+.error {
+    color: white;
+    background-color: #e5484d;
+}
+
+.errorMessage {
+    margin: 20px 0 0;
+
+    &-icon {
+        width: 20px;
+        height: 20px;
+        fill: #e5484d;
+    }
+}
+
+.link {
+    padding: 10px;
+    margin: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+}

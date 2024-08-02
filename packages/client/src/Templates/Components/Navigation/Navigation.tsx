@@ -26,15 +26,15 @@ const Navigation: React.FC<NavigationProps> = (props) => {
                 {Array.isArray(props.items) && props.items?.map((item, key) => {
                     if (item.children) {
                         return (
-                            <NavigationMenu.Item key={`NavigationMenu-${item.name}`}>
+                            <NavigationMenu.Item key={`NavigationMenu-${key}`}>
                                 <NavigationMenu.Trigger className={styles.navigationMenuTrigger}>
                                     {item.name} <CaretDownIcon className={styles.caretDown} aria-hidden />
                                 </NavigationMenu.Trigger>
                                 <NavigationMenu.Content className={styles.navigationMenuContent}>
                                     <ul className={styles.list}>
-                                        {item.children?.map(childItem => {
+                                        {item.children?.map((childItem, childKey) => {
                                             return (
-                                                <NavigationMenu.Link asChild key={`NavigationMenu-${childItem.name}`}>
+                                                <NavigationMenu.Link asChild key={`NavigationMenu-${childKey}`}>
                                                     <a className={styles.listItemLink} href={childItem.href} aria-label={childItem.description} target="_blank" rel="noopener noreferrer">
                                                         <div className={styles.listItemHeading}>{childItem.name}</div>
                                                         <p className={styles.listItemText}>{childItem.description}</p>
@@ -49,7 +49,7 @@ const Navigation: React.FC<NavigationProps> = (props) => {
                     }
 
                     return (
-                        <NavigationMenu.Item key={`NavigationMenu-${item.name}`}>
+                        <NavigationMenu.Item key={`NavigationMenu-${key}`}>
                             <NavigationMenu.Link
                                 onClick={item.onClick}
                                 className={styles.navigationMenuLink}

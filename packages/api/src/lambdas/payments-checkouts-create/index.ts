@@ -31,6 +31,7 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         line_items,
         project_id,
         account_id,
+        shopping_cart_id,
         enable_shipping,
         allowed_countries,
         shipping_options
@@ -48,6 +49,7 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
             metadata: {
                 project_id,
                 account_id,
+                shopping_cart_id,
             },
             ...(enable_shipping ? {
                 shipping_address_collection: {
@@ -67,6 +69,7 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         Item: {
             id: session.id,
             projectId: project_id,
+            shoppingCartId: shopping_cart_id,
         }
     };
 
@@ -95,6 +98,7 @@ interface PaymentShippingOptions {
 interface PaymentsCheckoutsInput {
     project_id: string
     account_id: string
+    shopping_cart_id: string
     return_url: string
     line_items: Stripe.Checkout.SessionCreateParams.LineItem[]
     enable_shipping: boolean
@@ -105,6 +109,7 @@ interface PaymentsCheckoutsInput {
 const validationSchema = Joi.object<PaymentsCheckoutsInput>({
     project_id: Joi.string().required(),
     account_id: Joi.string().required(),
+    shopping_cart_id: Joi.string().required(),
     return_url: Joi.string().required(),
     line_items: Joi.array().items(
         Joi.object({

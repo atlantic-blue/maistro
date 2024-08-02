@@ -9,9 +9,11 @@ import Button from "../../Templates/Components/Button/Button"
 import { PaymentPlan, PaymentsContext } from "../../Payments/PaymentsProvider"
 
 import * as styles from "./RouteSettings.scss"
-import { Avatar, Card, Flex, Heading } from "@radix-ui/themes"
+import { Avatar, Card, Flex, Heading, Text } from "@radix-ui/themes"
 import { useNavigate } from "react-router-dom"
-import { Routes } from "../router"
+import { appRoutes } from "../router"
+import HeaderBurger from "../../Templates/Header/HeaderBurger/HeaderBurger"
+import PaymentPlanComponent from "../../Payments/PaymentPlan/PaymentPlan"
 
 const RoutesSettings: React.FC = () => {
     const { user } = React.useContext(ProjectsContext)
@@ -20,7 +22,34 @@ const RoutesSettings: React.FC = () => {
 
     return (
         <div className={styles.main}>
-            <RouteProjectHeader />
+            <HeaderBurger
+                {
+                ...{
+                    logo: {
+                        url: "https://maistro.website/assets/logo.svg",
+                        slogan: "Maistro",
+                        href: appRoutes.getHomeRoute()
+                    },
+                    links: [
+                        {
+                            href: appRoutes.getSettingsRoute(),
+                            name: (
+                                <Flex align="center" gap="2" justify="center">
+                                    <PaymentPlanComponent />
+                                    <Avatar
+                                        size="1"
+                                        src={user.getAvatar()}
+                                        fallback={user.getName().charAt(0)}
+                                    />
+                                    <Text>Settings</Text>
+                                </Flex>
+                            ),
+                            description: "My settings"
+                        },
+                    ]
+                }
+                }
+            />
 
             <br />
             <Heading size="4" as="h3" align="center">
@@ -49,7 +78,7 @@ const RoutesSettings: React.FC = () => {
                                 if (paymentPlan !== PaymentPlan.FREE) {
                                     window.open("https://billing.stripe.com/p/login/00g4i29gM9GOgz6dQQ", "_blank")
                                 } else {
-                                    navigate(Routes.PAYMENTS_PRICING)
+                                    navigate(appRoutes.getPaymentsPricingRoute())
                                 }
                             }}
                         >
@@ -60,9 +89,9 @@ const RoutesSettings: React.FC = () => {
                             size="3"
                             onClick={() => {
                                 if (paymentPlan === PaymentPlan.FREE) {
-                                    navigate(Routes.PAYMENTS_PRICING)
+                                    navigate(appRoutes.getPaymentsPricingRoute())
                                 } else {
-                                    navigate(Routes.PAYMENTS_ACCOUNTS)
+                                    navigate(appRoutes.getPaymentsAccountsRoute())
                                 }
                             }}
                         >

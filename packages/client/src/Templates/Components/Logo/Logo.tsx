@@ -6,12 +6,13 @@ import * as styles from "./Logo.scss"
 interface LogoProps {
     slogan: string
     imgUrl: string
+    href?: string
 }
 
 const Logo: React.FC<LogoProps> = (props) => {
     return (
         <Box className={styles.logo}>
-            <a href="/" aria-label={props.slogan}>
+            <a href={props.href || "/"} aria-label={props.slogan}>
                 <Avatar
                     size="3"
                     fallback={props.slogan}

@@ -4,18 +4,19 @@ import { useParams } from "react-router-dom"
 import { Avatar, Box, Button, Card, Flex, Heading, Select, Text, TextField } from "@radix-ui/themes"
 import * as uuid from "uuid"
 
-import { ProjectsContext } from "../../../../../Projects"
-import { Product } from "../../../../../Store/Product"
-import EditorImage from "../../../../../Components/Editor/EditorImage"
-import { EditorDataType } from "../../../../../Components/Editor/EditorData"
-import { convertFileToBase64 } from "../../../../../Utils/toBase64"
-import { ApiContext } from "../../../../../Api/ApiProvider"
-import useObservable from "../../../../../Utils/Hooks/UseObservable"
-import { ProjectMessageType } from "../../../../../types"
-import { Project } from "../../../../../Store/Project"
+import { ProjectsContext } from "../../../Projects"
+import { Product } from "../../../Store/Product"
+import EditorImage from "../../../Components/Editor/EditorImage"
+import { EditorDataType } from "../../../Components/Editor/EditorData"
+import { convertFileToBase64 } from "../../../Utils/toBase64"
+import { ApiContext } from "../../../Api/ApiProvider"
+import useObservable from "../../../Utils/Hooks/UseObservable"
+import { ProjectMessageType } from "../../../types"
+import { Project } from "../../../Store/Project"
 import { Copy, PlusCircle, Trash2 } from "lucide-react"
 import { DashIcon } from "@radix-ui/react-icons"
-import { Currency, fromSmallestUnit, toSmallestUnit } from "../../../../../Utils/currency"
+import { Currency, fromSmallestUnit, toSmallestUnit } from "../../../Utils/currency"
+import Helmet from "../Components/Helmet/Helmet"
 
 const ProductViewer: React.FC<{ product: Product, projectId: string, project: Project }> = (props) => {
     const [product, setProduct] = React.useState(props.product)
@@ -472,54 +473,56 @@ const RouteProjectSettingsProducts: React.FC = () => {
 
     return (
         <>
-            <Box>
-                <Flex direction="column" gap="2" mb="2" justify="center" align="center">
-                    <Flex gap="2" align="center" justify="center">
-                        <Button onClick={createProduct} style={{ maxWidth: "300px" }} loading={isLoading}>
-                            Add Product
-                        </Button>
-                        <Flex gap="2" mb="2" justify="between" align='center'>
-                            <Text weight="bold">Currency</Text>
-                            <Select.Root defaultValue={project.getCurrency()}
-                                onValueChange={onSetCurrency}
-                            >
-                                <Select.Trigger />
-                                <Select.Content>
-                                    <Select.Group>
-                                        {
-                                            Object
-                                                .values(Currency)
-                                                .map(currency => {
-                                                    return (
-                                                        <Select.Item
-                                                            key={currency}
-                                                            value={currency}
-                                                        >
-                                                            {currency}
-                                                        </Select.Item>
-                                                    )
-                                                })
-                                        }
-                                    </Select.Group>
-                                </Select.Content>
-                            </Select.Root>
+            <Helmet>
+                <Box mt="5">
+                    <Flex direction="column" gap="2" mb="2" justify="center" align="center">
+                        <Flex gap="2" align="center" justify="center">
+                            <Button onClick={createProduct} style={{ maxWidth: "300px" }} loading={isLoading}>
+                                Add Product
+                            </Button>
+                            <Flex gap="2" mb="2" justify="between" align='center'>
+                                <Text weight="bold">Currency</Text>
+                                <Select.Root defaultValue={project.getCurrency()}
+                                    onValueChange={onSetCurrency}
+                                >
+                                    <Select.Trigger />
+                                    <Select.Content>
+                                        <Select.Group>
+                                            {
+                                                Object
+                                                    .values(Currency)
+                                                    .map(currency => {
+                                                        return (
+                                                            <Select.Item
+                                                                key={currency}
+                                                                value={currency}
+                                                            >
+                                                                {currency}
+                                                            </Select.Item>
+                                                        )
+                                                    })
+                                            }
+                                        </Select.Group>
+                                    </Select.Content>
+                                </Select.Root>
+                            </Flex>
+                        </Flex>
+
+                        <Flex wrap="wrap" justify='center' gap="2">
+                            {Object.values(project.getProducts())?.map(product => {
+                                return (
+                                    <ProductViewer
+                                        key={product.getId()}
+                                        projectId={projectId}
+                                        product={product}
+                                        project={project}
+                                    />
+                                )
+                            })}
                         </Flex>
                     </Flex>
-
-                    <Flex wrap="wrap" justify='center' gap="2">
-                        {Object.values(project.getProducts())?.map(product => {
-                            return (
-                                <ProductViewer
-                                    key={product.getId()}
-                                    projectId={projectId}
-                                    product={product}
-                                    project={project}
-                                />
-                            )
-                        })}
-                    </Flex>
-                </Flex>
-            </Box>
+                </Box>
+            </Helmet>
         </>
     )
 }

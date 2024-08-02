@@ -1,89 +1,71 @@
+import Joi from "joi"
 import AWS from 'aws-sdk';
 import * as uuid from "uuid"
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
 import jsonBodyParser from '../../middlewares/json-body-parser';
 import { LambdaMiddlewares } from '../../middlewares';
+import { validatorJoi } from '../../middlewares/validator-joi';
 import createError from '../../middlewares/error-handler';
-import Stripe from "stripe";
+import { OrderStatus } from "./types";
 
-const paymentsSecretKey = process.env.PAYMENTS_SECRET_KEY
-const paymentsWebhookKey = process.env.PAYMENTS_WEBHOOK_SECRET_KEY
+interface OrdersCreateInput {
+    projectId: string
+    shoppingCartId: string
+}
 
-const stripe = new Stripe(paymentsSecretKey as string, {
-    apiVersion: "2024-04-10",
-})
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-/**
- * Listens to a webhook to create orders
- * https://docs.stripe.com/connect/direct-charges?platform=web&ui=embedded-form#handle-post-payment-events
- */
 const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableName = process.env.TABLE_NAME
     if (!tableName) {
         throw createError(500, "process TABLE_NAME not specified")
     }
 
-    try {
-        const signature = event.headers['stripe-signature'];
-        const stripeEvent = stripe.webhooks.constructEvent(event.body, signature, paymentsWebhookKey);
+    const id = uuid.v4()
+    const createdAt = new Date().toISOString()
+    const status = OrderStatus.CREATED
+    const {
+        shoppingCartId,
+        projectId,
+    } = event.body as unknown as OrdersCreateInput;
 
-        if (stripeEvent.type !== "checkout.session.completed") {
-            throw createError(500, `${stripeEvent.type} not supported`)
-        }
+    const input = {
+        id,
+        projectId,
+        shoppingCartId,
+        createdAt,
 
-        const data = extractDataFromEvent(stripeEvent)
-        const id = uuid.v4()
-        const createdAt = new Date().toISOString()
-        const status = OrderStatus.PENDING
-
-        const params = {
-            TableName: tableName,
-            Item: {
-                id,
-                createdAt,
-
-                customerId: data.customerId,
+        status,
+        history: [
+            {
                 status,
-                history: [
-                    {
-                        status,
-                        timestamp: createdAt,
-                    }
-                ],
-
-                ...data
+                timestamp: createdAt,
             }
-        };
-
-        await dynamoDb.put(params).promise();
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-
-            })
-        };
-    } catch {
-        throw createError(500, "Failed to unmarshall event with stripe-signature")
-
+        ],
     }
+
+    const params = {
+        TableName: tableName,
+        Item: input
+    };
+
+    await dynamoDb.put(params).promise();
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(input)
+    };
 };
 
-
-export enum OrderStatus {
-    PENDING = "PENDING",
-    ACKNOWLEDGED = "ACKNOWLEDGED",
-    PROCESSING = "PROCESSING",
-    SHIPPED = "SHIPPED",
-    DELIVERED = "DELIVERED",
-    COMPLETED = "COMPLETED",
-}
-
+const validationSchema = Joi.object<OrdersCreateInput>({
+    projectId: Joi.string().required(),
+    shoppingCartId: Joi.string().required(),
+})
 
 const handler = new LambdaMiddlewares()
     .before(jsonBodyParser)
+    .before(validatorJoi(validationSchema))
     .handler(ordersCreate)
 
 export { handler }

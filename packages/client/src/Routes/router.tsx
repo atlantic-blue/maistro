@@ -1,5 +1,6 @@
 import React from "react"
 import {
+    RouteObject,
     createBrowserRouter,
 } from "react-router-dom";
 import loadable from "@loadable/component";
@@ -7,6 +8,14 @@ import loadable from "@loadable/component";
 import Loading from "../Components/Loading/Loading";
 import RouteBrainstorm from "./RouteBrainstorm/RouteBrainstorm";
 import RoutesHome from "./RouteHome/RouteHome";
+import { ResourceStringLanguage } from "../ResourceStrings";
+import { getCurrentLanguage } from "../ResourceStrings/ResourceStringsProvider";
+import RouteProjectProducts from "./RouteProject/RouteProjectProducts/RouteProjectProducts";
+import RouteProjectSettingsOrders from "./RouteProject/RouteProjectOrders/RouteProjectOrders";
+import RouteProjectSettingsContent from "./RouteProject/RouteProjectContents/RouteProjectContents";
+import RouteProjectSettingsTheme from "./RouteProject/RouteProjectTheme/RouteProjectTheme";
+import RouteProjectSettingsMailList from "./RouteProject/RouteProjectMailList/RouteProjectMailList";
+import RouteProjectPageSettings from "./RouteProject/RouteProjectPageSettings/RouteProjectSettings";
 
 // https://v5.reactrouter.com/web/guides/code-splitting
 const RoutesProjects = loadable(() => import("./RouteProjects/RouteProjects"), {
@@ -112,69 +121,127 @@ export enum Routes {
     PROJECT = `/projects/${RoutesParams.PROJECT_ID}`,
 
     PROJECT_PAGE = `/projects/${RoutesParams.PROJECT_ID}/page/${RoutesParams.PAGE_ID}`,
+    PROJECT_PAGE_SETTINGS = `/projects/${RoutesParams.PROJECT_ID}/page/${RoutesParams.PAGE_ID}/settings`,
     PROJECT_PAGE_CREATE = `/projects/${RoutesParams.PROJECT_ID}/page/create`,
 
+    // TODO delete? 
     PROJECT_CONTENT = `/projects/${RoutesParams.PROJECT_ID}/content/${RoutesParams.CONTENT_ID}`,
+    // TODO delete? 
     PROJECT_CONTENT_CREATE = `/projects/${RoutesParams.PROJECT_ID}/content/create`,
 
     PROJECT_SETTINGS = `/projects/${RoutesParams.PROJECT_ID}/settings`,
+    PROJECT_THEME = `/projects/${RoutesParams.PROJECT_ID}/theme`,
+    PROJECT_CONTACTS = `/projects/${RoutesParams.PROJECT_ID}/contacts`,
+    PROJECT_PRODUCTS = `/projects/${RoutesParams.PROJECT_ID}/products`,
+    PROJECT_ORDERS = `/projects/${RoutesParams.PROJECT_ID}/orders`,
+    PROJECT_CONTENTS = `/projects/${RoutesParams.PROJECT_ID}/contents`,
 }
 
-export const appRoutes = {
+class AppRoutes {
+    private language = ResourceStringLanguage.ENGLISH
+
+    constructor(language: ResourceStringLanguage) {
+        this.setLanguage(language)
+    }
+
+    setLanguage(language: ResourceStringLanguage) {
+        this.language = language
+    }
+
     getHomeRoute() {
-        return '/'
-    },
-
-    getBrainstormRoute() {
-        return Routes.BRAINSTORM
-    },
-
-    getTemplateRoute(templateId: string) {
-        return `${Routes.TEMPLATES}/${templateId}`
-    },
+        return `/${this.language}/`
+    }
 
     getLoginRoute() {
-        return Routes.AUTHZ_LOGIN
-    },
+        return `/${this.language}${Routes.AUTHZ_LOGIN}`
+    }
 
     getLogoutRoute() {
-        return Routes.AUTHZ_LOGOUT
-    },
+        return `/${this.language}${Routes.AUTHZ_LOGOUT}`
+    }
 
     getSettingsRoute() {
-        return Routes.SETTINGS
-    },
+        return `/${this.language}${Routes.SETTINGS}`
+    }
 
-    getPaymentsPricing() {
-        return Routes.PAYMENTS_PRICING
-    },
+    /**Payments */
+    getPaymentsRoute() {
+        return `/${this.language}${Routes.PAYMENTS}`
+    }
 
+    getPaymentsPricingRoute() {
+        return `/${this.language}${Routes.PAYMENTS_PRICING}`
+    }
+
+    getPaymentsAccountsRoute() {
+        return `/${this.language}${Routes.PAYMENTS_ACCOUNTS}`
+    }
+
+    getBrainstormRoute() {
+        return `/${this.language}${Routes.BRAINSTORM}`
+    }
+
+    getTemplateRoute(templateId: string) {
+        return `/${this.language}${Routes.TEMPLATES}/${templateId}`
+    }
     getProjectsRoute() {
-        return Routes.PROJECTS
-    },
+        return `/${this.language}${Routes.PROJECTS}`
+    }
 
+    /**
+     * Project
+     */
     getProjectsNewRoute() {
-        return Routes.PROJECTS_NEW
-    },
+        return `/${this.language}${Routes.PROJECTS_NEW}`
+    }
 
-    getProjectRoute(projectId: string) {
-        return `${Routes.PROJECTS}/${projectId}`
-    },
+    getProjectRoute(projectId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}`
+    }
 
-    getProjectPageRoute(projectId: string, pageId: string) {
-        return `${Routes.PROJECTS}/${projectId}/page/${pageId}`
-    },
+    /**
+     * Project Pages
+     */
+    getProjectPageRoute(projectId: string, pageId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/page/${pageId}`
+    }
 
-    getProjectSettingsRoute(projectId: string) {
-        return `${Routes.PROJECTS}/${projectId}/settings`
-    },
+    getProjectPageSettingsRoute(projectId: string, pageId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/page/${pageId}/settings`
+    }
 
-    getProjectPageTemplatesRoute(projectId: string) {
-        return `${Routes.PROJECTS}/${projectId}/page/create`
-    },
+    getProjectPageTemplatesRoute(projectId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/page/create`
+    }
+
+    getProjectSettingsRoute(projectId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/settings`
+    }
+
+    getProjectProductsRoute(projectId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/products`
+    }
+
+    getProjectOrdersRoute(projectId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/orders`
+    }
+
+    getProjectContactsRoute(projectId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/contacts`
+    }
+
+    getProjectThemeRoute(projectId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/theme`
+    }
+
+    getProjectContentsRoute(projectId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/contents`
+    }
 }
 
-const router = createBrowserRouter([
+export const appRoutes = new AppRoutes(getCurrentLanguage())
+
+const routes: RouteObject[] = [
     {
         path: Routes.HOME,
         element: (
@@ -268,16 +335,6 @@ const router = createBrowserRouter([
         ),
     },
     {
-        path: Routes.PROJECT_SETTINGS,
-        element: (
-            <ProtectedRoute>
-                <RouteProjectProvider>
-                    <RouteProjectSettings />
-                </RouteProjectProvider>
-            </ProtectedRoute>
-        ),
-    },
-    {
         path: Routes.PROJECT_PAGE_CREATE,
         element: (
             <ProtectedRoute>
@@ -297,6 +354,7 @@ const router = createBrowserRouter([
             </ProtectedRoute>
         ),
     },
+
     {
         path: Routes.PROJECT_PAGE,
         element: (
@@ -307,6 +365,94 @@ const router = createBrowserRouter([
             </ProtectedRoute>
         ),
     },
-]);
+    {
+        path: Routes.PROJECT_PAGE_SETTINGS,
+        element: (
+            <ProtectedRoute>
+                <RouteProjectProvider>
+                    <RouteProjectPageSettings />
+                </RouteProjectProvider>
+            </ProtectedRoute>
+        ),
+    },
+
+    {
+        path: Routes.PROJECT_SETTINGS,
+        element: (
+            <ProtectedRoute>
+                <RouteProjectProvider>
+                    <RouteProjectSettings />
+                </RouteProjectProvider>
+            </ProtectedRoute>
+        ),
+    },
+
+    {
+        path: Routes.PROJECT_PRODUCTS,
+        element: (
+            <ProtectedRoute>
+                <RouteProjectProvider>
+                    <RouteProjectProducts />
+                </RouteProjectProvider>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: Routes.PROJECT_ORDERS,
+        element: (
+            <ProtectedRoute>
+                <RouteProjectProvider>
+                    <RouteProjectSettingsOrders />
+                </RouteProjectProvider>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: Routes.PROJECT_CONTENTS,
+        element: (
+            <ProtectedRoute>
+                <RouteProjectProvider>
+                    <RouteProjectSettingsContent />
+                </RouteProjectProvider>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: Routes.PROJECT_THEME,
+        element: (
+            <ProtectedRoute>
+                <RouteProjectProvider>
+                    <RouteProjectSettingsTheme />
+                </RouteProjectProvider>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: Routes.PROJECT_CONTACTS,
+        element: (
+            <ProtectedRoute>
+                <RouteProjectProvider>
+                    <RouteProjectSettingsMailList />
+                </RouteProjectProvider>
+            </ProtectedRoute>
+        ),
+    },
+]
+
+const languageRoutes = Object.values(ResourceStringLanguage).map(language => {
+    return routes.map(route => {
+        return {
+            ...route,
+            path: `/${language}${route.path}`,
+        } as RouteObject
+    })
+}).flat()
+
+const router = createBrowserRouter(
+    [
+        ...routes,
+        ...languageRoutes,
+    ]
+);
 
 export default router

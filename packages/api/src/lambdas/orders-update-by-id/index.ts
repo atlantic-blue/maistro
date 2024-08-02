@@ -8,8 +8,7 @@ import createError from '../../middlewares/error-handler';
 import authJwt from '../../middlewares/auth-jwt';
 import jsonBodyParser from "../../middlewares/json-body-parser";
 import { validatorJoi } from "../../middlewares/validator-joi";
-import createUpdateParams from "../../utils/createUpdateParams";
-import sanitiseInput from "../../utils/sanitiseInput";
+import { OrderStatus } from "../orders-create/types";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -30,71 +29,55 @@ const productsUpdateById: APIGatewayProxyHandler = async (event: APIGatewayProxy
         throw createError(500, "projectId not specified")
     }
 
-    const productId = event.pathParameters && event.pathParameters['product-id']
-    if (!productId) {
-        throw createError(500, "productId not specified")
+    const orderId = event.pathParameters && event.pathParameters['order-id']
+    if (!orderId) {
+        throw createError(500, "orderId not specified")
     }
 
     const {
-        name,
-        description,
-        price,
-        priceDecimal,
-        stockQuantity,
-        currency,
-        images,
-        options,
-    } = event.body as unknown as ProductsUpdateByIdInput;
+        status
+    } = event.body as unknown as OrdersUpdateByIdInput;
 
-    const input = sanitiseInput({
-        name,
-        description,
-        price,
-        priceDecimal,
-        stockQuantity,
-        currency,
-        images,
-        options,
-        updatedAt: new Date().toISOString(),
-    })
+    const updatedAt = new Date().toISOString()
+    const history = {
+        status,
+        timestamp: updatedAt
+    }
 
-    const params = createUpdateParams(
-        input,
-        {
+    const params = {
+        TableName: tableName,
+        Key: {
+            id: orderId,
             projectId,
-            id: productId
         },
-        tableName
-    )
+        UpdateExpression: 'set status = :status, updatedAt = :updatedAt, history = list_append(history, :newHistory)',
+        ExpressionAttributeValues: {
+            ':status': status,
+            ':updatedAt': updatedAt,
+            ':newHistory': [history]
+        },
+        ReturnValues: 'ALL_NEW',
+    };
 
     await dynamoDb.update(params).promise()
 
     return {
         statusCode: 200,
-        body: JSON.stringify(input)
+        body: JSON.stringify({
+            id: orderId,
+            projectId,
+            history,
+            updatedAt,
+        })
     };
 };
 
-interface ProductsUpdateByIdInput {
-    name: string
-    description: string
-    price: number
-    priceDecimal: string
-    stockQuantity: number
-    currency: string
-    images: string[]
-    options: Record<string, string[]>
+interface OrdersUpdateByIdInput {
+    status: OrderStatus
 }
 
-const validationSchema = Joi.object<ProductsUpdateByIdInput>({
-    name: Joi.string().optional(),
-    description: Joi.string().optional(),
-    price: Joi.number().optional(),
-    priceDecimal: Joi.string().optional(),
-    stockQuantity: Joi.number().optional(),
-    currency: Joi.string().optional(),
-    images: Joi.array().items(Joi.string()).optional(),
-    options: Joi.object().optional()
+const validationSchema = Joi.object<OrdersUpdateByIdInput>({
+    status: Joi.string().optional(),
 })
 
 const handler = new LambdaMiddlewares()

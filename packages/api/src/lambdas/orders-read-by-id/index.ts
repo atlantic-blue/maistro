@@ -12,15 +12,21 @@ const ordersReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         throw createError(500, "process TABLE_NAME not specified")
     }
 
-    const productId = event.pathParameters && event.pathParameters['product-id']
-    if (!productId) {
-        throw createError(500, "productId not specified")
+    const projectId = event.pathParameters && event.pathParameters['project-id']
+    if (!projectId) {
+        throw createError(500, "projectId not specified")
+    }
+
+    const orderId = event.pathParameters && event.pathParameters['order-id']
+    if (!orderId) {
+        throw createError(500, "orderId not specified")
     }
 
     const params: AWS.DynamoDB.DocumentClient.GetItemInput = {
         TableName: tableName,
         Key: {
-            id: productId,
+            id: orderId,
+            projectId,
         }
     };
 

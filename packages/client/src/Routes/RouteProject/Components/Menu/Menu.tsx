@@ -2,16 +2,10 @@ import React from "react"
 import classNames from "classnames";
 import { NavLink, useParams } from "react-router-dom";
 
-import IconWireframe from "../../../../Components/Icons/Wireframe/Wireframe";
-import IconPlay from "../../../../Components/Icons/Play/Play";
-
 import { appRoutes } from "../../../router";
 
 import * as styles from "./Menu.scss"
 import { ProjectsContext } from "../../../../Projects";
-import IconHome from "../../../../Components/Icons/Home/Home";
-import IconNew from "../../../../Components/Icons/New/New";
-import IconSettings from "../../../../Components/Icons/Settings/Settings";
 import { IconButton, Text } from "@radix-ui/themes";
 import { CirclePlus, Cog, Pencil, School } from "lucide-react";
 
@@ -47,17 +41,15 @@ const Menu: React.FC = () => {
     const { projects } = React.useContext(ProjectsContext)
     const { projectId, pageId } = useParams()
     const project = projects.getProjectById(projectId || "")
+    const page = project.getPageById(pageId || "")
+
+    if (!project || !page) {
+        return null
+    }
 
     return (
         <div className={styles.menu}>
             <ul className={styles.menuContent}>
-                <li className={styles.link}>
-                    <MenuButton
-                        link={appRoutes.getProjectsRoute()}
-                        text="Home"
-                        Icon={School}
-                    />
-                </li>
                 <li className={styles.link}>
                     <MenuButton
                         link={appRoutes.getProjectPageTemplatesRoute(project?.getId())}
@@ -67,14 +59,14 @@ const Menu: React.FC = () => {
                 </li>
                 <li className={styles.link}>
                     <MenuButton
-                        link={appRoutes.getProjectPageRoute(projectId, pageId)}
+                        link={appRoutes.getProjectPageRoute(project?.getId(), page?.getId())}
                         text="Edit"
                         Icon={Pencil}
                     />
                 </li>
                 <li className={styles.link}>
                     <MenuButton
-                        link={appRoutes.getProjectSettingsRoute(project?.getId())}
+                        link={appRoutes.getProjectPageSettingsRoute(project?.getId(), page?.getId())}
                         text="Settings"
                         Icon={Cog}
                     />

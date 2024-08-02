@@ -1,14 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { ProjectsContext } from "../../../../../Projects"
+import { ProjectsContext } from "../../../Projects"
 import React from "react"
-import { Badge, Button, Card, Flex, Heading, Inset, Text } from "@radix-ui/themes"
-import Thumbnail from "../../../../../Components/Thumbnail/Thumbnail"
-import ProjectContent from "../../../../../Store/ProjectContent"
-import { ApiContext } from "../../../../../Api/ApiProvider"
-import { PageMessageType, ProjectMessageType } from "../../../../../types"
-import useObservable from "../../../../../Utils/Hooks/UseObservable"
+import { Badge, Box, Button, Card, Flex, Heading, Inset, Text } from "@radix-ui/themes"
+import Thumbnail from "../../../Components/Thumbnail/Thumbnail"
+import ProjectContent from "../../../Store/ProjectContent"
+import { ApiContext } from "../../../Api/ApiProvider"
+import { PageMessageType, ProjectMessageType } from "../../../types"
+import useObservable from "../../../Utils/Hooks/UseObservable"
 import { filter } from "rxjs"
-import { appRoutes } from "../../../../router"
+import { appRoutes } from "../../router"
+import Helmet from "../Components/Helmet/Helmet"
 
 const RouteProjectSettingsContent: React.FC = () => {
     const navigate = useNavigate();
@@ -17,7 +18,11 @@ const RouteProjectSettingsContent: React.FC = () => {
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
     const [isLoading, setIsLoading] = React.useState(false)
-    useObservable(project.event$.pipe(filter(event => event.type === ProjectMessageType.DELETE_CONTENT)))
+
+    useObservable(project.event$.pipe(filter(event => (
+        event.type === ProjectMessageType.SET_CONTENT ||
+        event.type === ProjectMessageType.DELETE_CONTENT
+    ))))
 
     if (!projectId || !project) {
         return null
@@ -134,9 +139,15 @@ const RouteProjectSettingsContent: React.FC = () => {
     })
 
     return (
-        <Flex wrap="wrap" gap="2" justify="center" align="stretch">
-            {sections}
-        </Flex>
+        <Helmet>
+
+            <Box mt="5" mb="9">
+                <Flex wrap="wrap" gap="2" justify="center" align="stretch">
+                    {sections}
+                </Flex>
+            </Box>
+
+        </Helmet>
     )
 }
 

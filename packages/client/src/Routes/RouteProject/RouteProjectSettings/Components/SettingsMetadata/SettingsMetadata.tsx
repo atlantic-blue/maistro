@@ -10,7 +10,7 @@ import { createUrl } from "../../../../../Utils/url"
 import * as styles from "./SettingsMetadata.scss"
 import { ApiContext } from "../../../../../Api/ApiProvider"
 import { Box, Button, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes"
-import RouteProjectSettingsTheme from "../RouteProjectSettingsTheme/RouteProjectSettingsTheme"
+import RouteProjectSettingsTheme from "../../../RouteProjectTheme/RouteProjectTheme"
 
 interface SettingsMetadataProps {
     project: Project

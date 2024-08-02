@@ -56,6 +56,7 @@ export interface SectionCheckoutMercadoPagoProps {
     "data-hydration-id"?: string
     projectId: string
     checkoutUrl: string
+    orderUrl: string
 
     returnUrl: string
     paymentUrl: string
@@ -218,6 +219,14 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
                     shipping_options: props.shippingOptions,
                 })
             }).then(response => response.json())
+
+            await fetch(props.orderUrl, {
+                method: "POST",
+                body: JSON.stringify({
+                    projectId: props.projectId,
+                    shoppingCartId,
+                })
+            })
 
             setPreferenceId(response.id)
         } catch (error) {

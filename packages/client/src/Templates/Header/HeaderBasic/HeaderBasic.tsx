@@ -23,6 +23,7 @@ const HeaderBasic: React.FC<HeaderProps> = ({
             <Box ml="6" mr='6'>
                 <Flex align="center" justify="between">
                     <Logo
+                        href={logo.href}
                         imgUrl={logo.url}
                         slogan={logo.slogan}
                     />

@@ -1,11 +1,11 @@
 import React from "react"
 import { Box, Button, Card, Text, TextField } from "@radix-ui/themes"
 
-import { ApiContext } from "../../../../../Api/ApiProvider"
-import { ProjectsContext } from "../../../../../Projects"
+import { ApiContext } from "../../../Api/ApiProvider"
+import { ProjectsContext } from "../../../Projects"
 
-import { Project } from "../../../../../Store/Project"
-import { ProjectMessageType } from "../../../../../types"
+import { Project } from "../../../Store/Project"
+import { ProjectMessageType } from "../../../types"
 import * as styles from "./RouteProjectSettingsMailList.scss"
 
 interface RouteProjectSettingsMailListCreateProps {

@@ -68,6 +68,10 @@ class PageStore implements IPage {
 
     private createSubscriptions() {
         return this.event$.subscribe(event => {
+            if (event.type === PageMessageType.SET) {
+                this.set(event.data)
+            }
+
             if (event.type === PageMessageType.SET_TITLE) {
                 this.setTitle(event.data)
             }

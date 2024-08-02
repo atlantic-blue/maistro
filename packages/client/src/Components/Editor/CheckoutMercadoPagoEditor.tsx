@@ -22,6 +22,7 @@ const SectionCheckoutMercadoPagoEditor: React.FC<SectionCheckoutMercadoPagoProps
         props.onSaveData({
             projectId: projectId || "",
             checkoutUrl: env.api.payments.checkouts.createLatam,
+            orderUrl: env.api.orders.create,
             paymentUrl: env.api.payments.process.createLatam,
 
             publicKey: state.publicKey,

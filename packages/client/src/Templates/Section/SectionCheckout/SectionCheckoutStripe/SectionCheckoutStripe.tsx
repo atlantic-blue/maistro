@@ -39,6 +39,7 @@ export interface SectionCheckoutStripeProps {
     "data-hydration-id"?: string
     projectId: string
     checkoutUrl: string
+    orderUrl: string
 
     returnUrl: string
     accountId: string
@@ -61,6 +62,7 @@ interface SectionCheckoutItemsProps {
     projectId: string
     onCreateOrder: (
         items: SectionCheckoutBasicItem[],
+        shoppingCartId: string
     ) => Promise<void>
     isLoading: boolean
 }
@@ -194,7 +196,7 @@ const SectionCheckoutItems: React.FC<SectionCheckoutItemsProps> = (props) => {
             return prev
         }, checkoutItems)
 
-        props.onCreateOrder(checkoutItems)
+        props.onCreateOrder(checkoutItems, shoppingCart.id)
     }
 
     return (
@@ -266,6 +268,7 @@ const SectionCheckoutItems: React.FC<SectionCheckoutItemsProps> = (props) => {
 
 const SectionCheckoutStripe: React.FC<SectionCheckoutStripeProps> = (props) => {
     const {
+        orderUrl,
         accountId,
         projectId,
         returnUrl,
@@ -279,7 +282,10 @@ const SectionCheckoutStripe: React.FC<SectionCheckoutStripeProps> = (props) => {
     const stripePromise = getStripePromise(accountId)
     const [loading, setIsLoading] = React.useState(false)
 
-    const onCreateOrder = async (items: SectionCheckoutBasicItem[]) => {
+    const onCreateOrder = async (
+        items: SectionCheckoutBasicItem[],
+        shoppingCartId: string
+    ) => {
         setIsLoading(true)
         try {
             const response = await fetch(checkoutUrl, {
@@ -288,12 +294,21 @@ const SectionCheckoutStripe: React.FC<SectionCheckoutStripeProps> = (props) => {
                     project_id: projectId,
                     account_id: accountId,
                     return_url: returnUrl,
+                    shopping_cart_id: shoppingCartId,
                     line_items: items,
                     enable_shipping: enableShipping,
                     shipping_options: shippingOptions,
                     allowed_countries: allowedCountries,
                 })
             }).then(response => response.json())
+
+            await fetch(orderUrl, {
+                method: "POST",
+                body: JSON.stringify({
+                    projectId,
+                    shoppingCartId,
+                })
+            })
 
             setClientSecret(response.session.client_secret)
         } catch (error) {

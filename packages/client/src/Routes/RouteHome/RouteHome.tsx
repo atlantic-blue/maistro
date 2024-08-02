@@ -8,6 +8,7 @@ import SectionServicesBasic from "../../Templates/Section/SectionServices/Sectio
 import FooterBasic from "../../Templates/Footer/FooterBasic/FooterBasic";
 import CreateProjectFlow from "./Components/CreateProjectFlow/CreateProjectFlow";
 import HeaderBasic from "../../Templates/Header/HeaderBasic/HeaderBasic";
+import { ResourceStringsContext } from "../../ResourceStrings/ResourceStringsProvider";
 
 // https://mixkit.co/free-stock-video/going-down-a-curved-highway-through-a-mountain-range-41576/
 const videoURLS = [
@@ -20,6 +21,11 @@ const videoURLS = [
 
 const RoutesHome: React.FC = () => {
     const { logIn } = React.useContext(AuthContext)
+    const {
+        data,
+        language
+    } = React.useContext(ResourceStringsContext)
+
     return (
         <>
             <HeaderBasic

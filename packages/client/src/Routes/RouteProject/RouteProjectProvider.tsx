@@ -234,6 +234,32 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
             })
     }
 
+    const getOrders = async () => {
+        if (!projectId) {
+            return
+        }
+        const response = await api.orders.read({
+            token: user.getTokenId(),
+            projectId,
+        })
+
+        if (!response || !Array.isArray(response)) {
+            return
+        }
+
+        response?.filter(Boolean)
+            .map(orderStruct => {
+                project.event$.next({
+                    type: ProjectMessageType.SET_ORDER,
+                    data: {
+                        id: orderStruct.id,
+                        shoppingCartId: orderStruct.shoppingCartId,
+                        status: orderStruct.status,
+                    }
+                })
+            })
+    }
+
     React.useEffect(() => {
         getPages()
             .then(() => {
@@ -247,6 +273,10 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
 
     React.useEffect(() => {
         getProduct()
+    }, [projectId])
+
+    React.useEffect(() => {
+        getOrders()
     }, [projectId])
 
     React.useEffect(() => {

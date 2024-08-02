@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 
 import { ProjectsContext } from "../../../Projects"
-import RouteProjectHeader from "../../RouteProject/Components/Header/Header"
 
-import { Blockquote, Button, Card, Code, Flex, Heading, Text } from "@radix-ui/themes"
+import { Avatar, Blockquote, Button, Card, Code, Flex, Heading, Text } from "@radix-ui/themes"
 
 import { ApiContext } from "../../../Api/ApiProvider"
 import { PaymentsContext, canUseFeature } from "../../../Payments/PaymentsProvider"
 import * as styles from "./RoutePaymentsAccounts.scss"
+import { appRoutes } from "../../router"
+import PaymentPlan from "../../../Payments/PaymentPlan/PaymentPlan"
+import HeaderBurger from "../../../Templates/Header/HeaderBurger/HeaderBurger"
 
 const RoutePaymentsAccounts: React.FC = () => {
     const { api } = React.useContext(ApiContext)
@@ -58,7 +60,34 @@ const RoutePaymentsAccounts: React.FC = () => {
 
     return (
         <div className={styles.main}>
-            <RouteProjectHeader />
+             <HeaderBurger
+                {
+                ...{
+                    logo: {
+                        url: "https://maistro.website/assets/logo.svg",
+                        slogan: "Maistro",
+                        href: appRoutes.getHomeRoute()
+                    },
+                    links: [
+                        {
+                            href: appRoutes.getSettingsRoute(),
+                            name: (
+                                <Flex align="center" gap="2" justify="center">
+                                    <PaymentPlan />
+                                    <Avatar
+                                        size="1"
+                                        src={user.getAvatar()}
+                                        fallback={user.getName().charAt(0)}
+                                    />
+                                    <Text>Settings</Text>
+                                </Flex>
+                            ),
+                            description: "My settings"
+                        },
+                    ]
+                }
+                }
+            />
 
             <br />
             <Heading size="4" as="h1" align="center">

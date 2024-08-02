@@ -9,7 +9,7 @@ import { PaymentsSubscriptionsReadInput, PaymentsSubscriptionsReadOutput, paymen
 import { EmailListsCreateInput, EmailListsCreateOutput, emailListsCreate } from "./EmailLists/emailListsCreate";
 import { EmailListsReadInput, EmailListsReadOutput, emailListsRead } from "./EmailLists/emailListsRead";
 
-import { ProductStruct, ProjectStruct } from "../types";
+import { OrderStruct, ProductStruct, ProjectStruct } from "../types";
 import { EmailEntriesCreateInput, EmailEntriesCreateOutput, emailEntriesCreate } from "./EmailEntries/emailEntriesCreate";
 import { EmailEntriesReadInput, EmailEntriesReadOutput, emailEntriesReadById } from "./EmailEntries/emailEntriesReadById";
 import { PagesCreateInput, PagesCreateOutput, pagesCreate } from "./Pages/pagesCreate";
@@ -43,6 +43,10 @@ import { ProductsReadByIdInput, productsReadById } from "./Products/productsRead
 import { ProductsUpdateByIdInput, ProductsUpdateByIdOutput, productsUpdateById } from "./Products/productsUpdateById";
 import { ProductsDeleteInput, productsDelete } from "./Products/productsDelete";
 import { ContentDeleteByIdInput, contentDeleteById } from "./Content/contentDeleteById";
+import { OrdersReadByIdInput, ordersReadById } from "./Orders/ordersReadById";
+import { OrdersDeleteInput, ordersDelete } from "./Orders/ordersDelete";
+import { OrdersReadInput, ordersRead } from "./Orders/ordersRead";
+import { OrdersUpdateByIdInput, OrdersUpdateByIdOutput, ordersUpdateById } from "./Orders/ordersUpdateById";
 
 interface ApiContextState {
     api: {
@@ -87,6 +91,12 @@ interface ApiContextState {
             readById: (input: ProductsReadByIdInput) => Promise<ProductStruct>
             updateById: (input: ProductsUpdateByIdInput) => Promise<ProductsUpdateByIdOutput>,
             delete: (input: ProductsDeleteInput) => Promise<void>,
+        }
+        orders: {
+            read: (input: OrdersReadInput) => Promise<OrderStruct[]>
+            delete: (input: OrdersDeleteInput) => Promise<void>,
+            readById: (input: OrdersReadByIdInput) => Promise<OrderStruct>
+            updateById: (input: OrdersUpdateByIdInput) => Promise<OrdersUpdateByIdOutput>,
         }
         projects: {
             create: (input: ProjectsCreateInput) => Promise<ProjectsCreateOutput>
@@ -177,6 +187,12 @@ const context: ApiContextState = {
             read: productsRead,
             delete: productsDelete,
             create: productsCreate,
+        },
+        orders: {
+            read: ordersRead,
+            readById: ordersReadById,
+            delete: ordersDelete,
+            updateById: ordersUpdateById,
         },
         email: {
             lists: {

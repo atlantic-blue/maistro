@@ -63,8 +63,8 @@ resource "aws_iam_policy" "api_lambda_orders_create_dynamo" {
         ],
         Effect : "Allow",
         Resource : [
-          "${aws_dynamodb_table.products.arn}",
-          "${aws_dynamodb_table.products.arn}/index/*"
+          "${aws_dynamodb_table.orders.arn}",
+          "${aws_dynamodb_table.orders.arn}/index/*"
         ]
       }
     ]
@@ -108,7 +108,7 @@ resource "aws_lambda_function" "api_lambda_orders_create" {
 
   environment {
     variables = {
-      TABLE_NAME          = "${aws_dynamodb_table.products.name}"
+      TABLE_NAME          = "${aws_dynamodb_table.orders.name}"
       PAYMENTS_SECRET_KEY = "${var.payments_secret_key}"
       PAYMENTS_WEBHOOK_SECRET_KEY = "${var.payments_webhook_secret_key}"
     }

@@ -14,6 +14,8 @@ import { ApiContext } from "../../../Api/ApiProvider";
 
 import useObservable from "../../../Utils/Hooks/UseObservable";
 import * as styles from "./RouteProjectPageCreate.scss"
+import Menu from "../Components/Menu/Menu";
+import PageNavigationDropdown from "../RouteProjectPage/PageNavigationDropdown/PageNavigationDropdown";
 
 const RouteProjectCreate: React.FC = () => {
     const navigate = useNavigate();
@@ -82,6 +84,8 @@ const RouteProjectCreate: React.FC = () => {
 
     return (
         <Helmet>
+            <PageNavigationDropdown />
+
             <Section size="1">
                 <Card className={styles.card}>
                     <Flex direction="column" align="center" justify="center">
@@ -137,6 +141,8 @@ const RouteProjectCreate: React.FC = () => {
                     </Flex>
                 </Card>
             </Section>
+
+            <Menu />
         </Helmet >
     );
 };

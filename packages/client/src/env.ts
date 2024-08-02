@@ -63,6 +63,13 @@ interface Env {
             update: string
             delete: string
         }
+        orders: {
+            create: string
+            read: (projectId: string) => string
+            readById: (projectId: string, id: string) => string
+            updateById: (projectId: string, id: string) => string
+            deleteById: (projectId: string, id: string) => string
+        }
         payments: {
             accounts: {
                 create: string
@@ -157,6 +164,15 @@ const createEnv = (): Env => {
                 read: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
                 update: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/content`,
                 deleteById: (projectId: string, contentId: string) => `${apiBaseUrl}/projects/${projectId}/content/${contentId}`,
+            },
+            orders: {
+                // public url
+                create: `${apiBaseUrl}/orders`,
+                // private urls
+                read: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/orders`,
+                readById: (projectId: string, id: string) => `${apiBaseUrl}/projects/${projectId}/orders/${id}`,
+                updateById: (projectId: string, id: string) => `${apiBaseUrl}/projects/${projectId}/orders/${id}`,
+                deleteById: (projectId: string, id: string) => `${apiBaseUrl}/projects/${projectId}/orders/${id}`,
             },
             pages: {
                 create: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/pages`,

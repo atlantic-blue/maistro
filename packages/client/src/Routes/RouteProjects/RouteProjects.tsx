@@ -1,19 +1,19 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
+import { CirclePlus } from "lucide-react";
+import { Avatar, Box, Button, Card, Flex, Section, Text } from "@radix-ui/themes"
 
 import { ProjectsContext } from "../../Projects"
 
 import { appRoutes } from "../router"
 
-import RouteProjectHeader from "../RouteProject/Components/Header/Header"
-
-import { Box, Button, Card, Flex, Section, Text } from "@radix-ui/themes"
+import HeaderBurger from "../../Templates/Header/HeaderBurger/HeaderBurger"
+import PaymentPlan from "../../Payments/PaymentPlan/PaymentPlan"
 import * as styles from "./RouteProjects.scss"
-import { CirclePlus } from "lucide-react";
 
 const RoutesProjects: React.FC = () => {
     const navigate = useNavigate();
-    const { projects } = React.useContext(ProjectsContext)
+    const { projects, user } = React.useContext(ProjectsContext)
 
     const onNewProjectClick = async () => {
         navigate(appRoutes.getProjectsNewRoute())
@@ -23,7 +23,34 @@ const RoutesProjects: React.FC = () => {
 
     return (
         <div className={styles.projects}>
-            <RouteProjectHeader />
+            <HeaderBurger
+                {
+                ...{
+                    logo: {
+                        url: "https://maistro.website/assets/logo.svg",
+                        slogan: "Maistro",
+                        href: appRoutes.getHomeRoute()
+                    },
+                    links: [
+                        {
+                            href: appRoutes.getSettingsRoute(),
+                            name: (
+                                <Flex align="center" gap="2" justify="center">
+                                    <PaymentPlan />
+                                    <Avatar
+                                        size="1"
+                                        src={user.getAvatar()}
+                                        fallback={user.getName().charAt(0)}
+                                    />
+                                    <Text>Settings</Text>
+                                </Flex>
+                            ),
+                            description: "My settings"
+                        },
+                    ]
+                }
+                }
+            />
             <Flex direction="column" align="center">
                 <Section size="2" m="2">
                     <Flex direction="column" gap="4">
