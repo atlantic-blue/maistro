@@ -46,5 +46,8 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "description": ""
+    "description": "",
+    "dependencies": {
+        "@react-email/components": "0.0.22"
+    }
 }

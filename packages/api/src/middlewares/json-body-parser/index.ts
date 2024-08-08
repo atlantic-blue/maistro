@@ -26,6 +26,7 @@ const jsonBodyParser = (event: APIGatewayProxyEvent) => {
             throw createError(500, `Middleware | ${NAME} | Empty request`)
         }
 
+        event.rawBody = event.body
         event.body = body
         return event
     } catch (error) {

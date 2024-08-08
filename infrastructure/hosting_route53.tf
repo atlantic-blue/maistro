@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "hosting" {
-  name = "${var.domain_name_hosting}"
+  name = var.domain_name_hosting
   tags = {
     application = "${lookup(local.tags, "application")}"
     environment = "${lookup(local.tags, "environment")}"
@@ -10,7 +10,7 @@ resource "aws_route53_zone" "hosting" {
 
 # see https://github.com/hashicorp/terraform-provider-aws/issues/27318
 resource "aws_route53domains_registered_domain" "hosting" {
-  domain_name = "${var.domain_name_hosting}"
+  domain_name = var.domain_name_hosting
 
   dynamic "name_server" {
     for_each = toset(aws_route53_zone.hosting.name_servers)
@@ -29,7 +29,7 @@ resource "aws_route53domains_registered_domain" "hosting" {
 
 resource "aws_route53_record" "hosting" {
   zone_id = aws_route53_zone.hosting.id
-  name    = "${var.domain_name_hosting}"
+  name    = var.domain_name_hosting
   type    = "A"
   alias {
     name                   = aws_cloudfront_distribution.hosting.domain_name

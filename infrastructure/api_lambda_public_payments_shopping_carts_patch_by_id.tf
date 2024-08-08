@@ -112,7 +112,7 @@ resource "aws_lambda_function" "api_lambda_payments_shopping_carts_patch_by_id" 
 
   environment {
     variables = {
-      TABLE_NAME          = "${aws_dynamodb_table.payments_shopping_carts.name}"
+      TABLE_NAME = "${aws_dynamodb_table.payments_shopping_carts.name}"
     }
   }
 

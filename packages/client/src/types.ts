@@ -7,6 +7,7 @@ import Page from "./Store/Page"
 import { User } from "./Store/User"
 import { TemplateComponentType } from "./Templates/templateTypes"
 import { Currency } from "./Utils/currency"
+import { Item } from "./Store/Order"
 
 export interface UserStruct {
     id: string
@@ -28,6 +29,8 @@ export interface OrderStruct {
     id: string
     shoppingCartId: string
     status: OrderStatus
+    items: Item[]
+    fulfilmentSlot: string
 }
 
 export interface ProjectStruct {

@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "hosting_certificate" {
-  domain_name       = "${var.domain_name_hosting}"
+  domain_name       = var.domain_name_hosting
   validation_method = "DNS"
 
   tags = {

@@ -68,6 +68,7 @@ const productsUpdateById: APIGatewayProxyHandler = async (event: APIGatewayProxy
             projectId,
             history,
             updatedAt,
+            status,
         })
     };
 };

@@ -108,7 +108,7 @@ resource "aws_lambda_function" "api_lambda_orders_read_by_id" {
 
   environment {
     variables = {
-      TABLE_NAME          = "${aws_dynamodb_table.orders.name}"
+      TABLE_NAME = "${aws_dynamodb_table.orders.name}"
     }
   }
 

@@ -23,7 +23,7 @@ resource "aws_dynamodb_table" "orders" {
     type = "S"
   }
 
-    global_secondary_index {
+  global_secondary_index {
     name            = "ProjectIdIndex"
     hash_key        = "projectId"
     projection_type = "ALL"
@@ -32,7 +32,7 @@ resource "aws_dynamodb_table" "orders" {
     write_capacity = 1
   }
 
-   global_secondary_index {
+  global_secondary_index {
     name            = "ShoppingCartIdIndex"
     hash_key        = "shoppingCartId"
     projection_type = "ALL"

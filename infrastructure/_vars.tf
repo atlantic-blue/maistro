@@ -14,6 +14,10 @@ variable "domain_name_hosting" {
   default = "maistro.live"
 }
 
+variable "domain_name_email" {
+  default = "team.maistro.website"
+}
+
 variable "aws_region" {
   default = "us-east-1"
 }

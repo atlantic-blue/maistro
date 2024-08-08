@@ -155,9 +155,9 @@ resource "aws_cloudwatch_log_group" "api_lambda_ai_templates_create" {
 
 ## API GATEWAY
 resource "aws_apigatewayv2_integration" "api_lambda_ai_templates_create" {
-  api_id               = aws_apigatewayv2_api.api.id
-  integration_type     = "AWS_PROXY"
-  integration_uri      = aws_lambda_function.api_lambda_ai_templates_create.invoke_arn
+  api_id           = aws_apigatewayv2_api.api.id
+  integration_type = "AWS_PROXY"
+  integration_uri  = aws_lambda_function.api_lambda_ai_templates_create.invoke_arn
 }
 
 resource "aws_apigatewayv2_route" "api_lambda_ai_templates_create" {

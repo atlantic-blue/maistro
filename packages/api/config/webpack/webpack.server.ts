@@ -73,6 +73,7 @@ const createMultipleWebpackConfigs = [
 
     // "hosting-redirect",
 
+    // "email-create",
     // "email-entries-create",
     // "email-entries-read-by-id",
 
@@ -81,6 +82,11 @@ const createMultipleWebpackConfigs = [
     // // TODO "email-lists-update-by-id",
 
     // "orders-create",
+    // "orders-delete-by-id",
+    // "orders-read-by-id",
+    // "orders-read",
+    // "orders-update-by-id",
+    // "orders-webhook-stripe",
 
     // "pages-create",
     // "pages-read",
@@ -93,16 +99,16 @@ const createMultipleWebpackConfigs = [
     // "payments-accounts-read",
     // "payments-accounts-read-by-id",
 
-    // "payments-checkouts-create",
+    // "payments-checkouts-create-stripe",
     // MERCADO-PAGO
-    // "payments-checkouts-mercado-pago-create",
+    // "payments-checkouts-create-mercado-pago",
     // "payments-process-mercado-pago-create",
 
     // "payments-shopping-carts-create",
     // "payments-shopping-carts-read-by-id"
 
-    "payments-shopping-carts-patch-by-id",
-    "payments-shopping-carts-update-by-id",
+    // "payments-shopping-carts-patch-by-id",
+    // "payments-shopping-carts-update-by-id",
 
     // "payments-accounts-link-create",
     // "payments-subscriptions-read"

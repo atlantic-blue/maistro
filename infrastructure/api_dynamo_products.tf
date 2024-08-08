@@ -18,7 +18,7 @@ resource "aws_dynamodb_table" "products" {
     type = "S"
   }
 
-    global_secondary_index {
+  global_secondary_index {
     name            = "ProjectIdIndex"
     hash_key        = "projectId"
     projection_type = "ALL"

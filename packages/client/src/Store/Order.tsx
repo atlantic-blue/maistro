@@ -11,11 +11,26 @@ interface IOrder {
     setStatus(status: OrderStatus): void
     getStatus(): OrderStatus
 }
+export interface Item {
+    price_data: {
+        currency: string
+        product_data: {
+            name: string
+            description: string
+            images: string[]
+        },
+        unit_amount: string
+    }
+    quantity: number
+}
+
 
 export class Order implements IOrder {
     private id = ""
     private shoppingCartId = ""
     private status: OrderStatus = OrderStatus.CREATED
+    private items: Item[] = []
+    private fulfilmentSlot: string = ""
 
     private subscriptions: Subscription[] = []
     public event$ = new Subject<OrderEvent>()
@@ -42,6 +57,8 @@ export class Order implements IOrder {
             id: this.getId(),
             shoppingCartId: this.getShoppingCartId(),
             status: this.getStatus(),
+            items: this.getItems(),
+            fulfilmentSlot: this.getFulfilmentSlot(),
         }
     }
 
@@ -53,6 +70,8 @@ export class Order implements IOrder {
         this.setId(order.id)
         this.setShoppingCartId(order.shoppingCartId)
         this.setStatus(order.status)
+        this.setFulfilmentSlot(order.fulfilmentSlot)
+        this.setItems(order.items)
     }
 
     public setId(id: string) {
@@ -61,6 +80,22 @@ export class Order implements IOrder {
 
     public getId() {
         return this.id
+    }
+
+    public setItems(items: Item[]) {
+        this.items = items
+    }
+
+    public getItems() {
+        return this.items
+    }
+
+    public setFulfilmentSlot(fulfilmentSlot: string) {
+        this.fulfilmentSlot = fulfilmentSlot
+    }
+
+    public getFulfilmentSlot() {
+        return this.fulfilmentSlot
     }
 
     public setShoppingCartId(id: string) {

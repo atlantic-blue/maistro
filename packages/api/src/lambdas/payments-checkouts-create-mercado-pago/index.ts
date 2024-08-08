@@ -1,5 +1,6 @@
 import Joi from "joi";
 import AWS from 'aws-sdk';
+import * as uuid from "uuid"
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
 import { LambdaMiddlewares } from '../../middlewares';
@@ -9,6 +10,7 @@ import { validatorJoi } from "../../middlewares/validator-joi";
 
 import { MercadoPagoConfig, Preference } from 'mercadopago'
 import { Items, Shipments } from "mercadopago/dist/clients/commonTypes";
+import { OrderStatus } from "../orders-create/types";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -28,6 +30,7 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         shipping_options,
         enable_shipping,
         token_id,
+        shopping_cart_id,
     } = event.body as unknown as PaymentsCheckoutsMercadoPagoInput
 
     const config = new MercadoPagoConfig({
@@ -62,12 +65,29 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         }
     })
 
+    const id = uuid.v4()
+    const createdAt = new Date().toISOString()
+    const status = OrderStatus.CREATED
+
+    // create ORDER
     const params = {
         TableName: tableName,
         Item: {
-            id: response.id,
+            id,
+            platform: "MERCADO_PAGO",
+
             projectId: project_id,
-            type: "PLATFORM_MERCADO_PAGO",
+            sessionId: response.id,
+            shoppingCartId: shopping_cart_id,
+
+            status,
+            createdAt,
+            history: [
+                {
+                    status,
+                    timestamp: createdAt,
+                }
+            ],
         }
     };
 
@@ -86,6 +106,7 @@ interface PaymentsCheckoutsMercadoPagoInput {
     // Access token for mercado pago
     token_id: string
     project_id: string
+    shopping_cart_id: string
     return_url: string
     line_items: Items[]
     shipping_options: Shipments
@@ -96,6 +117,7 @@ interface PaymentsCheckoutsMercadoPagoInput {
 const validationSchema = Joi.object<PaymentsCheckoutsMercadoPagoInput>({
     token_id: Joi.string().required(),
     project_id: Joi.string().required(),
+    shopping_cart_id: Joi.string().required(),
     return_url: Joi.string().required(),
     line_items: Joi.array().items(
         Joi.object({

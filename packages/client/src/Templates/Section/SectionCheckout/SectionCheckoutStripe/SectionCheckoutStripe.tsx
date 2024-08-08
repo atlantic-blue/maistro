@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
-import { Avatar, Button, Card, Flex, Heading, Separator, Text } from "@radix-ui/themes"
+import { Avatar, Button, Card, Flex, Heading, IconButton, Select, Separator, Text } from "@radix-ui/themes"
 import { TemplateCategory, TemplateComponentType, TemplateStruct } from "../../../templateTypes"
-import env from "../../../../env";
+import StripeSDK from "stripe"
 
 import { Stripe, loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
@@ -10,6 +10,9 @@ import { ProductStruct, ShoppingCartItem, ShoppingCartStruct } from "../../../ty
 import { productsGet } from "../../../Api/Products/productsGet";
 import { PARAMS_SHOPPING_CART_ID, calculateItemTotal, clientStorage } from "../../SectionShoppingCart/SectionShoppingCartBasic/SectionShoppingCartBasic";
 import { Currency, CurrencySymbol, fromSmallestUnit } from "../../../../Utils/currency";
+import { Store, Truck } from "lucide-react";
+import SectionCheckoutSlot, { AvailableDay } from "./SectionCheckoutSlot/SectionCheckoutSlot";
+import { checkoutsCreateStripe } from "../../../Api/Checkouts/CheckoutsCreateStripe";
 
 let stripePromise: Promise<Stripe | null> | null = null
 const getStripePromise = (accountId: string) => {
@@ -35,27 +38,31 @@ export interface SectionCheckoutBasicItem {
     },
 }
 
+export interface ShippingOption {
+    minimumDeliveryAmount: number
+    imgSrc: string
+    availability: AvailableDay[]
+    shipping_rate_data: {
+        display_name: string
+        type: string
+        fixed_amount: {
+            amount: number
+            currency: string
+        }
+    }
+}
+
 export interface SectionCheckoutStripeProps {
     "data-hydration-id"?: string
     projectId: string
     checkoutUrl: string
-    orderUrl: string
 
     returnUrl: string
     accountId: string
 
     enableShipping: boolean
     allowedCountries: string[]
-    shippingOptions: Array<{
-        shipping_rate_data: {
-            display_name: string
-            type: string
-            fixed_amount: {
-                amount: number
-                currency: string
-            }
-        }
-    }>
+    shippingOptions: Array<ShippingOption>
 }
 
 interface SectionCheckoutItemsProps {
@@ -65,6 +72,12 @@ interface SectionCheckoutItemsProps {
         shoppingCartId: string
     ) => Promise<void>
     isLoading: boolean
+    enableShipping: boolean
+    shippingOptions: ShippingOption[]
+    setEnableShipping: React.Dispatch<React.SetStateAction<boolean>>
+    setFulfilmentDate: (date: string) => void
+    setFulfilmentDateInterval: (interval: string) => void
+    submitDisabled: boolean
 }
 
 const SectionCheckoutItems: React.FC<SectionCheckoutItemsProps> = (props) => {
@@ -252,10 +265,21 @@ const SectionCheckoutItems: React.FC<SectionCheckoutItemsProps> = (props) => {
                         </Text>
                     </Flex>
 
+                    <SectionFulfilment
+                        totalAmount={totalAmount}
+                        enableShipping={props.enableShipping}
+                        shippingOptions={props.shippingOptions}
+                        setEnableShipping={props.setEnableShipping}
+                        setFulfilmentDate={props.setFulfilmentDate}
+                        setFulfilmentDateInterval={props.setFulfilmentDateInterval}
+                        currency={currency}
+                    />
+
                     <Button
                         onClick={onCreateOrder}
                         size="2"
                         loading={props.isLoading}
+                        disabled={props.submitDisabled}
                     >
                         Confirm order & Authorize payment
                     </Button>
@@ -266,21 +290,101 @@ const SectionCheckoutItems: React.FC<SectionCheckoutItemsProps> = (props) => {
     )
 }
 
-const SectionCheckoutStripe: React.FC<SectionCheckoutStripeProps> = (props) => {
-    const {
-        orderUrl,
-        accountId,
-        projectId,
-        returnUrl,
-        checkoutUrl,
-        enableShipping,
-        shippingOptions,
-        allowedCountries,
-    } = props
+interface SectionFulfilmentProps {
+    totalAmount: number
+    enableShipping: boolean
+    setEnableShipping: React.Dispatch<React.SetStateAction<boolean>>
+    setFulfilmentDate: (slot: string) => void
+    setFulfilmentDateInterval: (interval: string) => void
+    currency: Currency
+    shippingOptions: ShippingOption[]
+}
 
+const SectionFulfilment: React.FC<SectionFulfilmentProps> = (props) => {
+    const selectedStyles = { border: "1px solid var(--accent-7)" }
+    const [shippingOption, setShippingOption] = React.useState<ShippingOption | null>(null)
+
+    const onSelectShippingOption = (option: ShippingOption) => {
+        props.setFulfilmentDate("")
+        props.setFulfilmentDateInterval("")
+        setShippingOption(option)
+    }
+
+    const onDateChange = (date: Date) => {
+        props.setFulfilmentDate(date.toISOString())
+    }
+
+    const onDayIntervalChange = (interval: { from: string, to: string }) => {
+        props.setFulfilmentDateInterval(`${interval.from} - ${interval.to}`)
+    }
+
+    return (
+        <Flex direction="column" mt="2" mb="2">
+            <Flex direction="row" gap="2" mb="2" justify="between">
+                {
+                    props.shippingOptions?.map(option => {
+                        return (props.totalAmount >= (option.minimumDeliveryAmount || 0)) ? (
+                            <Card
+                                key={option.shipping_rate_data.display_name}
+                                onClick={() => onSelectShippingOption(option)} style={shippingOption === option ? selectedStyles : {}}>
+                                <Flex direction="column" gap="1" align="center" justify="center">
+                                    <Avatar
+                                        src={option.imgSrc}
+                                        fallback={option.shipping_rate_data.display_name}
+                                        size="7"
+                                    />
+                                    <Text>{option.shipping_rate_data.display_name}</Text>
+                                </Flex>
+                            </Card>
+                        ) : (
+                            <Card
+                                key={option.shipping_rate_data.display_name}
+                            >
+                                <Flex direction="column" gap="1" align="center" justify="center">
+                                    <Avatar
+                                        src={option.imgSrc}
+                                        fallback={option.shipping_rate_data.display_name}
+                                        size="7"
+                                    />
+                                    <Text>{option.shipping_rate_data.display_name}</Text>
+                                    <Text size="1">Minimum Delivery</Text>
+                                    <Text size="1">
+                                        {CurrencySymbol[props.currency]} {' '}
+                                        {
+                                            fromSmallestUnit(
+                                                option.minimumDeliveryAmount,
+                                                props.currency
+                                            )
+                                        }
+                                    </Text>
+
+                                </Flex>
+                            </Card>
+                        )
+                    })
+                }
+            </Flex>
+
+
+            {shippingOption ? (
+                <SectionCheckoutSlot
+                    onDateChange={onDateChange}
+                    onDayIntervalChange={onDayIntervalChange}
+                    availableDays={shippingOption.availability || []}
+                />
+            ) : null}
+
+        </Flex>
+    )
+}
+
+const SectionCheckoutStripe: React.FC<SectionCheckoutStripeProps> = (props) => {
     const [clientSecret, setClientSecret] = React.useState("")
-    const stripePromise = getStripePromise(accountId)
+    const stripePromise = getStripePromise(props.accountId)
     const [loading, setIsLoading] = React.useState(false)
+    const [enableShipping, setEnableShipping] = React.useState(true)
+    const [fulfilmentDate, setFulfilmentDate] = React.useState("")
+    const [fulfilmentDateInterval, setFulfilmentDateInterval] = React.useState("")
 
     const onCreateOrder = async (
         items: SectionCheckoutBasicItem[],
@@ -288,29 +392,33 @@ const SectionCheckoutStripe: React.FC<SectionCheckoutStripeProps> = (props) => {
     ) => {
         setIsLoading(true)
         try {
-            const response = await fetch(checkoutUrl, {
-                method: "POST",
-                body: JSON.stringify({
-                    project_id: projectId,
-                    account_id: accountId,
-                    return_url: returnUrl,
-                    shopping_cart_id: shoppingCartId,
-                    line_items: items,
-                    enable_shipping: enableShipping,
-                    shipping_options: shippingOptions,
-                    allowed_countries: allowedCountries,
-                })
-            }).then(response => response.json())
+            const response = await checkoutsCreateStripe({
+                checkoutUrl: props.checkoutUrl,
 
-            await fetch(orderUrl, {
-                method: "POST",
-                body: JSON.stringify({
-                    projectId,
-                    shoppingCartId,
-                })
+                projectId: props.projectId,
+                accountId: props.accountId,
+                returnUrl: props.returnUrl,
+                shippingOptions: props.shippingOptions.map(f => {
+                    return {
+                        shipping_rate_data: f.shipping_rate_data,
+                    }
+                }),
+
+                allowedCountries: props.allowedCountries,
+
+                items,
+                shoppingCartId,
+                enableShipping,
+                fulfilmentDate,
+                fulfilmentDateInterval,
             })
 
-            setClientSecret(response.session.client_secret)
+
+            const clientSecret = response?.data?.session?.client_secret
+            if (clientSecret) {
+                setClientSecret(clientSecret)
+                localStorage.clear()
+            }
         } catch (error) {
 
         } finally {
@@ -338,6 +446,12 @@ const SectionCheckoutStripe: React.FC<SectionCheckoutStripeProps> = (props) => {
                 projectId={props.projectId}
                 onCreateOrder={onCreateOrder}
                 isLoading={loading}
+                enableShipping={enableShipping}
+                shippingOptions={props.shippingOptions}
+                setEnableShipping={setEnableShipping}
+                setFulfilmentDate={setFulfilmentDate}
+                setFulfilmentDateInterval={setFulfilmentDateInterval}
+                submitDisabled={!fulfilmentDate || !fulfilmentDateInterval}
             />
         </Flex>
     )
@@ -356,11 +470,14 @@ export const SectionCheckoutStripeItem: TemplateStruct<SectionCheckoutStripeProp
         accountId: "",
         projectId: "",
         returnUrl: "",
-        checkoutUrl: env.api.payments.checkouts.create,
+        checkoutUrl: "",
         enableShipping: true,
         allowedCountries: ["GB"],
         shippingOptions: [
             {
+                minimumDeliveryAmount: 1000,
+                availability: [],
+                imgSrc: "",
                 shipping_rate_data: {
                     display_name: "Store Pickup",
                     type: "fixed_amount",
@@ -371,6 +488,9 @@ export const SectionCheckoutStripeItem: TemplateStruct<SectionCheckoutStripeProp
                 }
             },
             {
+                minimumDeliveryAmount: 1000,
+                imgSrc: "",
+                availability: [],
                 shipping_rate_data: {
                     display_name: "Local Delivery",
                     type: "fixed_amount",

@@ -83,8 +83,10 @@ interface Env {
                 read: string
             }
             checkouts: {
-                create: string
-                createLatam: string
+                create: {
+                    stripe: string
+                    mercadoPago: string
+                }
             }
             process: {
                 createLatam: string
@@ -207,10 +209,12 @@ const createEnv = (): Env => {
                 },
                 // Public
                 checkouts: {
-                    create: `${apiBaseUrl}/payments/checkouts`,
-                    createLatam: `${apiBaseUrl}/payments/checkouts/latam`,
+                    create: {
+                        stripe: `${apiBaseUrl}/payments/checkouts/stripe`,
+                        mercadoPago: `${apiBaseUrl}/payments/checkouts/mercado-pago`,
+                    }
                 },
-                // Public
+                // Public (specific to mercado pago)// TODO revise
                 process: {
                     createLatam: `${apiBaseUrl}/payments/process/latam`,
                 }

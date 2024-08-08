@@ -11,11 +11,12 @@ import RoutesHome from "./RouteHome/RouteHome";
 import { ResourceStringLanguage } from "../ResourceStrings";
 import { getCurrentLanguage } from "../ResourceStrings/ResourceStringsProvider";
 import RouteProjectProducts from "./RouteProject/RouteProjectProducts/RouteProjectProducts";
-import RouteProjectSettingsOrders from "./RouteProject/RouteProjectOrders/RouteProjectOrders";
+import RouteProjectOrders from "./RouteProject/RouteProjectOrders/RouteProjectOrders";
 import RouteProjectSettingsContent from "./RouteProject/RouteProjectContents/RouteProjectContents";
 import RouteProjectSettingsTheme from "./RouteProject/RouteProjectTheme/RouteProjectTheme";
 import RouteProjectSettingsMailList from "./RouteProject/RouteProjectMailList/RouteProjectMailList";
 import RouteProjectPageSettings from "./RouteProject/RouteProjectPageSettings/RouteProjectSettings";
+import RouteProjectOrder from "./RouteProject/RouteProjectOrder/RouteProjectOrders";
 
 // https://v5.reactrouter.com/web/guides/code-splitting
 const RoutesProjects = loadable(() => import("./RouteProjects/RouteProjects"), {
@@ -91,7 +92,8 @@ export enum RoutesParams {
     PAGE_ID = ":pageId",
     CONTENT_ID = ":contentId",
     PAYMENTS_ACCOUNT_ID = ":paymentsAccountId",
-    TEMPLATE_ID = ":templateId"
+    TEMPLATE_ID = ":templateId",
+    ORDER_ID = ":orderId"
 }
 
 export enum Routes {
@@ -134,6 +136,7 @@ export enum Routes {
     PROJECT_CONTACTS = `/projects/${RoutesParams.PROJECT_ID}/contacts`,
     PROJECT_PRODUCTS = `/projects/${RoutesParams.PROJECT_ID}/products`,
     PROJECT_ORDERS = `/projects/${RoutesParams.PROJECT_ID}/orders`,
+    PROJECT_ORDER = `/projects/${RoutesParams.PROJECT_ID}/orders/${RoutesParams.ORDER_ID}`,
     PROJECT_CONTENTS = `/projects/${RoutesParams.PROJECT_ID}/contents`,
 }
 
@@ -224,6 +227,10 @@ class AppRoutes {
 
     getProjectOrdersRoute(projectId: string,) {
         return `/${this.language}${Routes.PROJECTS}/${projectId}/orders`
+    }
+
+    getProjectOrderRoute(projectId: string, orderId: string) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/orders/${orderId}`
     }
 
     getProjectContactsRoute(projectId: string,) {
@@ -402,7 +409,17 @@ const routes: RouteObject[] = [
         element: (
             <ProtectedRoute>
                 <RouteProjectProvider>
-                    <RouteProjectSettingsOrders />
+                    <RouteProjectOrders />
+                </RouteProjectProvider>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: Routes.PROJECT_ORDER,
+        element: (
+            <ProtectedRoute>
+                <RouteProjectProvider>
+                    <RouteProjectOrder />
                 </RouteProjectProvider>
             </ProtectedRoute>
         ),

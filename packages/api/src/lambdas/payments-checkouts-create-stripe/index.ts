@@ -1,6 +1,7 @@
 import Stripe from "stripe"
 import Joi from "joi";
 import AWS from 'aws-sdk';
+import * as uuid from "uuid"
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
 import { LambdaMiddlewares } from '../../middlewares';
@@ -8,6 +9,7 @@ import createError from "../../middlewares/error-handler";
 import jsonBodyParser from "../../middlewares/json-body-parser";
 import { validatorJoi } from "../../middlewares/validator-joi";
 import { calculateFeeAmount } from "./feeAmounts";
+import { OrderStatus } from "../orders-create/types";
 
 const TRANSACTION_FEE_PERCENTAGE = 1
 const paymentsSecretKey = process.env.PAYMENTS_SECRET_KEY
@@ -34,14 +36,20 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         shopping_cart_id,
         enable_shipping,
         allowed_countries,
-        shipping_options
+        shipping_options,
+        fulfilment_date,
+        fulfilment_date_interval,
     } = event.body as unknown as PaymentsCheckoutsInput
+
+    const id = uuid.v4()
+    const createdAt = new Date().toISOString()
+    const status = OrderStatus.CREATED
 
     const session = await stripe.checkout.sessions.create(
         {
             mode: "payment",
             ui_mode: "embedded",
-            return_url,
+            return_url: `${return_url}?orderId=${id}`,
             line_items,
             payment_intent_data: {
                 application_fee_amount: calculateFeeAmount(line_items, TRANSACTION_FEE_PERCENTAGE)
@@ -50,6 +58,7 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
                 project_id,
                 account_id,
                 shopping_cart_id,
+                order_id: id,
             },
             ...(enable_shipping ? {
                 shipping_address_collection: {
@@ -64,12 +73,32 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         }
     )
 
+    // create ORDER
     const params = {
         TableName: tableName,
         Item: {
-            id: session.id,
+            id,
+            platform: "STRIPE",
+
             projectId: project_id,
+            sessionId: session.id,
             shoppingCartId: shopping_cart_id,
+
+            fulfilment: {
+                date: fulfilment_date,
+                interval: fulfilment_date_interval,
+            },
+            items: line_items,
+            shippingOptions: shipping_options,
+
+            status,
+            createdAt,
+            history: [
+                {
+                    status,
+                    timestamp: createdAt,
+                }
+            ],
         }
     };
 
@@ -101,6 +130,8 @@ interface PaymentsCheckoutsInput {
     shopping_cart_id: string
     return_url: string
     line_items: Stripe.Checkout.SessionCreateParams.LineItem[]
+    fulfilment_date?: string
+    fulfilment_date_interval?: string
     enable_shipping: boolean
     allowed_countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[]
     shipping_options: PaymentShippingOptions[]
@@ -127,6 +158,8 @@ const validationSchema = Joi.object<PaymentsCheckoutsInput>({
             }).required()
         }),
     ).required(),
+    fulfilment_date: Joi.string().allow("").optional(),
+    fulfilment_date_interval: Joi.string().allow("").optional(),
     enable_shipping: Joi.boolean().required(),
     allowed_countries: Joi.array().items(Joi.string()).optional(),
     shipping_options: Joi.array()

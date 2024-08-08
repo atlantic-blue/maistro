@@ -42,14 +42,17 @@ const createWebpackConfig = (args: WebpackArgs): Configuration => {
         devtool: 'source-map',
         cache: false,
         optimization: {
-            minimizer: [new TerserPlugin({
-                terserOptions: {
-                    compress: {
-                        drop_console: true,
+            minimizer: [
+                new TerserPlugin({
+                    terserOptions: {
+                        compress: {
+                            drop_console: true,
+                        },
+                        mangle: true,
                     },
-                    mangle: true,
-                },
-            }), new CssMinimizerPlugin()],
+                }),
+                new CssMinimizerPlugin()
+            ],
             minimize: true
         },
     }

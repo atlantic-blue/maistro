@@ -255,6 +255,8 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
                         id: orderStruct.id,
                         shoppingCartId: orderStruct.shoppingCartId,
                         status: orderStruct.status,
+                        fulfilmentSlot: orderStruct.fulfilmentSlot,
+                        items: orderStruct.items
                     }
                 })
             })

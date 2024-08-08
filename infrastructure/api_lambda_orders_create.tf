@@ -110,7 +110,6 @@ resource "aws_lambda_function" "api_lambda_orders_create" {
     variables = {
       TABLE_NAME          = "${aws_dynamodb_table.orders.name}"
       PAYMENTS_SECRET_KEY = "${var.payments_secret_key}"
-      PAYMENTS_WEBHOOK_SECRET_KEY = "${var.payments_webhook_secret_key}"
     }
   }
 

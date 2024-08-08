@@ -11,7 +11,7 @@ export enum Currency {
 export enum CurrencySymbol {
     USD = "$",
     AUD = "$",
-    GPB = "£",
+    GBP = "£",
     COP = "$",
 }
 

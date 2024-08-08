@@ -80,7 +80,8 @@ resource "aws_cloudfront_distribution" "www" {
     min_ttl                = 86400    // 1day
     default_ttl            = 31536000 // 1year
     max_ttl                = 31536000 // 1year
-    compress               = true
+
+    compress = true
   }
 
   custom_error_response {

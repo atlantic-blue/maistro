@@ -1,13 +1,16 @@
 import React from "react"
 import { Badge, Box, Card, Flex } from "@radix-ui/themes"
 import { ProjectsContext } from "../../../Projects"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Helmet from "../Components/Helmet/Helmet"
 import useObservable from "../../../Utils/Hooks/UseObservable"
 import { ProjectMessageType } from "../../../types"
 import { filter } from "rxjs/operators"
+import { appRoutes } from "../../router"
+import { Order } from "../../../Store/Order"
 
-const RouteProjectSettingsOrders: React.FC = () => {
+const RouteProjectOrders: React.FC = () => {
+    const navigate = useNavigate()
     const { projects } = React.useContext(ProjectsContext)
     const { projectId } = useParams()
     const project = projects.getProjectById(projectId || "")
@@ -17,6 +20,10 @@ const RouteProjectSettingsOrders: React.FC = () => {
         event.type === ProjectMessageType.DELETE_ORDER
     ))))
 
+    const onClick = (order: Order) => {
+        navigate(appRoutes.getProjectOrderRoute(project.getId(), order.getId()))
+    }
+
     return (
         <>
             <Helmet>
@@ -24,7 +31,7 @@ const RouteProjectSettingsOrders: React.FC = () => {
                     <Flex direction="column" gap="2" mb="2" justify="center" align="center">
                         {Object.values(project.getOrders()).map(order => {
                             return (
-                                <Card key={order.getId()}>
+                                <Card key={order.getId()} onClick={() => onClick(order)}>
                                     <Flex direction="column">
                                         {order.getId()}
                                         <Badge color="grass">
@@ -41,4 +48,4 @@ const RouteProjectSettingsOrders: React.FC = () => {
     )
 }
 
-export default RouteProjectSettingsOrders
+export default RouteProjectOrders
