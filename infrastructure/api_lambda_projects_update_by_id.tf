@@ -59,6 +59,7 @@ resource "aws_iam_policy" "api_lambda_projects_update_by_id_dynamo" {
     "Statement" : [
       {
         Action : [
+          "dynamodb:Query",
           "dynamodb:UpdateItem",
         ],
         Effect : "Allow",

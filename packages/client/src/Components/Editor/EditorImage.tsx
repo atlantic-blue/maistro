@@ -36,7 +36,7 @@ const EditorImage: React.FC<EditorImageProps> = (props) => {
                     {props.name}
                 </Text>
                 <Avatar
-                    size="9"
+                    size="7"
                     src={preview}
                     fallback="Preview"
                     alt="Preview"

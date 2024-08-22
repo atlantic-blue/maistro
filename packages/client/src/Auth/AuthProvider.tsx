@@ -52,9 +52,9 @@ const getSessionUserFromCallbackUrl = async (): Promise<[User | null, Error | nu
         }
 
         const user = new User()
+
         user.setTokenAccess(response.accessToken)
         user.setTokenId(response.idToken)
-
         return [user, null]
     } catch (error: any) {
 

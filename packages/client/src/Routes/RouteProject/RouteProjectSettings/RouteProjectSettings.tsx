@@ -41,6 +41,7 @@ const RouteProjectSettings: React.FC = () => {
                 </Box>
             </Tabs.Root>
 
+
             <Flex direction="column" maxWidth="800px" m="auto" mb="50px">
                 <RouteProjectSettingsDelete project={project} />
             </Flex>

@@ -12,36 +12,33 @@ const ordersReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         throw createError(500, "process TABLE_NAME not specified")
     }
 
-    const projectId = event.pathParameters && event.pathParameters['project-id']
-    if (!projectId) {
-        throw createError(500, "projectId not specified")
-    }
-
     const orderId = event.pathParameters && event.pathParameters['order-id']
     if (!orderId) {
         throw createError(500, "orderId not specified")
     }
 
-    const params: AWS.DynamoDB.DocumentClient.GetItemInput = {
+    const params: AWS.DynamoDB.DocumentClient.QueryInput = {
         TableName: tableName,
-        Key: {
-            id: orderId,
-            projectId,
-        }
+        IndexName: 'idIndex',
+        KeyConditionExpression: 'id = :id',
+        ExpressionAttributeValues: {
+            ':id': orderId,
+        },
+        Limit: 25,
     };
 
-    const data = await dynamoDb.get(params).promise()
+    const data = await dynamoDb.query(params).promise()
 
-    if (!data || !data.Item) {
+    if (!data || !data.Items || data.Items?.length === 0) {
         return {
             statusCode: 404,
-            body: JSON.stringify({})
+            body: JSON.stringify([])
         };
     }
 
     return {
         statusCode: 200,
-        body: JSON.stringify(data.Item)
+        body: JSON.stringify(data.Items)
     };
 };
 

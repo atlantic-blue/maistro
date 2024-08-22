@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
-import { Avatar, Button, Card, Flex, Heading, IconButton, Select, Separator, Text } from "@radix-ui/themes"
+import { Avatar, Button, Card, Flex, Heading, Separator, Text } from "@radix-ui/themes"
 import { TemplateCategory, TemplateComponentType, TemplateStruct } from "../../../templateTypes"
-import StripeSDK from "stripe"
 
 import { Stripe, loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
@@ -10,9 +9,9 @@ import { ProductStruct, ShoppingCartItem, ShoppingCartStruct } from "../../../ty
 import { productsGet } from "../../../Api/Products/productsGet";
 import { PARAMS_SHOPPING_CART_ID, calculateItemTotal, clientStorage } from "../../SectionShoppingCart/SectionShoppingCartBasic/SectionShoppingCartBasic";
 import { Currency, CurrencySymbol, fromSmallestUnit } from "../../../../Utils/currency";
-import { Store, Truck } from "lucide-react";
 import SectionCheckoutSlot, { AvailableDay } from "./SectionCheckoutSlot/SectionCheckoutSlot";
 import { checkoutsCreateStripe } from "../../../Api/Checkouts/CheckoutsCreateStripe";
+import SectionMapGoogle, { Address } from "../../SectionMap/SectionMapGoogle";
 
 let stripePromise: Promise<Stripe | null> | null = null
 const getStripePromise = (accountId: string) => {
@@ -42,6 +41,7 @@ export interface ShippingOption {
     minimumDeliveryAmount: number
     imgSrc: string
     availability: AvailableDay[]
+    address?: Address
     shipping_rate_data: {
         display_name: string
         type: string
@@ -365,7 +365,6 @@ const SectionFulfilment: React.FC<SectionFulfilmentProps> = (props) => {
                 }
             </Flex>
 
-
             {shippingOption ? (
                 <SectionCheckoutSlot
                     onDateChange={onDateChange}
@@ -373,6 +372,15 @@ const SectionFulfilment: React.FC<SectionFulfilmentProps> = (props) => {
                     availableDays={shippingOption.availability || []}
                 />
             ) : null}
+
+            {shippingOption?.address?.firstLine ?
+                (
+                    <Flex mt="2">
+                        <SectionMapGoogle
+                            address={shippingOption?.address}
+                        />
+                    </Flex >
+                ) : null}
 
         </Flex>
     )

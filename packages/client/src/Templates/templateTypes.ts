@@ -10,10 +10,14 @@ export enum TemplateCategory {
     SERVICES = "SERVICES",
     // CONTACT = "CONTACT",
     FOOTER = "FOOTER",
+
     PRODUCT = "PRODUCT",
     CHECKOUT = "CHECKOUT",
     SHOPPING_CART = "SHOPPING_CART",
     FULFILLMENT = "FULFILLMENT",
+    ORDER = "ORDER",
+
+    MAP = "MAP"
 }
 
 export enum TemplateComponentType {
@@ -47,7 +51,11 @@ export enum TemplateComponentType {
 
     SHOPPING_CART_BASIC = "SHOPPING_CART_BASIC",
 
-    FULFILLMENT_BASIC = "FULFILLMENT_BASIC"
+    FULFILLMENT_BASIC = "FULFILLMENT_BASIC",
+
+    ORDER_BASIC = "ORDER_BASIC",
+
+    MAP_GOOGLE = "MAP_GOOGLE",
 }
 
 export interface TemplateStruct<Props = {}> {

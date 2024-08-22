@@ -62,6 +62,8 @@ interface Env {
             read: string
             update: string
             delete: string
+            upload: (projectId: string) => string
+            uploadMultipart: (projectId: string) => string
         }
         orders: {
             create: string
@@ -90,6 +92,16 @@ interface Env {
             }
             process: {
                 createLatam: string
+            }
+        }
+        system: {
+            users: {
+                read: string
+            }
+            projects: {
+                read: string
+                readById: (projectId: string) => string
+                updateUser: (projectId: string) => string
             }
         }
     }
@@ -194,6 +206,8 @@ const createEnv = (): Env => {
                 read: `${apiBaseUrl}/projects`,
                 update: `${apiBaseUrl}/projects`,
                 delete: `${apiBaseUrl}/projects`,
+                upload: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/upload`,
+                uploadMultipart: (projectId: string) => `${apiBaseUrl}/projects/${projectId}/upload-multipart`
             },
             payments: {
                 accounts: {
@@ -218,6 +232,16 @@ const createEnv = (): Env => {
                 process: {
                     createLatam: `${apiBaseUrl}/payments/process/latam`,
                 }
+            },
+            system: {
+                users: {
+                    read: `${apiBaseUrl}/system/users`,
+                },
+                projects: {
+                    read: `${apiBaseUrl}/system/projects`,
+                    readById: (projectId: string) => `${apiBaseUrl}/system/projects/${projectId}`,
+                    updateUser: (projectId: string) => `${apiBaseUrl}/system/projects/${projectId}/user`,
+                },
             }
         },
         hosting: {

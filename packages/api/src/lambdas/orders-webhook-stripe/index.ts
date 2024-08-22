@@ -39,6 +39,8 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
         const projectId = checkoutObject?.metadata?.project_id
         const orderId = checkoutObject?.metadata?.order_id
         const paymentIntent = checkoutObject?.payment_intent
+        const returnUrl = checkoutObject?.return_url
+
         const updatedAt = new Date().toISOString()
         const status = OrderStatus.CHECKOUT_COMPLETED
         const history = {
@@ -76,12 +78,26 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
             subject: "You have a new order",
             body: `
                 You have a new order! 
+                \n
+                \n
 
-                see it in Maistro:
+                Maistro Order:
+                \n
                 https://maistro.website/en/projects/${projectId}/orders/${orderId}
+                \n
+                \n
 
-                see it in Stripe:
+                Stripe: 
+                \n
                 https://dashboard.stripe.com/payments/${paymentIntent}
+                \n
+                \n
+
+                Order Receipt:
+                ${returnUrl}
+                \n
+                \n
+
             `
         })
 

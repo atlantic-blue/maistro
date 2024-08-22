@@ -4,11 +4,12 @@ import { Theme } from '@radix-ui/themes';
 
 import { Project } from "../../Store/Project";
 
-import { fileCreate } from '../File/fileCreate';
 import { withExtension } from '../../Utils/url';
 import PageStore from '../../Store/Page';
 import env from "../../env"
 import { requestController } from '../fetch';
+import { projectUpload } from './projectUpload';
+import { fileCreate } from '../File/fileCreate';
 
 interface PostProjectsInput {
     token: string
@@ -83,18 +84,14 @@ const postPage = (
         Css: () => getContentStyles().join("\n"),
     })
 
-    return fileCreate(
-        {
-            token,
-            userId,
-            projectId: project.getId(),
-            fileName: withExtension(page.getPath(), ".html"),
-            fileContent: Html(),
-            fileType: "text/html",
-        },
-        url,
-        request
-    )
+    return projectUpload({
+        token,
+        projectId: project.getId(),
+        fileName: withExtension(page.getPath(), ".html"),
+        fileContent: Html(),
+        fileType: "text/html",
+        path: "",
+    })
 }
 
 export {

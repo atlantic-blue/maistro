@@ -22,11 +22,12 @@ interface ProjectsUpdateInput {
         scaling: string,
     }
     currency: string
+    logo: string
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const projectsReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
+const projectsUpdateById: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableName = process.env.TABLE_NAME
     if (!tableName) {
         throw createError(500, "process TABLE_NAME not specified")
@@ -43,30 +44,60 @@ const projectsReadById: APIGatewayProxyHandler = async (event: APIGatewayProxyEv
         throw createError(500, "projectId not specified")
     }
 
-    const { name, url, theme, currency } = event.body as unknown as ProjectsUpdateInput;
+    const queryParams: AWS.DynamoDB.DocumentClient.QueryInput = {
+        TableName: tableName,
+        IndexName: 'idIndex',
+        KeyConditionExpression: 'id = :id',
+        ExpressionAttributeValues: {
+            ':id': projectId,
+        },
+        Limit: 25,
+    };
+
+    const data = await dynamoDb.query(queryParams).promise()
+    if (!data || !data.Items || data.Items?.length === 0) {
+        return {
+            statusCode: 404,
+            body: JSON.stringify({})
+        };
+    }
+
+    const project = data.Items.find(item => item.id === projectId)
+    if (!project) {
+        return {
+            statusCode: 404,
+            body: JSON.stringify({})
+        };
+    }
+
+    const { name, url, theme, currency, logo } = event.body as unknown as ProjectsUpdateInput;
 
     const input = sanitiseInput({
         name,
         url,
         theme,
         currency,
+        logo,
         updatedAt: new Date().toISOString(),
     })
 
-    const params = createUpdateParams(
+    const updateParams = createUpdateParams(
         input,
         {
-            userId,
+            userId: project.userId,
             id: projectId
         },
         tableName
     )
 
-    await dynamoDb.update(params).promise()
+    await dynamoDb.update(updateParams).promise()
 
     return {
         statusCode: 200,
-        body: JSON.stringify({ message: `Project ${projectId} updated successfully` })
+        body: JSON.stringify({
+            ...project,
+            ...input,
+        })
     };
 };
 
@@ -76,12 +107,13 @@ const validationSchema = Joi.object<ProjectsUpdateInput>({
     url: Joi.string().optional(),
     theme: Joi.object().optional(),
     currency: Joi.string().optional(),
+    logo: Joi.string().optional(),
 })
 
 const handler = new LambdaMiddlewares()
     .before(authJwt)
     .before(jsonBodyParser)
     .before(validatorJoi(validationSchema))
-    .handler(projectsReadById)
+    .handler(projectsUpdateById)
 
 export { handler }

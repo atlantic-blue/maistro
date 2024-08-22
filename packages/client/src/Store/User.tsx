@@ -1,4 +1,7 @@
+import { decodeJwt, JwtDecoded } from "../Auth/jwt";
 import { UserStruct } from "../types";
+
+const ADMIN_GROUP = "atlantic-blue-maistro-user-group-system"
 
 interface IUser {
     setId(id: string): void
@@ -23,6 +26,9 @@ interface IUser {
     getName(): string
 
     setUser(userStruct: UserStruct): void
+
+    setGroups(groups: string[]): void
+    getGroups(): string[]
 }
 
 export class User implements IUser {
@@ -31,8 +37,10 @@ export class User implements IUser {
     private avatar: string = ""
     private name: string = ""
     private tokenAccess: string = ""
+    private tokenAccessDecoded: JwtDecoded | null = null
     private tokenId: string = ""
     private tokenIdExp: number = 0
+    private groups: string[] = []
 
     constructor(userStruct?: UserStruct) {
         if (userStruct) {
@@ -84,6 +92,10 @@ export class User implements IUser {
         return (this.getTokenIdExpiration() * 1000) - Date.now() < 0
     }
 
+    public getTokenAccessDecoded(): JwtDecoded | null {
+        return this.tokenAccessDecoded
+    }
+
     public getTokenAccess(): string {
         return this.tokenAccess
     }
@@ -104,13 +116,32 @@ export class User implements IUser {
         }
 
         this.tokenId = token
-        const infoRaw = token.split(".")[1]
-        const { email, name, picture, sub, exp } = JSON.parse(atob(infoRaw))
-        this.setId(sub)
-        this.setEmail(email)
-        this.setName(name)
-        this.setAvatar(picture)
+
+        const [decodedJwt] = decodeJwt(token)
+        this.tokenAccessDecoded = decodedJwt
+
+        this.setId(decodedJwt?.decoded?.payload["sub"] || "")
+        this.setEmail(decodedJwt?.decoded?.payload["email"] || "")
+        this.setName(decodedJwt?.decoded?.payload["name"] || "")
+        this.setAvatar(decodedJwt?.decoded?.payload["picture"] || "")
+
+        const exp = Number(decodedJwt?.decoded?.payload["exp"] || 0)
         this.setTokenIdExpiration(exp)
+
+        const groups: string[] = decodedJwt?.decoded?.payload["cognito:groups"] as any as string[] || []
+        this.setGroups(groups)
+    }
+
+    public getGroups() {
+        return this.groups
+    }
+
+    public setGroups(groups: string[]) {
+        this.groups = groups
+    }
+
+    public isAdmin() {
+        return this.groups.includes(ADMIN_GROUP)
     }
 
     public getAvatar(): string {

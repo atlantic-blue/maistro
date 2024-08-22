@@ -37,11 +37,14 @@ const hostingRedirect: CloudFrontRequestHandler = async (event) => {
         }
     };
 
+    console.log("PARAMS", JSON.stringify(params))
     const data = await dynamoDb.query(params).promise();
+    console.log("DATA", JSON.stringify(data))
 
     if (!data.Items || data.Items.length === 0) {
         // Continue with the original request if no mapping exists
         console.log("URL NOT FOUND", { hostHeader })
+        console.log(JSON.stringify({ request, data }))
         return request;
     }
 
@@ -55,12 +58,7 @@ const hostingRedirect: CloudFrontRequestHandler = async (event) => {
         return request
     }
 
-    const { userId, id } = data.Items[0];
-    if (!userId) {
-        console.log("userId not found", JSON.stringify(data))
-        return request
-    }
-
+    const { id } = data.Items[0];
     if (!id) {
         console.log("project id not found", JSON.stringify(data))
         return request
@@ -82,7 +80,7 @@ const hostingRedirect: CloudFrontRequestHandler = async (event) => {
         path += '.html';
     }
 
-    const uri = `/${userId}/${id}${path}`
+    const uri = `/${id}${path}`
     request.uri = uri;
     return request;
 };

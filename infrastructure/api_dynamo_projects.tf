@@ -31,6 +31,14 @@ resource "aws_dynamodb_table" "projects" {
     read_capacity      = 1
     write_capacity     = 1
   }
+
+  global_secondary_index {
+    name               = "idIndex"
+    hash_key        = "id"
+    projection_type = "ALL"
+    read_capacity      = 1
+    write_capacity     = 1
+  }
 }
 
 resource "aws_dynamodb_table" "pages" {

@@ -3,7 +3,7 @@ import React from "react"
 import { ApiContext } from "../../Api/ApiProvider"
 import { ProjectsContext } from "../../Projects"
 import { useParams } from "react-router-dom"
-import { ProjectMessageType, ProjectThreadMessageRole, ProjectThreadName } from "../../types"
+import { ProjectMessageType, ProjectsMessageType, ProjectThreadMessageRole, ProjectThreadName } from "../../types"
 import Loading from "../../Components/Loading/Loading"
 import { createMaistroChatPrompt } from "../../Ai/prompts/Maistro"
 import { Theme } from "@radix-ui/themes"
@@ -255,14 +255,20 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
                         id: orderStruct.id,
                         shoppingCartId: orderStruct.shoppingCartId,
                         status: orderStruct.status,
-                        fulfilmentSlot: orderStruct.fulfilmentSlot,
-                        items: orderStruct.items
+                        fulfilment: orderStruct.fulfilment,
+                        items: orderStruct.items,
+                        updatedAt: orderStruct.updatedAt,
+
                     }
                 })
             })
     }
 
     React.useEffect(() => {
+        if (!projectId || !project) {
+            return
+        }
+
         getPages()
             .then(() => {
                 setIsLoading(false)
@@ -270,26 +276,80 @@ const RouteProjectProvider: React.FC<RouteProjectProviderProps> = (props) => {
     }, [project, projectId])
 
     React.useEffect(() => {
+        if (!projectId || !project) {
+            return
+        }
+
         getContent()
-    }, [projectId])
+    }, [projectId, project])
 
     React.useEffect(() => {
+        if (!projectId || !project) {
+            return
+        }
+
         getProduct()
-    }, [projectId])
+    }, [projectId, project])
 
     React.useEffect(() => {
+        if (!projectId || !project) {
+            return
+        }
+
         getOrders()
-    }, [projectId])
+    }, [projectId, project])
 
     React.useEffect(() => {
+        if (!projectId || !project) {
+            return
+        }
+
         getEmailList()
-    }, [projectId])
+    }, [projectId, project])
 
     React.useEffect(() => {
-        getThreads()
-    }, [projectId])
+        if (!projectId || !project) {
+            return
+        }
 
-    useObservable(project.event$.pipe(filter(e => e.type === ProjectMessageType.SET_THEME)))
+        getThreads()
+    }, [projectId, project])
+
+    React.useEffect(() => {
+        if (!user) {
+            return
+        }
+        if (!projectId) {
+            return
+        }
+
+        
+        if (project) {
+            return
+        }
+        
+        if (!user.isAdmin()) {
+            return
+        }
+
+        api.system.projects.readById({
+            token: user.getTokenId(),
+            projectId,
+        }).then(project => {
+            if (!project) {
+                return
+            }
+
+            projects.event$.next({
+                type: ProjectsMessageType.SET_PROJECT,
+                data: project
+            })
+        })
+
+    }, [user, projectId])
+
+    useObservable(projects?.event$.pipe(filter(e => e.type === ProjectsMessageType.SET_PROJECT)))
+    useObservable(project?.event$.pipe(filter(e => e.type === ProjectMessageType.SET_THEME)))
 
     if (isLoading) {
         return (

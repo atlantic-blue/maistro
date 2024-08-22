@@ -1,7 +1,6 @@
 import React from "react"
 
 import { ProjectsContext } from "../../Projects"
-import RouteProjectHeader from "../RouteProject/Components/Header/Header"
 
 import AuthLogoutButton from "../../Auth/AuthLogoutButton"
 
@@ -9,11 +8,12 @@ import Button from "../../Templates/Components/Button/Button"
 import { PaymentPlan, PaymentsContext } from "../../Payments/PaymentsProvider"
 
 import * as styles from "./RouteSettings.scss"
-import { Avatar, Card, Flex, Heading, Text } from "@radix-ui/themes"
+import { Avatar, Badge, Card, Flex, Heading, Text } from "@radix-ui/themes"
 import { useNavigate } from "react-router-dom"
 import { appRoutes } from "../router"
 import HeaderBurger from "../../Templates/Header/HeaderBurger/HeaderBurger"
 import PaymentPlanComponent from "../../Payments/PaymentPlan/PaymentPlan"
+import { Crown } from "lucide-react"
 
 const RoutesSettings: React.FC = () => {
     const { user } = React.useContext(ProjectsContext)
@@ -31,6 +31,16 @@ const RoutesSettings: React.FC = () => {
                         href: appRoutes.getHomeRoute()
                     },
                     links: [
+                        user.isAdmin() ? {
+                            href: appRoutes.getAdminRoute(),
+                            name: (
+                                <Flex align="center" gap="2" justify="center">
+                                    <Badge>
+                                        <Crown />
+                                    </Badge>
+                                </Flex>
+                            )
+                        } : {},
                         {
                             href: appRoutes.getSettingsRoute(),
                             name: (

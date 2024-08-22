@@ -73,7 +73,7 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
     };
 
     return (
-        <Flex gap="2" align="center" justify="center">
+        <Flex gap="2" align="center" justify="center" wrap="wrap">
             <Button
                 size="1"
                 loading={isLoading}

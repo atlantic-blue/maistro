@@ -24,6 +24,7 @@ import SectionCustom from "./Components/SectionFlow/SectionCustom";
 import ProjectContent from "../../../Store/ProjectContent";
 import PageNavigationDropdown from "./PageNavigationDropdown/PageNavigationDropdown";
 import Menu from "../Components/Menu/Menu";
+import { SubmitProject } from "../RouteProjectPageSettings/Components/SubmitProject/SubmitProject";
 
 const RouteProjectPage: React.FC = () => {
     const { api } = React.useContext(ApiContext)
@@ -256,6 +257,16 @@ const RouteProjectPage: React.FC = () => {
     return (
         <Helmet>
             <PageNavigationDropdown />
+
+            <Flex m="2" gap="2" justify="center" align="center" wrap="wrap">
+                <SubmitProject
+                    token={user.getTokenId()}
+                    userId={user.getId()}
+                    project={project}
+                    page={page}
+                />
+
+            </Flex>
 
             <div className={styles.main}>
                 <div className={styles.dragDrop}>

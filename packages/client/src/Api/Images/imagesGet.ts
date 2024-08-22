@@ -34,12 +34,12 @@ const imagesGet = async (
     url = env.api.images.get,
     request = requestController.fetch,
 ): Promise<ImagesGetOutput> => {
-    const params = new URLSearchParams()
-    params.set("query", query)
-    params.set("page", String(page))
-    params.set("perPage", String(perPage))
+    const requestUrl = new URL(url)
+    requestUrl.searchParams.set("query", query)
+    requestUrl.searchParams.set("page", String(page))
+    requestUrl.searchParams.set("perPage", String(perPage))
 
-    return request(`${url}?${params.toString()}`, {
+    return request(requestUrl.toString(), {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

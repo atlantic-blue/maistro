@@ -1,7 +1,7 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { CirclePlus } from "lucide-react";
-import { Avatar, Box, Button, Card, Flex, Section, Text } from "@radix-ui/themes"
+import { CirclePlus, Crown } from "lucide-react";
+import { Avatar, Badge, Box, Button, Card, Flex, Section, Text } from "@radix-ui/themes"
 
 import { ProjectsContext } from "../../Projects"
 
@@ -31,7 +31,18 @@ const RoutesProjects: React.FC = () => {
                         slogan: "Maistro",
                         href: appRoutes.getHomeRoute()
                     },
+
                     links: [
+                        user.isAdmin() ? {
+                            href: appRoutes.getAdminRoute(),
+                            name: (
+                                <Flex align="center" gap="2" justify="center">
+                                    <Badge>
+                                        <Crown />
+                                    </Badge>
+                                </Flex>
+                            )
+                        } : {},
                         {
                             href: appRoutes.getSettingsRoute(),
                             name: (

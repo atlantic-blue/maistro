@@ -1,4 +1,5 @@
 import { Currency } from "../Utils/currency"
+import { SectionCheckoutBasicItem } from "./Section/SectionCheckout/SectionCheckoutStripe/SectionCheckoutStripe"
 
 export interface ShoppingCartItemModifierStruct {
     id: string,
@@ -47,3 +48,31 @@ export interface ShoppingCartItem {
     product: ProductStruct,
     modifiers: ShoppingCartItemModifierStruct[]
 }
+
+export enum OrderStatus {
+    CREATED = "CREATED",
+    CHECKOUT_COMPLETED = "CHECKOUT_COMPLETED",
+    PAYMENT_ACCEPTED = "PAYMENT_ACCEPTED",
+
+    ACKNOWLEDGED = "ACKNOWLEDGED",
+    PENDING = "PENDING",
+    PROCESSING = "PROCESSING",
+    SHIPPED = "SHIPPED",
+    DELIVERED = "DELIVERED",
+    COMPLETED = "COMPLETED",
+}
+
+export interface Order {
+    id: string,
+    projectId: string
+    fulfilment: {
+        date: string,
+        interval: string
+    },
+    createdAt: string,
+    updatedAt: string,
+    shoppingCartId: string,
+    status: OrderStatus,
+    items: SectionCheckoutBasicItem[]
+}
+

@@ -124,7 +124,15 @@ const createMultipleWebpackConfigs = [
     // "projects-read-by-id",
     // "projects-update-by-id",
     // "projects-delete",
+
     // "projects-upload",
+    // "projects-upload-multipart",
+
+    // "system-users-read",
+    // "system-projects-read",
+    // "system-projects-read-by-id",
+    // "system-projects-update-user",
+
 ].map(api => {
     console.info(`BUILDING: ${api}\n`)
     return ({

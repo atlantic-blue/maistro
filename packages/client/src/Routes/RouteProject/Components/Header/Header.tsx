@@ -6,7 +6,7 @@ import { Avatar, Flex, Text } from "@radix-ui/themes"
 import { ProjectsContext } from "../../../../Projects"
 
 import { useParams } from "react-router-dom"
-import { Barcode, BoxIcon, Cog, Contact, Package, Palette, PanelsTopLeft, Puzzle, Settings2 } from "lucide-react"
+import { Barcode, BoxIcon, Cog, Contact, Package, Palette, PanelsTopLeft, Puzzle, QrCode, Settings2 } from "lucide-react"
 
 interface RouteProjectHeaderProps {
 
@@ -87,6 +87,16 @@ const RouteProjectHeader: React.FC<RouteProjectHeaderProps> = (props) => {
                             </Flex>
                         ),
                         description: "Theme"
+                    },
+                    {
+                        href: appRoutes.getProjectQRCodeRoute(project?.getId()),
+                        name: (
+                            <Flex direction="column" align="center" justify="center">
+                                <QrCode style={{ width: "20px" }} />
+                                <Text size="1">QRCode</Text>
+                            </Flex>
+                        ),
+                        description: "QRCode"
                     },
                     {
                         href: appRoutes.getProjectSettingsRoute(project?.getId()),

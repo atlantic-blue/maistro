@@ -53,8 +53,10 @@ interface IProject {
 
 export class Project implements IProject {
     private id = `${Date.now()}`
+    private userId = ""
     private name = `Untitled-${randAnimal().replace(" ", "-")}`
     private url = ""
+    private logo = ""
     private currency: Currency = Currency.GBP
 
     private pages: Record<string, Page> = {}
@@ -164,8 +166,10 @@ export class Project implements IProject {
     public getStruct(): ProjectStruct {
         return {
             id: this.getId(),
+            userId: this.getUserId(),
             name: this.getName(),
             url: this.getUrl(),
+            logo: this.getLogo(),
             theme: this.getTheme(),
             currency: this.getCurrency(),
 
@@ -215,8 +219,10 @@ export class Project implements IProject {
         this.setId(projectStruct.id)
         this.setName(projectStruct.name)
         this.setUrl(projectStruct.url)
+        this.setLogo(projectStruct.logo)
         this.setTheme(projectStruct.theme)
         this.setCurrency(projectStruct.currency)
+        this.setUserId(projectStruct.userId)
 
         Object.keys(projectStruct.assets || {}).map(asset => {
             const assetStruct = projectStruct.assets[asset]
@@ -245,6 +251,14 @@ export class Project implements IProject {
 
     public getCurrency() {
         return this.currency
+    }
+
+    public setUserId(userId: string) {
+        this.userId = userId
+    }
+
+    public getUserId() {
+        return this.userId
     }
 
     /**
@@ -437,6 +451,14 @@ export class Project implements IProject {
 
     public setUrl(url: string) {
         this.url = url
+    }
+
+    public getLogo(): string {
+        return this.logo
+    }
+
+    public setLogo(url: string) {
+        this.logo = url
     }
 
     public setTheme(theme: ProjectTheme): void {

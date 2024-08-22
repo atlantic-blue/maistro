@@ -24,6 +24,15 @@ resource "aws_dynamodb_table" "orders" {
   }
 
   global_secondary_index {
+    name            = "idIndex"
+    hash_key        = "id"
+    projection_type = "ALL"
+
+    read_capacity  = 1
+    write_capacity = 1
+  }
+
+  global_secondary_index {
     name            = "ProjectIdIndex"
     hash_key        = "projectId"
     projection_type = "ALL"

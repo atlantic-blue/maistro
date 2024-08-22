@@ -9,7 +9,9 @@ export enum PaymentPlan {
     BASIC = "BASIC",
     STANDARD = "STANDARD",
     PREMIUM = "PREMIUM",
-    VIP = "VIP"
+    VIP = "VIP",
+
+    ADMIN = "ADMIn"
 }
 
 interface PaymentsContextState {
@@ -39,6 +41,7 @@ export const canUseFeature = {
         [PaymentPlan.STANDARD]: (tokens: number) => true,
         [PaymentPlan.PREMIUM]: (tokens: number) => true,
         [PaymentPlan.VIP]: (tokens: number) => true,
+        [PaymentPlan.ADMIN]: (tokens: number) => true,
     },
     aiImage: {
         [PaymentPlan.FREE]: () => false,
@@ -46,6 +49,7 @@ export const canUseFeature = {
         [PaymentPlan.STANDARD]: () => true,
         [PaymentPlan.PREMIUM]: () => true,
         [PaymentPlan.VIP]: () => true,
+        [PaymentPlan.ADMIN]: () => true,
     },
     aiText: {
         [PaymentPlan.FREE]: () => false,
@@ -53,6 +57,7 @@ export const canUseFeature = {
         [PaymentPlan.STANDARD]: () => true,
         [PaymentPlan.PREMIUM]: () => true,
         [PaymentPlan.VIP]: () => true,
+        [PaymentPlan.ADMIN]: () => true,
     },
     connectedAccount: {
         [PaymentPlan.FREE]: () => false,
@@ -60,13 +65,15 @@ export const canUseFeature = {
         [PaymentPlan.STANDARD]: () => true,
         [PaymentPlan.PREMIUM]: () => true,
         [PaymentPlan.VIP]: () => true,
+        [PaymentPlan.ADMIN]: () => true,
     },
     createPage: {
         [PaymentPlan.FREE]: (currentPages: number) => currentPages < 1,
-        [PaymentPlan.BASIC]: (currentPages: number) => currentPages < 3,
-        [PaymentPlan.STANDARD]: (currentPages: number) => currentPages < 10,
+        [PaymentPlan.BASIC]: (currentPages: number) => currentPages < 10,
+        [PaymentPlan.STANDARD]: (currentPages: number) => currentPages < 20,
         [PaymentPlan.PREMIUM]: (currentPages: number) => true,
         [PaymentPlan.VIP]: (currentPages: number) => true,
+        [PaymentPlan.ADMIN]: (currentPages: number) => true,
     },
     createProject: {
         [PaymentPlan.FREE]: (currentProjects: number) => currentProjects < 1,
@@ -74,6 +81,7 @@ export const canUseFeature = {
         [PaymentPlan.STANDARD]: (currentProjects: number) => currentProjects < 3,
         [PaymentPlan.PREMIUM]: (currentProjects: number) => currentProjects < 9,
         [PaymentPlan.VIP]: (currentProjects: number) => currentProjects < 9,
+        [PaymentPlan.ADMIN]: (currentProjects: number) => true,
     },
     deleteProject: {
         [PaymentPlan.FREE]: (currentProjects: number) => false,
@@ -81,6 +89,7 @@ export const canUseFeature = {
         [PaymentPlan.STANDARD]: (currentProjects: number) => true,
         [PaymentPlan.PREMIUM]: (currentProjects: number) => true,
         [PaymentPlan.VIP]: (currentProjects: number) => true,
+        [PaymentPlan.ADMIN]: (currentProjects: number) => true,
     }
 }
 
@@ -96,6 +105,11 @@ const PaymentsProvider: React.FC<PaymentsProviderProps> = (props) => {
      */
     React.useEffect(() => {
         if (!user) {
+            return
+        }
+
+        if (user.isAdmin()) {
+            setPaymentPlan(PaymentPlan.ADMIN)
             return
         }
 

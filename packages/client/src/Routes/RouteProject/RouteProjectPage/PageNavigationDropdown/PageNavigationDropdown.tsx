@@ -50,93 +50,86 @@ const PageNavigation: React.FC = () => {
     return (
         <NavigationMenu.Root className={styles.navigationMenuRoot}>
             <NavigationMenu.List className={styles.navigationMenuList}>
-                <NavigationMenu.Item>
-                    <NavigationMenu.Trigger className={styles.navigationMenuTrigger}>
-                        {project?.getUrl()?.replace("www.", "").split(".")[0]}... <CaretDownIcon className={styles.caretDown} aria-hidden />
-                    </NavigationMenu.Trigger>
-                    <NavigationMenu.Content className={styles.navigationMenuContent}>
-                        <ul className={classNames(styles.list, styles.listOne)}>
-                            {Object.values(projects.getProjects()).map(project => {
-                                return (
-                                    <ListItem
-                                        key={project.getId()}
-                                        onClick={() => onProjectClick(project)}
-                                    >
+                <Flex wrap="wrap" gap="1" align="center" justify="center">
+                    <NavigationMenu.Item>
+                        <NavigationMenu.Trigger className={styles.navigationMenuTrigger}>
+                            {project?.getUrl()?.replace("www.", "").split(".")[0]}... <CaretDownIcon className={styles.caretDown} aria-hidden />
+                        </NavigationMenu.Trigger>
+                        <NavigationMenu.Content className={styles.navigationMenuContent}>
+                            <ul className={classNames(styles.list, styles.listOne)}>
+                                {Object.values(projects.getProjects()).map(project => {
+                                    return (
+                                        <ListItem
+                                            key={project.getId()}
+                                            onClick={() => onProjectClick(project)}
+                                        >
 
-                                        <Flex align="center" gap="1">
-                                            <Avatar
-                                                size="1"
-                                                fallback={project.getName().charAt(0)}
-                                            />
-                                            <Text>
-                                                {project.getName()}
-                                            </Text>
-                                        </Flex>
-                                    </ListItem>
-                                )
-                            })}
-                            <li>
-                                <NavigationMenu.Link asChild>
-                                    <a className={styles.callout} onClick={onNewProjectClick} aria-label="New Project">
-                                        <div className={styles.calloutHeading}> New Project</div>
-                                    </a>
-                                </NavigationMenu.Link>
-                            </li>
-                        </ul>
-                    </NavigationMenu.Content>
-                </NavigationMenu.Item>
+                                            <Flex align="center" gap="1">
+                                                <Avatar
+                                                    size="1"
+                                                    fallback={project.getName().charAt(0)}
+                                                />
+                                                <Text>
+                                                    {project.getName()}
+                                                </Text>
+                                            </Flex>
+                                        </ListItem>
+                                    )
+                                })}
+                                <li>
+                                    <NavigationMenu.Link asChild>
+                                        <a className={styles.callout} onClick={onNewProjectClick} aria-label="New Project">
+                                            <div className={styles.calloutHeading}> New Project</div>
+                                        </a>
+                                    </NavigationMenu.Link>
+                                </li>
+                            </ul>
+                        </NavigationMenu.Content>
+                    </NavigationMenu.Item>
 
-                <NavigationMenu.Item>
-                    <NavigationMenu.Trigger className={styles.navigationMenuTrigger}>
-                        {page?.getPath() || "Page"} <CaretDownIcon className={styles.caretDown} aria-hidden />
-                    </NavigationMenu.Trigger>
-                    <NavigationMenu.Content className={styles.navigationMenuContent}>
-                        <ul className={classNames(styles.list, styles.listTwo)}>
-                            {project.getPagesMap().map(page => {
-                                if (!page) {
-                                    return null
-                                }
+                    <NavigationMenu.Item>
+                        <NavigationMenu.Trigger className={styles.navigationMenuTrigger}>
+                            {page?.getPath() || "Page"} <CaretDownIcon className={styles.caretDown} aria-hidden />
+                        </NavigationMenu.Trigger>
+                        <NavigationMenu.Content className={styles.navigationMenuContent}>
+                            <ul className={classNames(styles.list, styles.listTwo)}>
+                                {project.getPagesMap().map(page => {
+                                    if (!page) {
+                                        return null
+                                    }
 
-                                return (
-                                    <ListItem
-                                        key={page.getId()}
-                                        onClick={() => onPageClick(page)}>
-                                        <Flex>
-                                            {
-                                                page.getPath() === "index" ?
-                                                    <IconHome className={styles.navigationMenuContentItemIcon} /> :
-                                                    <IconFile className={styles.navigationMenuContentItemIcon} />
-                                            }
-                                            <Text>
-                                                {page.getPath()}
-                                            </Text>
-                                        </Flex>
-                                    </ListItem>
-                                )
-                            })}
-                            <li>
-                                <NavigationMenu.Link asChild>
-                                    <a className={styles.callout} onClick={onNewPageClick} aria-label="New Page">
-                                        <div className={styles.calloutHeading}>New page</div>
-                                    </a>
-                                </NavigationMenu.Link>
-                            </li>
-                        </ul>
-                    </NavigationMenu.Content>
-                </NavigationMenu.Item>
+                                    return (
+                                        <ListItem
+                                            key={page.getId()}
+                                            onClick={() => onPageClick(page)}>
+                                            <Flex>
+                                                {
+                                                    page.getPath() === "index" ?
+                                                        <IconHome className={styles.navigationMenuContentItemIcon} /> :
+                                                        <IconFile className={styles.navigationMenuContentItemIcon} />
+                                                }
+                                                <Text>
+                                                    {page.getPath()}
+                                                </Text>
+                                            </Flex>
+                                        </ListItem>
+                                    )
+                                })}
+                                <li>
+                                    <NavigationMenu.Link asChild>
+                                        <a className={styles.callout} onClick={onNewPageClick} aria-label="New Page">
+                                            <div className={styles.calloutHeading}>New page</div>
+                                        </a>
+                                    </NavigationMenu.Link>
+                                </li>
+                            </ul>
+                        </NavigationMenu.Content>
+                    </NavigationMenu.Item>
 
-                <NavigationMenu.Item>
-                    <SubmitProject
-                        token={user.getTokenId()}
-                        userId={user.getId()}
-                        project={project}
-                        page={page}
-                    />
-                </NavigationMenu.Item>
-
-                <NavigationMenu.Indicator className={styles.navigationMenuIndicator}>
-                    <div className={styles.arrow} />
-                </NavigationMenu.Indicator>
+                    <NavigationMenu.Indicator className={styles.navigationMenuIndicator}>
+                        <div className={styles.arrow} />
+                    </NavigationMenu.Indicator>
+                </Flex>
             </NavigationMenu.List>
 
             <div className={styles.viewportPosition}>

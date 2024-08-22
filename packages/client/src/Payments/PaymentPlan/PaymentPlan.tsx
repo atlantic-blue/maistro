@@ -12,6 +12,7 @@ const PaymentPlanBadge: React.FC = () => {
         [PaymentPlan.STANDARD]: { color: "orange", text: "Standard" },
         [PaymentPlan.PREMIUM]: { color: "bronze", text: "Premium" },
         [PaymentPlan.VIP]: { color: "gold", text: "VIP" },
+        [PaymentPlan.ADMIN]: { color: "gold", text: "ADMIN" },
     }[paymentPlan]
 
     return (

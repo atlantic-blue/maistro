@@ -51,6 +51,27 @@ resource "aws_iam_role_policy_attachment" "api_lambda_projects_upload_logs" {
   policy_arn = aws_iam_policy.api_lambda_projects_upload_logs.arn
 }
 
+resource "aws_iam_policy" "api_lambda_projects_upload_s3" {
+  name = "${local.api_bucket_name}-projects-upload-s3"
+   policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        Action : [
+          "s3:Put*",
+        ],
+        Effect : "Allow",
+        Resource : ["${aws_s3_bucket.hosting.arn}/*"]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "api_lambda_projects_upload_s3" {
+  role       = aws_iam_role.api_lambda_projects_upload.id
+  policy_arn = aws_iam_policy.api_lambda_projects_upload_s3.arn
+}
+
 ## LAMBDA
 data "archive_file" "api_lambda_projects_upload" {
   type = "zip"

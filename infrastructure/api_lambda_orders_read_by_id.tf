@@ -59,7 +59,7 @@ resource "aws_iam_policy" "api_lambda_orders_read_by_id_dynamo" {
     "Statement" : [
       {
         Action : [
-          "dynamodb:PutItem"
+          "dynamodb:Query"
         ],
         Effect : "Allow",
         Resource : [

@@ -11,6 +11,7 @@ import { fromSmallestUnit, toSmallestUnit } from "../../Utils/currency"
 import env from "../../env"
 import { MinusCircle, PlusCircle } from "lucide-react"
 import { AvailableDay, AvailableDayInterval } from "../../Templates/Section/SectionCheckout/SectionCheckoutStripe/SectionCheckoutSlot/SectionCheckoutSlot"
+import AddressEditor from "./AddressEditor"
 
 
 interface AvailabilityIntervalsProps {
@@ -501,6 +502,23 @@ const SectionCheckoutStripeEditor: React.FC<SectionCheckoutStripeProps & EditorP
                                                 onUploadFile={props.onUploadFile}
                                             />
                                         </Box>
+
+                                        <AddressEditor
+                                            address={option.address}
+                                            onChange={address => {
+                                                setState(prev => {
+                                                    return {
+                                                        ...prev,
+                                                        shippingOptions: prev.shippingOptions.map((s, i) => {
+                                                            return index === i ? {
+                                                                ...s,
+                                                                address,
+                                                            } : s
+                                                        })
+                                                    }
+                                                })
+                                            }}
+                                        />
 
                                         <Text as="div" size="1" weight="bold" mb="2">
                                             Availability

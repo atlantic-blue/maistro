@@ -4,7 +4,6 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
 import { LambdaMiddlewares } from '../../middlewares';
 import createError from '../../middlewares/error-handler';
-import authJwt from '../../middlewares/auth-jwt';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 

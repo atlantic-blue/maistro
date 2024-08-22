@@ -28,15 +28,21 @@ export interface ProjectAssetStruct {
 export interface OrderStruct {
     id: string
     shoppingCartId: string
+    updatedAt: string
     status: OrderStatus
     items: Item[]
-    fulfilmentSlot: string
+    fulfilment: {
+        date: string
+        interval: string
+    }
 }
 
 export interface ProjectStruct {
     id: string
+    userId: string
     name: string
     url: string
+    logo: string
     pages: Record<string, PageStruct>
     assets: Record<string, ProjectAssetStruct>
     content: Record<string, ProjectContentStruct>
@@ -382,6 +388,7 @@ export type ProductEvent = {
 export enum OrderStatus {
     CREATED = "CREATED",
     PAYMENT_ACCEPTED = "PAYMENT_ACCEPTED",
+    CHECKOUT_COMPLETED = "CHECKOUT_COMPLETED",
 
     ACKNOWLEDGED = "ACKNOWLEDGED",
     PENDING = "PENDING",

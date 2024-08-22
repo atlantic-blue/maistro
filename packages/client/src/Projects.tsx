@@ -14,7 +14,7 @@ import { ApiContext } from "./Api/ApiProvider";
 import useObservable from "./Utils/Hooks/UseObservable";
 import Loading from "./Components/Loading/Loading";
 
-const projectsStore = new Projects()
+export const projectsStore = new Projects()
 const user = new User()
 
 export const ProjectsContext = React.createContext<ProjectsState>({

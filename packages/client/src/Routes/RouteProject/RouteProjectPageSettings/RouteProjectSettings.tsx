@@ -164,7 +164,6 @@ const RouteProjectPageSettings: React.FC = () => {
 
             <Flex direction="column" maxWidth="800px" m="auto" mb="50px">
                 <PageSettings />
-                <RouteProjectSettingsDelete project={project} />
             </Flex>
 
             <Menu />

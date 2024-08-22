@@ -3,7 +3,7 @@ import React from "react";
 import { ProjectsCreateInput, ProjectsCreateOutput, projectsCreate } from "./Projects/projectsCreate";
 import { projectsRead } from "./Projects/projectsRead";
 import { projectsReadById } from "./Projects/projectsReadById";
-import { ProjectsReadInput, projectsUpdateById } from "./Projects/projectsUpdateById";
+import { ProjectsUpdateInput, projectsUpdateById } from "./Projects/projectsUpdateById";
 import { projectsDelete } from "./Projects/projectsDelete";
 import { PaymentsSubscriptionsReadInput, PaymentsSubscriptionsReadOutput, paymentsSubscriptionsRead } from "./Payments/PaymentSubscriptions/PaymentSubscriptionsRead";
 import { EmailListsCreateInput, EmailListsCreateOutput, emailListsCreate } from "./EmailLists/emailListsCreate";
@@ -47,6 +47,13 @@ import { OrdersReadByIdInput, ordersReadById } from "./Orders/ordersReadById";
 import { OrdersDeleteInput, ordersDelete } from "./Orders/ordersDelete";
 import { OrdersReadInput, ordersRead } from "./Orders/ordersRead";
 import { OrdersUpdateByIdInput, OrdersUpdateByIdOutput, ordersUpdateById } from "./Orders/ordersUpdateById";
+import { systemUsersRead, SystemUsersReadInput, SystemUsersReadOutput } from "./System/systemUsersRead";
+import { systemProjectsRead, SystemProjectsReadInput, SystemProjectsReadOutput } from "./System/systemProjectsRead";
+import { systemProjectsReadById, SystemProjectsReadByIdInput, SystemProjectsReadByIdOutput } from "./System/systemProjectsReadById";
+import { SystemProjectsReadUpdateUserOutput, systemProjectsUpdateUser, SystemProjectsUpdateUserInput } from "./System/systemProjectsUpdateUser";
+import { projectUpload, ProjectUploadInput, ProjectUploadOutput } from "./Project/projectUpload";
+import { projectUploadMultipart, ProjectUploadMultipartInput, ProjectUploadMultipartOutput } from "./Project/projectUploadMultipart";
+
 
 interface ApiContextState {
     api: {
@@ -102,8 +109,10 @@ interface ApiContextState {
             create: (input: ProjectsCreateInput) => Promise<ProjectsCreateOutput>
             read: ({ token }: { token: string }) => Promise<Partial<ProjectStruct[]>>
             readById: ({ projectId, token }: { projectId: string, token: string }) => Promise<Partial<ProjectStruct>>
-            updateById: (input: ProjectsReadInput) => Promise<void>,
+            updateById: (input: ProjectsUpdateInput) => Promise<void>,
             delete: ({ token, id }: { token: string, id: string }) => Promise<void>,
+            upload: (input: ProjectUploadInput) => Promise<ProjectUploadOutput>
+            uploadMultipart: (input: ProjectUploadMultipartInput) => Promise<ProjectUploadMultipartOutput>
         }
         file: {
             createFile(input: CreateFileInput): Promise<CreateFileOutput>
@@ -131,12 +140,23 @@ interface ApiContextState {
                 read: (input: PaymentsSubscriptionsReadInput) => Promise<PaymentsSubscriptionsReadOutput>
             }
         }
+        system: {
+            users: {
+                read: (input: SystemUsersReadInput) => Promise<SystemUsersReadOutput>
+            }
+            projects: {
+                read: (input: SystemProjectsReadInput) => Promise<SystemProjectsReadOutput>
+                readById: (input: SystemProjectsReadByIdInput) => Promise<SystemProjectsReadByIdOutput>
+                updateUser: (input: SystemProjectsUpdateUserInput) => Promise<SystemProjectsReadUpdateUserOutput>
+            }
+        }
     }
 }
 
 const context: ApiContextState = {
     api: {
         file: {
+            // TODO @deprecate in favour of projectUpload // what's the deal with the token?
             createFile: fileCreate
         },
         ai: {
@@ -180,6 +200,8 @@ const context: ApiContextState = {
             readById: projectsReadById,
             updateById: projectsUpdateById,
             delete: projectsDelete,
+            upload: projectUpload,
+            uploadMultipart: projectUploadMultipart
         },
         products: {
             updateById: productsUpdateById,
@@ -215,6 +237,16 @@ const context: ApiContextState = {
             },
             subscriptions: {
                 read: paymentsSubscriptionsRead
+            }
+        },
+        system: {
+            users: {
+                read: systemUsersRead,
+            },
+            projects: {
+                read: systemProjectsRead,
+                readById: systemProjectsReadById,
+                updateUser: systemProjectsUpdateUser,
             }
         }
     }

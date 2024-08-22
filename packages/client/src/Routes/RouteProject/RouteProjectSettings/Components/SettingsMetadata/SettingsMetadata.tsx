@@ -11,6 +11,9 @@ import * as styles from "./SettingsMetadata.scss"
 import { ApiContext } from "../../../../../Api/ApiProvider"
 import { Box, Button, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes"
 import RouteProjectSettingsTheme from "../../../RouteProjectTheme/RouteProjectTheme"
+import EditorImage from "../../../../../Components/Editor/EditorImage"
+import { EditorDataType } from "../../../../../Components/Editor/EditorData"
+import { convertFileToBase64 } from "../../../../../Utils/toBase64"
 
 interface SettingsMetadataProps {
     project: Project
@@ -23,6 +26,7 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
     const [name, setName] = React.useState(project.getName())
     const [projectUrl, setProjectURl] = React.useState(project.getUrl())
     const [isLoading, setIsLoading] = React.useState(false)
+    const [projectLogo, setProjectLogo] = React.useState(project.getLogo())
 
     useEffect(() => {
         project.event$.next({
@@ -48,6 +52,8 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
             name: name,
             url: createUrl(projectUrl),
             theme: project.getTheme(),
+            currency: project.getCurrency(),
+            logo: projectLogo,
         })
             .finally(() => {
                 setIsLoading(false)
@@ -91,6 +97,27 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
                     />
 
                 </Box>
+
+                <EditorImage
+                    name="Logo"
+                    onChange={src => {
+                        setProjectLogo(src)
+                    }}
+                    onUploadFile={async file => {
+                        const fileBase64 = await convertFileToBase64(file)
+                        const response = await api.projects.upload({
+                            fileType: file.type,
+                            fileName: file.name,
+                            projectId: project.getId(),
+                            token: user.getTokenId(),
+                            fileContent: fileBase64,
+                            path: "assets"
+                        })
+
+                        return response?.src
+                    }}
+                    type={EditorDataType.IMAGE}
+                />
 
                 <Button onClick={onClick} size="3" loading={isLoading}>
                     Update

@@ -115,13 +115,13 @@ const DroppableItem: React.FC<DroppableItemProps> = (props) => {
             }
 
             const fileBase64 = await convertFileToBase64(file)
-            const { src } = await api.file.createFile({
-                // token: user.getTokenId(),
-                userId: user.getId(),
+            const { src } = await api.projects.upload({
+                token: user.getTokenId(),
                 projectId,
                 fileContent: fileBase64,
                 fileName: file.name,
                 fileType: file.type,
+                path: "assets"
             })
 
             return src

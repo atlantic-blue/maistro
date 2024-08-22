@@ -35,6 +35,8 @@ import { SectionCheckoutStripeItem } from './Section/SectionCheckout/SectionChec
 import { SectionCheckoutMercadoPagoItem } from './Section/SectionCheckout/SectionCheckoutMercadoPago/SectionCheckoutMercadoPago'
 import { SectionShoppingCartsBasicItem } from './Section/SectionShoppingCart/SectionShoppingCartBasic/SectionShoppingCartBasic'
 import SectionFulfilmentBasicItem from './Section/SectionFulfilment/SectionFulfilmentBasic'
+import { SectionOrderBasicItem } from './Section/SectionOrder/SectionOrderBasic'
+import { SectionMapGoogleItem } from './Section/SectionMap/SectionMapGoogle'
 
 export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>> => {
     const templatesRecord: Record<string, TemplateStruct<{}>> = {}
@@ -83,6 +85,9 @@ export const GetTemplates = (): Record<TemplateComponentType, TemplateStruct<{}>
 
         SectionFulfilmentBasicItem,
 
+        SectionOrderBasicItem,
+
+        SectionMapGoogleItem,
     ]
 
     templatesList.forEach(template => {

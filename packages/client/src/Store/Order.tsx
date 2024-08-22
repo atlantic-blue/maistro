@@ -1,5 +1,6 @@
 import { Subject, Subscription } from "rxjs"
 import { OrderEvent, OrderMessageType, OrderStatus, OrderStruct } from "../types"
+import { timingSafeEqual } from "crypto"
 
 interface IOrder {
     setId(id: string): void
@@ -28,9 +29,13 @@ export interface Item {
 export class Order implements IOrder {
     private id = ""
     private shoppingCartId = ""
+    private updatedAt: string = ""
     private status: OrderStatus = OrderStatus.CREATED
     private items: Item[] = []
-    private fulfilmentSlot: string = ""
+    private fulfilment: OrderStruct["fulfilment"] = {
+        date: "",
+        interval: "",
+    }
 
     private subscriptions: Subscription[] = []
     public event$ = new Subject<OrderEvent>()
@@ -58,7 +63,8 @@ export class Order implements IOrder {
             shoppingCartId: this.getShoppingCartId(),
             status: this.getStatus(),
             items: this.getItems(),
-            fulfilmentSlot: this.getFulfilmentSlot(),
+            fulfilment: this.getFulfilment(),
+            updatedAt: this.getUpdatedAt(),
         }
     }
 
@@ -70,8 +76,9 @@ export class Order implements IOrder {
         this.setId(order.id)
         this.setShoppingCartId(order.shoppingCartId)
         this.setStatus(order.status)
-        this.setFulfilmentSlot(order.fulfilmentSlot)
+        this.setFulfilment(order.fulfilment)
         this.setItems(order.items)
+        this.setUpdatedAt(order.updatedAt)
     }
 
     public setId(id: string) {
@@ -82,6 +89,14 @@ export class Order implements IOrder {
         return this.id
     }
 
+    public setUpdatedAt(date: string) {
+        this.updatedAt = date
+    }
+
+    public getUpdatedAt() {
+        return this.updatedAt
+    }
+
     public setItems(items: Item[]) {
         this.items = items
     }
@@ -90,12 +105,12 @@ export class Order implements IOrder {
         return this.items
     }
 
-    public setFulfilmentSlot(fulfilmentSlot: string) {
-        this.fulfilmentSlot = fulfilmentSlot
+    public setFulfilment(fulfilment: OrderStruct["fulfilment"]) {
+        this.fulfilment = fulfilment
     }
 
-    public getFulfilmentSlot() {
-        return this.fulfilmentSlot
+    public getFulfilment() {
+        return this.fulfilment
     }
 
     public setShoppingCartId(id: string) {

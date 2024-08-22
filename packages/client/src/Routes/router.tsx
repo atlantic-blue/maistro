@@ -17,6 +17,9 @@ import RouteProjectSettingsTheme from "./RouteProject/RouteProjectTheme/RoutePro
 import RouteProjectSettingsMailList from "./RouteProject/RouteProjectMailList/RouteProjectMailList";
 import RouteProjectPageSettings from "./RouteProject/RouteProjectPageSettings/RouteProjectSettings";
 import RouteProjectOrder from "./RouteProject/RouteProjectOrder/RouteProjectOrders";
+import RouteAdmin from "./RouteAdmin/RouteAdmin";
+import RouteAdminUser from "./RouteAdmin/RouteAdminUser";
+import RouteProjectQrCode from "./RouteProject/RouteProjectQrCode/RouteProjectQrCode";
 
 // https://v5.reactrouter.com/web/guides/code-splitting
 const RoutesProjects = loadable(() => import("./RouteProjects/RouteProjects"), {
@@ -88,6 +91,7 @@ const RouteTemplate = loadable(() => import("./RouteTemplate/RouteTemplate"), {
 });
 
 export enum RoutesParams {
+    USER_ID = ":userId",
     PROJECT_ID = ":projectId",
     PAGE_ID = ":pageId",
     CONTENT_ID = ":contentId",
@@ -98,6 +102,9 @@ export enum RoutesParams {
 
 export enum Routes {
     HOME = "/*",
+
+    ADMIN = "/admin",
+    ADMIN_USER = `/admin/${RoutesParams.USER_ID}`,
 
     AUTHZ_LOGIN = "/login",
     AUTHZ_LOGOUT = "/logout",
@@ -133,6 +140,7 @@ export enum Routes {
 
     PROJECT_SETTINGS = `/projects/${RoutesParams.PROJECT_ID}/settings`,
     PROJECT_THEME = `/projects/${RoutesParams.PROJECT_ID}/theme`,
+    PROJECT_QRCODE = `/projects/${RoutesParams.PROJECT_ID}/qrcode`,
     PROJECT_CONTACTS = `/projects/${RoutesParams.PROJECT_ID}/contacts`,
     PROJECT_PRODUCTS = `/projects/${RoutesParams.PROJECT_ID}/products`,
     PROJECT_ORDERS = `/projects/${RoutesParams.PROJECT_ID}/orders`,
@@ -153,6 +161,17 @@ class AppRoutes {
 
     getHomeRoute() {
         return `/${this.language}/`
+    }
+
+    getAdminRoute() {
+        return `/${this.language}${Routes.ADMIN}`
+    }
+
+    /**
+     * Allows admins to see and interact with users projects
+     */
+    getAdminUserRoute(userId: string) {
+        return `/${this.language}${Routes.ADMIN}/${userId}`
     }
 
     getLoginRoute() {
@@ -241,6 +260,10 @@ class AppRoutes {
         return `/${this.language}${Routes.PROJECTS}/${projectId}/theme`
     }
 
+    getProjectQRCodeRoute(projectId: string,) {
+        return `/${this.language}${Routes.PROJECTS}/${projectId}/qrcode`
+    }
+
     getProjectContentsRoute(projectId: string,) {
         return `/${this.language}${Routes.PROJECTS}/${projectId}/contents`
     }
@@ -292,6 +315,22 @@ const routes: RouteObject[] = [
                 <RouteCallback />
             </RedirectRoute>
         ),
+    },
+    {
+        path: Routes.ADMIN,
+        element: (
+            <ProtectedRoute>
+                <RouteAdmin />
+            </ProtectedRoute>
+        )
+    },
+    {
+        path: Routes.ADMIN_USER,
+        element: (
+            <ProtectedRoute>
+                <RouteAdminUser />
+            </ProtectedRoute>
+        )
     },
     {
         path: Routes.SETTINGS,
@@ -440,6 +479,16 @@ const routes: RouteObject[] = [
             <ProtectedRoute>
                 <RouteProjectProvider>
                     <RouteProjectSettingsTheme />
+                </RouteProjectProvider>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: Routes.PROJECT_QRCODE,
+        element: (
+            <ProtectedRoute>
+                <RouteProjectProvider>
+                    <RouteProjectQrCode />
                 </RouteProjectProvider>
             </ProtectedRoute>
         ),
