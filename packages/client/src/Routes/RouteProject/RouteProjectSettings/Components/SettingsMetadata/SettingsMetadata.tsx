@@ -12,8 +12,9 @@ import { ApiContext } from "../../../../../Api/ApiProvider"
 import { Box, Button, Card, Flex, Heading, Text, TextField } from "@radix-ui/themes"
 import RouteProjectSettingsTheme from "../../../RouteProjectTheme/RouteProjectTheme"
 import EditorImage from "../../../../../Components/Editor/EditorImage"
-import { EditorDataType } from "../../../../../Components/Editor/EditorData"
+import EditorData, { EditorDataType } from "../../../../../Components/Editor/EditorData"
 import { convertFileToBase64 } from "../../../../../Utils/toBase64"
+import EditorText from "../../../../../Components/Editor/EditorText"
 
 interface SettingsMetadataProps {
     project: Project
@@ -23,24 +24,18 @@ interface SettingsMetadataProps {
 const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled }) => {
     const { api } = React.useContext(ApiContext)
     const { user } = React.useContext(ProjectsContext)
-    const [name, setName] = React.useState(project.getName())
-    const [projectUrl, setProjectURl] = React.useState(project.getUrl())
     const [isLoading, setIsLoading] = React.useState(false)
-    const [projectLogo, setProjectLogo] = React.useState(project.getLogo())
+    const [state, setState] = React.useState(project.getStruct())
 
     useEffect(() => {
         project.event$.next({
-            type: ProjectMessageType.SET_NAME,
-            data: name
+            type: ProjectMessageType.SET,
+            data: {
+                ...project.getStruct(),
+                ...state
+            }
         })
-    }, [name])
-
-    useEffect(() => {
-        project.event$.next({
-            type: ProjectMessageType.SET_URL,
-            data: projectUrl
-        })
-    }, [projectUrl])
+    }, [JSON.stringify(state)])
 
 
     // TODO ERROR HANDLING
@@ -49,11 +44,13 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
         api.projects.updateById({
             token: user.getTokenId(),
             projectId: project.getId(),
-            name: name,
-            url: createUrl(projectUrl),
             theme: project.getTheme(),
             currency: project.getCurrency(),
-            logo: projectLogo,
+
+            url: createUrl(state.url),
+            name: state.name,
+            logo: state.logo,
+            email: state.email,
         })
             .finally(() => {
                 setIsLoading(false)
@@ -73,8 +70,15 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
                         size="2"
                         type="text"
                         variant="surface"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
+                        value={state.name}
+                        onChange={e => {
+                            setState(prev => {
+                                return {
+                                    ...prev,
+                                    name: e.target.value
+                                }
+                            })
+                        }}
                         disabled={isDisabled}
                         className={styles.input}
                     />
@@ -90,18 +94,55 @@ const SettingsMetadata: React.FC<SettingsMetadataProps> = ({ project, isDisabled
                         type="text"
                         size="2"
                         variant="surface"
-                        value={projectUrl}
-                        onChange={e => setProjectURl(e.target.value)}
+                        value={state.url}
+                        onChange={e => {
+                            setState(prev => {
+                                return {
+                                    ...prev,
+                                    url: e.target.value
+                                }
+                            })
+                        }}
                         disabled={isDisabled}
                         className={styles.input}
                     />
 
                 </Box>
 
+                <Box p="2">
+                    <Text
+                        className={styles.title}
+                    >
+                        Email
+                    </Text>
+                    <TextField.Root
+                        size="2"
+                        type="text"
+                        variant="surface"
+                        value={state.email}
+                        onChange={e => {
+                            setState(prev => {
+                                return {
+                                    ...prev,
+                                    email: e.target.value
+                                }
+                            })
+                        }}
+                        disabled={isDisabled}
+                        className={styles.input}
+                    />
+                </Box>
+
                 <EditorImage
                     name="Logo"
-                    onChange={src => {
-                        setProjectLogo(src)
+                    value={state.logo}
+                    onChange={logo => {
+                        setState(prev => {
+                            return {
+                                ...prev,
+                                logo,
+                            }
+                        })
                     }}
                     onUploadFile={async file => {
                         const fileBase64 = await convertFileToBase64(file)

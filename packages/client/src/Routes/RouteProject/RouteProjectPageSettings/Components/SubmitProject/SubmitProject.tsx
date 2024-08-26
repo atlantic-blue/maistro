@@ -65,11 +65,7 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
     };
 
     const onSeeProject = () => {
-        if (!viewLink) {
-            return;
-        }
-
-        window.open(withHttps(viewLink), "_blank");
+        window.open(withHttps(project.getUrl()), "_blank");
     };
 
     return (
@@ -85,14 +81,12 @@ export const SubmitProject: React.FC<SubmitProjectProps> = ({
                 Publish
             </Button>
 
-            {viewLink ? (
-                <Button
-                    size="1"
-                    variant="outline"
-                    onClick={onSeeProject}>
-                    See Project
-                </Button>
-            ) : null}
+            <Button
+                size="1"
+                variant="outline"
+                onClick={onSeeProject}>
+                See Project
+            </Button>
 
             {/* TODO use a toaster */}
             {isError &&

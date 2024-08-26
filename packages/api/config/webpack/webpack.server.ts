@@ -122,7 +122,7 @@ const createMultipleWebpackConfigs = [
     // "projects-create",
     // "projects-read",
     // "projects-read-by-id",
-    // "projects-update-by-id",
+    "projects-update-by-id",
     // "projects-delete",
 
     // "projects-upload",

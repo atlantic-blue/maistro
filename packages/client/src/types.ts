@@ -43,6 +43,7 @@ export interface ProjectStruct {
     name: string
     url: string
     logo: string
+    email: string
     pages: Record<string, PageStruct>
     assets: Record<string, ProjectAssetStruct>
     content: Record<string, ProjectContentStruct>
@@ -286,6 +287,8 @@ export type ProjectThreadEvent = {
 }
 
 export enum ProjectMessageType {
+    SET = "SET",
+
     SET_NAME = "SET_NAME",
     SET_URL = "SET_URL",
 
@@ -315,6 +318,9 @@ export enum ProjectMessageType {
 }
 
 export type ProjectEvent = {
+    type: ProjectMessageType.SET
+    data: ProjectStruct
+} | {
     type: ProjectMessageType.SET_PAGE
     data: PageStruct
 } | {

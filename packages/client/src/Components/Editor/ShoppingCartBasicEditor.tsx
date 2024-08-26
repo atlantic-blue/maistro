@@ -28,9 +28,9 @@ const SectionShoppingCartBasicEditor: React.FC<SectionShoppingCartBasicProps & E
 
     return (
         <>
-            <Flex gap="3" mt="4" justify="end" mb="2">
-                <Button onClick={onSave}>Save</Button>
-            </Flex>
+            <Text as="div" size="1" mb="2">
+                Currency: {project.getCurrency()}
+            </Text>
 
             <Text as="div" size="2" mb="1" weight="bold">
                 Checkout URL
@@ -63,6 +63,10 @@ const SectionShoppingCartBasicEditor: React.FC<SectionShoppingCartBasicProps & E
                     })}
                 </DropdownMenu.Content>
             </DropdownMenu.Root>
+
+            <Flex gap="3" justify="end" mb="2">
+                <Button onClick={onSave}>Save</Button>
+            </Flex>
         </>
     )
 }

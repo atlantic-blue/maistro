@@ -5,6 +5,8 @@ import { TemplateCategory, TemplateComponentType, TemplateStruct } from '../../t
 import { FooterBasicProps } from '../FooterTypes';
 
 import * as styles from './FooterBasic.scss';
+import AvatarMaistro from '../../../Components/AvatarMaistro/AvatarMaistro';
+import IconLogo, { IconLogoSimple } from '../../../Components/Icons/Logo/Logo';
 
 const FooterBasic: React.FC<FooterBasicProps> = (props) => (
     <footer className={styles.simpleFooter} data-hydration-id={props["data-hydration-id"]}>
@@ -62,6 +64,20 @@ const FooterBasic: React.FC<FooterBasicProps> = (props) => (
         <Text as="p">
             © {new Date().getFullYear()} {props.name}. All rights reserved.
         </Text>
+        <a
+            href='https://maistro.website'
+            aria-label='maistro'
+            target="_blank" rel="noopener noreferrer"
+            style={{ textDecoration: "none", color: "var(--black-a7)" }}
+        >
+            <Flex justify="center" align="center" m="2" gap="1">
+                <Text as="p" size="1">
+                    Powered by Maistro
+                </Text>
+
+                <IconLogoSimple style={{ width: "20px", height: "20px" }} />
+            </Flex>
+        </a>
     </footer>
 );
 

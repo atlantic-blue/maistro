@@ -57,6 +57,7 @@ export class Project implements IProject {
     private name = `Untitled-${randAnimal().replace(" ", "-")}`
     private url = ""
     private logo = ""
+    private email = ""
     private currency: Currency = Currency.GBP
 
     private pages: Record<string, Page> = {}
@@ -85,6 +86,10 @@ export class Project implements IProject {
 
     private createSubscriptions() {
         return this.event$.subscribe(event => {
+            if (event.type === ProjectMessageType.SET) {
+                this.set(event.data)
+            }
+
             if (event.type === ProjectMessageType.SET_PAGE) {
                 this.setPage(event.data.id, event.data)
             }
@@ -170,6 +175,7 @@ export class Project implements IProject {
             name: this.getName(),
             url: this.getUrl(),
             logo: this.getLogo(),
+            email: this.getEmail(),
             theme: this.getTheme(),
             currency: this.getCurrency(),
 
@@ -220,6 +226,7 @@ export class Project implements IProject {
         this.setName(projectStruct.name)
         this.setUrl(projectStruct.url)
         this.setLogo(projectStruct.logo)
+        this.setEmail(projectStruct.email)
         this.setTheme(projectStruct.theme)
         this.setCurrency(projectStruct.currency)
         this.setUserId(projectStruct.userId)
@@ -461,6 +468,14 @@ export class Project implements IProject {
         this.logo = url
     }
 
+    public getEmail(): string {
+        return this.email
+    }
+
+    public setEmail(email: string) {
+        this.email = email
+    }
+
     public setTheme(theme: ProjectTheme): void {
         this.theme = theme
     }
@@ -481,7 +496,17 @@ export class Project implements IProject {
             threads: {},
             products: {},
             orders: {},
-            theme: {},
+            theme: {
+                accentColor: ProjectThemeAccentColour.amber,
+                appearance: "light",
+                grayColor: ProjectThemeGrayColour.auto,
+                radius: "small",
+                scaling: "100%",
+            },
+            currency: Currency.GBP,
+            logo: "",
+            email: "",
+            userId: ""
         })
     }
 }

@@ -21,7 +21,7 @@ const SectionHeroSlides: React.FC<SectionHeroSlidesProps> = (props) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setCurrentSlide((currentSlide + 1) % props.slides.length);
-        }, props.transition || 4000);
+        }, props.transition || 5000);
 
         return () => clearTimeout(timer);
     }, [currentSlide]);

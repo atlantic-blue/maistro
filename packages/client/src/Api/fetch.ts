@@ -75,6 +75,17 @@ class RequestController {
                 return error
             })
             .then((response) => {
+                if (response.status >= 500) {
+                    this.event$.next({
+                        type: RequestEventType.REQUEST_ERROR,
+                        data: {
+                            error: response,
+                            input,
+                            init,
+                        }
+                    })
+                }
+
                 this.event$.next({
                     type: RequestEventType.REQUEST_ENDED,
                     data: {

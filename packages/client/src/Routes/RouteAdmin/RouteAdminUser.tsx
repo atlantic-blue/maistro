@@ -5,12 +5,14 @@ import React, { useEffect } from "react"
 import { appRoutes } from "../router"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 import HeaderBurger from "../../Templates/Header/HeaderBurger/HeaderBurger"
-import { Avatar, Badge, Card, Flex, Text } from "@radix-ui/themes"
+import { Avatar, Badge, Button, Card, Flex, Heading, Text } from "@radix-ui/themes"
 import PaymentPlan from "../../Payments/PaymentPlan/PaymentPlan"
 import { ApiContext } from "../../Api/ApiProvider"
 import { ProjectsContext, projectsStore } from "../../Projects"
 import { ProjectsMessageType } from "../../types"
 import useObservable from "../../Utils/Hooks/UseObservable"
+import { SystemUser } from "../../Api/System/systemUsersRead"
+import { Project } from "../../Store/Project"
 
 const RouteAdminUser: React.FC = () => {
     const navigate = useNavigate();
@@ -56,6 +58,24 @@ const RouteAdminUser: React.FC = () => {
                 filter(e => e.type === ProjectsMessageType.SET_PROJECT)
             )
     )
+
+    const onTransferProjectToAdmin = (project: Project) => {
+        api.system.projects.updateUser({
+            token: user.getTokenId(),
+            userId: user.getId(),
+            projectId: project.getId(),
+        }).then(() => {
+            if (!userId) {
+                return
+            }
+
+            projectsStore.event$.next({
+                type: ProjectsMessageType.DELETE_PROJECT,
+                data: project.getId(),
+            })
+            navigate(appRoutes.getAdminUserRoute(userId))
+        })
+    }
 
     const projectsList = Object.keys(projects.getProjects())
         .filter(projectId => {
@@ -116,14 +136,26 @@ const RouteAdminUser: React.FC = () => {
                     }
 
                     return (
-                        <Card key={project.getId()} onClick={onClick} mb="3">
-                            <Flex wrap="wrap" justify="start" align="center" gap="2">
-                                <Text as="div" size="2" weight="bold">
-                                    {project.getName()}
-                                </Text>
-                                <Text as="div" size="2" color="gray">
-                                    {project.getUrl()}
-                                </Text>
+                        <Card m="2" >
+                            <Flex direction="column" justify="center" mb="2">
+                                <Card key={project.getId()} onClick={onClick} mb="3">
+                                    <Flex wrap="wrap" direction="column" align="center" gap="1">
+                                        <Heading as="h3" size="2">
+                                            {project.getName()}
+                                        </Heading>
+                                        {project.getLogo() ? <Avatar
+                                            size="9"
+                                            fallback={project.getName()}
+                                            src={project.getLogo()}
+                                        /> : null}
+                                        <Badge color="mint">
+                                            {project.getUrl()}
+                                        </Badge>
+                                    </Flex>
+                                </Card>
+                                <Button variant="outline" onClick={() => onTransferProjectToAdmin(project)}>
+                                    Transfer to Admin
+                                </Button>
                             </Flex>
                         </Card>
                     )

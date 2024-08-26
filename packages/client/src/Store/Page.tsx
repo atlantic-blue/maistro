@@ -211,11 +211,13 @@ class PageStore implements IPage {
         Body,
         state,
         theme,
+        favicon,
     }: {
         Css: () => string,
         Body: () => string,
         state: Object,
         theme: ProjectTheme
+        favicon: string
     }): string {
         return (
             Html({
@@ -228,9 +230,9 @@ class PageStore implements IPage {
                     <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
 
                     <title>${this.getTitle()}</title>
-                    <link rel="icon" type="image/x-icon" href=${this.getFavicon()}></link>
-                    <meta name="description" content=${this.getDescription()} />
-                    <meta name="keywords" content=${this.getKeyWords()} />
+                    <link rel="icon" type="image/x-icon" href=${favicon}></link>
+                    <meta name="description" content="${this.getDescription()}" />
+                    <meta name="keywords" content="${this.getKeyWords()}" />
                     <meta name="author" content="https://maistro.website" />
 
                     <link href="https://maistro.website/assets/radix-styles.css" rel="stylesheet" />

@@ -40,7 +40,7 @@ const SectionCheckoutDate: React.FC<SectionCheckoutDateProps> = (props) => {
                     mode="single"
                     selected={date}
                     onSelect={onSelectDate}
-                    disabled={{ dayOfWeek: disabledDays }}
+                    disabled={[{ dayOfWeek: disabledDays }, { before: new Date() }]}
                     weekStartsOn={1}
                 />
             </Dialog.Content>

@@ -216,7 +216,7 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
                         }
                     }),
                     enable_shipping: props.enableShipping,
-                    shipping_options: props.shippingOptions,
+                    // shipping_options: props.shippingOptions,
                 })
             }).then(response => response.json())
 
@@ -586,34 +586,6 @@ export const SectionCheckoutMercadoPagoItem: TemplateStruct<SectionCheckoutMerca
         projectId: "",
         returnUrl: "",
         statementDescriptor: "",
-        payer: {
-            first_name: "",
-            last_name: "",
-            phone: {
-                area_code: "",
-                number: "",
-            },
-        },
-        items: [
-            {
-                id: new Date().toISOString(),
-                quantity: 2,
-                currency_id: "COP",
-                title: "brownie",
-                unit_price: 5000,
-                description: "",
-                picture_url: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxM3x8ZGVzc2VydHxlbnwwfHx8fDE3MjAzMTI5ODV8MA&ixlib=rb-4.0.3&q=85",
-                category_id: "food",
-            }
-        ],
         enableShipping: false,
-        shippingOptions: {
-            receiver_address: {
-                zip_code: "",
-                street_name: "",
-                city_name: "",
-            },
-            cost: 0,
-        }
     }
 }

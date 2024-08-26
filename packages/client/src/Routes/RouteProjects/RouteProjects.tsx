@@ -1,7 +1,7 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { CirclePlus, Crown } from "lucide-react";
-import { Avatar, Badge, Box, Button, Card, Flex, Section, Text } from "@radix-ui/themes"
+import { Avatar, Badge, Box, Button, Card, Flex, Heading, Section, Text } from "@radix-ui/themes"
 
 import { ProjectsContext } from "../../Projects"
 
@@ -88,13 +88,18 @@ const RoutesProjects: React.FC = () => {
 
                                     return (
                                         <Card key={project.getId()} onClick={onClick} mb="3">
-                                            <Flex wrap="wrap" justify="start" align="center" gap="2">
-                                                <Text as="div" size="2" weight="bold">
+                                            <Flex wrap="wrap" direction="column" align="center" gap="1">
+                                                <Heading as="h3" size="2">
                                                     {project.getName()}
-                                                </Text>
-                                                <Text as="div" size="2" color="gray">
+                                                </Heading>
+                                                <Avatar
+                                                    size="9"
+                                                    fallback={project.getName()}
+                                                    src={project.getLogo()}
+                                                />
+                                                <Badge color="mint">
                                                     {project.getUrl()}
-                                                </Text>
+                                                </Badge>
                                             </Flex>
                                         </Card>
                                     )

@@ -23,6 +23,7 @@ interface ProjectsUpdateInput {
     }
     currency: string
     logo: string
+    email: string
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -70,7 +71,7 @@ const projectsUpdateById: APIGatewayProxyHandler = async (event: APIGatewayProxy
         };
     }
 
-    const { name, url, theme, currency, logo } = event.body as unknown as ProjectsUpdateInput;
+    const { name, url, theme, currency, logo, email } = event.body as unknown as ProjectsUpdateInput;
 
     const input = sanitiseInput({
         name,
@@ -78,6 +79,7 @@ const projectsUpdateById: APIGatewayProxyHandler = async (event: APIGatewayProxy
         theme,
         currency,
         logo,
+        email,
         updatedAt: new Date().toISOString(),
     })
 
@@ -108,6 +110,7 @@ const validationSchema = Joi.object<ProjectsUpdateInput>({
     theme: Joi.object().optional(),
     currency: Joi.string().optional(),
     logo: Joi.string().optional(),
+    email: Joi.string().optional(),
 })
 
 const handler = new LambdaMiddlewares()

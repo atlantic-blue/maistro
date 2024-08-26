@@ -13,6 +13,7 @@ import SectionBlankEditor from "./SectionBlankEditor";
 import ServicesBasicEditor from "./ServicesBasicEditor";
 import SectionShoppingCartBasicEditor from "./ShoppingCartBasicEditor";
 import TestimonialsBasicEditor from "./TestimonialsBasicEditor";
+import SectionMapGoogleEditor from "./SectionMapGoogleEditor";
 
 const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.HEADER_BASIC]: HeaderBasicEditor,
@@ -41,6 +42,8 @@ const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.CHECKOUT_MERCADO_PAGO]: SectionCheckoutMercadoPagoEditor,
 
     [TemplateComponentType.SHOPPING_CART_BASIC]: SectionShoppingCartBasicEditor,
+
+    [TemplateComponentType.MAP_GOOGLE]: SectionMapGoogleEditor,
 }
 
 export default editors

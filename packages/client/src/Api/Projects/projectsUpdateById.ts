@@ -11,6 +11,7 @@ export interface ProjectsUpdateInput {
     theme: ProjectTheme
     currency: Currency
     logo: string
+    email: string
 }
 
 const projectsUpdateById = async (
@@ -23,6 +24,7 @@ const projectsUpdateById = async (
         theme,
         currency,
         logo,
+        email,
     }: ProjectsUpdateInput,
     apiUrl = env.api.projects.update,
     request = requestController.fetch,
@@ -39,6 +41,7 @@ const projectsUpdateById = async (
             theme,
             currency,
             logo,
+            email,
         })
     }).then(response => response.json())
 }

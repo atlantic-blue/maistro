@@ -32,36 +32,6 @@ const SectionCheckoutMercadoPagoEditor: React.FC<SectionCheckoutMercadoPagoProps
             // Shipping TODO
             // enableShipping: state.enableShipping || false,
             enableShipping: true,
-            payer: {
-                first_name: "Carlos",
-                last_name: "Franco",
-                phone: {
-                    area_code: "+57",
-                    number: "3223245732",
-                },
-            },
-            shippingOptions: {
-                receiver_address: {
-                    zip_code: "110110",
-                    street_name: "calle 86",
-                    city_name: "Bogota",
-                },
-                cost: 3000,
-            },
-            // TODO checkout
-            // Items
-            items: [
-                {
-                    id: new Date().toISOString(),
-                    quantity: 2,
-                    title: "tart",
-                    category_id: 'dessert',
-                    unit_price: 3000,
-                    currency_id: "COP",
-                    description: "tarts for all!",
-                    picture_url: "https://images.unsplash.com/photo-1468218620578-e8d78dcda7b1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1OTYxOTB8MHwxfHNlYXJjaHwxNnx8c3dlZXQlMkNzaW58ZW58MHx8fHwxNzE5OTYwMzg3fDA&ixlib=rb-4.0.3&q=85",
-                }
-            ],
         })
     }
 
@@ -142,16 +112,8 @@ const SectionCheckoutMercadoPagoEditor: React.FC<SectionCheckoutMercadoPagoProps
                 mt="2"
                 mb="2"
                 size="2"
-                onClick={() => {
-                    setState(prev => {
-                        return {
-                            ...prev,
-                            checkoutUrl: env.api.payments.checkouts.createLatam,
-                        }
-                    })
-                }}
             >
-                {env.api.payments.checkouts.createLatam}
+                {env.api.payments.checkouts.create.mercadoPago}
             </Badge>
 
             <Text as="div" size="1" weight="bold">

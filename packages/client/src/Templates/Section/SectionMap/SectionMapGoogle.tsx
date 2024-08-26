@@ -9,9 +9,10 @@ export interface Address {
     firstLine: string
 }
 
-interface SectionMapGoogleProps {
+export interface SectionMapGoogleProps {
     "data-hydration-id"?: string
     address: Address
+    zoom: string
 }
 
 const SectionMapGoogle: React.FC<SectionMapGoogleProps> = (props) => {
@@ -19,10 +20,12 @@ const SectionMapGoogle: React.FC<SectionMapGoogleProps> = (props) => {
         return null
     }
 
+    const zoom = props.zoom || "12"
+
     const url = new URL("https://maps.google.com/maps")
     url.searchParams.append("hl", "en")
     url.searchParams.append("q", `${props.address.firstLine}, ${props.address.city}, ${props.address.postcode}, ${props.address.country}`)
-    url.searchParams.append("z", "12")
+    url.searchParams.append("z", zoom)
     url.searchParams.append("t", "")
     url.searchParams.append("ie", "UTF8")
     url.searchParams.append("iwloc", "B")

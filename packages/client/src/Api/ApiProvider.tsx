@@ -53,6 +53,8 @@ import { systemProjectsReadById, SystemProjectsReadByIdInput, SystemProjectsRead
 import { SystemProjectsReadUpdateUserOutput, systemProjectsUpdateUser, SystemProjectsUpdateUserInput } from "./System/systemProjectsUpdateUser";
 import { projectUpload, ProjectUploadInput, ProjectUploadOutput } from "./Project/projectUpload";
 import { projectUploadMultipart, ProjectUploadMultipartInput, ProjectUploadMultipartOutput } from "./Project/projectUploadMultipart";
+import ErrorToast from "../Components/ErrorToast/ErrorToast";
+import { requestController } from "./fetch";
 
 
 interface ApiContextState {
@@ -265,6 +267,10 @@ const ApiProvider: React.FC<ApiProviderProps> = (props) => {
             <ApiContext.Provider value={context}>
                 {props.children}
             </ApiContext.Provider>
+
+            <ErrorToast
+                requestController={requestController}
+            />
         </>
     )
 }

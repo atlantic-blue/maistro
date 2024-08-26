@@ -6,20 +6,9 @@ import {
 import loadable from "@loadable/component";
 
 import Loading from "../Components/Loading/Loading";
-import RouteBrainstorm from "./RouteBrainstorm/RouteBrainstorm";
 import RoutesHome from "./RouteHome/RouteHome";
 import { ResourceStringLanguage } from "../ResourceStrings";
 import { getCurrentLanguage } from "../ResourceStrings/ResourceStringsProvider";
-import RouteProjectProducts from "./RouteProject/RouteProjectProducts/RouteProjectProducts";
-import RouteProjectOrders from "./RouteProject/RouteProjectOrders/RouteProjectOrders";
-import RouteProjectSettingsContent from "./RouteProject/RouteProjectContents/RouteProjectContents";
-import RouteProjectSettingsTheme from "./RouteProject/RouteProjectTheme/RouteProjectTheme";
-import RouteProjectSettingsMailList from "./RouteProject/RouteProjectMailList/RouteProjectMailList";
-import RouteProjectPageSettings from "./RouteProject/RouteProjectPageSettings/RouteProjectSettings";
-import RouteProjectOrder from "./RouteProject/RouteProjectOrder/RouteProjectOrders";
-import RouteAdmin from "./RouteAdmin/RouteAdmin";
-import RouteAdminUser from "./RouteAdmin/RouteAdminUser";
-import RouteProjectQrCode from "./RouteProject/RouteProjectQrCode/RouteProjectQrCode";
 
 // https://v5.reactrouter.com/web/guides/code-splitting
 const RoutesProjects = loadable(() => import("./RouteProjects/RouteProjects"), {
@@ -87,6 +76,50 @@ const RoutePaymentsPricing = loadable(() => import("./RoutePayments/RoutePayment
 });
 
 const RouteTemplate = loadable(() => import("./RouteTemplate/RouteTemplate"), {
+    fallback: <Loading />
+});
+
+const RouteBrainstorm = loadable(() => import("./RouteBrainstorm/RouteBrainstorm"), {
+    fallback: <Loading />
+});
+
+const RouteProjectQrCode = loadable(() => import("./RouteProject/RouteProjectQrCode/RouteProjectQrCode"), {
+    fallback: <Loading />
+});
+
+const RouteAdminUser = loadable(() => import("./RouteAdmin/RouteAdminUser"), {
+    fallback: <Loading />
+});
+
+const RouteAdmin = loadable(() => import("./RouteAdmin/RouteAdmin"), {
+    fallback: <Loading />
+});
+
+const RouteProjectOrder = loadable(() => import("./RouteProject/RouteProjectOrder/RouteProjectOrders"), {
+    fallback: <Loading />
+});
+
+const RouteProjectPageSettings = loadable(() => import("./RouteProject/RouteProjectPageSettings/RouteProjectSettings"), {
+    fallback: <Loading />
+});
+
+const RouteProjectSettingsMailList = loadable(() => import("./RouteProject/RouteProjectMailList/RouteProjectMailList"), {
+    fallback: <Loading />
+});
+
+const RouteProjectSettingsTheme = loadable(() => import("./RouteProject/RouteProjectTheme/RouteProjectTheme"), {
+    fallback: <Loading />
+});
+
+const RouteProjectSettingsContent = loadable(() => import("./RouteProject/RouteProjectContents/RouteProjectContents"), {
+    fallback: <Loading />
+});
+
+const RouteProjectOrders = loadable(() => import("./RouteProject/RouteProjectOrders/RouteProjectOrders"), {
+    fallback: <Loading />
+});
+
+const RouteProjectProducts = loadable(() => import("./RouteProject/RouteProjectProducts/RouteProjectProducts"), {
     fallback: <Loading />
 });
 

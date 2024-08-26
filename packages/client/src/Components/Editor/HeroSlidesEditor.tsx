@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Card, Flex } from "@radix-ui/themes";
+import React, { useEffect } from "react";
+import { Button, Card, Flex, Text, TextField } from "@radix-ui/themes";
 
 import { SectionHeroSlidesProps } from "../../Templates/Section/SectionHero/SectionHeroSlides/SectionHeroSlides";
 import EditorData, { EditorDataType } from "./EditorData";
@@ -15,17 +15,37 @@ const HeroSlidesEditor: React.FC<SectionHeroSlidesProps & EditorProps> = (props)
 
     const onSave = () => {
         props.onSaveData({
-            transition: props.transition,
-            slides: props.slides
+            transition: state.transition,
+            slides: state.slides
         })
     }
 
     return (
         <>
             <Flex direction="column" gap="3">
+                <Flex align="center" gap="2" justify="between" mb="2">
+                    <Text as="div" size="1" mb="1" weight="bold">
+                        Slide Transition Speed (ms)
+                    </Text>
+                </Flex>
+                <TextField.Root
+                    type="number"
+                    size="2"
+                    variant="surface"
+                    value={state.transition}
+                    onChange={e => {
+                        setState(prev => {
+                            return {
+                                ...prev,
+                                transition: Number(e.target.value)
+                            }
+                        })
+                    }}
+                />
+
                 {state.slides.map((slide, index) => {
                     return (
-                        <Card>
+                        <Card key={index}>
                             <EditorData
                                 type={EditorDataType.TEXT}
                                 name="Title"
