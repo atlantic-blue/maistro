@@ -58,7 +58,8 @@ export const ShoppingItemModifiers: React.FC<ShoppingItemModifiersProps> = (prop
                     <Flex direction="column" gap="1" justify="center">
                         <Avatar
                             src={shoppingCartItem.product.images[0]}
-                            fallback={shoppingCartItem.product.name}
+                            alt={shoppingCartItem?.product?.name}
+                            fallback={shoppingCartItem?.product?.name}
                             size="9"
                             style={{ margin: "auto" }}
                         />
@@ -113,6 +114,7 @@ export const ShoppingItemModifiers: React.FC<ShoppingItemModifiersProps> = (prop
                                             />
                                             <Avatar
                                                 src={modifier?.imgSrc}
+                                                alt={modifier?.name}
                                                 fallback={modifier?.name?.charAt(0)}
                                                 size="3"
                                             />

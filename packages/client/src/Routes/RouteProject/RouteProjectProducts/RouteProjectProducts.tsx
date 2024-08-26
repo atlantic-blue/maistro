@@ -355,9 +355,9 @@ const ProductViewer: React.FC<{ product: Product, projectId: string, project: Pr
                                                     <Text weight="bold" size="2">Image</Text>
                                                     <Avatar
                                                         src={m.imgSrc}
+                                                        alt={m.name}
                                                         size="5"
                                                         fallback={m.name}
-                                                        alt="Preview"
                                                         m="auto"
                                                     />
                                                     <EditorImage

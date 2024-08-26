@@ -14,6 +14,7 @@ const SectionTestimonialsBasic: React.FC<SectionTestimonialsProps> = (props) => 
                     <Avatar
                         size="3"
                         src={props.pictureUrl}
+                        alt={props.name}
                         radius="full"
                         fallback={props.name.charAt(0)}
                     />

@@ -46,6 +46,7 @@ const ImagesGallery: React.FC<ImagesGalleryProps> = (props) => {
                             <Avatar
                                 size="7"
                                 src={image.urls.thumb}
+                                alt="Preview"
                                 fallback="NA"
                             />
                         </Box>

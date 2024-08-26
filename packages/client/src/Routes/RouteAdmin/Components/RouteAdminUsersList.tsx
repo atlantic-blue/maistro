@@ -123,6 +123,7 @@ const RouteAdminUsersList: React.FC = () => {
                             <Flex gap="2" direction="row" align="center">
                                 <Avatar
                                     src={userAvatar}
+                                    alt={userName}
                                     fallback={userName || "N/A"}
                                     size="4"
                                     referrerPolicy="unsafe-url"

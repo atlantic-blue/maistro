@@ -27,6 +27,7 @@ const FooterBasic: React.FC<FooterBasicProps> = (props) => (
                                         <Avatar
                                             size="2"
                                             src={item.imgSrc}
+                                            alt={item.description}
                                             fallback={typeof item.name === "string" && item.name.charAt(0)}
                                         /> :
                                         item.name}
@@ -51,6 +52,7 @@ const FooterBasic: React.FC<FooterBasicProps> = (props) => (
                                         <Avatar
                                             size="2"
                                             src={item.imgSrc}
+                                            alt={item.description}
                                             fallback={typeof item.name === "string" && item.name.charAt(0)}
                                         /> :
                                         item.name}

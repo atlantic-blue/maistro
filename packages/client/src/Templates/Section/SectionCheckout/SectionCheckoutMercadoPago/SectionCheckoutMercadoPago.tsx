@@ -509,6 +509,7 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
                                     <Text >{shoppingCartItem?.quantity}x</Text>
                                     <Avatar
                                         src={shoppingCartItem?.product?.images[0]}
+                                        alt={shoppingCartItem.product.name}
                                         fallback={shoppingCartItem.product.name.charAt(0)}
                                         size="2"
                                     />

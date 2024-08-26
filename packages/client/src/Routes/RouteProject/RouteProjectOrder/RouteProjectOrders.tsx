@@ -56,6 +56,7 @@ const RouteProjectOrder: React.FC = () => {
                                             <Text >{item?.quantity}x</Text>
                                             <Avatar
                                                 src={item?.price_data?.product_data?.images[0]}
+                                                alt={item?.price_data?.product_data?.name}
                                                 fallback={item?.price_data?.product_data?.name.charAt(0)}
                                                 size="2"
                                             />

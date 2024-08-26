@@ -49,6 +49,7 @@ const RoutesSettings: React.FC = () => {
                                     <Avatar
                                         size="1"
                                         src={user.getAvatar()}
+                                        alt={user.getName()}
                                         fallback={user.getName().charAt(0)}
                                     />
                                     <Text>Settings</Text>

@@ -260,6 +260,7 @@ const SectionProductModifiersBasic: React.FC<{
                             />
                             <Avatar
                                 src={modifier?.imgSrc}
+                                alt={modifier?.name}
                                 fallback={modifier?.name?.charAt(0)}
                                 size="3"
                             />

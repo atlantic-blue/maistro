@@ -222,6 +222,7 @@ const SectionCheckoutItems: React.FC<SectionCheckoutItemsProps> = (props) => {
                                 <Text >{shoppingCartItem?.quantity}x</Text>
                                 <Avatar
                                     src={shoppingCartItem?.product?.images[0]}
+                                    alt={shoppingCartItem.product.name}
                                     fallback={shoppingCartItem.product.name.charAt(0)}
                                     size="2"
                                 />
@@ -330,6 +331,7 @@ const SectionFulfilment: React.FC<SectionFulfilmentProps> = (props) => {
                                 <Flex direction="column" gap="1" align="center" justify="center">
                                     <Avatar
                                         src={option.imgSrc}
+                                        alt={option.shipping_rate_data.display_name}
                                         fallback={option.shipping_rate_data.display_name}
                                         size="7"
                                     />
@@ -343,6 +345,7 @@ const SectionFulfilment: React.FC<SectionFulfilmentProps> = (props) => {
                                 <Flex direction="column" gap="1" align="center" justify="center">
                                     <Avatar
                                         src={option.imgSrc}
+                                        alt={option.shipping_rate_data.display_name}
                                         fallback={option.shipping_rate_data.display_name}
                                         size="7"
                                     />

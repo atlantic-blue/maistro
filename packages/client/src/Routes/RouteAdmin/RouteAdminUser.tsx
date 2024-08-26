@@ -143,11 +143,14 @@ const RouteAdminUser: React.FC = () => {
                                         <Heading as="h3" size="2">
                                             {project.getName()}
                                         </Heading>
-                                        {project.getLogo() ? <Avatar
-                                            size="9"
-                                            fallback={project.getName()}
-                                            src={project.getLogo()}
-                                        /> : null}
+                                        {project.getLogo() ? (
+                                            <Avatar
+                                                size="9"
+                                                src={project.getLogo()}
+                                                alt={project.getName()}
+                                                fallback={project.getName()}
+                                            />
+                                        ) : null}
                                         <Badge color="mint">
                                             {project.getUrl()}
                                         </Badge>

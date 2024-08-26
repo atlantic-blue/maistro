@@ -67,6 +67,8 @@ const PageNavigation: React.FC = () => {
                                             <Flex align="center" gap="1">
                                                 <Avatar
                                                     size="1"
+                                                    src={project.getLogo()}
+                                                    alt={project.getName()}
                                                     fallback={project.getName().charAt(0)}
                                                 />
                                                 <Text>

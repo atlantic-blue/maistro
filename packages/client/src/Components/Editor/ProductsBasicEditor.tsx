@@ -77,6 +77,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                                     <Avatar
                                                         size="2"
                                                         src={product.getImages()[0]}
+                                                        alt={product.getName()}
                                                         fallback={product.getName()}
                                                     />
                                                     <Text>{product.getName()}</Text>
@@ -127,6 +128,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                                     size={product.imgSrc === image ? "7" : "8"}
                                                     key={image}
                                                     src={image}
+                                                    alt={product.cta}
                                                     fallback={"Not Available"}
                                                     onClick={() => {
                                                         setState(prev => {
