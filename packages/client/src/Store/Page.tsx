@@ -188,7 +188,7 @@ class PageStore implements IPage {
     }
 
     public setPath(path: string) {
-        const sanitised = path?.replace("/", "").replace(" ", "-")
+        const sanitised = path?.replace(" ", "-")
         this.path = sanitised === "home" ? "index" : sanitised
     }
 

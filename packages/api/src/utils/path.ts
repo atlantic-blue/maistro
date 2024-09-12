@@ -18,7 +18,7 @@ export const sanitizePath = (path: string): string => {
 
 const sanitizeInput = (input: string): string => {
     // Replace unsafe characters with URL encoding (e.g., spaces to %20)
-    return encodeURIComponent(input.trim());
+    return encodeURI(input.trim());
 };
 
 export const s3Path = (input: { projectId: string, fileName: string, path?: string }): string => {
@@ -35,7 +35,6 @@ export const s3Path = (input: { projectId: string, fileName: string, path?: stri
     }
 
     fullPath += `/${sanitizedFileName}`;
-
     // Remove leading and trailing slashes
     return fullPath.replace(/^\/+|\/+$/g, '');
 };

@@ -21,7 +21,7 @@ interface ToolbarToolbarMediaImageProps {
 const TOOLBAR_MEDIA_IMAGE = "ToolbarMedia-image"
 
 const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
-    const ref = React.useRef(null)
+    const ref = React.useRef<HTMLDivElement | null>(null)
     const [currentMedia, setCurrentMedia] = React.useState<HTMLImageElement | null>(null)
     const [isLoading, setIsLoading] = React.useState(false)
 
@@ -33,12 +33,17 @@ const ToolbarMediaImage: React.FC<ToolbarToolbarMediaImageProps> = (props) => {
     })
 
     React.useEffect(() => {
-        const handleClick = (event) => {
-            const { target } = event;
+        const handleClick = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+
             if (!['IMG'].includes(target.tagName)) {
                 return
             }
-            setCurrentMedia(event.target)
+            if (!ref.current || !ref.current.contains(target)) {
+                return
+            }
+
+            setCurrentMedia(event.target as HTMLImageElement)
         };
 
         document.addEventListener('click', handleClick);

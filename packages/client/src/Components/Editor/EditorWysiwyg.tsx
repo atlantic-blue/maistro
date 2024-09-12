@@ -7,10 +7,12 @@ import ErrorBoundary from "../../Errors/ErrorBoundary";
 
 const EditorWysiwyg: React.FC<EditorWysiwygProps> = (props) => {
     const editorApiRef = React.useRef<WysiwygApi>(null);
+    const [content, setContent] = React.useState(htmlReactParser(props.value || ""))
 
     const onClick = () => {
-        const content = editorApiRef.current?.getContent()
-        props.onChange(content || "")
+        const content = editorApiRef.current?.getContent() || ""
+        props.onChange(content)
+        setContent(content)
     }
 
     return (
@@ -26,7 +28,7 @@ const EditorWysiwyg: React.FC<EditorWysiwygProps> = (props) => {
                     onUploadFile={props.onUploadFile}
                     isEditable
                 >
-                    {htmlReactParser(props.value || "")}
+                    {content}
                 </Wysiwyg>
                 <Flex gap="2" mt="4" justify="center">
                     <Button variant="outline" onClick={onClick}>

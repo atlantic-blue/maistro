@@ -14,6 +14,7 @@ export interface SectionBlankProps {
 const SectionBlank: React.FC<SectionBlankProps> = (props) => {
     return (
         <Section
+            size={"1"}
             data-hydration-id={props["data-hydration-id"]}
             className={styles.main}
         >

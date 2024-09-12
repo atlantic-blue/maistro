@@ -12,7 +12,6 @@ interface EditorProps {
 const HeroBasicEditor: React.FC<SectionHeroProps & EditorProps> = (props) => {
     const [state, setState] = React.useState(props)
 
-
     const onSave = () => {
         props.onSaveData({
             content: state.content,

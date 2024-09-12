@@ -9,7 +9,7 @@ import createError from '../../middlewares/error-handler';
 import authJwt from '../../middlewares/auth-jwt';
 import jsonBodyParser from '../../middlewares/json-body-parser';
 import { validatorJoi } from '../../middlewares/validator-joi';
-import { s3Path, sanitizePath } from '../../utils/path';
+import { s3Path } from '../../utils/path';
 
 
 interface UploadMultipartInput {

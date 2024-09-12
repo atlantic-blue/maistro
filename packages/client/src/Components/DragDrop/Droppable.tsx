@@ -28,7 +28,7 @@ const DroppableComponent: React.FC = () => {
 
         const subscription = page.event$
             .pipe(
-                debounceTime(1000 / 2)
+                debounceTime(1000 / 4)
             )
             .subscribe(event => {
                 if (event.type === PageMessageType.SET_CONTENT_IDS) {

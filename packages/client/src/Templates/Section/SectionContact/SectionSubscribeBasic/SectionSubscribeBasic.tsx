@@ -30,7 +30,7 @@ const SectionSubscribeBasic: React.FC<SectionSubscribeBasicProps> = (props) => (
                 <TextField.Root
                     id="name"
                     name="name"
-                    placeholder="emilia@gmail.com"
+                    placeholder="Emilia Tellez"
                     type="text"
                     size="2"
                     variant="surface"

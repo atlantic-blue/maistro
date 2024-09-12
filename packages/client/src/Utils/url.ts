@@ -29,9 +29,7 @@ const withDomain = (input: string, domain: string) => {
 
 const sanitizeDomainName = (input: string) => {
     return input
-        .replace(/(http)s/g, '')
-        .replace(/[0-9]/g, '')
-        .replace(/[^a-zA-Z-_]/g, '')
+        .replace(/[^a-zA-Z0-9-_]/g, '')
         .replace(/\s+/g, '-')
         .toLowerCase();
 }
