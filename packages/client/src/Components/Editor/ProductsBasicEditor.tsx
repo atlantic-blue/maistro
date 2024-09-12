@@ -1,7 +1,7 @@
 import React from "react"
 import { Avatar, Box, Button, Card, DropdownMenu, Flex, Text } from "@radix-ui/themes"
 import EditorData, { EditorDataType } from "./EditorData";
-import { SectionProductsBasicProps } from "../../Templates/Section/SectionProduct/SectionProductBasic/SectionProductBasic";
+import { SectionProductsBasicProps } from "../../Templates/Section/SectionProducts/SectionProductsBasic/SectionProductsBasic";
 import { ProjectsContext } from "../../Projects";
 import { useParams } from "react-router-dom";
 
@@ -38,7 +38,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                         </Button>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content>
-                        <Flex align="center" gap="3" direction="column" justify="center">
+                        <Flex align="start" gap="3" direction="column">
                             {
                                 Object.values(
                                     project.getProducts()
@@ -47,6 +47,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                     .map(product => {
                                         return (
                                             <DropdownMenu.Item
+
                                                 key={product.getId()}
                                                 onClick={() => {
                                                     setState(prev => {
@@ -125,7 +126,7 @@ const SectionProductsEditor: React.FC<SectionProductsBasicProps & EditorProps> =
                                         {project?.getProductById(product.metadata.id)?.getImages()?.map(image => {
                                             return (
                                                 <Avatar
-                                                    size={product.imgSrc === image ? "7" : "8"}
+                                                    size={product.imgSrc === image ? "8" : "5"}
                                                     key={image}
                                                     src={image}
                                                     alt={product.cta}

@@ -27,8 +27,6 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         project_id,
         return_url,
         line_items,
-        shipping_options,
-        enable_shipping,
         token_id,
         shopping_cart_id,
     } = event.body as unknown as PaymentsCheckoutsMercadoPagoInput
@@ -55,10 +53,6 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
                 pending: return_url,
             },
             auto_return: "all",
-            shipments: enable_shipping ? {
-                ...shipping_options,
-                mode: "custom",
-            } : void 0,
         },
         requestOptions: {
 
@@ -130,15 +124,6 @@ const validationSchema = Joi.object<PaymentsCheckoutsMercadoPagoInput>({
             currency_id: Joi.string().required(),
         }),
     ).required(),
-    enable_shipping: Joi.boolean().required(),
-    shipping_options: Joi.object({
-        receiver_address: Joi.object({
-            zip_code: Joi.string().required(),
-            street_name: Joi.string().required(),
-            city_name: Joi.string().required(),
-        }).required(),
-        cost: Joi.number().required(),
-    }).required()
 })
 
 const handler = new LambdaMiddlewares()

@@ -41,6 +41,7 @@ export interface ShippingOption {
     minimumDeliveryAmount: number
     imgSrc: string
     availability: AvailableDay[]
+    disabledDates: string[] // Date string
     address?: Address
     shipping_rate_data: {
         display_name: string
@@ -373,6 +374,7 @@ const SectionFulfilment: React.FC<SectionFulfilmentProps> = (props) => {
                     onDateChange={onDateChange}
                     onDayIntervalChange={onDayIntervalChange}
                     availableDays={shippingOption.availability || []}
+                    disabledDates={shippingOption.disabledDates || []}
                 />
             ) : null}
 
@@ -488,6 +490,7 @@ export const SectionCheckoutStripeItem: TemplateStruct<SectionCheckoutStripeProp
             {
                 minimumDeliveryAmount: 1000,
                 availability: [],
+                disabledDates: [],
                 imgSrc: "",
                 shipping_rate_data: {
                     display_name: "Store Pickup",
@@ -502,13 +505,14 @@ export const SectionCheckoutStripeItem: TemplateStruct<SectionCheckoutStripeProp
                 minimumDeliveryAmount: 1000,
                 imgSrc: "",
                 availability: [],
+                disabledDates: [],
                 shipping_rate_data: {
                     display_name: "Local Delivery",
                     type: "fixed_amount",
                     fixed_amount: {
                         amount: 500,
                         currency: "gbp"
-                    }
+                    },
                 }
             }
         ]

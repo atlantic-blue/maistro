@@ -215,8 +215,6 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
                             currency_id: item.product.currency,
                         }
                     }),
-                    enable_shipping: props.enableShipping,
-                    // shipping_options: props.shippingOptions,
                 })
             }).then(response => response.json())
 
@@ -282,6 +280,9 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
             .then((response) => {
                 if (response.id) {
                     setPaymentId(response.id)
+                    localStorage.clear()
+                    // TODO redirect to orders
+                    // window.location.href = props.returnUrl
                 }
             })
             .catch((error) => {

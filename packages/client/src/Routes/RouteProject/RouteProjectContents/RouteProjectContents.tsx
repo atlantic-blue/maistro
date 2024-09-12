@@ -10,6 +10,7 @@ import useObservable from "../../../Utils/Hooks/UseObservable"
 import { filter } from "rxjs"
 import { appRoutes } from "../../router"
 import Helmet from "../Components/Helmet/Helmet"
+import ErrorBoundary from "../../../Errors/ErrorBoundary"
 
 const RouteProjectSettingsContent: React.FC = () => {
     const navigate = useNavigate();
@@ -85,7 +86,9 @@ const RouteProjectSettingsContent: React.FC = () => {
                                 scale: 0.5,
                             }
                         }}>
-                            <content.Component {...content.getData()} />
+                            <ErrorBoundary>
+                                <content.Component {...content.getData()} />
+                            </ErrorBoundary>
                         </Thumbnail>
                     </Inset>
                     <Heading

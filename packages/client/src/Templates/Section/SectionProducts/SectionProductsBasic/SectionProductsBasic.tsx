@@ -526,6 +526,7 @@ export const SectionProductsBasicItem: TemplateStruct<SectionProductsBasicProps>
                 cta: "Add to cart",
                 currency: Currency.GBP,
                 metadata: {
+                    currency: Currency.GBP,
                     id: "1",
                     name: "Brownies",
                     description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",
@@ -540,6 +541,7 @@ export const SectionProductsBasicItem: TemplateStruct<SectionProductsBasicProps>
             },
             {
                 metadata: {
+                    currency: Currency.GBP,
                     id: "2",
                     name: "Macaroons",
                     description: "The art and technique of arranging type to make written language legible, readable and appealing when displayed.",

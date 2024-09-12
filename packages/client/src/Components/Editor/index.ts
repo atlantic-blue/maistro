@@ -14,6 +14,8 @@ import ServicesBasicEditor from "./ServicesBasicEditor";
 import SectionShoppingCartBasicEditor from "./ShoppingCartBasicEditor";
 import TestimonialsBasicEditor from "./TestimonialsBasicEditor";
 import SectionMapGoogleEditor from "./SectionMapGoogleEditor";
+import SectionProductsEnhanced, { SectionProductsEnhancedItem } from "../../Templates/Section/SectionProducts/SectionProductsEnhanced/SectionProductsEnhanced";
+import SectionProductsEnhancedEditor from "./ProductsEnhancedEditor";
 
 const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.HEADER_BASIC]: HeaderBasicEditor,
@@ -37,6 +39,7 @@ const editors: Record<TemplateComponentType, React.FC<any>> = {
     [TemplateComponentType.SECTION_BLANK]: SectionBlankEditor,
 
     [TemplateComponentType.PRODUCTS_BASIC]: SectionProductsEditor,
+    [TemplateComponentType.PRODUCTS_ENHANCED]: SectionProductsEnhancedEditor,
 
     [TemplateComponentType.CHECKOUT_STRIPE]: SectionCheckoutStripeEditor,
     [TemplateComponentType.CHECKOUT_MERCADO_PAGO]: SectionCheckoutMercadoPagoEditor,

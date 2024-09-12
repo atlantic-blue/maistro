@@ -54,6 +54,9 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
             payment_intent_data: {
                 application_fee_amount: calculateFeeAmount(line_items, TRANSACTION_FEE_PERCENTAGE)
             },
+            phone_number_collection: {
+                enabled: true,
+            },
             metadata: {
                 project_id,
                 account_id,

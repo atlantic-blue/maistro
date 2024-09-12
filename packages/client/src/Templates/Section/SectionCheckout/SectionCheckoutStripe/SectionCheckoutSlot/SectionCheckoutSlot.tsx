@@ -3,6 +3,7 @@ import React, { useState } from "react"
 import { DayPicker } from "react-day-picker";
 
 interface SectionCheckoutDateProps {
+    disabledDates: Date[]
     availableDays: number[]
     onChange: (date: Date) => void
 }
@@ -40,7 +41,7 @@ const SectionCheckoutDate: React.FC<SectionCheckoutDateProps> = (props) => {
                     mode="single"
                     selected={date}
                     onSelect={onSelectDate}
-                    disabled={[{ dayOfWeek: disabledDays }, { before: new Date() }]}
+                    disabled={[{ dayOfWeek: disabledDays }, { before: new Date() }, ...props.disabledDates]}
                     weekStartsOn={1}
                 />
             </Dialog.Content>
@@ -111,6 +112,7 @@ export interface AvailableDay {
 }
 
 interface SectionCheckoutSlotProps {
+    disabledDates: string[]
     availableDays: AvailableDay[]
     onDateChange: (date: Date) => void
     onDayIntervalChange: (interval: AvailableDayInterval) => void
@@ -132,6 +134,7 @@ const SectionCheckoutSlot: React.FC<SectionCheckoutSlotProps> = (props) => {
         <>
             <Flex direction="column" gap="2">
                 <SectionCheckoutDate
+                    disabledDates={(props.disabledDates || []).filter(Boolean).map(d => new Date(d))}
                     availableDays={props.availableDays.map(d => d.day)}
                     onChange={onChangeDate}
                 />

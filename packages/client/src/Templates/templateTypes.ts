@@ -17,7 +17,10 @@ export enum TemplateCategory {
     FULFILLMENT = "FULFILLMENT",
     ORDER = "ORDER",
 
-    MAP = "MAP"
+    MAP = "MAP",
+    BANNER = "BANNER",
+
+    REVIEWS= "REVIEWS"
 }
 
 export enum TemplateComponentType {
@@ -45,6 +48,7 @@ export enum TemplateComponentType {
     SUBSCRIBE_BASIC = "SUBSCRIBE_BASIC",
 
     PRODUCTS_BASIC = "PRODUCTS_BASIC",
+    PRODUCTS_ENHANCED = "PRODUCTS_ENHANCED",
 
     CHECKOUT_STRIPE = "CHECKOUT_STRIPE",
     CHECKOUT_MERCADO_PAGO = "CHECKOUT_MERCADO_PAGO",
@@ -56,6 +60,8 @@ export enum TemplateComponentType {
     ORDER_BASIC = "ORDER_BASIC",
 
     MAP_GOOGLE = "MAP_GOOGLE",
+
+    REVIEWS_BASIC = "REVIEWS_BASIC",
 }
 
 export interface TemplateStruct<Props = {}> {

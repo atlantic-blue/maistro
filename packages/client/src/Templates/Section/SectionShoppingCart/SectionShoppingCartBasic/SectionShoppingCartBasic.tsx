@@ -5,7 +5,7 @@ import { TemplateStruct, TemplateCategory, TemplateComponentType } from '../../.
 import { ShoppingCart, } from 'lucide-react';
 import { ShoppingItem } from './SectionShoppingCartBasicItem';
 import * as styles from "./SectionShoppingCartBasic.scss"
-import { MaistroEvent } from '../../SectionProduct/SectionProductBasic/SectionProductBasic';
+import { MaistroEvent } from '../../SectionProducts/SectionProductsBasic/SectionProductsBasic';
 import { ShoppingCartStruct, ShoppingCartItem, MaistroClientStorage, ProductStruct } from '../../../types';
 import { shoppingCartGet } from '../../../Api/ShoppingCart/ShoppingCartGet';
 import { productsGet } from '../../../Api/Products/productsGet';

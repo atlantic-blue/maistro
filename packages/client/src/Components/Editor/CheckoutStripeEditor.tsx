@@ -482,6 +482,38 @@ const SectionCheckoutStripeEditor: React.FC<SectionCheckoutStripeProps & EditorP
                                         </Box>
 
                                         <Box mb="2">
+                                            <Flex align="center" gap="2" justify="between" mb="2">
+                                                <Text as="div" size="1" mb="1" weight="bold">
+                                                    Disabled Dates
+                                                </Text>
+                                            </Flex>
+                                            <TextField.Root
+                                                type="text"
+                                                size="2"
+                                                placeholder="YYYY-MM-DD,"
+                                                variant="surface"
+                                                value={option.disabledDates?.map(v => {
+                                                    return v ? new Date(v)?.toDateString() : ""
+                                                }).join(",")}
+                                                onChange={e => {
+                                                    setState(prev => {
+                                                        return {
+                                                            ...prev,
+                                                            shippingOptions: prev?.shippingOptions?.map((option, i) => {
+                                                                return i === index ? ({
+                                                                    ...option,
+                                                                    disabledDates: e.target.value?.split(",").map(v => {
+                                                                        return new Date(v)
+                                                                    }) || [],
+                                                                }) : option
+                                                            })
+                                                        }
+                                                    })
+                                                }}
+                                            />
+                                        </Box>
+
+                                        <Box mb="2">
                                             <EditorData
                                                 type={EditorDataType.IMAGE}
                                                 name="Image"
@@ -577,6 +609,7 @@ const SectionCheckoutStripeEditor: React.FC<SectionCheckoutStripeProps & EditorP
                                         minimumDeliveryAmount: 0,
                                         availability: [],
                                         imgSrc: "",
+                                        disabledDates: [],
                                         shipping_rate_data: {
                                             display_name: "Edit Me!",
                                             type: "fixed_amount",
