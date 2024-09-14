@@ -33,6 +33,7 @@ const SectionHeroBasic: React.FC<SectionHeroProps> = (props) => {
                             src={props.img.src}
                             alt={props.img.alt}
                             className={styles.img}
+                            loading="lazy"
                         />
                     </div>
                 </Box>

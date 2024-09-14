@@ -37,9 +37,8 @@ const hostingRedirect: CloudFrontRequestHandler = async (event) => {
         }
     };
 
-    console.log("PARAMS", JSON.stringify(params))
     const data = await dynamoDb.query(params).promise();
-    console.log("DATA", JSON.stringify(data))
+    console.log("DATA", JSON.stringify({params, data}))
 
     if (!data.Items || data.Items.length === 0) {
         // Continue with the original request if no mapping exists

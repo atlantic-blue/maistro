@@ -10,6 +10,7 @@ export interface PagesUpdateByIdInput {
     title?: string
     path?: string
     description?: string
+    keywords?: string
     contentIds?: string[]
 }
 

@@ -16,7 +16,7 @@ const SectionContactWithMap = (props) => (
         </div>
         <div className={styles.mapContainer}>
             {/* TODO Embed your map or use an image placeholder */}
-            <img src="path/to/map/image.jpg" alt="Our location" />
+            <img src="path/to/map/image.jpg" alt="Our location" loading="lazy" />
         </div>
     </div>
 );

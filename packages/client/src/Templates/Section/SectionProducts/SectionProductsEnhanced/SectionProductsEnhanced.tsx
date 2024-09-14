@@ -202,6 +202,7 @@ const ProductCard: React.FC<{
                         src={productDisplay.imgSrc}
                         alt={productDisplay.product.name}
                         style={{ width: '100%', height: 200, objectFit: 'cover' }}
+                        loading="lazy"
                     />
                     <Heading size="3" mt="2">{productDisplay.product.name}</Heading>
                     <Text as="p" size="2" color="gray">{productDisplay.product.description}</Text>
@@ -233,6 +234,7 @@ const ProductCard: React.FC<{
                         src={productDisplay.imgSrc}
                         alt={productDisplay.product.name}
                         style={{ width: '100%', height: 300, objectFit: 'cover' }}
+                        loading="lazy"
                     />
                     <Heading size="6" mt="4">{productDisplay.product.name}</Heading>
                     <Flex align="center" gap="2">

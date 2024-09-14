@@ -31,7 +31,7 @@ export const TemplateThumbnail: React.FC<TemplateThumbnail> = (props) => {
             dimensions: {
                 width: `140px`,
                 height: `120px`,
-                scale: 0.3,
+                scale: 0.2,
             }
         }}>
             <Component {...template.props} />
@@ -74,7 +74,7 @@ const SelectedTemplates: React.FC<SelectedTemplatesProps> = (props) => {
                             dimensions: {
                                 width: `140px`,
                                 height: `120px`,
-                                scale: 0.5,
+                                scale: 0.2,
                             }
                         }}>
                             <Component {...template.props} />

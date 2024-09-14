@@ -18,7 +18,7 @@ const SectionAboutUsTeam = (props) => {
             <div className={styles.teamMembers}>
                 {teamMembers.map((member) => (
                     <div key={member.id} className={styles.teamMember}>
-                        <img src={member.imageUrl} alt={member.name} />
+                        <img src={member.imageUrl} alt={member.name} loading="lazy" />
                         <h3>{member.name}</h3>
                         <p>{member.role}</p>
                         <p>{member.description}</p>

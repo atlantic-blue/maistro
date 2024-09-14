@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { Avatar, Button, Card, Flex, Heading, Separator, Text } from "@radix-ui/themes"
 import { TemplateCategory, TemplateComponentType, TemplateStruct } from "../../../templateTypes"
 
-import { Stripe, loadStripe } from '@stripe/stripe-js';
+import { Stripe } from '@stripe/stripe-js';
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { shoppingCartGet } from "../../../Api/ShoppingCart/ShoppingCartGet";
 import { ProductStruct, ShoppingCartItem, ShoppingCartStruct } from "../../../types";
@@ -15,13 +15,16 @@ import SectionMapGoogle, { Address } from "../../SectionMap/SectionMapGoogle";
 
 let stripePromise: Promise<Stripe | null> | null = null
 const getStripePromise = (accountId: string) => {
-    if (stripePromise) {
-        return stripePromise
+    if (!stripePromise) {
+        import("@stripe/stripe-js").then(({ loadStripe }) =>
+            stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY || "", {
+                stripeAccount: accountId,
+            })
+        )
+
     }
 
-    stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY || "", {
-        stripeAccount: accountId,
-    })
+    return stripePromise
 }
 
 export interface SectionCheckoutBasicItem {

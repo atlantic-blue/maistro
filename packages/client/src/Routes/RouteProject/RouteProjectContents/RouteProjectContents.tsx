@@ -75,32 +75,30 @@ const RouteProjectSettingsContent: React.FC = () => {
         return (
             <Card
                 key={content.getId()}
-                style={{ width: "250px" }}
             >
-                <Flex direction="column" justify="center" align="center">
-                    <Inset clip="padding-box" side="top" pb="current">
-                        <Thumbnail {...{
-                            dimensions: {
-                                width: `250px`,
-                                height: `120px`,
-                                scale: 0.5,
-                            }
-                        }}>
-                            <ErrorBoundary>
-                                <content.Component {...content.getData()} />
-                            </ErrorBoundary>
-                        </Thumbnail>
-                    </Inset>
+                <Flex direction="column" align="center" justify="center" height="100%">
+                    <Thumbnail {...{
+                        dimensions: {
+                            width: `200px`,
+                            height: `120px`,
+                            scale: 0.2,
+                        }
+                    }}>
+                        <ErrorBoundary>
+                            <content.Component {...content.getData()} />
+                        </ErrorBoundary>
+                    </Thumbnail>
                     <Heading
                         as="h4"
+                        size="2"
                     >
                         {content.getTemplate().toLocaleLowerCase().replaceAll("_", " ")}
                     </Heading>
-                    <Text as="p" style={{ fontSize: "12px" }} mb="2">
+                    <Text as="p" style={{ fontSize: "12px" }} mb="2" size="1">
                         Created on {new Date(content.getCreatedAt()).toLocaleString()}
                     </Text>
 
-                    <Text weight="bold">
+                    <Text weight="bold" size="1">
                         Pages
                     </Text>
                     <Flex wrap="wrap" justify="center" align="center" gap="2" m="2">
@@ -109,7 +107,7 @@ const RouteProjectSettingsContent: React.FC = () => {
                                 if (page.getContentIds().includes(content.getId())) {
                                     return (
                                         <Badge
-                                            size="2"
+                                            size="1"
                                             color="green"
                                             key={page.getId()}
                                             onClick={() => {
@@ -125,10 +123,9 @@ const RouteProjectSettingsContent: React.FC = () => {
                             })
                         }
                     </Flex>
-                </Flex>
-                <Flex justify="center" m="2">
+
                     <Button
-                        style={{ width: "200px" }}
+                        style={{ width: "200px", marginTop: "auto" }}
                         variant="outline"
                         size="1"
                         onClick={() => onDelete(content)}

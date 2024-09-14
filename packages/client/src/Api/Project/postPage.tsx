@@ -66,6 +66,7 @@ const postPage = (
     })
 
     const Html = () => page.createHtml({
+        url: project.getUrl(),
         favicon: project.getLogo(),
         state: hydrationState,
         theme: project.getTheme(),

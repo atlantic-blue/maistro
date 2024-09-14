@@ -1,13 +1,10 @@
 import React from "react"
-import { Box, Button, Card, Flex, Heading, Tabs, TextField, Text } from "@radix-ui/themes";
+import { Button, Card, Flex, Heading, TextField, Text } from "@radix-ui/themes";
 import { Navigate, useParams } from "react-router-dom"
 
 import { ProjectsContext } from "../../../Projects";
 import Helmet from "../Components/Helmet/Helmet";
 
-import SettingsMetadata from "./Components/SettingsMetadata/SettingsMetadata";
-
-import RouteProjectSettingsDelete from "./Components/RouteProjectSettingsDelete/RouteProjectSettingsDelete";
 import PageNavigationDropdown from "../RouteProjectPage/PageNavigationDropdown/PageNavigationDropdown";
 import Menu from "../Components/Menu/Menu";
 import Loading from "../../../Components/Loading/Loading";
@@ -16,6 +13,7 @@ import { PageMessageType, PageStruct } from "../../../types";
 import useObservable from "../../../Utils/Hooks/UseObservable";
 import { filter } from "rxjs";
 import { ApiContext } from "../../../Api/ApiProvider";
+import * as styles from "./RouteProjectSettings.scss"
 
 const PageSettings: React.FC = () => {
     const { api } = React.useContext(ApiContext)
@@ -47,6 +45,7 @@ const PageSettings: React.FC = () => {
                 title: state.title,
                 description: state.description,
                 path: state.path,
+                keywords: state.keywords,
             })
 
             page.event$.next({
@@ -66,6 +65,28 @@ const PageSettings: React.FC = () => {
 
     return (
         <Card>
+
+            <Card size="1" mb="3">
+                <div className={styles.seoViewer}>
+                    <div className={styles.seoViewerTitle}>{state.title}</div>
+                    <div className={styles.seoViewerUrl}>https://{project.getUrl()}/{state.path === "index" ? "" : state.path}</div>
+                    <div className={styles.seoViewerDescription}>{state.description}</div>
+                </div>
+            </Card>
+
+            <Card size="1" mb="3">
+                <Flex align="center" justify="center">
+                    <div className={styles.openGraph}>
+                        <img src={project.getLogo()} alt={page.getTitle()} className={styles.openGraphSection} loading="lazy" />
+                        <div className={styles.openGraphSection}>
+                            <div className={styles.openGraphSectionTitle}>{state.title}</div>
+                            <div className={styles.openGraphSectionDescription}>{state.description}</div>
+                            <div className={styles.openGraphSectionUrl}>https://{project.getUrl()}/{state.path === "index" ? "" : state.path}</div>
+                        </div>
+                    </div>
+                </Flex>
+            </Card>
+
             <Flex direction="column" gap="2" mb="2">
                 <Text weight="bold">
                     Title
@@ -77,6 +98,23 @@ const PageSettings: React.FC = () => {
                             return {
                                 ...prev,
                                 title: e.target.value
+                            }
+                        })
+                    }}
+                />
+            </Flex>
+
+            <Flex direction="column" gap="2" mb="2">
+                <Text weight="bold">
+                    URL
+                </Text>
+                <TextField.Root
+                    value={state.path}
+                    onChange={e => {
+                        setState(prev => {
+                            return {
+                                ...prev,
+                                path: e.target.value
                             }
                         })
                     }}
@@ -100,17 +138,18 @@ const PageSettings: React.FC = () => {
                 />
             </Flex>
 
+
             <Flex direction="column" gap="2" mb="2">
                 <Text weight="bold">
-                    URL
+                    Key words
                 </Text>
                 <TextField.Root
-                    value={state.path}
+                    value={state.keywords}
                     onChange={e => {
                         setState(prev => {
                             return {
                                 ...prev,
-                                path: e.target.value
+                                keywords: e.target.value
                             }
                         })
                     }}

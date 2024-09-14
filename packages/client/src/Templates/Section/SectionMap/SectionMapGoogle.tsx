@@ -35,6 +35,7 @@ const SectionMapGoogle: React.FC<SectionMapGoogleProps> = (props) => {
         <Box data-hydration-id={props["data-hydration-id"]}>
 
             <iframe
+                title="Google maps"
                 width="100%"
                 height="400"
                 src={url.toString()}

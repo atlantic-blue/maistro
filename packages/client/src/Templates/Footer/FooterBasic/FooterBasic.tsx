@@ -70,7 +70,7 @@ const FooterBasic: React.FC<FooterBasicProps> = (props) => (
             href='https://maistro.website'
             aria-label='maistro'
             target="_blank" rel="noopener noreferrer"
-            style={{ textDecoration: "none", color: "var(--black-a7)" }}
+            style={{ textDecoration: "none", color: "var(--accent-10)" }}
         >
             <Flex justify="center" align="center" m="2" gap="1">
                 <Text as="p" size="1">

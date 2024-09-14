@@ -23,27 +23,27 @@ const SectionCustom: React.FC<SectionCustomProps> = (props) => {
         return (
             <Card
                 key={content.getId()}
-                style={{ height: "200px", width: "200px" }}
                 onClick={() => props.onClick(content)}
             >
                 <Flex direction="column" justify="center" align="center">
                     <Inset clip="padding-box" side="top" pb="current">
                         <Thumbnail {...{
                             dimensions: {
-                                width: `200px`,
+                                width: `140px`,
                                 height: `120px`,
-                                scale: 0.5,
+                                scale: 0.2,
                             }
                         }}>
                             <content.Component {...content.getData()} />
                         </Thumbnail>
                     </Inset>
                     <Heading
+                        size="1"
                         as="h4"
                     >
                         {content.getTemplate().toLocaleLowerCase().replaceAll("_", " ")}
                     </Heading>
-                    <Text as="p">
+                    <Text as="p" size="1">
                         {new Date(content.getCreatedAt()).toLocaleDateString()}
                     </Text>
 

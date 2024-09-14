@@ -16,6 +16,7 @@ interface PagesUpdateInput {
     path?: string
     contentIds?: string[]
     description?: string
+    keywords?: string
 }
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -69,6 +70,7 @@ const validationSchema = Joi.object<PagesUpdateInput>({
     title: Joi.string().optional(),
     path: Joi.string().optional(),
     description: Joi.string().optional(),
+    keywords: Joi.string().optional(),
     contentIds: Joi.array().optional(),
 })
 

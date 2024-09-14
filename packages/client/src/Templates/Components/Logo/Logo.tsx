@@ -18,6 +18,7 @@ const Logo: React.FC<LogoProps> = (props) => {
                     fallback={props.slogan}
                     src={props.imgUrl}
                     alt={props.slogan}
+                    loading="lazy"
                 />
             </a>
         </Box>

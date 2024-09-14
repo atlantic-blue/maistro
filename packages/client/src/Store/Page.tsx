@@ -30,7 +30,7 @@ interface IPage {
     getDescription(): string
     setDescription(description: string): void
 
-    setKeyWords(keyWords: string[]): void
+    setKeyWords(keyWords: string): void
     getKeyWords(): string
 
     setContentIds(content: string[]): void
@@ -110,7 +110,8 @@ class PageStore implements IPage {
             path: this.getPath(),
             contentIds: this.getContentIds(),
             description: this.getDescription(),
-            projectId: this.getProjectId()
+            keywords: this.getKeyWords(),
+            projectId: this.getProjectId(),
         }
     }
 
@@ -123,6 +124,7 @@ class PageStore implements IPage {
         this.setTitle(page.title)
         this.setPath(page.path)
         this.setDescription(page.description)
+        this.setKeyWords(page.keywords)
         this.setContentIds([...new Set(page.contentIds)])
     }
 
@@ -171,8 +173,8 @@ class PageStore implements IPage {
         return this.keywords
     }
 
-    public setKeyWords(keywords: string[]) {
-        this.keywords = keywords.join(", ")
+    public setKeyWords(keywords: string) {
+        this.keywords = keywords
     }
 
     public getContentIds(): string[] {
@@ -212,13 +214,16 @@ class PageStore implements IPage {
         state,
         theme,
         favicon,
+        url,
     }: {
         Css: () => string,
         Body: () => string,
         state: Object,
         theme: ProjectTheme
         favicon: string
+        url: string
     }): string {
+        const canonicalUrl = `https://${url}/${this.getPath() === "index" ? "" : this.getPath()}`
         return (
             Html({
                 htmlAttributes: `
@@ -226,15 +231,62 @@ class PageStore implements IPage {
                 `,
                 head: `
                     <meta charSet="UTF-8" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
                     <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
 
+                    <link rel="icon" type="image/x-icon" href="${favicon}"></link>
+                    <link rel="apple-touch-icon" href="${favicon}"></link>
+
+                    <!-- SEO -->
+                    <link rel="canonical" href="${canonicalUrl}" />
                     <title>${this.getTitle()}</title>
-                    <link rel="icon" type="image/x-icon" href=${favicon}></link>
                     <meta name="description" content="${this.getDescription()}" />
                     <meta name="keywords" content="${this.getKeyWords()}" />
                     <meta name="author" content="https://maistro.website" />
+                    <meta name="robots" content="index, follow">
 
+                    <!-- Open Graph Meta Tags -->
+                    <meta property="og:title" content="${this.getTitle()}">
+                    <meta property="og:description" content="${this.getDescription()}">
+                    <meta property="og:image" content="${favicon}">
+                    <meta property="og:url" content="${canonicalUrl}">
+                    <meta property="og:type" content="website">
+
+                    <!-- Twitter Meta Tags -->
+                    <meta name="twitter:card" content="summary_large_image">
+                    <meta name="twitter:title" content="${this.getTitle()}">
+                    <meta name="twitter:description" content="${this.getDescription()}">
+                    <meta name="twitter:image" content="${favicon}">
+
+                    <!-- Schema org -->
+                    <script type="application/ld+json">
+                    {
+                        "@context": "https://schema.org",
+                        "@type": "WebPage",
+                        "name": "${this.getTitle()}",
+                        "url": "${canonicalUrl}",
+                        "description": "${this.getDescription()}",
+                        "isPartOf": {
+                            "@type": "WebSite",
+                            "url": "https://${url}"
+                        },
+                        "author": {
+                            "@type": "Organization",
+                            "url": "https://${url}",
+                            "logo": {
+                                "@type": "ImageObject",
+                                "url": "${favicon}"
+                            },
+                        },
+                        "mainEntityOfPage": {
+                            "@type": "WebPage",
+                            "@id":  "${canonicalUrl}"
+                        }
+                    }
+                    </script>
+                    <!-- Generated via https://maistro.website -->
+
+                    <link rel="preconnect" href="https://maistro.website" crossorigin />
                     <link href="https://maistro.website/assets/radix-styles.css" rel="stylesheet" />
 
                     <style>
@@ -251,7 +303,7 @@ class PageStore implements IPage {
                         window.__STATE__ = ${JSON.stringify(state)};
                         window.__MAISTRO_THEME__ = ${JSON.stringify(theme)};
                     </script>
-                    <script src="https://maistro.website/assets/client-js/main.js"></script>
+                    <script src="https://maistro.website/assets/client-js/main.js" defer></script>
                     `,
                 },
                 bodyAttributes: ``,

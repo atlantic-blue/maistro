@@ -343,6 +343,7 @@ const SectionProductBasic: React.FC<{
                                     height: 200,
                                     backgroundColor: 'var(--gray-5)',
                                 }}
+                                loading="lazy"
                             />
                         </Flex>
                         <Flex mb="2" justify="between">
@@ -397,6 +398,7 @@ const SectionProductBasic: React.FC<{
                                 margin: "auto",
                                 backgroundColor: 'var(--gray-5)',
                             }}
+                            loading="lazy"
                         />
 
                         <Flex m="2" gap="2" justify="center">
