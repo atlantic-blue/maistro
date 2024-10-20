@@ -61,12 +61,15 @@ resource "aws_iam_policy" "api_lambda_orders_webhook_stripe_dynamo" {
     "Statement" : [
       {
         Action : [
-          "dynamodb:UpdateItem"
+          "dynamodb:Query",
+          "dynamodb:UpdateItem",
         ],
         Effect : "Allow",
         Resource : [
           "${aws_dynamodb_table.orders.arn}",
-          "${aws_dynamodb_table.orders.arn}/index/*"
+          "${aws_dynamodb_table.orders.arn}/index/*",
+          "${aws_dynamodb_table.projects.arn}",
+          "${aws_dynamodb_table.projects.arn}/index/*"
         ]
       }
     ]
@@ -130,9 +133,12 @@ resource "aws_lambda_function" "api_lambda_orders_webhook_stripe" {
   role             = aws_iam_role.api_lambda_orders_webhook_stripe.arn
   source_code_hash = data.archive_file.api_lambda_orders_webhook_stripe.output_base64sha256
 
+  timeout = 60 * 2 // 2 minutes
+
   environment {
     variables = {
-      TABLE_NAME                  = "${aws_dynamodb_table.orders.name}"
+      TABLE_NAME_ORDERS           = "${aws_dynamodb_table.orders.name}"
+      TABLE_NAME_PROJECTS         = "${aws_dynamodb_table.projects.name}"
       PAYMENTS_SECRET_KEY         = "${var.payments_secret_key}"
       PAYMENTS_WEBHOOK_SECRET_KEY = "${var.payments_webhook_secret_key}"
     }

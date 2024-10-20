@@ -53,7 +53,7 @@ resource "aws_iam_role_policy_attachment" "api_lambda_projects_upload_logs" {
 
 resource "aws_iam_policy" "api_lambda_projects_upload_s3" {
   name = "${local.api_bucket_name}-projects-upload-s3"
-   policy = jsonencode({
+  policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {

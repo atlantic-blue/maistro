@@ -33,11 +33,11 @@ resource "aws_dynamodb_table" "projects" {
   }
 
   global_secondary_index {
-    name               = "idIndex"
+    name            = "idIndex"
     hash_key        = "id"
     projection_type = "ALL"
-    read_capacity      = 1
-    write_capacity     = 1
+    read_capacity   = 1
+    write_capacity  = 1
   }
 }
 

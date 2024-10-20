@@ -108,7 +108,7 @@ resource "aws_lambda_function" "api_lambda_system_users_read" {
 
   environment {
     variables = {
-      USERS_POOL_ID = "${aws_cognito_user_pool.authz.id}"
+      USERS_POOL_ID           = "${aws_cognito_user_pool.authz.id}"
       USERS_POOL_SYSTEM_GROUP = "${aws_cognito_user_group.authz_cognito_group_role_system.name}"
     }
   }

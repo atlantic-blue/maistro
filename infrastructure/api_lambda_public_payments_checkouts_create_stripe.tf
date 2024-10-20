@@ -108,6 +108,8 @@ resource "aws_lambda_function" "api_lambda_payments_checkouts_create_stripe" {
   role             = aws_iam_role.api_lambda_payments_checkouts_create_stripe.arn
   source_code_hash = data.archive_file.api_lambda_payments_checkouts_create_stripe.output_base64sha256
 
+  timeout = 60 * 2 // 2 minutes
+
   environment {
     variables = {
       PAYMENTS_SECRET_KEY = "${var.payments_secret_key}"

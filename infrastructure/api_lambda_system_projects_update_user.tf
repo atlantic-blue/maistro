@@ -110,7 +110,7 @@ resource "aws_lambda_function" "api_lambda_system_projects_update_user" {
 
   environment {
     variables = {
-      TABLE_NAME = "${aws_dynamodb_table.projects.name}"
+      TABLE_NAME              = "${aws_dynamodb_table.projects.name}"
       USERS_POOL_SYSTEM_GROUP = "${aws_cognito_user_group.authz_cognito_group_role_system.name}"
     }
   }

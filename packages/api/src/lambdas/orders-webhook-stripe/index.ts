@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk';
-import * as uuid from "uuid"
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
 import jsonBodyParser from '../../middlewares/json-body-parser';
@@ -8,6 +7,7 @@ import createError from '../../middlewares/error-handler';
 import Stripe from "stripe";
 import { OrderStatus } from '../orders-create/types';
 import sendEmail from '../email-create/sendEmail';
+import newOrderEmail from './newOrderEmail';
 
 const paymentsSecretKey = process.env.PAYMENTS_SECRET_KEY
 const paymentsWebhookKey = process.env.PAYMENTS_WEBHOOK_SECRET_KEY || ""
@@ -22,9 +22,14 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
  * https://docs.stripe.com/connect/direct-charges?platform=web&ui=embedded-form#handle-post-payment-events
  */
 const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
-    const tableName = process.env.TABLE_NAME
-    if (!tableName) {
-        throw createError(500, "process TABLE_NAME not specified")
+    const tableNameOrders = process.env.TABLE_NAME_ORDERS
+    if (!tableNameOrders) {
+        throw createError(500, "process TABLE_NAME_ORDERS not specified")
+    }
+
+    const tableNameProjects = process.env.TABLE_NAME_PROJECTS
+    if (!tableNameProjects) {
+        throw createError(500, "process TABLE_NAME_PROJECTS not specified")
     }
 
     try {
@@ -49,7 +54,7 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
         }
 
         const params: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
-            TableName: tableName,
+            TableName: tableNameOrders,
             Key: {
                 id: orderId,
                 projectId,
@@ -70,35 +75,30 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
 
         await dynamoDb.update(params).promise()
 
+        // Send Email
+        const queryParams: AWS.DynamoDB.DocumentClient.QueryInput = {
+            TableName: tableNameProjects,
+            IndexName: 'idIndex',
+            KeyConditionExpression: 'id = :id',
+            ExpressionAttributeValues: {
+                ':id': projectId,
+            },
+            Limit: 25,
+        };
+        const data = await dynamoDb.query(queryParams).promise()
+        const project = (data.Items || []).find(item => item.id === projectId)
+        const projectEmail = project?.email || "hello@atlanticblue.solutions"
+
         await sendEmail({
-            to: ["sweetsin.au@gmail.com", "atlanticbluesolutionslimited@gmail.com"],
-            // to: ["sweetsin.au@gmail.com", "atlanticbluesolutionslimited@gmail.com"],
-            // to: ["atlanticbluesolutionslimited@gmail.com"],
+            to: [projectEmail, "atlanticbluesolutionslimited@gmail.com"],
             from: "info@team.maistro.website",
             subject: "You have a new order",
-            body: `
-                You have a new order! 
-                \n
-                \n
-
-                Maistro Order:
-                \n
-                https://maistro.website/en/projects/${projectId}/orders/${orderId}
-                \n
-                \n
-
-                Stripe: 
-                \n
-                https://dashboard.stripe.com/payments/${paymentIntent}
-                \n
-                \n
-
-                Order Receipt:
-                ${returnUrl}
-                \n
-                \n
-
-            `
+            body: newOrderEmail({
+                orderId,
+                projectId,
+                paymentIntent,
+                returnUrl,
+            })
         })
 
         return {

@@ -39,9 +39,9 @@ resource "aws_cloudfront_distribution" "hosting" {
     viewer_protocol_policy = "redirect-to-https"
 
     // TODO set sensible defaults
-    min_ttl     = 0
-    default_ttl = 0
-    max_ttl     = 0
+    min_ttl     = 60 // 1minute
+    default_ttl = 60 // 1minute
+    max_ttl     = 60 // 1minute
     compress    = true
   }
 
