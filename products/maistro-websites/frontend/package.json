@@ -1,10 +1,14 @@
 {
-  "name": "frontend",
+  "name": "maistro-websites",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix"
   },
   "keywords": [],
   "author": "",
@@ -14,8 +18,9 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@maistro/typescript-config": "file:../../../packages/frontend/config/typescript",
-    "@maistro/rsbuild-config": "file:../../../packages/frontend/config/rsbuild",
+    "@maistro/eslint-config": "workspace:^",
+    "@maistro/rsbuild-config": "workspace:^",
+    "@maistro/typescript-config": "workspace:^",
     "@rsbuild/core": "^1.2.19",
     "@rsbuild/plugin-react": "^1.1.1",
     "@types/react": "^19.0.12",
