@@ -1,0 +1,3 @@
+- [] checkout + shipping details (mercado pago + stripe)
+- [] order management
+- [] emails
