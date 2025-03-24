@@ -1,0 +1,39 @@
+{
+  "name": "maistro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm --parallel -r run dev",
+    "dev:customers": "pnpm --filter ./products/maistro-customers/frontend run dev",
+    "dev:funnels": "pnpm --filter ./products/maistro-funnels/frontend run dev",
+    "dev:socials": "pnpm --filter ./products/maistro-socials/frontend run dev",
+    "dev:websites": "pnpm --filter ./products/maistro-websites/frontend run dev",
+    
+    "build": "pnpm -r run build",
+    "build:customers": "pnpm --filter ./products/maistro-customers/frontend run build",
+    "build:funnels": "pnpm --filter ./products/maistro-funnels/frontend run build",
+    "build:socials": "pnpm --filter ./products/maistro-socials/frontend run build",
+    "build:websites": "pnpm --filter ./products/maistro-websites/frontend run build",
+    
+    "preview": "pnpm --parallel -r run preview",
+    "preview:customers": "pnpm --filter ./products/maistro-customers/frontend run preview",
+    "preview:funnels": "pnpm --filter ./products/maistro-funnels/frontend run preview",
+    "preview:socials": "pnpm --filter ./products/maistro-socials/frontend run preview",
+    "preview:websites": "pnpm --filter ./products/maistro-websites/frontend run preview",
+
+    "lint": "pnpm --parallel -r run lint",
+    "lint:fix": "pnpm --parallel -r run lint:fix",
+    "lint:customers": "pnpm --filter ./products/maistro-customers/frontend run lint",
+    "lint:funnels": "pnpm --filter ./products/maistro-funnels/frontend run lint",
+    "lint:socials": "pnpm --filter ./products/maistro-socials/frontend run lint",
+    "lint:websites": "pnpm --filter ./products/maistro-websites/frontend run lint",
+
+    "test": "pnpm --parallel -r run test",
+    "test:customers": "pnpm --filter ./products/maistro-customers/frontend run test",
+    "test:funnels": "pnpm --filter ./products/maistro-funnels/frontend run test",
+    "test:socials": "pnpm --filter ./products/maistro-socials/frontend run test",
+    "test:websites": "pnpm --filter ./products/maistro-websites/frontend run test"
+  },
+  "license": "ISC"
+}

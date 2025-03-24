@@ -1,0 +1,11 @@
+packages:
+  # All packages in direct subdirectories of packages/
+  - 'packages/*'
+  # All packages in subdirectories of packages/config/
+  - 'packages/frontend/config/*'
+  # All product directories
+  - 'products/*'
+  # All subdirectories of each product
+  - 'products/*/backend'
+  - 'products/*/frontend'
+  - 'products/*/infra'
