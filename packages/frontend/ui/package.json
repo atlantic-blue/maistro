@@ -4,8 +4,6 @@
     "main": "src/index.ts",
     "types": "src/index.ts",
     "scripts": {
-        "build": "tsc",
-        "dev": "tsc --watch"
     },
     "peerDependencies": {
         "react": "^19.0.0",
