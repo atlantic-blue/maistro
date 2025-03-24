@@ -6,7 +6,7 @@ const createBaseConfig = (options = {}) => {
         plugins: [pluginReact()],
         source: {
             entry: {
-                index: options.entry || './src/index.tsx'
+                index: options.entry || './src/index.ts'
             }
         },
         dev: {
