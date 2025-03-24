@@ -1,5 +1,5 @@
 {
-  "name": "masitro-customers",
+  "name": "maistro-customers",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,10 @@
     "build": "rsbuild build",
     "preview": "rsbuild preview",
     "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix"
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -19,12 +22,17 @@
   },
   "devDependencies": {
     "@maistro/eslint-config": "workspace:^",
+    "@maistro/jest-config": "workspace:^",
     "@maistro/rsbuild-config": "workspace:^",
     "@maistro/typescript-config": "workspace:^",
     "@rsbuild/core": "^1.2.19",
     "@rsbuild/plugin-react": "^1.1.1",
+    "@types/jest": "^29.5.3",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
+    "eslint": "^8.45.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "jest": "^29.6.1",
     "typescript": "^5.8.2"
   }
 }
