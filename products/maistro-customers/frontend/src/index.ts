@@ -1,5 +1,1 @@
-const App = () => {
-    return null
-}
-
-export default App
+import "./App"

@@ -3,6 +3,7 @@ packages:
   - 'packages/*'
   # All packages in subdirectories of packages/config/
   - 'packages/frontend/config/*'
+  - 'packages/frontend/ui'
   # All product directories
   - 'products/*'
   # All subdirectories of each product

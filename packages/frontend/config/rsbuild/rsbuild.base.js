@@ -2,7 +2,7 @@ const { defineConfig } = require('@rsbuild/core');
 const { pluginReact } = require('@rsbuild/plugin-react');
 
 const createBaseConfig = (options = {}) => {
-    return defineConfig({
+    const config = defineConfig({
         plugins: [pluginReact()],
         source: {
             entry: {
@@ -29,6 +29,8 @@ const createBaseConfig = (options = {}) => {
             bundlerChain: options.bundlerChain || undefined
         }
     });
+
+    return config
 };
 
 module.exports = { createBaseConfig };
