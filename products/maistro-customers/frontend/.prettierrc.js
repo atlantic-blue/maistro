@@ -1,1 +1,1 @@
-export default '@maistro/eslint-config'
+module.exports = require('@maistro/prettier-config');

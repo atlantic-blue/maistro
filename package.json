@@ -29,6 +29,13 @@
     "lint:socials": "pnpm --filter ./products/maistro-socials/frontend run lint",
     "lint:websites": "pnpm --filter ./products/maistro-websites/frontend run lint",
 
+    "format": "pnpm --parallel -r run format",
+    "format:fix": "pnpm --parallel -r run format:fix",
+    "format:customers": "pnpm --filter ./products/maistro-customers/frontend run format",
+    "format:funnels": "pnpm --filter ./products/maistro-funnels/frontend run format",
+    "format:socials": "pnpm --filter ./products/maistro-socials/frontend run format",
+    "format:websites": "pnpm --filter ./products/maistro-websites/frontend run format",
+
     "test": "pnpm --parallel -r run test",
     "test:customers": "pnpm --filter ./products/maistro-customers/frontend run test",
     "test:funnels": "pnpm --filter ./products/maistro-funnels/frontend run test",

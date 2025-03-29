@@ -1,0 +1,12 @@
+{
+    "name": "@maistro/prettier-config",
+    "version": "0.1.0",
+    "main": "prettier.config.js",
+    "files": [
+        "prettier.config.js",
+        ".prettierignore"
+    ],
+    "dependencies": {
+        "prettier": "^3.0.0"
+    }
+}

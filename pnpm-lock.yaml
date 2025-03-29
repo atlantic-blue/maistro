@@ -51,6 +51,12 @@ importers:
         specifier: ^29.1.1
         version: 29.2.6(@babel/core@7.26.10)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.10))(jest@29.7.0(@types/node@22.13.11))(typescript@5.8.2)
 
+  packages/frontend/config/prettier:
+    dependencies:
+      prettier:
+        specifier: ^3.0.0
+        version: 3.5.3
+
   packages/frontend/config/rsbuild:
     dependencies:
       '@rsbuild/core':
@@ -108,6 +114,9 @@ importers:
       '@maistro/jest-config':
         specifier: workspace:^
         version: link:../../../packages/frontend/config/jest
+      '@maistro/prettier-config':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/config/prettier
       '@maistro/rsbuild-config':
         specifier: workspace:^
         version: link:../../../packages/frontend/config/rsbuild
@@ -178,6 +187,9 @@ importers:
       '@maistro/jest-config':
         specifier: workspace:^
         version: link:../../../packages/frontend/config/jest
+      '@maistro/prettier-config':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/config/prettier
       '@maistro/rsbuild-config':
         specifier: workspace:^
         version: link:../../../packages/frontend/config/rsbuild
@@ -248,6 +260,9 @@ importers:
       '@maistro/jest-config':
         specifier: workspace:^
         version: link:../../../packages/frontend/config/jest
+      '@maistro/prettier-config':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/config/prettier
       '@maistro/rsbuild-config':
         specifier: workspace:^
         version: link:../../../packages/frontend/config/rsbuild
@@ -318,6 +333,9 @@ importers:
       '@maistro/jest-config':
         specifier: workspace:^
         version: link:../../../packages/frontend/config/jest
+      '@maistro/prettier-config':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/config/prettier
       '@maistro/rsbuild-config':
         specifier: workspace:^
         version: link:../../../packages/frontend/config/rsbuild

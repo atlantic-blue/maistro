@@ -9,6 +9,8 @@
     "preview": "rsbuild preview",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "format:fix": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css}'",
+    "format": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json,css}'",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
@@ -23,6 +25,7 @@
   "devDependencies": {
     "@maistro/eslint-config": "workspace:^",
     "@maistro/jest-config": "workspace:^",
+    "@maistro/prettier-config": "workspace:^",
     "@maistro/rsbuild-config": "workspace:^",
     "@maistro/typescript-config": "workspace:^",
     "@maistro/ui": "workspace:^",
