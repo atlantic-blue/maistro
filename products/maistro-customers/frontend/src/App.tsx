@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { 
   Button
 } from '@maistro/ui';
 
-
 import './styles/global.css';
 
 const App = () => {
-  return (
+       return (
     <div className="min-h-screen bg-gray-100 p-8">
       <header className="mb-8">
       <div className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-lg">

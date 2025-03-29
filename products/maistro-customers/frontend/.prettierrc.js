@@ -1,1 +1,1 @@
-module.exports = require('@maistro/eslint-config');
+export default '@maistro/eslint-config'
