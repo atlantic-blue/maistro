@@ -150,4 +150,4 @@ jobs:
 
     - name: Deploy to S3
       run: |
-        aws s3 sync ./products/maistro-${{ matrix.product }}/frontend/dist/ s3://maistro-${{ matrix.product }}-hosting-prod/ --delete
+        aws s3 sync ./products/maistro-${{ matrix.product }}/frontend/dist/ s3://maistro-${{ matrix.product }}-hosting-production/ --delete
