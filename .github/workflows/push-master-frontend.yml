@@ -140,11 +140,15 @@ jobs:
     - name: Build
       run: pnpm build:${{ matrix.product }}
 
+    - name: Set environment variables
+      run: |
+        echo "PRODUCT=$(echo ${{ matrix.product }} | tr '[:lower:]' '[:upper:]')" >> $GITHUB_ENV
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        aws-access-key-id: ${{ secrets[format('MAISTRO_{0}_CI_AWS_ACCESS_KEY_ID', upper(matrix.product))] }}
-        aws-secret-access-key: ${{ secrets[format('MAISTRO_{0}_CI_AWS_SECRET_ACCESS_KEY', upper(matrix.product))] }}
+        aws-access-key-id: ${{ secrets[format('MAISTRO_{0}_CI_AWS_ACCESS_KEY_ID', env.PRODUCT)] }}
+        aws-secret-access-key: ${{ secrets[format('MAISTRO_{0}_CI_AWS_SECRET_ACCESS_KEY', env.PRODUCT)] }}
         aws-region: us-east-1
 
     - name: Deploy to S3
