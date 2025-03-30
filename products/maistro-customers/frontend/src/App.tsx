@@ -10,7 +10,7 @@ const App = () => {
         <div className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-lg">
           <div>If you see this with blue background and white text, Tailwind is working!</div>
           <Button className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-red-600 transition-colors">
-            TEST
+            I have updated this button
           </Button>
         </div>
 
