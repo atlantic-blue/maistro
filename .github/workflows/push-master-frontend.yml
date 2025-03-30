@@ -50,7 +50,15 @@ jobs:
         fi
 
         # Detect file changes
-        CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+        # For pull requests, get the changed files correctly
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          # This compares the PR branch with the base branch
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD)
+        else
+          # For direct pushes or workflow dispatch
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+        fi
+
         echo "Changed files:"
         echo "$CHANGED_FILES"
 
