@@ -116,7 +116,7 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
-    - name: Lint
+    - name: Format
       run: pnpm format:${{ matrix.product }}
 
     - name: Lint
