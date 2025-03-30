@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - 'products/**/frontend/**'
+      - 'packages/frontend/**'
   workflow_dispatch:
     inputs:
       product:
