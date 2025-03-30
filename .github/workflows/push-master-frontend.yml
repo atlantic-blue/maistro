@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'products/**/frontend/**'
+      - 'packages/frontend/**'
   workflow_dispatch:
     inputs:
       product:
@@ -145,8 +148,8 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy to S3
-        run: |
-          aws s3 sync ./products/maistro-${{ matrix.product }}/frontend/dist/ s3://maistro-${{ matrix.product }}-hosting-prod/ --delete
+      run: |
+        aws s3 sync ./products/maistro-${{ matrix.product }}/frontend/dist/ s3://maistro-${{ matrix.product }}-hosting-prod/ --delete
 
   # - name: Invalidate CloudFront
   #   run: |
