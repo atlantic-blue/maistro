@@ -33,10 +33,6 @@ jobs:
       with:
         fetch-depth: 1
 
-    - name: Fetch base branch for comparison
-      if: github.event_name == 'pull_request'
-      run: git fetch --depth=1 origin ${{ github.base_ref }}
-
     - id: set-matrix
       name: Detect changed products
       shell: bash
