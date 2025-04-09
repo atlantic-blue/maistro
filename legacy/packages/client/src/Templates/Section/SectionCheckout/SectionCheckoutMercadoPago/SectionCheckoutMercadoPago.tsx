@@ -361,7 +361,6 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
                             </Text>
                             <TextField.Root
                                 value={mercadoPagoData.payer.phone.area_code}
-                                maxLength={5}
                                 required
                                 onChange={e => {
                                     setMercadoPagoData(prev => {
@@ -387,7 +386,6 @@ const SectionCheckoutMercadoPago: React.FC<SectionCheckoutMercadoPagoProps> = (p
                                 type="tel"
                                 required
                                 value={mercadoPagoData.payer.phone.number}
-                                maxLength={5}
                                 onChange={e => {
                                     setMercadoPagoData(prev => {
                                         return {

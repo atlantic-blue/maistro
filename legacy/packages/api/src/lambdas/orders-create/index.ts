@@ -7,7 +7,7 @@ import jsonBodyParser from '../../middlewares/json-body-parser';
 import { LambdaMiddlewares } from '../../middlewares';
 import { validatorJoi } from '../../middlewares/validator-joi';
 import createError from '../../middlewares/error-handler';
-import { OrderStatus } from "./types";
+import { Order, OrderStatus } from "../../types/Order";
 
 interface OrdersCreateInput {
     projectId: string
@@ -30,7 +30,7 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
         projectId,
     } = event.body as unknown as OrdersCreateInput;
 
-    const input = {
+    const input: Order = {
         id,
         projectId,
         shoppingCartId,

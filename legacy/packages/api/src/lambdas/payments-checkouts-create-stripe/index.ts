@@ -9,7 +9,7 @@ import createError from "../../middlewares/error-handler";
 import jsonBodyParser from "../../middlewares/json-body-parser";
 import { validatorJoi } from "../../middlewares/validator-joi";
 import { calculateFeeAmount } from "./feeAmounts";
-import { OrderStatus } from "../orders-create/types";
+import { Order, OrderShippingOptions, OrderStatus } from "../../types/Order";
 
 const TRANSACTION_FEE_PERCENTAGE = 1
 const paymentsSecretKey = process.env.PAYMENTS_SECRET_KEY
@@ -77,32 +77,51 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
     )
 
     // create ORDER
+    const order: Order = {
+        id,
+        platform: "STRIPE",
+
+        projectId: project_id,
+        sessionId: session.id,
+        shoppingCartId: shopping_cart_id,
+
+        fulfilment: {
+            date: fulfilment_date,
+            interval: fulfilment_date_interval,
+        },
+        items: line_items,
+        shippingOptions: shipping_options,
+
+        status,
+        createdAt,
+        history: [
+            {
+                status,
+                timestamp: createdAt,
+            }
+        ],
+        returnUrl: `${return_url}?orderId=${id}`,
+
+        // TODO collect from Stripe webhook
+        customerDetails: {
+            address: {
+                city: "",
+                country: "",
+                line1: "",
+                line2: "",
+                postalCode: "",
+                state: "",
+            },
+            email: "",
+            name: "",
+            phone: "",
+        },
+        paymentIntent: "",
+    }
+
     const params = {
         TableName: tableName,
-        Item: {
-            id,
-            platform: "STRIPE",
-
-            projectId: project_id,
-            sessionId: session.id,
-            shoppingCartId: shopping_cart_id,
-
-            fulfilment: {
-                date: fulfilment_date,
-                interval: fulfilment_date_interval,
-            },
-            items: line_items,
-            shippingOptions: shipping_options,
-
-            status,
-            createdAt,
-            history: [
-                {
-                    status,
-                    timestamp: createdAt,
-                }
-            ],
-        }
+        Item: order
     };
 
     await dynamoDb.put(params).promise();
@@ -115,17 +134,6 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
     };
 };
 
-interface PaymentShippingOptions {
-    shipping_rate: string
-    shipping_rate_data: {
-        display_name: string
-        type: string
-        fixed_amount: {
-            amount: number
-            currency: string
-        }
-    }
-}
 
 interface PaymentsCheckoutsInput {
     project_id: string
@@ -137,7 +145,7 @@ interface PaymentsCheckoutsInput {
     fulfilment_date_interval?: string
     enable_shipping: boolean
     allowed_countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[]
-    shipping_options: PaymentShippingOptions[]
+    shipping_options: OrderShippingOptions[]
 }
 
 const validationSchema = Joi.object<PaymentsCheckoutsInput>({

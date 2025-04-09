@@ -11,6 +11,7 @@ import { validatorJoi } from "../../middlewares/validator-joi";
 import { MercadoPagoConfig, Payment } from 'mercadopago'
 import { PaymentCreateData } from "mercadopago/dist/clients/payment/create/types";
 import { Items, Shipments } from "mercadopago/dist/clients/commonTypes";
+import { Order, OrderStatus } from "../../types/Order";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -24,6 +25,11 @@ const paymentsProcessCreate: APIGatewayProxyHandler = async (event: APIGatewayPr
         throw createError(500, "process TABLE_NAME not specified")
     }
 
+    const webhookUrl = process.env.WEBHOOK_URL
+    if (!webhookUrl) {
+        throw createError(500, "process WEBHOOK_URL not specified")
+    }
+
     const {
         project_id,
         token_id,
@@ -33,12 +39,19 @@ const paymentsProcessCreate: APIGatewayProxyHandler = async (event: APIGatewayPr
         checkout_id,
         shipping_options,
         payer,
+        fulfilment_date,
+        fulfilment_date_interval,
+        return_url,
     } = event.body as unknown as PaymentsCheckoutsMercadoPagoInput
 
     const config = new MercadoPagoConfig({
         accessToken: token_id,
     });
     const payment = new Payment(config)
+
+    const order_id = uuid.v4()
+    const createdAt = new Date().toISOString()
+    const status = OrderStatus.CREATED
 
     const response = await payment.create({
         body: {
@@ -81,25 +94,71 @@ const paymentsProcessCreate: APIGatewayProxyHandler = async (event: APIGatewayPr
                         street_name: shipping_options.receiver_address?.street_name,
                     }
                 },
-            }
+            },
+            notification_url: `${webhookUrl}?source_news=webhooks&access_token=${token_id}&project_id=${project_id}&order_id=${order_id}`,
         },
         requestOptions: {
             idempotencyKey: uuid.v1(),
         }
     })
 
-    console.log(JSON.stringify(response))
+    // create ORDER
+    const order:Order = {
+        id: order_id,
+        platform: "MERCADO_PAGO",
 
-    const createdAt = new Date().toISOString()
+        projectId: project_id,
+        sessionId: String(response.id),
+        shoppingCartId: checkout_id,
+
+        fulfilment: {
+            date: fulfilment_date,
+            interval: fulfilment_date_interval,
+        },
+        items: line_items,
+        shippingOptions: [
+            {
+                shipping_rate: "",
+                shipping_rate_data: {
+                    type: "",
+                    display_name: "",
+                    fixed_amount: {
+                        amount: Number(form_data?.transaction_amount),
+                        currency: "",
+                    }
+                }
+            }
+        ],
+
+        status,
+        createdAt,
+        history: [
+            {
+                status,
+                timestamp: createdAt,
+            }
+        ],
+        returnUrl: `${return_url}?orderId=${order_id}`,
+
+        customerDetails: {
+            address: {
+                city: `${shipping_options?.receiver_address?.city_name}`,
+                country: "",
+                line1: `${shipping_options?.receiver_address?.street_name}`,
+                line2: "",
+                postalCode: `${shipping_options?.receiver_address?.zip_code}`,
+                state: "",
+            },
+            email: `${form_data?.payer?.email}`,
+            name: `${payer?.first_name} ${payer?.last_name}`,
+            phone: `${payer?.phone?.area_code} ${payer?.phone?.number}`,
+        },
+        paymentIntent: "",
+    }
+
     const params = {
         TableName: tableName,
-        Item: {
-            id: String(response.id),
-            projectId: project_id,
-            type: "PLATFORM_MERCADO_PAGO",
-            checkout_id: checkout_id,
-            createdAt,
-        }
+        Item: order
     };
 
     await dynamoDb.put(params).promise();
@@ -130,6 +189,9 @@ interface PaymentsCheckoutsMercadoPagoInput {
             number: string
         },
     }
+    fulfilment_date?: string
+    fulfilment_date_interval?: string
+    return_url: string
 }
 
 const validationSchema = Joi.object<PaymentsCheckoutsMercadoPagoInput>({
@@ -137,6 +199,7 @@ const validationSchema = Joi.object<PaymentsCheckoutsMercadoPagoInput>({
     project_id: Joi.string().required(),
     checkout_id: Joi.string().required(),
     statement_descriptor: Joi.string().required(),
+    return_url: Joi.string().required(),
     form_data: Joi.object({
         token: Joi.string().required(),
         issuer_id: Joi.string().required(),
@@ -176,7 +239,9 @@ const validationSchema = Joi.object<PaymentsCheckoutsMercadoPagoInput>({
             area_code: Joi.string().required(),
             number: Joi.string().required(),
         }).required(),
-    }).required()
+    }).required(),
+    fulfilment_date: Joi.string().allow("").optional(),
+    fulfilment_date_interval: Joi.string().allow("").optional(),
 })
 
 const handler = new LambdaMiddlewares()

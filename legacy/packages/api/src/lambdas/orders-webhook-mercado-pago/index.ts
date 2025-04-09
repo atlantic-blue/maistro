@@ -4,23 +4,16 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import jsonBodyParser from '../../middlewares/json-body-parser';
 import { LambdaMiddlewares } from '../../middlewares';
 import createError from '../../middlewares/error-handler';
-import Stripe from "stripe";
 import sendEmail from '../email-create/sendEmail';
 import newOrderEmail from './newOrderEmail';
-import { extractDataFromEvent, extractFulfillmentDetails } from './extractDataFromEvent';
-import { OrderStatus } from '../../types/Order';
+import { Order, OrderStatus } from '../../types/Order';
 
-const paymentsSecretKey = process.env.PAYMENTS_SECRET_KEY
-const paymentsWebhookKey = process.env.PAYMENTS_WEBHOOK_SECRET_KEY || ""
-
-const stripe = new Stripe(paymentsSecretKey as string, {
-    apiVersion: "2024-04-10",
-})
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 /**
  * Listens to a webhook to create orders
- * https://docs.stripe.com/connect/direct-charges?platform=web&ui=embedded-form#handle-post-payment-events
+ * https://www.mercadopago.com.co/developers/es/docs/your-integrations/notifications/webhooks
+ * https://www.mercadopago.com.co/developers/es/docs/your-integrations/notifications/webhooks#editor_6#bookmark_configuración_al_crear_pagos
  */
 const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     const tableNameOrders = process.env.TABLE_NAME_ORDERS
@@ -34,16 +27,15 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
     }
 
     try {
-        const signature = event.headers['Stripe-Signature'] || "";
-        const stripeEvent = stripe.webhooks.constructEvent(event.rawBody, signature, paymentsWebhookKey);
-
-        if (stripeEvent.type !== "checkout.session.completed") {
-            throw createError(500, `${stripeEvent.type} not supported`)
+        const projectId = event.queryStringParameters && event.queryStringParameters['project_id']
+        if (!projectId) {
+            throw createError(500, "queryParams must have a projectId")
         }
 
-        const checkoutObject = stripeEvent?.data?.object
-        const projectId = checkoutObject?.metadata?.project_id
-        const orderId = checkoutObject?.metadata?.order_id
+        const orderId = event.queryStringParameters && event.queryStringParameters['order_id']
+        if (!orderId) {
+            throw createError(500, "queryParams must have an orderId")
+        }
 
         const updatedAt = new Date().toISOString()
         const status = OrderStatus.CHECKOUT_COMPLETED
@@ -72,14 +64,21 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
             ReturnValues: 'ALL_NEW',
         };
 
-        const orderResponse = await dynamoDb.update(params).promise()
+        await dynamoDb.update(params).promise()
 
-        // Extract data
-        const {date, interval} = extractFulfillmentDetails(orderResponse.Attributes)
-        const order = extractDataFromEvent(stripeEvent, {date, interval})
+        const orderGetParams: AWS.DynamoDB.DocumentClient.GetItemInput = {
+            TableName: tableNameOrders,
+            Key: {
+                id: orderId,
+                projectId,
+            }
+        };
+    
+        const orderData = await dynamoDb.get(orderGetParams).promise();
+        const order = orderData && orderData.Item
 
         // Send Email
-        const queryParams: AWS.DynamoDB.DocumentClient.QueryInput = {
+        const projectQueryParams: AWS.DynamoDB.DocumentClient.QueryInput = {
             TableName: tableNameProjects,
             IndexName: 'idIndex',
             KeyConditionExpression: 'id = :id',
@@ -88,7 +87,8 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
             },
             Limit: 25,
         };
-        const data = await dynamoDb.query(queryParams).promise()
+
+        const data = await dynamoDb.query(projectQueryParams).promise()
         const project = (data.Items || []).find(item => item.id === projectId)
         const projectEmail = project?.email || "hello@atlanticblue.solutions"
 
@@ -96,7 +96,7 @@ const ordersCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent)
             to: [projectEmail, "atlanticbluesolutionslimited@gmail.com"],
             from: "info@team.maistro.website",
             subject: "You have a new order",
-            body: newOrderEmail(order)
+            body: newOrderEmail(order as Order)
         })
 
         return {

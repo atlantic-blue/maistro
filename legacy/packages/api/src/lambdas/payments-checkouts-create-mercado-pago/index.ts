@@ -10,11 +10,13 @@ import { validatorJoi } from "../../middlewares/validator-joi";
 
 import { MercadoPagoConfig, Preference } from 'mercadopago'
 import { Items, Shipments } from "mercadopago/dist/clients/commonTypes";
-import { OrderStatus } from "../orders-create/types";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 /**
+ * Generate a preference with the information of a product or service
+ * and obtain the necessary URL to start the payment flow
+ * 
  * https://www.mercadopago.com.br/developers/en/reference/preferences/_checkout_preferences/post
  */
 const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
@@ -28,7 +30,6 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
         return_url,
         line_items,
         token_id,
-        shopping_cart_id,
     } = event.body as unknown as PaymentsCheckoutsMercadoPagoInput
 
     const config = new MercadoPagoConfig({
@@ -58,34 +59,6 @@ const paymentsCheckoutsCreate: APIGatewayProxyHandler = async (event: APIGateway
 
         }
     })
-
-    const id = uuid.v4()
-    const createdAt = new Date().toISOString()
-    const status = OrderStatus.CREATED
-
-    // create ORDER
-    const params = {
-        TableName: tableName,
-        Item: {
-            id,
-            platform: "MERCADO_PAGO",
-
-            projectId: project_id,
-            sessionId: response.id,
-            shoppingCartId: shopping_cart_id,
-
-            status,
-            createdAt,
-            history: [
-                {
-                    status,
-                    timestamp: createdAt,
-                }
-            ],
-        }
-    };
-
-    await dynamoDb.put(params).promise();
 
     return {
         statusCode: 200,

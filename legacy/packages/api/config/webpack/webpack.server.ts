@@ -86,8 +86,8 @@ const createMultipleWebpackConfigs = [
     // "orders-read-by-id",
     // "orders-read",
     // "orders-update-by-id",
+    "orders-webhook-mercado-pago",
     // "orders-webhook-stripe",
-
     // "pages-create",
     // "pages-read",
     // "pages-read-by-id",
@@ -102,7 +102,7 @@ const createMultipleWebpackConfigs = [
     // "payments-checkouts-create-stripe",
     // MERCADO-PAGO
     // "payments-checkouts-create-mercado-pago",
-    // "payments-process-mercado-pago-create",
+    "payments-process-mercado-pago-create",
 
     // "payments-shopping-carts-create",
     // "payments-shopping-carts-read-by-id"
@@ -114,7 +114,7 @@ const createMultipleWebpackConfigs = [
     // "payments-subscriptions-read"
 
     // "products-create",
-    "products-read",
+    // "products-read",
     // "products-read-by-id",
     // "products-update-by-id",
     // "products-delete-by-id",

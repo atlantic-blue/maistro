@@ -113,6 +113,7 @@ resource "aws_lambda_function" "api_lambda_payments_process_mercado_pago_create"
   environment {
     variables = {
       TABLE_NAME = "${aws_dynamodb_table.payments_process.name}"
+      WEBHOOK_URL = "https://api.maistro.website/v1/orders/mercado-pago"
     }
   }
 

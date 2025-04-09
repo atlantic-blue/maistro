@@ -8,7 +8,7 @@ import createError from '../../middlewares/error-handler';
 import authJwt from '../../middlewares/auth-jwt';
 import jsonBodyParser from "../../middlewares/json-body-parser";
 import { validatorJoi } from "../../middlewares/validator-joi";
-import { OrderStatus } from "../orders-create/types";
+import { OrderStatus } from "../../types/Order";
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
