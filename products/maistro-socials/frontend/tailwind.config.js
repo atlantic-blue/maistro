@@ -1,12 +1,15 @@
 module.exports = {
     content: [
-      './src/**/*.{js,jsx,ts,tsx}',
-      '../../../packages/frontend/ui/src/**/*.{js,jsx,ts,tsx}'
+        './src/**/*.{js,jsx,ts,tsx}',
+        '../../../packages/frontend/ui/src/**/*.{js,jsx,ts,tsx}'
     ],
     theme: {
-      extend: {
-       
-      },
+        extend: {
+
+        },
     },
+    presets: [
+        require('../../../packages/frontend/ui/tailwind.config.js')
+    ],
     plugins: [],
-  };
+};

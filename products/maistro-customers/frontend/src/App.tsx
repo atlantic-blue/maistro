@@ -22,6 +22,14 @@ const App = () => {
           <h2 className="text-xl font-semibold mb-4">Welcome to Maistro Customers</h2>
         </div>
       </main>
+
+      <div className="space-y-4">
+        <Button variant="primary">Primary Button</Button>
+        <Button variant="secondary">Secondary Button</Button>
+        <Button variant="accent">Accent Button</Button>
+        <Button variant="outline">Outline Button</Button>
+        <Button variant="ghost">Ghost Button</Button>
+      </div>
     </div>
   );
 };
