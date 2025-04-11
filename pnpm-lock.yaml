@@ -172,6 +172,79 @@ importers:
         specifier: ^5.8.2
         version: 5.8.2
 
+  products/maistro-design/frontend:
+    dependencies:
+      react:
+        specifier: ^19.0.0
+        version: 19.0.0
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.0(react@19.0.0)
+    devDependencies:
+      '@maistro/eslint-config':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/config/eslint
+      '@maistro/jest-config':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/config/jest
+      '@maistro/prettier-config':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/config/prettier
+      '@maistro/rsbuild-config':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/config/rsbuild
+      '@maistro/typescript-config':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/config/typescript
+      '@maistro/ui':
+        specifier: workspace:^
+        version: link:../../../packages/frontend/ui
+      '@rsbuild/core':
+        specifier: ^1.2.19
+        version: 1.2.19
+      '@rsbuild/plugin-react':
+        specifier: ^1.1.1
+        version: 1.1.1(@rsbuild/core@1.2.19)
+      '@tailwindcss/postcss':
+        specifier: ^4.0.15
+        version: 4.0.15
+      '@types/jest':
+        specifier: ^29.5.3
+        version: 29.5.14
+      '@types/react':
+        specifier: ^19.0.12
+        version: 19.0.12
+      '@types/react-dom':
+        specifier: ^19.0.4
+        version: 19.0.4(@types/react@19.0.12)
+      '@typescript-eslint/parser':
+        specifier: ^6.21.0
+        version: 6.21.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)
+      autoprefixer:
+        specifier: ^10.4.21
+        version: 10.4.21(postcss@8.5.3)
+      eslint:
+        specifier: ^9.23.0
+        version: 9.23.0(jiti@2.4.2)
+      jest:
+        specifier: ^29.6.1
+        version: 29.7.0(@types/node@22.13.11)
+      postcss:
+        specifier: ^8.5.3
+        version: 8.5.3
+      prettier:
+        specifier: ^3.5.3
+        version: 3.5.3
+      tailwind:
+        specifier: ^4.0.0
+        version: 4.0.0
+      tailwindcss:
+        specifier: ^4.0.15
+        version: 4.0.15
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.2
+
   products/maistro-funnels/frontend:
     dependencies:
       react:
