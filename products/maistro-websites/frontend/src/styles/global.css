@@ -4,4 +4,4 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '@maistro/ui/src/styles/global.css'
+@import '@maistro/ui/src/styles/global.css';
