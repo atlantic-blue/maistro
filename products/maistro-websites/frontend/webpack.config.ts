@@ -8,10 +8,6 @@ const isProduction = process.env.NODE_ENV === 'production';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const config = () => {
-  return merge(
-    createWebpackConfig({isProduction, dirname: __dirname}),
-  )
-}
-
-export default config;
+export default merge(
+  createWebpackConfig({isProduction, dirname: __dirname}),
+);
