@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button as MaistroButton} from "@maistro/ui"
+import { Button as MaistroButton } from '@maistro/ui';
 
 const App: React.FC = () => {
   return (
@@ -23,7 +23,6 @@ const App: React.FC = () => {
           <MaistroButton variant="ghost">Ghost</MaistroButton>
           <MaistroButton variant="link">Link</MaistroButton>
         </div>
-
       </div>
     </div>
   );
