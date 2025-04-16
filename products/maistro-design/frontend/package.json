@@ -23,11 +23,11 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@maistro/eslint-config": "workspace:^",
-    "@maistro/jest-config": "workspace:^",
-    "@maistro/prettier-config": "workspace:^",
-    "@maistro/typescript-config": "workspace:^",
-    "@maistro/ui": "workspace:^",
+    "@maistro/eslint-config": "*",
+    "@maistro/jest-config": "*",
+    "@maistro/prettier-config": "*",
+    "@maistro/typescript-config": "*",
+    "@maistro/ui": "*",
     "@storybook/addon-essentials": "^8.6.12",
     "@storybook/addon-interactions": "^8.6.12",
     "@storybook/addon-onboarding": "^8.6.12",

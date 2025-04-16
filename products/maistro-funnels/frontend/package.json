@@ -1,5 +1,5 @@
 {
-  "name": "maistro-funnels",
+  "name": "@maistro/funnels",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -27,12 +27,12 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@maistro/eslint-config": "workspace:^",
-    "@maistro/jest-config": "workspace:^",
-    "@maistro/prettier-config": "workspace:^",
-    "@maistro/typescript-config": "workspace:^",
-    "@maistro/ui": "workspace:^",
-    "@maistro/webpack-config": "workspace:^",
+    "@maistro/eslint-config": "*",
+    "@maistro/jest-config": "*",
+    "@maistro/prettier-config": "*",
+    "@maistro/typescript-config": "*",
+    "@maistro/ui": "*",
+    "@maistro/webpack-config": "*",
     "@radix-ui/react-accordion": "^1.2.4",
     "@radix-ui/react-alert-dialog": "^1.1.7",
     "@radix-ui/react-aspect-ratio": "^1.1.3",
