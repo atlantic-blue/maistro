@@ -123,25 +123,26 @@ jobs:
       with:
         fetch-depth: 1
 
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
       with:
-        version: 8
+        node-version: '23'
+        cache: 'yarn'
 
     - name: Install dependencies
-      run: pnpm install
+      run: yarn install
 
     - name: Format
-      run: pnpm format:${{ matrix.product }}
+      run: yarn format:${{ matrix.product }}
 
     - name: Lint
-      run: pnpm lint:${{ matrix.product }}
+      run: yarn lint:${{ matrix.product }}
     
     - name: Test
-      run: pnpm test:${{ matrix.product }}
+      run: yarn test:${{ matrix.product }}
     
     - name: Build
-      run: pnpm build:${{ matrix.product }}
+      run: yarn build:${{ matrix.product }}
 
     - name: Set environment variables
       run: |

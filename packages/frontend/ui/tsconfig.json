@@ -23,5 +23,5 @@
       }
     },
     "include": ["src"],
-    "exclude": ["node_modules", "**/*.spec.ts", "webpack.config.ts"]
+    "exclude": ["node_modules"]
   }

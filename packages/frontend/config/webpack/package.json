@@ -1,0 +1,16 @@
+{
+    "name": "@maistro/webpack-config",
+    "version": "0.1.0",
+    "private": true,
+    "main": "webpack.config.ts",
+    "dependencies": {
+        "@rsbuild/core": "^0.4.0",
+        "@rsbuild/plugin-react": "^0.4.0"
+    },
+    "devDependencies": {
+        "html-webpack-plugin": "^5.6.3",
+        "mini-css-extract-plugin": "^2.9.2",
+        "webpack": "^5.91.0",
+        "webpack-dev-server": "^5.0.1"
+    }
+}
