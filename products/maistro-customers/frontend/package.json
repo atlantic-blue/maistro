@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack serve --mode development",
-    "build": "webpack --mode production",
+    "dev": "TS_NODE_PROJECT='tsconfig.webpack.json' webpack serve --mode development",
+    "build": "TS_NODE_PROJECT='tsconfig.webpack.json' webpack --mode production",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "format:fix": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css}'",
