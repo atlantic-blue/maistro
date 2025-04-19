@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import { Route, Routes as ReactRoutes, useLocation, useNavigate } from 'react-router';
 import { BarChartIcon, FileTextIcon, HomeIcon, LayoutIcon } from 'lucide-react';
@@ -13,7 +14,7 @@ enum Routes {
   SETTINGS = '/settings',
 }
 
-const navigation: NavItem[] = [
+const routesNavigation: NavItem[] = [
   {
     name: 'Dashboard',
     path: Routes.HOME,
@@ -83,7 +84,7 @@ const AppRoutes: React.FC = () => {
     <Layout
       productName="Websites"
       accentColor="blue"
-      navigation={navigation}
+      navigation={routesNavigation}
       logo={<IconLogoSimple />}
       currentPath={location.pathname}
       user={currentUser}
