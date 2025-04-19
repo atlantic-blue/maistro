@@ -74,6 +74,9 @@ const createConfig = ({
     static: {
       directory: path.join(dirname, 'public'),
     },
+    client: {
+      overlay: false,
+    },
     historyApiFallback: true,
     port: 3000,
     hot: true,
