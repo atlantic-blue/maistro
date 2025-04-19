@@ -6,11 +6,11 @@ import { IconLogoSimple, NavItem } from '@maistro/ui';
 import Layout from './Layout';
 
 enum Routes {
-    HOME = "/",
-    WEBSITES = "/websites",
-    TEMPLATES = "/templates",
-    ANALYTICS = "/analytics",
-    SETTINGS = "/settings",
+  HOME = '/',
+  WEBSITES = '/websites',
+  TEMPLATES = '/templates',
+  ANALYTICS = '/analytics',
+  SETTINGS = '/settings',
 }
 
 const navigation: NavItem[] = [
@@ -39,7 +39,7 @@ const navigation: NavItem[] = [
     path: Routes.SETTINGS,
     icon: <GearIcon />,
   },
-]
+];
 
 // Mock user data
 const currentUser = {
@@ -49,7 +49,7 @@ const currentUser = {
 };
 
 function getPageTitle(path: string): string {
-  switch(path) {
+  switch (path) {
     case Routes.HOME:
       return 'Dashboard';
     case Routes.WEBSITES:
@@ -74,7 +74,7 @@ const AppRoutes: React.FC = () => {
     navigate(path);
     setPageTitle(getPageTitle(path));
   };
-  
+
   const handleLogout = () => {
     console.log('Logging out...');
   };
@@ -99,7 +99,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/" element={<div>Hello World!</div>} />
         <Route path="/" element={<div>Hello World!</div>} />
       </ReactRoutes>
-      </Layout>
+    </Layout>
   );
 };
 
