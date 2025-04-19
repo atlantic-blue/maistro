@@ -3,12 +3,11 @@ import React, { useState } from 'react';
 import { Route, Routes as ReactRoutes, useLocation, useNavigate } from 'react-router';
 import { BarChartIcon, FileTextIcon, HomeIcon, LayoutIcon } from 'lucide-react';
 import { GearIcon } from '@radix-ui/react-icons';
-import { IconLogoSimple, NavItem } from '@maistro/ui';
-import Layout from './Layout';
+import { IconLogoSimple, Layout, NavItem } from '@maistro/ui';
 
 enum Routes {
   HOME = '/',
-  WEBSITES = '/websites',
+  WEBSITES = '/funnels',
   TEMPLATES = '/templates',
   ANALYTICS = '/analytics',
   SETTINGS = '/settings',
@@ -21,7 +20,7 @@ const routesNavigation: NavItem[] = [
     icon: <HomeIcon />,
   },
   {
-    name: 'My Websites',
+    name: 'My Funnels',
     path: Routes.WEBSITES,
     icon: <LayoutIcon />,
   },
@@ -54,7 +53,7 @@ function getPageTitle(path: string): string {
     case Routes.HOME:
       return 'Dashboard';
     case Routes.WEBSITES:
-      return 'My Websites';
+      return 'My Funnels';
     case Routes.TEMPLATES:
       return 'Templates';
     case Routes.ANALYTICS:
@@ -82,8 +81,8 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Layout
-      productName="Websites"
-      accentColor="blue"
+      productName="Funnels"
+      accentColor="orange"
       navigation={routesNavigation}
       logo={<IconLogoSimple />}
       currentPath={location.pathname}
