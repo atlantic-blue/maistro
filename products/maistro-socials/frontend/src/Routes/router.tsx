@@ -7,7 +7,7 @@ import { IconLogoSimple, Layout, NavItem } from '@maistro/ui';
 
 enum Routes {
   HOME = '/',
-  WEBSITES = '/funnels',
+  SOCIALS = '/socials',
   TEMPLATES = '/templates',
   ANALYTICS = '/analytics',
   SETTINGS = '/settings',
@@ -20,8 +20,8 @@ const routesNavigation: NavItem[] = [
     icon: <HomeIcon />,
   },
   {
-    name: 'My Funnels',
-    path: Routes.WEBSITES,
+    name: 'My Socials',
+    path: Routes.SOCIALS,
     icon: <LayoutIcon />,
   },
   {
@@ -52,8 +52,8 @@ function getPageTitle(path: string): string {
   switch (path) {
     case Routes.HOME:
       return 'Dashboard';
-    case Routes.WEBSITES:
-      return 'My Funnels';
+    case Routes.SOCIALS:
+      return 'My Socials';
     case Routes.TEMPLATES:
       return 'Templates';
     case Routes.ANALYTICS:
@@ -81,8 +81,8 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Layout
-      productName="Funnels"
-      accentColor="orange"
+      productName="Socials"
+      accentColor="purple"
       navigation={routesNavigation}
       logo={<IconLogoSimple />}
       currentPath={location.pathname}
