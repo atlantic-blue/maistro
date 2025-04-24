@@ -2,20 +2,18 @@
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router';
 import {AuthProvider} from '@maistro/auth';
-
-import env from '../env';
-import Helmet from '../Components/Helmet';
-
 import Login from './Login';
 import RedirectRoute from './RedirectRoute';
+import Helmet from '../Components/Helmet';
 import { appRoutes, Routes } from './appRoutes';
+import env from '../env';
 
 const Router: React.FC = () => {
   return (
     <AuthProvider
-    authCallbackPath={Routes.AUTH_CALLBACK}
       {...env.auth}
-    >
+      authCallbackPath={Routes.AUTH_CALLBACK}
+      >
       <ReactRoutes>      
         <Route path={Routes.HOME}
             element={  
