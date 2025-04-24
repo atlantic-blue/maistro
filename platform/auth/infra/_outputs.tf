@@ -11,6 +11,7 @@ output "authz_client_secret" {
   value     = aws_cognito_user_pool_client.authz.client_secret
 }
 
+# terraform output authz_client_id
 output "authz_client_id" {
   value = aws_cognito_user_pool_client.authz.id
 }

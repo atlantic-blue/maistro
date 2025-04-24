@@ -27,7 +27,7 @@ variable "google_client_secret" {
 }
 
 variable "callback_urls" {
-  type = list(string)
+  type = set(string)
   default = [
     "http://localhost:3000/callback/",
     "https://maistro.website/callback/",
@@ -40,7 +40,7 @@ variable "callback_urls" {
 }
 
 variable "logout_urls" {
-  type = list(string)
+  type = set(string)
   default = [
     "http://localhost:3000/logout/",
     "https://maistro.website/logout/",

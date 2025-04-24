@@ -28,6 +28,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@maistro/auth": "*",
     "@maistro/eslint-config": "*",
     "@maistro/jest-config": "*",
     "@maistro/prettier-config": "*",

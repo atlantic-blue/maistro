@@ -46,6 +46,7 @@ export interface LayoutProps {
   headerTitle?: string;
   notificationCount?: number;
   helpUrl?: string;
+  onSettings: () => void;
 }
 
 export const Layout: React.FC<LayoutProps> = ({
@@ -58,6 +59,7 @@ export const Layout: React.FC<LayoutProps> = ({
   user,
   onLogout,
   onNavigate,
+  onSettings,
   headerTitle,
   notificationCount = 0,
   helpUrl,
@@ -241,7 +243,7 @@ export const Layout: React.FC<LayoutProps> = ({
                       </Flex>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content>
-                      <Box className="px-3 py-2">
+                      <Box className="px-3 py-2 flex flex-col">
                         <Text size="2" weight="bold">
                           {user.name}
                         </Text>
@@ -252,7 +254,7 @@ export const Layout: React.FC<LayoutProps> = ({
                         )}
                       </Box>
                       <DropdownMenu.Separator />
-                      <DropdownMenu.Item>
+                      <DropdownMenu.Item onClick={onSettings}>
                         <Flex align="center" gap="2">
                           <GearIcon />
                           <Text size="2">Settings</Text>

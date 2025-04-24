@@ -1,106 +1,39 @@
 /* eslint-disable */
-import React, { useState } from 'react';
-import { Route, Routes as ReactRoutes, useLocation, useNavigate } from 'react-router';
-import { BarChartIcon, FileTextIcon, HomeIcon, LayoutIcon } from 'lucide-react';
-import { GearIcon } from '@radix-ui/react-icons';
-import { IconLogoSimple, Layout, NavItem } from '@maistro/ui';
+import React from 'react';
+import { Route, Routes as ReactRoutes } from 'react-router';
+import { AuthProvider } from '@maistro/auth';
 
-enum Routes {
-  HOME = '/',
-  WEBSITES = '/funnels',
-  TEMPLATES = '/templates',
-  ANALYTICS = '/analytics',
-  SETTINGS = '/settings',
-}
+import env from '../env';
+import Helmet from '../Components/Helmet';
 
-const routesNavigation: NavItem[] = [
-  {
-    name: 'Dashboard',
-    path: Routes.HOME,
-    icon: <HomeIcon />,
-  },
-  {
-    name: 'My Funnels',
-    path: Routes.WEBSITES,
-    icon: <LayoutIcon />,
-  },
-  {
-    name: 'Templates',
-    path: Routes.TEMPLATES,
-    icon: <FileTextIcon />,
-  },
-  {
-    name: 'Analytics',
-    path: Routes.ANALYTICS,
-    icon: <BarChartIcon />,
-  },
-  {
-    name: 'Settings',
-    path: Routes.SETTINGS,
-    icon: <GearIcon />,
-  },
-];
+import Login from './Login';
+import RedirectRoute from './RedirectRoute';
+import { appRoutes, Routes } from './appRoutes';
 
-// Mock user data
-const currentUser = {
-  name: 'Jane Smith',
-  email: 'jane@example.com',
-  avatar: undefined, // Will use fallback
-};
-
-function getPageTitle(path: string): string {
-  switch (path) {
-    case Routes.HOME:
-      return 'Dashboard';
-    case Routes.WEBSITES:
-      return 'My Funnels';
-    case Routes.TEMPLATES:
-      return 'Templates';
-    case Routes.ANALYTICS:
-      return 'Analytics';
-    case Routes.SETTINGS:
-      return 'Settings';
-    default:
-      return 'Dashboard';
-  }
-}
-
-const AppRoutes: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [pageTitle, setPageTitle] = useState(getPageTitle(location.pathname));
-
-  const handleNavigate = (path: string) => {
-    navigate(path);
-    setPageTitle(getPageTitle(path));
-  };
-
-  const handleLogout = () => {
-    console.log('Logging out...');
-  };
-
+const Router: React.FC = () => {
   return (
-    <Layout
-      productName="Funnels"
-      accentColor="orange"
-      navigation={routesNavigation}
-      logo={<IconLogoSimple />}
-      currentPath={location.pathname}
-      user={currentUser}
-      onLogout={handleLogout}
-      onNavigate={handleNavigate}
-      headerTitle={pageTitle}
-      notificationCount={3}
-      helpUrl="https://help.maistro.websites"
-    >
+    <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
-        <Route path="/" element={<div>Hello World!</div>} />
-        <Route path="/" element={<div>Hello World!</div>} />
-        <Route path="/" element={<div>Hello World!</div>} />
-        <Route path="/" element={<div>Hello World!</div>} />
+        <Route
+          path={Routes.HOME}
+          element={
+            <Helmet>
+              <div>Hello World!</div>
+            </Helmet>
+          }
+        />
+        <Route
+          path={Routes.AUTH_CALLBACK}
+          element={
+            <RedirectRoute navigateTo={appRoutes.getHomeRoute()}>
+              <div>Hello World!</div>
+            </RedirectRoute>
+          }
+        />
+        <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
       </ReactRoutes>
-    </Layout>
+    </AuthProvider>
   );
 };
 
-export default AppRoutes;
+export { Router as default, appRoutes, Routes };
