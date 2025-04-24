@@ -1,8 +1,11 @@
 import path from 'path';
 import Webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
+import createWebpackEnv from "./utils/createWebpackEnv"
+import createWebpackPaths from "./utils/createWebpackPaths"
+import createWebpackPlugins from './utils/createWebpackPlugins';
 
 type WebpackConfiguration = Webpack.Configuration;
 type WebpackDevServerConfiguration = WebpackDevServer.Configuration
@@ -13,7 +16,14 @@ interface Configuration extends WebpackConfiguration {
 const createConfig = ({
   dirname,
   isProduction
-}): Configuration => {
+}: {dirname: string, isProduction: boolean}): Configuration => {
+  const env = createWebpackEnv({
+    ANALYSE: false,
+    NODE_ENV: isProduction ? "production" : "development"
+  })
+  const paths = createWebpackPaths(dirname)
+  const plugins = createWebpackPlugins(env, paths)
+
   const config: Configuration = {
     mode: isProduction ? 'production' : 'development',
   entry: './src/index.tsx',
@@ -64,12 +74,7 @@ const createConfig = ({
       '@': path.resolve(dirname, 'src'),
     },
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      filename: 'index.html',
-    }),
-  ],
+  plugins,
   devServer: {
     static: {
       directory: path.join(dirname, 'public'),
