@@ -140,7 +140,18 @@ jobs:
     
     - name: Test
       run: yarn test:${{ matrix.product }}
-    
+
+    - name: Generate .env file
+      run: |
+        # Create .env file for the specific product in the matrix
+        cat > ./products/maistro-${{ matrix.product }}/frontend/.env << EOL
+        # Common variables for all products
+        AUTH_DOMAIN=${{ secrets.MAISTRO_PRODUCTS_AUTH_CLIENT_ID }}
+        AUTH_CLIENT_ID=${{ secrets.MAISTRO_PRODUCTS_AUTH_CLIENT_SECRET }}
+        AUTH_CLIENT_SECRET=${{ secrets.MAISTRO_PRODUCTS_AUTH_DOMAIN }}
+        EOL
+
+        echo "Created .env file for maistro-${{ matrix.product }}"
     - name: Build
       run: yarn build:${{ matrix.product }}
 
