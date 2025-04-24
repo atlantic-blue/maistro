@@ -45,13 +45,13 @@ function getPageTitle(path: string): string {
   switch (path) {
     case appRoutes.getHomeRoute():
       return 'Dashboard';
-    case appRoutes.getHomeRoute():
+    case appRoutes.getSocials():
       return 'My Socials';
-    case appRoutes.getHomeRoute():
+    case appRoutes.getTemplates():
       return 'Templates';
-    case appRoutes.getHomeRoute():
+    case appRoutes.getAnalytics():
       return 'Analytics';
-    case appRoutes.getHomeRoute():
+    case appRoutes.getSettings():
       return 'Settings';
     default:
       return 'Dashboard';
