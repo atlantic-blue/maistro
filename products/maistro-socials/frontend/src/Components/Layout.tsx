@@ -46,7 +46,7 @@ export interface LayoutProps {
   headerTitle?: string;
   notificationCount?: number;
   helpUrl?: string;
-  onSettings: () => void
+  onSettings: () => void;
 }
 
 export const Layout: React.FC<LayoutProps> = ({

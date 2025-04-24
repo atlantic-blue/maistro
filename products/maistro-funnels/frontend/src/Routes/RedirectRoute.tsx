@@ -1,37 +1,29 @@
-import {AuthContext} from "@maistro/auth"
-import React from "react"
-import { Navigate } from "react-router"
-import { appRoutes, Routes } from "./appRoutes"
+import { AuthContext } from '@maistro/auth';
+import React from 'react';
+import { Navigate } from 'react-router';
+import { appRoutes, Routes } from './appRoutes';
 
 interface RedirectRouteProps {
-    children: React.ReactNode
-    navigateTo: string
+  children: React.ReactNode;
+  navigateTo: string;
 }
 
 const RedirectRoute: React.FC<RedirectRouteProps> = (props) => {
-    const { isAuthenticated, isLoading, error } = React.useContext(AuthContext)
+  const { isAuthenticated, isLoading, error } = React.useContext(AuthContext);
 
-    if (isLoading) {
-        return (
-            <div>
-                Loading User....
-            </div>
-        )
-    }
+  if (isLoading) {
+    return <div>Loading User....</div>;
+  }
 
-    if (isAuthenticated && !isLoading) {
-        return <Navigate to={props.navigateTo} />
-    }
+  if (isAuthenticated && !isLoading) {
+    return <Navigate to={props.navigateTo} />;
+  }
 
-    if (error && !window.location.pathname.includes(Routes.AUTHZ_LOGIN)) {
-        return <Navigate to={appRoutes.getLoginRoute()} />
-    }
+  if (error && !window.location.pathname.includes(Routes.AUTHZ_LOGIN)) {
+    return <Navigate to={appRoutes.getLoginRoute()} />;
+  }
 
-    return (
-        <>
-            {props.children}
-        </>
-    )
-}
+  return <>{props.children}</>;
+};
 
-export default RedirectRoute
+export default RedirectRoute;

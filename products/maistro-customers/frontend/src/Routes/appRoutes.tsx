@@ -1,45 +1,44 @@
 export enum Routes {
-    HOME = '/*',
-    CUSTOMERS = '/customers',
-    ANALYTICS = '/analytics',
-    SETTINGS = '/settings',
-  
-    AUTHZ_LOGIN = "/login",
-    AUTHZ_LOGOUT = "/logout",
-    AUTH_CALLBACK = "/callback",
+  HOME = '/*',
+  CUSTOMERS = '/customers',
+  ANALYTICS = '/analytics',
+  SETTINGS = '/settings',
 
-    USER_SETTINGS = "/user/settings"
+  AUTHZ_LOGIN = '/login',
+  AUTHZ_LOGOUT = '/logout',
+  AUTH_CALLBACK = '/callback',
+
+  USER_SETTINGS = '/user/settings',
+}
+
+class AppRoutes {
+  getHomeRoute() {
+    return `/`;
   }
-  
-  class AppRoutes {
-    getHomeRoute() {
-      return `/`
-    }
-  
-    getLoginRoute() {
-      return `${Routes.AUTHZ_LOGIN}`
-    }
-  
-    getLogoutRoute() {
-        return `${Routes.AUTHZ_LOGOUT}`
-    }
-  
-    getCustomers() {
-      return `${Routes.CUSTOMERS}`
-    }
 
-    getAnalytics() {
-      return `${Routes.ANALYTICS}`
-    }
-
-    getSettings() {
-      return `${Routes.SETTINGS}`
-    }
-
-    getUserSettings() {
-      return `${Routes.USER_SETTINGS}`
-    }
+  getLoginRoute() {
+    return `${Routes.AUTHZ_LOGIN}`;
   }
-  
-export const appRoutes = new AppRoutes()
-  
+
+  getLogoutRoute() {
+    return `${Routes.AUTHZ_LOGOUT}`;
+  }
+
+  getCustomers() {
+    return `${Routes.CUSTOMERS}`;
+  }
+
+  getAnalytics() {
+    return `${Routes.ANALYTICS}`;
+  }
+
+  getSettings() {
+    return `${Routes.SETTINGS}`;
+  }
+
+  getUserSettings() {
+    return `${Routes.USER_SETTINGS}`;
+  }
+}
+
+export const appRoutes = new AppRoutes();
