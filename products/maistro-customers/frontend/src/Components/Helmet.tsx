@@ -1,5 +1,5 @@
 import { IconLogoSimple, NavItem } from '@maistro/ui';
-import { BarChartIcon, FileTextIcon, GearIcon, HomeIcon, LayoutIcon } from '@radix-ui/react-icons';
+import { BarChartIcon, GearIcon, HomeIcon, LayoutIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
