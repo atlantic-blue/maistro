@@ -9,19 +9,25 @@ import Helmet from '../Components/Helmet';
 import Login from './Login';
 import RedirectRoute from './RedirectRoute';
 import { appRoutes, Routes } from './appRoutes';
+import Dashboard from './Dashboard';
+import CoursePlayer from './CoursePlayer';
 
 const Router: React.FC = () => {
   return (
     <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
         <Route
-          path={Routes.HOME}
-          element={
-            <Helmet>
-              <div>Hello World!</div>
-            </Helmet>
-          }
+            path="*"
+            element={
+              <Helmet>
+                <ReactRoutes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/courses/:courseId" element={<CoursePlayer />} />
+                </ReactRoutes>
+              </Helmet>
+            }
         />
+
         <Route
           path={Routes.AUTH_CALLBACK}
           element={
