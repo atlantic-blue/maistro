@@ -41,11 +41,11 @@ function getPageTitle(path: string): string {
   switch (path) {
     case appRoutes.getHomeRoute():
       return 'Dashboard';
-      case appRoutes.getExplore():
+    case appRoutes.getExplore():
       return 'Explore';
-      case appRoutes.getMyLearning():
-        return 'My Learning';
-      case appRoutes.getSettings():
+    case appRoutes.getMyLearning():
+      return 'My Learning';
+    case appRoutes.getSettings():
       return 'Settings';
     default:
       return 'Dashboard';

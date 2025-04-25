@@ -6,28 +6,30 @@ import { useEffect, useRef } from 'react';
 const CoursePlayer = () => {
   const { courseId } = useParams();
   const videoRef = useRef<HTMLVideoElement>(null);
-  
+
   // In a real implementation, you would fetch the course by ID
   // For now, we'll just use our single course
   const course = featuredCourse;
-  
+
   useEffect(() => {
     // You could track video progress here in the future
     return () => {
       // Clean up if needed
     };
   }, [courseId]);
-  
+
   return (
     <Box p="4">
-      <Heading size="6" mb="4">{course.title}</Heading>
-      
+      <Heading size="6" mb="4">
+        {course.title}
+      </Heading>
+
       <Card size="2" mb="4">
-        <Box 
-          style={{ 
+        <Box
+          style={{
             backgroundColor: 'black',
             borderRadius: 'var(--radius-2)',
-            overflow: 'hidden'
+            overflow: 'hidden',
           }}
         >
           <video
@@ -43,15 +45,21 @@ const CoursePlayer = () => {
           </video>
         </Box>
       </Card>
-      
+
       <Flex gap="4">
         <Box style={{ flex: '3' }}>
           <Card size="2">
             <Box p="4">
-              <Heading size="3" mb="2">About This Course</Heading>
-              <Text as="p" size="2">{course.description}</Text>
-              
-              <Heading size="2" mt="4" mb="2">What You'll Learn</Heading>
+              <Heading size="3" mb="2">
+                About This Course
+              </Heading>
+              <Text as="p" size="2">
+                {course.description}
+              </Text>
+
+              <Heading size="2" mt="4" mb="2">
+                What You'll Learn
+              </Heading>
               <Box pl="4">
                 <Text size="2">Introduction to the platform</Text>
                 <Text size="2">How to navigate courses</Text>
@@ -60,11 +68,13 @@ const CoursePlayer = () => {
             </Box>
           </Card>
         </Box>
-        
+
         <Box style={{ flex: '1' }}>
           <Card size="2">
             <Box p="4">
-              <Heading size="2" mb="2">Course Details</Heading>
+              <Heading size="2" mb="2">
+                Course Details
+              </Heading>
               <Flex direction="column" gap="2">
                 <Text size="2">
                   <strong>Instructor:</strong> {course.instructor}

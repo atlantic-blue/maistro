@@ -17,15 +17,15 @@ const Router: React.FC = () => {
     <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
         <Route
-            path="*"
-            element={
-              <Helmet>
-                <ReactRoutes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/courses/:courseId" element={<CoursePlayer />} />
-                </ReactRoutes>
-              </Helmet>
-            }
+          path="*"
+          element={
+            <Helmet>
+              <ReactRoutes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/courses/:courseId" element={<CoursePlayer />} />
+              </ReactRoutes>
+            </Helmet>
+          }
         />
 
         <Route
