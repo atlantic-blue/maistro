@@ -1,8 +1,9 @@
 /* eslint-disable */
 export enum Routes {
-  HOME = '/*',
+  DASHBOARD = '/*',
   COURSES = '/courses',
-  ANALYTICS = '/analytics',
+  EXPLORE = '/explore',
+  MY_LEARNING = 'MY_LEARNING',
   SETTINGS = '/settings',
 
   AUTHZ_LOGIN = '/login',
@@ -29,8 +30,12 @@ class AppRoutes {
     return `${Routes.COURSES}`;
   }
 
-  getAnalytics() {
-    return `${Routes.ANALYTICS}`;
+  getExplore() {
+    return `${Routes.EXPLORE}`;
+  }
+
+  getMyLearning() {
+    return `${Routes.MY_LEARNING}`;
   }
 
   getSettings() {

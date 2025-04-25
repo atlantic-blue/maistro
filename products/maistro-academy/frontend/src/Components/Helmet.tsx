@@ -1,5 +1,5 @@
 import { IconLogoSimple, NavItem } from '@maistro/ui';
-import { BarChartIcon, GearIcon, HomeIcon, LayoutIcon } from '@radix-ui/react-icons';
+import { GearIcon, HomeIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
@@ -8,6 +8,7 @@ import { AuthContext } from '@maistro/auth';
 import Layout from './Layout';
 import ProtectedRoute from '../Routes/ProtectedRoute';
 import { appRoutes } from '../Routes/appRoutes';
+import { BookOpenIcon, SearchIcon } from 'lucide-react';
 
 interface HelmetProps {
   children: React.ReactNode;
@@ -20,14 +21,14 @@ const routesNavigation: NavItem[] = [
     icon: <HomeIcon />,
   },
   {
-    name: 'My Courses',
-    path: appRoutes.getCourses(),
-    icon: <LayoutIcon />,
+    name: 'Explore',
+    path: appRoutes.getExplore(),
+    icon: <SearchIcon />,
   },
   {
-    name: 'Analytics',
-    path: appRoutes.getAnalytics(),
-    icon: <BarChartIcon />,
+    name: 'My Learning',
+    path: appRoutes.getMyLearning(),
+    icon: <BookOpenIcon />,
   },
   {
     name: 'Settings',
@@ -40,10 +41,10 @@ function getPageTitle(path: string): string {
   switch (path) {
     case appRoutes.getHomeRoute():
       return 'Dashboard';
-    case appRoutes.getCourses():
-      return 'My Courses';
-    case appRoutes.getAnalytics():
-      return 'Analytics';
+    case appRoutes.getExplore():
+      return 'Explore';
+    case appRoutes.getMyLearning():
+      return 'My Learning';
     case appRoutes.getSettings():
       return 'Settings';
     default:
