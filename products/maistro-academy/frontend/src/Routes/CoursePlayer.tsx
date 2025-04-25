@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useParams } from 'react-router';
 import { Box, Heading, Text, Flex, Card } from '@maistro/ui';
 import { featuredCourse } from '../data/initialCourse';

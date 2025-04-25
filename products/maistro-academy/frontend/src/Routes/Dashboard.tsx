@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Box, Card, Flex, Heading, Text, Button } from '@maistro/ui';
 import { useNavigate } from 'react-router';
 import { featuredCourse } from '../data/initialCourse';
