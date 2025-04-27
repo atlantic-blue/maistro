@@ -95,10 +95,11 @@ data "archive_file" "video_processor" {
   output_path = local.output_path
 }
 
+// Store the lambda in s3
 resource "aws_s3_object" "video_processor" {
   bucket = aws_s3_bucket.video_output.id
 
-  key    = "projects-upload-multipart.zip"
+  key    = "${var.platform_name}-processor.zip"
   source = data.archive_file.video_processor.output_path
 
   etag = filemd5(data.archive_file.video_processor.output_path)

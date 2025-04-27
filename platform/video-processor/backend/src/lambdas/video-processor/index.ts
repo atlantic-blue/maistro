@@ -7,7 +7,15 @@ const mediaConvert = new MediaConvert({
   endpoint: process.env.MEDIACONVERT_ENDPOINT,
 });
 
-// s3://<input-bucket>/<projectId>/<fileId>
+/**
+ * Video Processor
+ * Listens to aws_s3_bucket_notification.input_notification
+ * and creates DASH and HLS manifests as well as
+ * thumbnails for mp4 input
+ * Renditions: 1080 - 720 - 480
+ * Segment Lenght: 6s
+ * s3://<input-bucket>/<projectId>/<fileId>
+ */
 const handler = async (event: S3Event): Promise<void> => {
     console.log('Processing video upload event', JSON.stringify(event, null, 2));
   
@@ -42,6 +50,7 @@ const handler = async (event: S3Event): Promise<void> => {
                 fileInput: `s3://${inputBucket}/${key}`,
                 output: {
                     dash: `s3://${outputBucket}/${outputPrefix}/dash/`,
+                    hls: `s3://${outputBucket}/${outputPrefix}/hls/`,
                     thumbnails: `s3://${outputBucket}/${outputPrefix}/thumbnails/`,
                 }
             })
@@ -62,6 +71,7 @@ const handler = async (event: S3Event): Promise<void> => {
                     jobId: job.Job.Id,
                     outputPrefix: outputPrefix,
                     dashManifest: `${outputPrefix}/dash/${fileName}.mpd`,
+                    hlsManifest: `${outputPrefix}/hls/${fileName}.m3u8`,
                     thumbnails: `${outputPrefix}/thumbnails/`,
                     createdAt: new Date().toISOString(),
                 }),
@@ -87,9 +97,73 @@ function createMediaConvertJob({
     fileInput: string,
     output: {
         dash: string,
+        hls: string,
         thumbnails: string
     }
 }): MediaConvert.Types.CreateJobRequest {
+  const SEGMENT_LENGTH = 6 //seconds 
+  const renditions = [
+    {
+      nameModifier: '1080p',
+      width: 1920,
+      height: 1080,
+      bitrate: 5000000,
+      qualityLevel: 9,
+      audioBitrate: 128000,
+    },
+    {
+      nameModifier: '720p',
+      width: 1280,
+      height: 720,
+      bitrate: 3000000,
+      qualityLevel: 8,
+      audioBitrate: 96000,
+    },
+    {
+      nameModifier: '480p',
+      width: 854,
+      height: 480,
+      bitrate: 1000000,
+      qualityLevel: 7,
+      audioBitrate: 64000,
+    },
+  ];
+
+  const createOutput = (container: 'MPD' | 'M3U8') => {
+    return renditions.map((rendition) => ({
+      NameModifier: rendition.nameModifier,
+      ContainerSettings: {
+        Container: container,
+      },
+      VideoDescription: {
+        Width: rendition.width,
+        Height: rendition.height,
+        CodecSettings: {
+          Codec: 'H_264',
+          H264Settings: {
+            RateControlMode: 'QVBR',
+            QvbrSettings: {
+              QvbrQualityLevel: rendition.qualityLevel,
+            },
+            MaxBitrate: rendition.bitrate,
+          },
+        },
+      },
+      AudioDescriptions: [
+        {
+          CodecSettings: {
+            Codec: 'AAC',
+            AacSettings: {
+              Bitrate: rendition.audioBitrate,
+              CodingMode: 'CODING_MODE_2_0',
+              SampleRate: 48000,
+            },
+          },
+        },
+      ],
+    }));
+  }
+
     return {
         Role: role,
         Queue: queue,
@@ -112,146 +186,25 @@ function createMediaConvertJob({
               OutputGroupSettings: {
                 Type: 'DASH_ISO_GROUP_SETTINGS',
                 DashIsoGroupSettings: {
-                  SegmentLength: 4,
+                  SegmentLength: SEGMENT_LENGTH,
                   SegmentControl: 'SEGMENTED_FILES',
-                  FragmentLength: 2,
+                  FragmentLength: SEGMENT_LENGTH / 2,
                   Destination: output.dash,
                 },
               },
-              Outputs: [
-                {
-                  // 1080p output
-                  NameModifier: '1080p',
-                  ContainerSettings: {
-                    Container: 'MPD',
-                  },
-                  VideoDescription: {
-                    Width: 1920,
-                    Height: 1080,
-                    CodecSettings: {
-                      Codec: 'H_264',
-                      H264Settings: {
-                        RateControlMode: 'QVBR',
-                        QvbrSettings: {
-                          QvbrQualityLevel: 9,
-                        },
-                        MaxBitrate: 5000000,
-                      },
-                    },
-                  },
-                  AudioDescriptions: [
-                    {
-                      CodecSettings: {
-                        Codec: 'AAC',
-                        AacSettings: {
-                          Bitrate: 128000,
-                          CodingMode: 'CODING_MODE_2_0',
-                          SampleRate: 48000,
-                        },
-                      },
-                    },
-                  ],
+              Outputs: createOutput('MPD'),
+            },
+            {
+              Name: 'HLS',
+              OutputGroupSettings: {
+                Type: 'HLS_GROUP_SETTINGS',
+                HlsGroupSettings: {
+                  SegmentLength: SEGMENT_LENGTH,
+                  Destination: output.hls,
+                  MinSegmentLength: 0,
                 },
-                {
-                  // 720p output
-                  NameModifier: '720p',
-                  ContainerSettings: {
-                    Container: 'MPD',
-                  },
-                  VideoDescription: {
-                    Width: 1280,
-                    Height: 720,
-                    CodecSettings: {
-                      Codec: 'H_264',
-                      H264Settings: {
-                        RateControlMode: 'QVBR',
-                        QvbrSettings: {
-                          QvbrQualityLevel: 8,
-                        },
-                        MaxBitrate: 3000000,
-                      },
-                    },
-                  },
-                  AudioDescriptions: [
-                    {
-                      CodecSettings: {
-                        Codec: 'AAC',
-                        AacSettings: {
-                          Bitrate: 96000,
-                          CodingMode: 'CODING_MODE_2_0',
-                          SampleRate: 48000,
-                        },
-                      },
-                    },
-                  ],
-                },
-                {
-                  // 480p output
-                  NameModifier: '480p',
-                  ContainerSettings: {
-                    Container: 'MPD',
-                  },
-                  VideoDescription: {
-                    Width: 854,
-                    Height: 480,
-                    CodecSettings: {
-                      Codec: 'H_264',
-                      H264Settings: {
-                        RateControlMode: 'QVBR',
-                        QvbrSettings: {
-                          QvbrQualityLevel: 7,
-                        },
-                        MaxBitrate: 1500000,
-                      },
-                    },
-                  },
-                  AudioDescriptions: [
-                    {
-                      CodecSettings: {
-                        Codec: 'AAC',
-                        AacSettings: {
-                          Bitrate: 96000,
-                          CodingMode: 'CODING_MODE_2_0',
-                          SampleRate: 48000,
-                        },
-                      },
-                    },
-                  ],
-                },
-                {
-                  // 360p output
-                  NameModifier: '360p',
-                  ContainerSettings: {
-                    Container: 'MPD',
-                  },
-                  VideoDescription: {
-                    Width: 640,
-                    Height: 360,
-                    CodecSettings: {
-                      Codec: 'H_264',
-                      H264Settings: {
-                        RateControlMode: 'QVBR',
-                        QvbrSettings: {
-                          QvbrQualityLevel: 6,
-                        },
-                        MaxBitrate: 750000,
-                      },
-                    },
-                  },
-                  AudioDescriptions: [
-                    {
-                      CodecSettings: {
-                        Codec: 'AAC',
-                        AacSettings: {
-                          Bitrate: 64000,
-                          CodingMode: 'CODING_MODE_2_0',
-                          SampleRate: 48000,
-                        },
-                      },
-                    },
-                  ],
-                },
-              ],
+              },
+              Outputs: createOutput('M3U8'),
             },
             {
               // Thumbnail generation
