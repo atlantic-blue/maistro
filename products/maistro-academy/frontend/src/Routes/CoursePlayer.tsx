@@ -61,7 +61,7 @@ const CoursePlayer = () => {
               <Heading size="2" mt="4" mb="2">
                 What You'll Learn
               </Heading>
-              <Box className='flex flex-col'>
+              <Box className="flex flex-col">
                 <Text size="2">Introduction to the platform</Text>
                 <Text size="2">How to navigate courses</Text>
                 <Text size="2">Tips for effective learning</Text>
