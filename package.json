@@ -7,6 +7,7 @@
   "workspaces": [
     "packages/contracts",
     "packages/frontend/*",
+    "packages/backend/*",
     "packages/frontend/config/*",
     "products/*/frontend"
   ],
@@ -68,8 +69,16 @@
     "webpack-bundle-analyzer": "^4.10.2"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.149",
     "@types/circular-dependency-plugin": "^5.0.8",
     "@types/dotenv-webpack": "^7.0.8",
-    "circular-dependency-plugin": "^5.2.2"
+    "@types/joi": "^17.2.3",
+    "@types/jsonwebtoken": "^9.0.9",
+    "aws-lambda": "^1.0.7",
+    "aws-sdk": "^2.1692.0",
+    "circular-dependency-plugin": "^5.2.2",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^11.1.0"
   }
 }

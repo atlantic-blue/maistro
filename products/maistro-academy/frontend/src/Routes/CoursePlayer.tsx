@@ -47,7 +47,7 @@ const CoursePlayer = () => {
         </Box>
       </Card>
 
-      <Flex gap="4">
+      <Flex gap="4" direction="column">
         <Box style={{ flex: '3' }}>
           <Card size="2">
             <Box p="4">
@@ -61,7 +61,7 @@ const CoursePlayer = () => {
               <Heading size="2" mt="4" mb="2">
                 What You'll Learn
               </Heading>
-              <Box pl="4">
+              <Box className='flex flex-col'>
                 <Text size="2">Introduction to the platform</Text>
                 <Text size="2">How to navigate courses</Text>
                 <Text size="2">Tips for effective learning</Text>
