@@ -1,3 +1,5 @@
+# Takes an mp4 video and convers it to dash and hls
+
 resource "aws_iam_role" "video_processor" {
   name = "${var.platform_name}-processor-role"
   

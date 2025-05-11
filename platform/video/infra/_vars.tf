@@ -15,5 +15,5 @@ variable "platform_name" {
 }
 
 variable "domain_name" {
-  default = "video.maistro.website"
+  default = "maistro.website"
 }
