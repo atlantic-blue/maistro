@@ -6,6 +6,7 @@
         "build": "TS_NODE_PROJECT=tsconfig.json webpack --config ./config/webpack/webpack.server.ts"
     },
     "dependencies": {
+        "@aws-sdk/cloudfront-signer": "^3.775.0",
         "aws-lambda": "^1.0.7",
         "aws-sdk": "^2.1692.0"
     },

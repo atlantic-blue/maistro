@@ -10,7 +10,8 @@ import Login from './Login';
 import RedirectRoute from './RedirectRoute';
 import { appRoutes, Routes } from './appRoutes';
 import Dashboard from './Dashboard';
-import CoursePlayer from './CoursePlayer';
+import CourseLayout from './CourseLayout';
+import ModuleLayout from './ModuleLayout';
 
 const Router: React.FC = () => {
   return (
@@ -22,7 +23,8 @@ const Router: React.FC = () => {
             <Helmet>
               <ReactRoutes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/courses/:courseId" element={<CoursePlayer />} />
+                <Route path="/courses/:courseId" element={<CourseLayout />} />
+                <Route path="/courses/:courseId/:moduleId" element={<ModuleLayout />} />
               </ReactRoutes>
             </Helmet>
           }
