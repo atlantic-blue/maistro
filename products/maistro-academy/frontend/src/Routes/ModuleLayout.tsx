@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { useParams, useNavigate } from 'react-router';
-import { Box, Heading, Text, Card, Flex, Button, Grid } from '@radix-ui/themes';
+import { Box, Heading, Text, Card, Flex, Button, Grid, Link } from '@radix-ui/themes';
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircledIcon } from '@radix-ui/react-icons';
 import { featuredCourse } from '../data/initialCourse';
 import { useEffect, useRef } from 'react';
@@ -156,6 +156,17 @@ const ModuleLayout = () => {
               </Heading>
               <Text as="p">{module.description}</Text>
 
+              <Flex gap="3" direction="column" align="center">
+                {module.links &&
+                  module.links.map((link) => {
+                    return (
+                      <Link href={link.href} target="_blank">
+                        {link.title}
+                      </Link>
+                    );
+                  })}
+              </Flex>
+
               <Flex justify="end" mt="4">
                 {!moduleProgress.completed ? (
                   <Button onClick={onCompleteModule} color="indigo">
@@ -167,7 +178,7 @@ const ModuleLayout = () => {
                   </Button>
                 ) : (
                   <Button onClick={() => navigate(`/courses/${courseId}`)} color="indigo">
-                    Back to Course
+                    Volver al curso
                   </Button>
                 )}
               </Flex>

@@ -42,7 +42,7 @@ const Dashboard = () => {
               </Text>
             </Flex>
             <Button size="2" mt="3" onClick={() => navigate(`/courses/${featuredCourse.id}`)}>
-              Watch Now
+              ver ahora
             </Button>
           </Box>
         </Card>
@@ -55,7 +55,8 @@ const Dashboard = () => {
         <Card size="2">
           <Box p="4">
             <Text as="p" color="gray">
-              More courses are being prepared. Stay tuned!
+              Posisionate con poder! Si ya tienes una pagina web o estas a punto de tenerla, este
+              curso es para ti. No basta con tener un web bonita, necesitas que la encuentren 🧲
             </Text>
           </Box>
         </Card>
