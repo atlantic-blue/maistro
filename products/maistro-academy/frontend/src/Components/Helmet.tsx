@@ -1,5 +1,5 @@
 import { IconLogoSimple, NavItem } from '@maistro/ui';
-import { GearIcon, HomeIcon } from '@radix-ui/react-icons';
+import { HomeIcon, BookmarkIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
@@ -8,7 +8,6 @@ import { AuthContext } from '@maistro/auth';
 import Layout from './Layout';
 import ProtectedRoute from '../Routes/ProtectedRoute';
 import { appRoutes } from '../Routes/appRoutes';
-import { BookOpenIcon, SearchIcon } from 'lucide-react';
 
 interface HelmetProps {
   children: React.ReactNode;
@@ -20,21 +19,21 @@ const routesNavigation: NavItem[] = [
     path: appRoutes.getHomeRoute(),
     icon: <HomeIcon />,
   },
-  {
-    name: 'Explore',
-    path: appRoutes.getExplore(),
-    icon: <SearchIcon />,
-  },
-  {
-    name: 'My Learning',
-    path: appRoutes.getMyLearning(),
-    icon: <BookOpenIcon />,
-  },
-  {
-    name: 'Settings',
-    path: appRoutes.getSettings(),
-    icon: <GearIcon />,
-  },
+  // {
+  //   name: 'Explore',
+  //   path: appRoutes.getExplore(),
+  //   icon: <SearchIcon />,
+  // },
+  // {
+  //   name: 'My Learning',
+  //   path: appRoutes.getMyLearning(),
+  //   icon: <BookmarkIcon />,
+  // },
+  // {
+  //   name: 'Settings',
+  //   path: appRoutes.getSettings(),
+  //   icon: <GearIcon />,
+  // },
 ];
 
 function getPageTitle(path: string): string {
@@ -84,7 +83,7 @@ const Helmet: React.FC<HelmetProps> = (props) => {
         onNavigate={handleNavigate}
         headerTitle={pageTitle}
         notificationCount={3}
-        helpUrl="https://help.maistro.websites"
+        helpUrl="https://wa.me/573013239010"
         onSettings={handleOnSettings}
       >
         {props.children}

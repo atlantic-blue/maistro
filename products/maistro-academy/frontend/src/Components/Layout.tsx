@@ -180,7 +180,7 @@ export const Layout: React.FC<LayoutProps> = ({
                   onClick={() => window.open(helpUrl, '_blank')}
                 >
                   <QuestionMarkCircledIcon className="text-gray-500" />
-                  <Text size="2">Help & Documentation</Text>
+                  <Text size="2">Ayuda</Text>
                 </Flex>
               </Box>
             )}
@@ -253,13 +253,13 @@ export const Layout: React.FC<LayoutProps> = ({
                           </Text>
                         )}
                       </Box>
-                      <DropdownMenu.Separator />
+                      {/* <DropdownMenu.Separator />
                       <DropdownMenu.Item onClick={onSettings}>
                         <Flex align="center" gap="2">
                           <GearIcon />
                           <Text size="2">Settings</Text>
                         </Flex>
-                      </DropdownMenu.Item>
+                      </DropdownMenu.Item> */}
                       <DropdownMenu.Separator />
                       <DropdownMenu.Item onClick={onLogout}>
                         <Flex align="center" gap="2">

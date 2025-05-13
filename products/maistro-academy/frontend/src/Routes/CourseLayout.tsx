@@ -23,15 +23,10 @@ const CourseLayout = () => {
 
   const course = featuredCourse;
 
-  const {
-    courseProgress,
-    getCourseProgressPercentage,
-    getModuleProgress,
-    isLoading,
-    setCourseProgress,
-    setModuleCompleted,
-    setModulePosition,
-  } = useLocalProgress(course.id, course.modules.length);
+  const { getCourseProgressPercentage, getModuleProgress } = useLocalProgress(
+    course.id,
+    course.modules.length
+  );
 
   const totalModules = course.modules.length;
   const courseProgressPercentage = getCourseProgressPercentage();
@@ -91,7 +86,12 @@ const CourseLayout = () => {
           </Flex>
         </Box>
 
-        <Button onClick={navigateToNextModule} size="3" color="green" className="mb-4">
+        <Button
+          onClick={navigateToNextModule}
+          size="3"
+          color={courseProgressPercentage > 0 ? 'green' : 'amber'}
+          className="mb-4"
+        >
           {courseProgressPercentage === 0 ? 'Empezar' : 'Continuar'} curso
         </Button>
 
@@ -134,7 +134,6 @@ const CourseLayout = () => {
                         <TriangleRightIcon />
                       )}
                       <Text weight="bold">{module.title}</Text>
-                      {moduleProgress.completed && <CheckCircledIcon color="var(--green-9)" />}
                     </Flex>
                   </Flex>
                 </Box>
