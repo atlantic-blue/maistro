@@ -1,5 +1,5 @@
 import { IconLogoSimple, NavItem } from '@maistro/ui';
-import { HomeIcon, BookmarkIcon } from '@radix-ui/react-icons';
+import { HomeIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
