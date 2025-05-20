@@ -53,8 +53,8 @@ function getPageTitle(path: string): string {
       return 'Dashboard';
     case appRoutes.getCustomers():
       return 'My Customers';
-      case appRoutes.getPlugins():
-        return 'My Plugins';
+    case appRoutes.getPlugins():
+      return 'My Plugins';
     case appRoutes.getAnalytics():
       return 'Analytics';
     case appRoutes.getSettings():

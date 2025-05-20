@@ -8,7 +8,7 @@ import Helmet from '../Components/Helmet';
 
 import Login from './Login';
 import Dashboard from './Dashboard';
-import Customers from "./Customers"
+import Customers from './Customers';
 import RedirectRoute from './RedirectRoute';
 import { appRoutes, Routes } from './appRoutes';
 import Customer from './Customer';
@@ -22,7 +22,7 @@ const Router: React.FC = () => {
           element={
             <Helmet>
               <ReactRoutes>
-                <Route path={"/"} element={<Dashboard />} />
+                <Route path={'/'} element={<Dashboard />} />
                 <Route path={Routes.CUSTOMERS} element={<Customers />} />
                 <Route path={Routes.CUSTOMER} element={<Customer />} />
               </ReactRoutes>

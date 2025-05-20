@@ -9,9 +9,9 @@ interface Env {
   };
   payments: {
     stripe: {
-      key: string
-    }
-  }
+      key: string;
+    };
+  };
 }
 
 const createEnv = (): Env => {
@@ -29,8 +29,8 @@ const createEnv = (): Env => {
     payments: {
       stripe: {
         key: process.env.PAYMENTS_STRIPE_KEY || '',
-      }
-    }
+      },
+    },
   };
 };
 

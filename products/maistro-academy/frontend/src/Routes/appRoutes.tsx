@@ -12,7 +12,7 @@ export enum Routes {
 
   USER_SETTINGS = '/user/settings',
 
-  PAYMENTS = '/payments/:priceId'
+  PAYMENTS = '/payments/:priceId',
 }
 
 class AppRoutes {

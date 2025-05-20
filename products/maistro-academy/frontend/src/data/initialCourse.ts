@@ -24,7 +24,7 @@ interface Course {
 
 export const featuredCourse: Course = {
   id: 'contenido-con-poder',
-  priceId: "prctbl_1RQcs6Hdug2e0offAywTsD9R",
+  priceId: 'prctbl_1RQcs6Hdug2e0offAywTsD9R',
   title: 'Contenido con Poder',
   description: 'Emprende con intencion, juega a ganar!',
   thumbnail:

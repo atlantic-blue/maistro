@@ -24,18 +24,9 @@ const Router: React.FC = () => {
             <Helmet>
               <ReactRoutes>
                 <Route path="/" element={<Dashboard />} />
-                <Route
-                  path="/courses/:courseId"
-                  element={<CourseLayout />}
-                  />
-                <Route
-                  path="/courses/:courseId/:moduleId"
-                  element={<ModuleLayout />}
-                  />
-                <Route
-                  path={Routes.PAYMENTS}
-                  element={<Payments />}
-                  />
+                <Route path="/courses/:courseId" element={<CourseLayout />} />
+                <Route path="/courses/:courseId/:moduleId" element={<ModuleLayout />} />
+                <Route path={Routes.PAYMENTS} element={<Payments />} />
               </ReactRoutes>
             </Helmet>
           }

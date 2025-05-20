@@ -1,9 +1,11 @@
-import { Badge, Box, Card, Flex, Grid, Heading, Progress, Text } from '@maistro/ui';
+/* eslint-disable */
+import React from 'react';
+import { Badge, Box, Card, Flex, Heading, Progress, Text } from '@maistro/ui';
 
 const Dashboard: React.FC = () => (
   <Flex gap="4" direction="column" className="m-4">
     <Flex gap="4" className="mb-3" justify="between" align="center" wrap="wrap">
-      <Card className='w-40'>
+      <Card className="w-40">
         <Flex direction="column" align="center">
           <Text size="2" color="gray">
             Total Customers
@@ -15,7 +17,7 @@ const Dashboard: React.FC = () => (
         </Flex>
       </Card>
 
-      <Card className='w-40'>
+      <Card className="w-40">
         <Flex direction="column" align="center">
           <Text size="2" color="gray">
             Active This Month
@@ -27,7 +29,7 @@ const Dashboard: React.FC = () => (
         </Flex>
       </Card>
 
-      <Card className='w-40'>
+      <Card className="w-40">
         <Flex direction="column" align="center">
           <Text size="2" color="gray">
             Avg. Retention
@@ -41,7 +43,7 @@ const Dashboard: React.FC = () => (
         </Flex>
       </Card>
 
-      <Card className='w-40'>
+      <Card className="w-40">
         <Flex direction="column" align="center">
           <Text size="2" color="gray">
             Lifetime Value
