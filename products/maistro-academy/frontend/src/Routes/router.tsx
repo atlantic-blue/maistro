@@ -12,6 +12,7 @@ import { appRoutes, Routes } from './appRoutes';
 import Dashboard from './Dashboard';
 import CourseLayout from './CourseLayout';
 import ModuleLayout from './ModuleLayout';
+import Payments from './Payments';
 
 const Router: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const Router: React.FC = () => {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/courses/:courseId" element={<CourseLayout />} />
                 <Route path="/courses/:courseId/:moduleId" element={<ModuleLayout />} />
+                <Route path={Routes.PAYMENTS} element={<Payments />} />
               </ReactRoutes>
             </Helmet>
           }

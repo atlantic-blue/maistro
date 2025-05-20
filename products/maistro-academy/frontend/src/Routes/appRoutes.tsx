@@ -11,6 +11,8 @@ export enum Routes {
   AUTH_CALLBACK = '/callback',
 
   USER_SETTINGS = '/user/settings',
+
+  PAYMENTS = '/payments/:priceId',
 }
 
 class AppRoutes {
@@ -44,6 +46,10 @@ class AppRoutes {
 
   getUserSettings() {
     return `${Routes.USER_SETTINGS}`;
+  }
+
+  getPayment(priceId: string) {
+    return `payments/${priceId}`;
   }
 }
 

@@ -152,12 +152,14 @@ jobs:
         AUTH_DOMAIN: ${{ secrets.MAISTRO_PRODUCTS_AUTH_DOMAIN }}
         AUTH_CLIENT_ID: ${{ secrets.MAISTRO_PRODUCTS_AUTH_CLIENT_ID }}
         AUTH_CLIENT_SECRET: ${{ secrets.MAISTRO_PRODUCTS_AUTH_CLIENT_SECRET }}
+        PAYMENTS_STRIPE_KEY: ${{ secrets.PAYMENTS_STRIPE_KEY }}
       run: |
         # Create .env file for the specific product in the matrix
         cat > ./products/maistro-${{ matrix.product }}/frontend/.env << EOL
         AUTH_DOMAIN=${AUTH_DOMAIN}
         AUTH_CLIENT_ID=${AUTH_CLIENT_ID}
         AUTH_CLIENT_SECRET=${AUTH_CLIENT_SECRET}
+        PAYMENTS_STRIPE_KEY=${PAYMENTS_STRIPE_KEY}
         EOL
 
         if [ ! -f "./products/maistro-${{ matrix.product }}/frontend/.env" ]; then

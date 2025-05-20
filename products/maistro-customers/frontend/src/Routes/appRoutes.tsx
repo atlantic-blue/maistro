@@ -2,7 +2,9 @@
 export enum Routes {
   HOME = '/*',
   CUSTOMERS = '/customers',
+  CUSTOMER = '/customers/:customerId',
   ANALYTICS = '/analytics',
+  PLUGINS = '/plugins',
   SETTINGS = '/settings',
 
   AUTHZ_LOGIN = '/login',
@@ -29,8 +31,16 @@ class AppRoutes {
     return `${Routes.CUSTOMERS}`;
   }
 
+  getCustomer(customerId: string) {
+    return `${Routes.CUSTOMERS}/${customerId}`;
+  }
+
   getAnalytics() {
     return `${Routes.ANALYTICS}`;
+  }
+
+  getPlugins() {
+    return `${Routes.PLUGINS}`;
   }
 
   getSettings() {
