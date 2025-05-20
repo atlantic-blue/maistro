@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { 
   Card, 
   Flex, 
@@ -16,7 +16,6 @@ import { AuthContext } from '@maistro/auth';
 
 const Payments = () => {
     const { priceId } = useParams();
-    const navigate = useNavigate();
     const { user } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
