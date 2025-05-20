@@ -1,3 +1,11 @@
+declare global {
+  namespace JSX {
+      interface IntrinsicElements {
+          'stripe-pricing-table': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      }
+  }
+}
+
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';

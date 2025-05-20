@@ -64,43 +64,44 @@ const ModuleLayout = () => {
     };
 
     const handleVideoStart = () => {
-    if (!video.paused) return;
+      if (!video.paused) return;
       // Check if video is buffered enough to start
-    const isBuffered = () => {
-      for (let i = 0; i < video.buffered.length; i++) {
-        if (video.buffered.start(i) <= video.currentTime &&
-            video.buffered.end(i) - video.currentTime > 3) {
-          return true;
+      const isBuffered = () => {
+        for (let i = 0; i < video.buffered.length; i++) {
+          if (
+            video.buffered.start(i) <= video.currentTime &&
+            video.buffered.end(i) - video.currentTime > 3
+          ) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      if (isBuffered()) {
+        // Attempt to autoplay
+        const playPromise = video.play();
+
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              // Autoplay succeeded
+              console.log('Autoplay started successfully');
+            })
+            .catch((error) => {
+              // Autoplay was prevented
+              console.log('Autoplay failed, likely due to browser policy', error);
+              // Optionally fallback to muted autoplay or show a play button
+              // video.muted = true;
+              // video.play(); // Optional muted fallback
+            })
+            .finally(() => {});
         }
       }
-      return false;
     };
 
-    if (isBuffered()) {
-      // Attempt to autoplay
-      const playPromise = video.play();
-
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            // Autoplay succeeded
-            console.log("Autoplay started successfully");
-          })
-          .catch((error) => {
-            // Autoplay was prevented
-            console.log("Autoplay failed, likely due to browser policy", error);
-            // Optionally fallback to muted autoplay or show a play button
-            // video.muted = true;
-            // video.play(); // Optional muted fallback
-          })
-          .finally(() => {
-          })
-      }
-      }
-    }
-
     video.addEventListener('ended', handleVideoEnd);
-    video.addEventListener('canplaythrough', handleVideoStart)
+    video.addEventListener('canplaythrough', handleVideoStart);
     return () => {
       clearInterval(interval);
       video.removeEventListener('ended', handleVideoEnd);

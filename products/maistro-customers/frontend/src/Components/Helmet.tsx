@@ -1,5 +1,11 @@
 import { IconLogoSimple, NavItem } from '@maistro/ui';
-import { BarChartIcon, GearIcon, HomeIcon, LayoutIcon } from '@radix-ui/react-icons';
+import {
+  BarChartIcon,
+  GearIcon,
+  HomeIcon,
+  LayoutIcon,
+  PlusCircledIcon,
+} from '@radix-ui/react-icons';
 import React from 'react';
 import { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
@@ -30,6 +36,11 @@ const routesNavigation: NavItem[] = [
     icon: <BarChartIcon />,
   },
   {
+    name: 'Plugins',
+    path: appRoutes.getPlugins(),
+    icon: <PlusCircledIcon />,
+  },
+  {
     name: 'Settings',
     path: appRoutes.getSettings(),
     icon: <GearIcon />,
@@ -41,7 +52,9 @@ function getPageTitle(path: string): string {
     case appRoutes.getHomeRoute():
       return 'Dashboard';
     case appRoutes.getCustomers():
-      return 'My Funnels';
+      return 'My Customers';
+      case appRoutes.getPlugins():
+        return 'My Plugins';
     case appRoutes.getAnalytics():
       return 'Analytics';
     case appRoutes.getSettings():
@@ -83,7 +96,7 @@ const Helmet: React.FC<HelmetProps> = (props) => {
         onNavigate={handleNavigate}
         headerTitle={pageTitle}
         notificationCount={3}
-        helpUrl="https://help.maistro.websites"
+        helpUrl="https://wa.me/573013239010"
         onSettings={handleOnSettings}
       >
         {props.children}
