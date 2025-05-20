@@ -14,6 +14,15 @@ import {
 import env from '@/env';
 import { AuthContext } from '@maistro/auth';
 
+// TODO: this declaration is not working atm
+declare global {
+  namespace JSX {
+      interface IntrinsicElements {
+          'stripe-pricing-table': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      }
+  }
+}
+
 const Payments = () => {
     const { priceId } = useParams();
     const { user } = useContext(AuthContext);
