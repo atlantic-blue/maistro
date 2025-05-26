@@ -21,7 +21,7 @@ const CourseLayout = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
 
-  const course = courseId ? courses[courseId]: courses[""];
+  const course = courseId ? courses[courseId] : courses[''];
 
   const { getCourseProgressPercentage, getModuleProgress } = useLocalProgress(
     course.id,
