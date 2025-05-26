@@ -162,7 +162,7 @@ const CourseLayout = () => {
                             style={{
                               backgroundImage: `url(${module.thumbnail})`,
                               width: '100%',
-                              maxWidth: "300px",
+                              maxWidth: '300px',
                               aspectRatio: '10 / 7',
                               backgroundSize: 'cover',
                               backgroundPosition: 'center',
