@@ -36,7 +36,7 @@ const Dashboard = () => {
               </Text>
               <Flex gap="3" mt="3">
                 <Text size="1" color="gray">
-                  {contenidoConPoder.modules[0].duration}
+                  {contenidoConPoder.duration}
                 </Text>
                 <Text size="1" color="gray">
                   By {contenidoConPoder.instructor}
@@ -67,7 +67,7 @@ const Dashboard = () => {
               </Text>
               <Flex gap="3" mt="3">
                 <Text size="1" color="gray">
-                  {ofertasConPoder.modules[0].duration}
+                  {ofertasConPoder.duration}
                 </Text>
                 <Text size="1" color="gray">
                   By {ofertasConPoder.instructor}

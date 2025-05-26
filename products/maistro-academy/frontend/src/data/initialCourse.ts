@@ -17,6 +17,7 @@ interface Course {
   priceId: string;
   title: string;
   description: string;
+  duration: string;
   thumbnail: string;
   instructor: string;
   modules: CourseModule[];
@@ -30,6 +31,7 @@ export const ofertasConPoder: Course = {
   thumbnail:
     'https://maistro.website/assets/videos/offertas-con-poder/thumbnails/ofertas_con_poder_modulo_0.png',
   instructor: 'Patricia Gomez',
+  duration: "30 mins",
   modules: [
     {
       id: 'module-0',
@@ -83,6 +85,7 @@ export const contenidoConPoder: Course = {
   thumbnail:
     'https://maistro.website/assets/videos/contenido-con-poder/thumbnails/contenido_con_poder_modulo_0.png',
   instructor: 'Patricia Gomez',
+  duration: "30 mins",
   modules: [
     {
       id: 'module-intro',
