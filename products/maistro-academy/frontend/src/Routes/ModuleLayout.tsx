@@ -2,7 +2,7 @@
 import { useParams, useNavigate } from 'react-router';
 import { Box, Heading, Text, Card, Flex, Button, Grid, Link } from '@radix-ui/themes';
 import { ArrowLeftIcon, ArrowRightIcon, CheckCircledIcon } from '@radix-ui/react-icons';
-import { featuredCourse } from '../data/initialCourse';
+import { contenidoConPoder, courses } from '../data/initialCourse';
 import { useEffect, useRef } from 'react';
 import useLocalProgress from '@/Components/Course/useLocalProgress';
 
@@ -12,7 +12,7 @@ const ModuleLayout = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // In a real app, fetch the course and find the lesson
-  const course = featuredCourse;
+  const course = courseId ? courses[courseId] : courses[''];
   const moduleIndex = course.modules.findIndex((module) => module.id === moduleId);
   const module = course.modules[moduleIndex];
 
@@ -173,19 +173,32 @@ const ModuleLayout = () => {
                 overflow: 'hidden',
               }}
             >
-              <video
-                key={module.id}
-                ref={videoRef}
-                controls
-                width="100%"
-                height="auto"
-                style={{ display: 'block' }}
-                poster={module.thumbnail}
-                preload="auto"
+              <div
+                style={{
+                  width: '100%',
+                  aspectRatio: '16 / 9', // Enforces same ratio
+                  backgroundColor: '#000', // Prevents white flash while loading
+                  overflow: 'hidden',
+                  position: 'relative',
+                }}
               >
-                <source src={module.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+                <video
+                  key={module.id}
+                  ref={videoRef}
+                  controls
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover', // Ensures the poster covers the whole area
+                    display: 'block',
+                  }}
+                  poster={module.thumbnail}
+                  preload="auto"
+                >
+                  <source src={module.videoUrl} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
             </Box>
           </Card>
 
