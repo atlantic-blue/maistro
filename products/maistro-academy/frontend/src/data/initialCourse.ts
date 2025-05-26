@@ -24,7 +24,7 @@ interface Course {
 
 export const offertasConPoder: Course = {
   id: 'offertas-con-poder',
-  priceId: 'prctbl_1RQcs6Hdug2e0offAywTsD9R',
+  priceId: 'prctbl_1RT6fJHdug2e0offfaTbneb2',
   title: 'Offertas con Poder',
   description: `No es lo que vendes, sino cómo lo estás ofreciendo.`,
   thumbnail:
