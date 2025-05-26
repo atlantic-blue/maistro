@@ -22,10 +22,10 @@ interface Course {
   modules: CourseModule[];
 }
 
-export const offertasConPoder: Course = {
-  id: 'offertas-con-poder',
+export const ofertasConPoder: Course = {
+  id: 'ofertas-con-poder',
   priceId: 'prctbl_1RT6fJHdug2e0offfaTbneb2',
-  title: 'Offertas con Poder',
+  title: 'Ofertas con Poder',
   description: `No es lo que vendes, sino cómo lo estás ofreciendo.`,
   thumbnail:
     'https://maistro.website/assets/videos/offertas-con-poder/thumbnails/ofertas_con_poder_modulo_0.png',
@@ -186,6 +186,6 @@ export const contenidoConPoder: Course = {
 };
 
 export const courses: Record<string, Course> = {
-  'offertas-con-poder': offertasConPoder,
+  'ofertas-con-poder': ofertasConPoder,
   'contenido-con-poder': contenidoConPoder,
 };
