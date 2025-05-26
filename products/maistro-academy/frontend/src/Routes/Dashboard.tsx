@@ -14,7 +14,7 @@ const Dashboard = () => {
 
       <Box mb="6">
         <Heading size="4" mb="3">
-          Cursos Destacado
+          Cursos Destacados
         </Heading>
         <Flex gap="2" align="center" justify="center" wrap="wrap">
           <Card size="2" className="flex flex-col items-center max-w-[320px]">
