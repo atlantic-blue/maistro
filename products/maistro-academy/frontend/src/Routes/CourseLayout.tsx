@@ -160,12 +160,12 @@ const CourseLayout = () => {
                         <Flex direction="column" justify="center" align="center">
                           <Box
                             style={{
-                              height: '135px',
                               backgroundImage: `url(${module.thumbnail})`,
-                              width: '25%',
-                              aspectRatio: '10 / 9',
+                              width: '100%',
+                              maxWidth: "300px",
+                              aspectRatio: '10 / 7',
                               backgroundSize: 'cover',
-                              backgroundPosition: 'center center',
+                              backgroundPosition: 'center',
                               borderRadius: '8px',
                             }}
                           />
