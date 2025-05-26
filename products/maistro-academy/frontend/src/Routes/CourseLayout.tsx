@@ -12,7 +12,7 @@ import {
   Separator,
   Link,
 } from '@maistro/ui';
-import { featuredCourse } from '../data/initialCourse';
+import { courses } from '../data/initialCourse';
 import { useState } from 'react';
 import useLocalProgress from '@/Components/Course/useLocalProgress';
 import { CheckCircledIcon, ClockIcon, TriangleRightIcon } from '@radix-ui/react-icons';
@@ -21,7 +21,7 @@ const CourseLayout = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
 
-  const course = featuredCourse;
+  const course = courseId ? courses[courseId]: courses[""];
 
   const { getCourseProgressPercentage, getModuleProgress } = useLocalProgress(
     course.id,
@@ -160,11 +160,13 @@ const CourseLayout = () => {
                         <Flex direction="column" justify="center" align="center">
                           <Box
                             style={{
-                              width: '240px',
                               height: '135px',
                               backgroundImage: `url(${module.thumbnail})`,
+                              width: '25%',
+                              aspectRatio: '10 / 9',
                               backgroundSize: 'cover',
-                              backgroundPosition: 'center',
+                              backgroundPosition: 'center center',
+                              borderRadius: '8px',
                             }}
                           />
 

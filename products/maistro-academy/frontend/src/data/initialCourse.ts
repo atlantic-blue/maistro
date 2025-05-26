@@ -22,7 +22,64 @@ interface Course {
   modules: CourseModule[];
 }
 
-export const featuredCourse: Course = {
+export const offertasConPoder: Course = {
+  id: 'offertas-con-poder',
+  priceId: 'prctbl_1RQcs6Hdug2e0offAywTsD9R',
+  title: 'Offertas con Poder',
+  description: `No es lo que vendes, sino cómo lo estás ofreciendo.`,
+  thumbnail:
+  'https://maistro.website/assets/videos/offertas-con-poder/thumbnails/ofertas_con_poder_modulo_0.png',
+  instructor: 'Patricia Gomez',
+  modules: [
+    {
+      id: 'module-0',
+      title: '🎯 ¿Qué es una Oferta Irresistible?',
+      description:
+        'Haz que tu cliente diga: “Sería estúpido decir que no”',
+      duration: '14 minutos',
+      thumbnail:
+        'https://maistro.website/assets/videos/offertas-con-poder/thumbnails/ofertas_con_poder_modulo_0.png',
+      videoUrl:
+        'https://maistro.website/assets/videos/offertas-con-poder/ofertas_con_poder_modulo_0.mp4',
+    },
+    {
+      id: 'module-1',
+      title: 'La ecuación del valor y el poder del nicho',
+      description:
+        `👉 Tu trabajo es aumentar el resultado soñado y la confianza del cliente en que lo logrará,
+ y reducir al máximo el tiempo y el esfuerzo necesarios.`,
+      duration: '7 minutos',
+      thumbnail:
+        'https://maistro.website/assets/videos/offertas-con-poder/thumbnails/ofertas_con_poder_modulo_1.png',
+      videoUrl:
+        'https://maistro.website/assets/videos/offertas-con-poder/ofertas_con_poder_modulo_1.mp4',
+    },
+    {
+      id: 'module-2',
+      title: 'Precios premium, high ticket y el ciclo emocional',
+      description:
+        `¿Por qué deberías cobrar más (y no menos)?`,
+      duration: '8 minutos',
+      thumbnail:
+        'https://maistro.website/assets/videos/offertas-con-poder/thumbnails/ofertas_con_poder_modulo_2.png',
+      videoUrl:
+        'https://maistro.website/assets/videos/offertas-con-poder/ofertas_con_poder_modulo_2.mp4',
+    },
+    {
+      id: 'module-3',
+      title: 'Escasez y los 4 activadores de acción',
+      description:
+        `Para que una oferta se venda, no basta con que sea buena. Debe ser urgente, única y generar acción inmediata.`,
+      duration: `1 minuto 30 sec`,
+      thumbnail:
+        'https://maistro.website/assets/videos/offertas-con-poder/thumbnails/ofertas_con_poder_modulo_3.png',
+      videoUrl:
+        'https://maistro.website/assets/videos/offertas-con-poder/ofertas_con_poder_modulo_3.mp4',
+    },
+  ]
+}
+
+export const contenidoConPoder: Course = {
   id: 'contenido-con-poder',
   priceId: 'prctbl_1RQcs6Hdug2e0offAywTsD9R',
   title: 'Contenido con Poder',
@@ -131,3 +188,8 @@ export const featuredCourse: Course = {
     },
   ],
 };
+
+export const courses: Record<string, Course> = {
+  'offertas-con-poder': offertasConPoder,
+  'contenido-con-poder': contenidoConPoder,
+}
