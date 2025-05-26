@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Box, Card, Flex, Heading, Text, Button } from '@maistro/ui';
 import { useNavigate } from 'react-router';
-import { contenidoConPoder, offertasConPoder } from '../data/initialCourse';
+import { contenidoConPoder, ofertasConPoder } from '../data/initialCourse';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Dashboard = () => {
 
       <Box mb="6">
         <Heading size="4" mb="3">
-          Cursos Destacado
+          Cursos Destacados
         </Heading>
         <Flex gap="2" align="center" justify="center" wrap="wrap">
           <Card size="2" className="flex flex-col items-center max-w-[320px]">
@@ -36,7 +36,7 @@ const Dashboard = () => {
               </Text>
               <Flex gap="3" mt="3">
                 <Text size="1" color="gray">
-                  {contenidoConPoder.modules[0].duration}
+                  {contenidoConPoder.duration}
                 </Text>
                 <Text size="1" color="gray">
                   By {contenidoConPoder.instructor}
@@ -53,27 +53,27 @@ const Dashboard = () => {
               style={{
                 width: '144px',
                 height: '118px',
-                backgroundImage: `url(${offertasConPoder.thumbnail})`,
+                backgroundImage: `url(${ofertasConPoder.thumbnail})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
             />
             <Box p="4" className="flex flex-col">
               <Heading size="3" mb="2">
-                {offertasConPoder.title}
+                {ofertasConPoder.title}
               </Heading>
               <Text as="p" size="2" mb="3">
-                {offertasConPoder.description}
+                {ofertasConPoder.description}
               </Text>
               <Flex gap="3" mt="3">
                 <Text size="1" color="gray">
-                  {offertasConPoder.modules[0].duration}
+                  {ofertasConPoder.duration}
                 </Text>
                 <Text size="1" color="gray">
-                  By {offertasConPoder.instructor}
+                  By {ofertasConPoder.instructor}
                 </Text>
               </Flex>
-              <Button size="2" mt="3" onClick={() => navigate(`/courses/${offertasConPoder.id}`)}>
+              <Button size="2" mt="3" onClick={() => navigate(`/courses/${ofertasConPoder.id}`)}>
                 ver ahora
               </Button>
             </Box>
