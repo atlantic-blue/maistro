@@ -9,6 +9,8 @@ import Loading from "../Components/Loading/Loading";
 import RoutesHome from "./RouteHome/RouteHome";
 import { ResourceStringLanguage } from "../ResourceStrings";
 import { getCurrentLanguage } from "../ResourceStrings/ResourceStringsProvider";
+import FunnelContenidoConPoderVsl from "./RouteFunnels/ContenidoConPoder/ContenidoConPoderVsl";
+import FunnelContenidoConPoderSuccess from "./RouteFunnels/ContenidoConPoder/ContenidoConPoderSuccess";
 
 // https://v5.reactrouter.com/web/guides/code-splitting
 const RoutesProjects = loadable(() => import("./RouteProjects/RouteProjects"), {
@@ -179,6 +181,9 @@ export enum Routes {
     PROJECT_ORDERS = `/projects/${RoutesParams.PROJECT_ID}/orders`,
     PROJECT_ORDER = `/projects/${RoutesParams.PROJECT_ID}/orders/${RoutesParams.ORDER_ID}`,
     PROJECT_CONTENTS = `/projects/${RoutesParams.PROJECT_ID}/contents`,
+
+    FUNNEL_CONTENIDO_CON_PODER_VSL = `/funnels/contenido-con-poder`,
+    FUNNEL_CONTENIDO_CON_PODER_SUCCESS = `/funnels/contenido-con-poder/success`
 }
 
 class AppRoutes {
@@ -299,6 +304,14 @@ class AppRoutes {
 
     getProjectContentsRoute(projectId: string,) {
         return `/${this.language}${Routes.PROJECTS}/${projectId}/contents`
+    }
+
+    getFunnelContenidoConPoder() {
+        return `${Routes.FUNNEL_CONTENIDO_CON_PODER_VSL}`
+    }
+
+    getFunnelContenidoConPoderSuccess() {
+        return `${Routes.FUNNEL_CONTENIDO_CON_PODER_SUCCESS}`
     }
 }
 
@@ -536,6 +549,18 @@ const routes: RouteObject[] = [
             </ProtectedRoute>
         ),
     },
+    {
+        path: Routes.FUNNEL_CONTENIDO_CON_PODER_VSL,
+        element: (
+            <FunnelContenidoConPoderVsl />
+        )
+    },
+    {
+        path: Routes.FUNNEL_CONTENIDO_CON_PODER_SUCCESS,
+        element: (
+            <FunnelContenidoConPoderSuccess />
+        )
+    }
 ]
 
 const languageRoutes = Object.values(ResourceStringLanguage).map(language => {
