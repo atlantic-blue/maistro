@@ -51,7 +51,9 @@ const createDefaultWebpackConfig = (): Configuration => {
 // TODO implement with fs.readdir
 const createMultipleWebpackConfigs = [
     // "ping",
-    "webhook"
+    "meta-webhook",
+    "meta-oauth-login-url",
+    "meta-oauth-callback"
 
 ].map(api => {
     console.info(`BUILDING: ${api}\n`)

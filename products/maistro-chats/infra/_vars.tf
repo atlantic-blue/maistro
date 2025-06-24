@@ -11,7 +11,7 @@ variable "environment" {
 }
 
 variable "product_name" {
-    default = "maistro-chat"
+    default = "maistro-chats"
 }
 
 variable "root_domain_name" {
@@ -19,7 +19,7 @@ variable "root_domain_name" {
 }
 
 variable "domain_name" {
-  default = "chat.maistro.website"
+  default = "chats.maistro.website"
 }
 
 variable "acm_certificate_arn" {
@@ -28,4 +28,16 @@ variable "acm_certificate_arn" {
 
 variable "route53_zone_id" {
   default = "Z04277421F81SV5P9H2GC"
+}
+
+variable "meta_webhook_verify_token" {
+  type  = string
+}
+
+variable "meta_webhook_fb_app_id" {
+  type = string
+}
+
+variable "meta_webhook_fb_app_secret" {
+  type = string
 }
