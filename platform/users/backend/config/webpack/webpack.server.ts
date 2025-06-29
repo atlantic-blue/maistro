@@ -51,7 +51,8 @@ const createDefaultWebpackConfig = (): Configuration => {
 // TODO implement with fs.readdir
 const createMultipleWebpackConfigs = [
     // "ping",
-    "users"
+    "users",
+    "users-create"
 
 ].map(api => {
     console.info(`BUILDING: ${api}\n`)

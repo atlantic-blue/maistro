@@ -2,6 +2,17 @@ resource "aws_cognito_user_pool" "authz" {
   name                     = local.authz_pool_name
   auto_verified_attributes = ["email"]
 
+  lambda_config {
+    post_authentication = var.aws_lambda_post_authentication_function_arn
+  }
+}
+
+resource "aws_lambda_permission" "allow_cognito" {
+  statement_id  = "AllowCognitoInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = var.aws_lambda_post_authentication_function_name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.authz.arn
 }
 
 /**

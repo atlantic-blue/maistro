@@ -56,3 +56,11 @@ variable "pool_domain_certificate_arn" {
   type = string
   default = "arn:aws:acm:us-east-1:230345688874:certificate/aea3d759-73cb-433d-9798-9477d81eb42e"
 }
+
+variable "aws_lambda_post_authentication_function_arn" {
+  type = string
+}
+
+variable aws_lambda_post_authentication_function_name {
+  type = string
+}

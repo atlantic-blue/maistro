@@ -1,19 +1,17 @@
-import { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
-import { DynamoDB } from 'aws-sdk';
+import { APIGatewayProxyHandler } from 'aws-lambda';
+import { createErrorResponse } from '../../utils/createError';
+import { getUserById } from './getUserById';
+import { getUserProfile } from './getUserProfile';
+import { updateUser } from './updateUser';
 
-function createErrorResponse(statusCode: number, message: string, headers?: any): APIGatewayProxyResult {
-  return {
-    statusCode,
-    headers: headers || {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify({ error: message })
-  };
+enum Routes {
+    users = '/users',
+    userById = '/users/{userId}',
+    userProfile = '/users/{userId}/profile'
 }
 
 /**
- * Main handler for user service API (API Gateway v2)
+ * Main handler for user service API
  */
 export const handler: APIGatewayProxyHandler = async (event) => {
   console.log('User Service API event:', JSON.stringify(event, null, 2));
@@ -26,7 +24,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   };
 
   try {
-    // Handle preflight requests
     if (event.httpMethod === 'OPTIONS') {
       return {
         statusCode: 200,
@@ -35,47 +32,30 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       };
     }
 
-    // Parse the route and method
     const method = event.httpMethod;
     const path = event.resource;
 
-    console.log(`Processing ${method} ${path} (routeKey)`);
-    // Route based on the routeKey pattern
     if (method === 'GET') {
-      // GET /users/{userId}
-      if (path === '/users/{userId}') {
-        return {
-            statusCode: 200,
-            body: JSON.stringify({response: "OK"})
-        }
+      if (path === Routes.userById) {
+        return await getUserById(event)
       }
 
-      // GET /users/{userId}/profile
-      if (path === '/users/{userId}/profile') {
-        return {
-            statusCode: 200,
-            body: JSON.stringify({response: "OK"})
-        }
+      if (path === Routes.userProfile) {
+        return await getUserProfile(event)
       }
 
-      // GET /users
-      if (path === '/users') {
+      if (path === Routes.users) {
         return {
             statusCode: 200,
             body: JSON.stringify({response: "OK"})
         }
       }
     } else if (method === 'PUT') {
-      // PUT /users/{userId}
-      if (path === '/users/{userId}') {
-       return {
-            statusCode: 200,
-            body: JSON.stringify({response: "OK"})
-        }
+      if (path === Routes.userById) {
+       return await updateUser(event)
       }
 
-      // PUT /users/{userId}/profile
-      if (path === '/users/{userId}/profile') {
+      if (path === Routes.userProfile) {
         return {
             statusCode: 200,
             body: JSON.stringify({response: "OK"})
@@ -83,7 +63,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       }
     }
 
-    // If no route matches
     return createErrorResponse(404, 'Route not found', corsHeaders);
 
   } catch (error) {

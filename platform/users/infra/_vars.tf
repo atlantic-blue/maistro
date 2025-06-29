@@ -11,7 +11,7 @@ variable "environment" {
 }
 
 variable "platform_name" {
-    default = "maistro-platform-users"
+  default = "maistro-platform-users"
 }
 
 variable "root_domain_name" {
