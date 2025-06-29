@@ -11,7 +11,6 @@ export interface MaistroUser {
   Email: string;
   FirstName?: string;
   LastName?: string;
-  DisplayName?: string;
   Avatar?: string;
   CreatedAt: string;
   UpdatedAt: string;
@@ -20,8 +19,8 @@ export interface MaistroUser {
   SubscriptionTier: SubscriptionTier;
   EmailVerified: boolean;
   PhoneNumber?: string;
-  PhoneVerified: boolean;
-  PreferredLanguage: string;
+  PhoneVerified?: boolean;
+  PreferredLanguage?: string;
   Timezone?: string;
   ProductAccess: {
     websites: boolean;
