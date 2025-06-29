@@ -4,6 +4,9 @@ const FB_APP_ID = process.env.FB_APP_ID!;
 const FB_APP_SECRET = process.env.FB_APP_SECRET!;
 const REDIRECT_URI = process.env.REDIRECT_URI!;
 
+/**
+ * see https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/business-login
+ */
 export const handler: APIGatewayProxyHandler = async (event) => {
   const code = event.queryStringParameters?.code;
 
@@ -15,51 +18,62 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   }
 
   try {
-    // Exchange code for access token
-    const tokenRes = await fetch(
-      `https://graph.facebook.com/v20.0/oauth/access_token?` +
-        new URLSearchParams({
-          client_id: FB_APP_ID,
-          redirect_uri: REDIRECT_URI,
-          client_secret: FB_APP_SECRET,
-          code,
-        }),
-    );
+    console.log("Step 1: Exchange code for short-lived access token")
+    const tokenRes = await fetch('https://api.instagram.com/oauth/access_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: FB_APP_ID,
+        client_secret: FB_APP_SECRET,
+        grant_type: 'authorization_code',
+        redirect_uri: REDIRECT_URI,
+        code,
+      }),
+    });
 
     if (!tokenRes.ok) {
       const err = await tokenRes.text();
+      console.log(JSON.stringify(err))
       throw new Error(`Token exchange failed: ${err}`);
     }
 
     const tokenData = await tokenRes.json();
-    const accessToken = tokenData.access_token;
+    const shortLivedAccessToken = tokenData.access_token;
+    const userId = tokenData.user_id;
 
-    // Get basic user info
-    const userRes = await fetch(
-      `https://graph.facebook.com/me?fields=id,name&access_token=${accessToken}`,
+    console.log("Step 2: Exchange short-lived token for long-lived token")
+    const longTokenRes = await fetch(
+      `https://graph.instagram.com/access_token?` +
+        new URLSearchParams({
+          grant_type: 'ig_exchange_token',
+          client_secret: FB_APP_SECRET,
+          access_token: shortLivedAccessToken,
+        }),
     );
 
-    const userData = await userRes.json();
+    if (!longTokenRes.ok) {
+      const err = await longTokenRes.text();
+      console.log(JSON.stringify(err))
+      throw new Error(JSON.stringify(err));
+    }
 
-    // Get pages + IG accounts
-    const pagesRes = await fetch(
-      `https://graph.facebook.com/me/accounts?access_token=${accessToken}`,
-    );
-
-    const pagesData = await pagesRes.json();
+    const longTokenData = await longTokenRes.json();
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        accessToken,
-        user: userData,
-        pages: pagesData,
+        access_token: longTokenData.access_token,
+        expires_in: longTokenData.expires_in,
+        user_id: userId,
       }),
     };
-  } catch (e: any) {
+  } catch (err: any) {
+    console.log(JSON.stringify(err))
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: e.message }),
+      body: JSON.stringify({ error: err.message }),
     };
   }
 };

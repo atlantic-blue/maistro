@@ -76,6 +76,9 @@ resource "aws_lambda_function" "api_lambda" {
   role             = aws_iam_role.api_lambda.arn
   source_code_hash = data.archive_file.api_lambda.output_base64sha256
 
+  timeout     = 60 * 5 // 5 minutes
+#   memory_size = 128 * 4
+
   environment {
     variables = var.lambda_env_variables
   }
