@@ -37,7 +37,6 @@ export const handler = async (
     if (existingUser) {
       // User exists, update last login time
       await updateUserLastLogin(existingUser.UserId, timestamp);
-      console.log(`Updated last login for existing user: ${existingUser.UserId}`);
     } else {
       // New user, create user record
       const newUserId = generateUserId();
