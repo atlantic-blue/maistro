@@ -13,12 +13,7 @@ const Router: React.FC = () => {
   return (
     <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
-        <Route
-          path="*"
-          element={
-            <div>HELLO WORLD</div>
-          }
-        />
+        <Route path="*" element={<div>HELLO WORLD</div>} />
         <Route
           path={Routes.AUTH_CALLBACK}
           element={
