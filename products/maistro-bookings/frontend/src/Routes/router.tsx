@@ -8,12 +8,13 @@ import env from '../env';
 import Login from './Login';
 import RedirectRoute from './RedirectRoute';
 import { appRoutes, Routes } from './appRoutes';
+import Homepage from './Home';
 
 const Router: React.FC = () => {
   return (
     <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
-        <Route path="*" element={<div>HELLO WORLD</div>} />
+        <Route path="*" element={<Homepage />} />
         <Route
           path={Routes.AUTH_CALLBACK}
           element={
