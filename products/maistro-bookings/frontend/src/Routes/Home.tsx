@@ -1,24 +1,35 @@
-import React from "react";
-import { Button, Badge, Card, Box } from "@maistro/ui";
-import { MenuIcon } from "lucide-react";
+import React from 'react';
+import { Button, Badge, Card, Box } from '@maistro/ui';
+import { MenuIcon } from 'lucide-react';
 
 export default function Homepage() {
   return (
     <div className="bg-[#FFF8F6] text-black min-h-screen font-sans">
-
-        {/* Header Navigation */}
+      {/* Header Navigation */}
       <header className="sticky top-0 z-50 bg-white ">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="text-2xl font-bold text-black tracking-tight">maistro</div>
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-gray-700">
-            <a href="#" className="hover:text-black">Tipos de negocio</a>
-            <a href="#" className="hover:text-black">Pagos</a>
-            <a href="#" className="hover:text-black">Precios</a>
-            <a href="#" className="hover:text-black">Marketplace</a>
+            <a href="#" className="hover:text-black">
+              Tipos de negocio
+            </a>
+            <a href="#" className="hover:text-black">
+              Pagos
+            </a>
+            <a href="#" className="hover:text-black">
+              Precios
+            </a>
+            <a href="#" className="hover:text-black">
+              Marketplace
+            </a>
           </nav>
           <div className="hidden lg:flex items-center gap-3">
-            <Button variant="ghost" className="text-sm font-medium text-black px-4 py-2">Ingresar</Button>
-            <Button className="text-sm px-4 py-2 bg-black hover:bg-gray-900 text-white rounded-full">Crear cuenta</Button>
+            <Button variant="ghost" className="text-sm font-medium text-black px-4 py-2">
+              Ingresar
+            </Button>
+            <Button className="text-sm px-4 py-2 bg-black hover:bg-gray-900 text-white rounded-full">
+              Crear cuenta
+            </Button>
           </div>
           <div className="lg:hidden">
             <Button variant="ghost">
@@ -28,17 +39,16 @@ export default function Homepage() {
         </div>
       </header>
 
-
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-[#FFF8F6] to-white px-6 py-32 overflow-hidden">
         <div className="absolute top-[-80px] right-[-100px] w-[500px] h-[500px] bg-[#FF3366]/10 rounded-full blur-3xl" />
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-5xl font-extrabold tracking-tight leading-tight mb-4">
-            Reserva. Gestiona. <span className="text-[#FF3366]">Crece.</span>
+              Reserva. Gestiona. <span className="text-[#FF3366]">Crece.</span>
             </h1>
             <p className="text-xl text-gray-600 font-light mb-6 max-w-lg">
-            La plataforma gratuita para gestionar tu salón con estilo y cero complicaciones.
+              La plataforma gratuita para gestionar tu salón con estilo y cero complicaciones.
             </p>
             <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
               <Button className="text-lg px-6 py-3 bg-[#FF3366] hover:bg-[#e52b5a] text-white">
@@ -59,27 +69,35 @@ export default function Homepage() {
         </div>
       </section>
 
-        {/* Key Features */}
+      {/* Key Features */}
       <section className="bg-[#FFF8F6] px-6 py-20">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-12">Todo lo que necesitas para hacer crecer tu negocio</h2>
+          <h2 className="text-3xl font-bold mb-12">
+            Todo lo que necesitas para hacer crecer tu negocio
+          </h2>
           <div className="grid md:grid-cols-3 gap-8 text-left">
             <Card>
               <Box className="p-6">
                 <h3 className="text-xl font-semibold mb-2">✅ Reservas automáticas 24/7</h3>
-                <p className="text-gray-700">Tus clientes reservan sin interrupciones, incluso mientras duermes.</p>
+                <p className="text-gray-700">
+                  Tus clientes reservan sin interrupciones, incluso mientras duermes.
+                </p>
               </Box>
             </Card>
             <Card>
               <Box className="p-6">
                 <h3 className="text-xl font-semibold mb-2">✅ WhatsApp & recordatorios</h3>
-                <p className="text-gray-700">Recordatorios automáticos que reducen ausencias y mejoran la experiencia.</p>
+                <p className="text-gray-700">
+                  Recordatorios automáticos que reducen ausencias y mejoran la experiencia.
+                </p>
               </Box>
             </Card>
             <Card>
               <Box className="p-6">
                 <h3 className="text-xl font-semibold mb-2">✅ CRM de clientes</h3>
-                <p className="text-gray-700">Conoce el historial de cada cliente y fideliza como nunca antes.</p>
+                <p className="text-gray-700">
+                  Conoce el historial de cada cliente y fideliza como nunca antes.
+                </p>
               </Box>
             </Card>
           </div>
@@ -113,11 +131,11 @@ export default function Homepage() {
         </div>
       </section>
 
-    <section className="py-6 text-center text-gray-500 text-sm">
+      <section className="py-6 text-center text-gray-500 text-sm">
         <p>Confiado por +1.200 salones en Colombia 🇨🇴</p>
-    </section>
+      </section>
 
-        {/* Final CTA */}
+      {/* Final CTA */}
       <section className="text-center py-20 px-6 bg-[#FF3366] text-white">
         <h2 className="text-3xl font-bold mb-4">Empieza con Maistro hoy mismo</h2>
         <p className="mb-6 text-lg">Sin tarjeta. Sin complicaciones. 100% gratis.</p>

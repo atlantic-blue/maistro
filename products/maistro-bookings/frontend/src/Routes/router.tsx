@@ -14,7 +14,7 @@ const Router: React.FC = () => {
   return (
     <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
-        <Route path="*" element={<Homepage/>} />
+        <Route path="*" element={<Homepage />} />
         <Route
           path={Routes.AUTH_CALLBACK}
           element={
