@@ -1,4 +1,3 @@
- 
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router';
 import { AuthProvider } from '@maistro/auth';
