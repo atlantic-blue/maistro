@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Badge, Card, Box } from '@maistro/ui';
-import { MenuIcon } from 'lucide-react';
 import Header from '@/Components/Header';
 
 export default function Homepage() {

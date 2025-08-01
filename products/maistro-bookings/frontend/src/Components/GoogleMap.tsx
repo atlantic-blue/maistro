@@ -1,4 +1,5 @@
-import { Box, Text, Flex } from '@maistro/ui';
+import React from 'react';
+import { Box } from '@maistro/ui';
 
 interface MapProps {
   zoom?: string;
@@ -10,7 +11,7 @@ interface MapProps {
   };
 }
 
-const Map: React.FC<MapProps> = (props) => {
+const GoogleMap: React.FC<MapProps> = (props) => {
   const zoom = props.zoom || '12';
 
   const url = new URL('https://maps.google.com/maps');
@@ -32,4 +33,4 @@ const Map: React.FC<MapProps> = (props) => {
   );
 };
 
-export default Map;
+export default GoogleMap;

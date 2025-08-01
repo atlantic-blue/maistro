@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Card, Separator } from '@maistro/ui';
-import { MapPin, Clock, Star, Phone, Globe, Share2, Heart, ChevronRight } from 'lucide-react';
+import { MapPin, Clock, Star, Share2, Heart, ChevronRight } from 'lucide-react';
 import Header from '@/Components/Header';
-import Map from '../Components/Map';
+import GoogleMap from '../Components/GoogleMap';
 
 // Business Profile Interface
-interface BusinessProfile {
+interface IBusinessProfile {
   id: string;
   name: string;
   rating: number;
@@ -58,7 +58,7 @@ interface OpeningHours {
 }
 
 // Default business data
-const defaultBusiness: BusinessProfile = {
+const defaultBusiness: IBusinessProfile = {
   id: 'tan-on-1',
   name: 'Tan On',
   rating: 4.6,
@@ -177,7 +177,7 @@ const defaultBusiness: BusinessProfile = {
 };
 
 interface BusinessProfileProps {
-  business?: BusinessProfile;
+  business?: IBusinessProfile;
 }
 
 export default function BusinessProfile({ business = defaultBusiness }: BusinessProfileProps) {
@@ -366,7 +366,7 @@ export default function BusinessProfile({ business = defaultBusiness }: Business
 
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Ubicación</h2>
-            <Map
+            <GoogleMap
               address={{
                 city: 'Uxbridge Road, London, England',
                 country: 'England',
