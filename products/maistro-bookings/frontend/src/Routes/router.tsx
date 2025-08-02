@@ -9,6 +9,7 @@ import RedirectRoute from './RedirectRoute';
 import { appRoutes, Routes } from './appRoutes';
 import Homepage from './Home';
 import BusinessProfile from './BusinessProfile';
+import Onboarding from './Onboarding';
 
 const Router: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const Router: React.FC = () => {
       <ReactRoutes>
         <Route path="*" element={<Homepage />} />
         <Route path="/b/:businessProfile" element={<BusinessProfile />} />
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route
           path={Routes.AUTH_CALLBACK}
           element={
