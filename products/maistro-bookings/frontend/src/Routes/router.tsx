@@ -12,12 +12,15 @@ import BusinessProfile from './BusinessProfile';
 import Onboarding from './Onboarding';
 
 const Router: React.FC = () => {
+  // TODO implement multiple languages
+  const language = 'es';
+
   return (
     <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
         <Route path="*" element={<Homepage />} />
         <Route path="/b/:businessProfile" element={<BusinessProfile />} />
-        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/onboarding" element={<Onboarding language={language} />} />
         <Route
           path={Routes.AUTH_CALLBACK}
           element={
