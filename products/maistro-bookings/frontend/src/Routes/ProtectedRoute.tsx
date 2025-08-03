@@ -1,9 +1,6 @@
 import React from 'react';
-import { Navigate } from 'react-router';
 
 import { AuthContext } from '@maistro/auth';
-import { appRoutes } from './appRoutes';
-
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }

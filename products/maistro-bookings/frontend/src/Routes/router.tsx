@@ -5,7 +5,6 @@ import { AuthProvider } from '@maistro/auth';
 import env from '../env';
 
 import Login from './Login';
-import RedirectRoute from './RedirectRoute';
 import { appRoutes, Routes } from './appRoutes';
 import Homepage from './Home';
 import BusinessProfile from './BusinessProfile';
@@ -22,17 +21,15 @@ const Router: React.FC = () => {
       <ReactRoutes>
         <Route path="*" element={<Homepage />} />
         <Route path="/b/:businessProfile" element={<BusinessProfile />} />
-        <Route path="/onboarding" element={
-          <ProtectedRoute>
-            <Onboarding language={language} />
-          </ProtectedRoute>
-        } />
         <Route
-          path={Routes.AUTH_CALLBACK}
+          path="/onboarding"
           element={
-            <AuthCallback />
+            <ProtectedRoute>
+              <Onboarding language={language} />
+            </ProtectedRoute>
           }
         />
+        <Route path={Routes.AUTH_CALLBACK} element={<AuthCallback />} />
         <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
       </ReactRoutes>
     </AuthProvider>
