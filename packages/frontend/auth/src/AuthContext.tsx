@@ -27,17 +27,28 @@ interface LogInArgs {
     logInUrl: string
     clientId: string
     callbackUrl: string
+    returnUrl?: string
 }
 
 const logIn = async ({
     logInUrl,
     clientId,
     callbackUrl,
+    returnUrl,
 }: LogInArgs) => {
     const url = new URL(logInUrl)
     url.searchParams.append("response_type", "code")
     url.searchParams.append("client_id", clientId)
     url.searchParams.append("redirect_uri", callbackUrl)
+
+    // Add state parameter with return URL
+    const originalUrl = returnUrl || window.location.pathname + window.location.search;
+    const state = btoa(JSON.stringify({ 
+        returnUrl: originalUrl,
+        timestamp: Date.now()
+    }));
+    
+    url.searchParams.append("state", state);
 
     window.location.href = url.toString()
 }

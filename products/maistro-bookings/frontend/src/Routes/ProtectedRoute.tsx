@@ -1,18 +1,16 @@
 import React from 'react';
-import { Navigate } from 'react-router';
 
 import { AuthContext } from '@maistro/auth';
-import { appRoutes } from './appRoutes';
-
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
-  const { isAuthenticated, isLoading } = React.useContext(AuthContext);
+  const { isAuthenticated, isLoading, logIn } = React.useContext(AuthContext);
 
   if (!isAuthenticated && !isLoading) {
-    return <Navigate to={appRoutes.getLoginRoute()} />;
+    logIn();
+    return null;
   }
 
   if (isLoading) {

@@ -19,7 +19,7 @@ const Onboarding: React.FC<OnboardingProps> = (props): React.ReactNode => {
   const resourceStrings = i18nConfig[language];
   const totalSteps: number = 8;
   const [currentStep, setCurrentStep] = useState<number>(0);
-  console.log({ currentStep });
+
   const [formData, setFormData] = useState<OnboardingFormData>({
     businessName: '',
     website: '',
