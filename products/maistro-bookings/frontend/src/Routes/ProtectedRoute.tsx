@@ -9,10 +9,11 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
-  const { isAuthenticated, isLoading } = React.useContext(AuthContext);
+  const { isAuthenticated, isLoading, logIn } = React.useContext(AuthContext);
 
   if (!isAuthenticated && !isLoading) {
-    return <Navigate to={appRoutes.getLoginRoute()} />;
+    logIn();
+    return null;
   }
 
   if (isLoading) {

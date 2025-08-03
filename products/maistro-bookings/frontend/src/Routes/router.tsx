@@ -10,6 +10,8 @@ import { appRoutes, Routes } from './appRoutes';
 import Homepage from './Home';
 import BusinessProfile from './BusinessProfile';
 import Onboarding from './Onboarding';
+import ProtectedRoute from './ProtectedRoute';
+import { AuthCallback } from './AuthCallback';
 
 const Router: React.FC = () => {
   // TODO implement multiple languages
@@ -20,13 +22,15 @@ const Router: React.FC = () => {
       <ReactRoutes>
         <Route path="*" element={<Homepage />} />
         <Route path="/b/:businessProfile" element={<BusinessProfile />} />
-        <Route path="/onboarding" element={<Onboarding language={language} />} />
+        <Route path="/onboarding" element={
+          <ProtectedRoute>
+            <Onboarding language={language} />
+          </ProtectedRoute>
+        } />
         <Route
           path={Routes.AUTH_CALLBACK}
           element={
-            <RedirectRoute navigateTo={appRoutes.getHomeRoute()}>
-              <div>Hello World!</div>
-            </RedirectRoute>
+            <AuthCallback />
           }
         />
         <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
