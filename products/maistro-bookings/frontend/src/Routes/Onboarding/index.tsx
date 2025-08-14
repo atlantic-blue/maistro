@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { OnboardingFormData } from './types';
 import i18nConfig from './i18.config';
 import Step1 from './Step1';
@@ -9,16 +9,22 @@ import Step5 from './Step5';
 import Step6 from './Step6';
 import Step7 from './Step7';
 import Step8 from './Step8';
+import { AuthContext } from '@maistro/auth';
+import env from '@/env';
+import onboardUser from '@/Api/Onboarding';
 
 interface OnboardingProps {
   language: 'en' | 'es' | 'fr';
 }
 
 const Onboarding: React.FC<OnboardingProps> = (props): React.ReactNode => {
+  const { isAuthenticated, isLoading, user } = React.useContext(AuthContext);
+
   const [language] = useState<OnboardingProps['language']>(props.language);
   const resourceStrings = i18nConfig[language];
   const totalSteps: number = 8;
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [formData, setFormData] = useState<OnboardingFormData>({
     businessName: '',
@@ -33,6 +39,29 @@ const Onboarding: React.FC<OnboardingProps> = (props): React.ReactNode => {
     features: [],
     hearAbout: '',
   });
+
+  const processOnboardUser = async () => {
+    const token = user?.getTokenAccess();
+    if (!token) {
+      return;
+    }
+
+    try {
+      await onboardUser(env.api.onboarding, token, formData);
+      setIsSubmitted(true);
+    } catch (error) {
+      // TODO
+      console.log({ error });
+    }
+  };
+
+  useEffect(() => {
+    if (isLoading || !isAuthenticated || currentStep !== 7) {
+      return;
+    }
+
+    processOnboardUser();
+  }, [currentStep]);
 
   const updateFormData = (updates: Partial<OnboardingFormData>): void => {
     setFormData((prev) => ({ ...prev, ...updates }));
@@ -146,7 +175,7 @@ const Onboarding: React.FC<OnboardingProps> = (props): React.ReactNode => {
         />
       );
     case 7:
-      return <Step8 resourceStrings={resourceStrings} />;
+      return <Step8 resourceStrings={resourceStrings} isSubmitted={isSubmitted} />;
 
     default:
       return null;

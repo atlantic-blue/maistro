@@ -1,9 +1,16 @@
 /* eslint-disable */
 export enum Routes {
   HOME = '/*',
+
   AUTHZ_LOGIN = '/login',
   AUTHZ_LOGOUT = '/logout',
   AUTH_CALLBACK = '/callback',
+
+  ONBOARDING = '/onboarding',
+
+  BUSINESS_PROFILE = '/b/:businessProfile',
+
+  DASHBOARD = '/dashboard',
 }
 
 class AppRoutes {
@@ -17,6 +24,18 @@ class AppRoutes {
 
   getLogoutRoute() {
     return `${Routes.AUTHZ_LOGOUT}`;
+  }
+
+  getOnboardingRoute() {
+    return `${Routes.ONBOARDING}`;
+  }
+
+  getBusinessProfile(businessProfile: string) {
+    return `/b/${businessProfile}`;
+  }
+
+  getDashboard() {
+    return `${Routes.DASHBOARD}`;
   }
 }
 

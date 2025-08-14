@@ -20,9 +20,9 @@ const Router: React.FC = () => {
     <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
         <Route path="*" element={<Homepage />} />
-        <Route path="/b/:businessProfile" element={<BusinessProfile />} />
+        <Route path={Routes.BUSINESS_PROFILE} element={<BusinessProfile />} />
         <Route
-          path="/onboarding"
+          path={Routes.ONBOARDING}
           element={
             <ProtectedRoute>
               <Onboarding language={language} />

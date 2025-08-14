@@ -1,13 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Button, Badge, Card, Box } from '@maistro/ui';
 import Header from '@/Components/Header';
+import { appRoutes } from './appRoutes';
 
 export default function Homepage() {
   return (
     <div className="bg-[#FFF8F6] text-black min-h-screen font-sans">
       <Header />
-
-      {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-[#FFF8F6] to-white px-6 py-32 overflow-hidden">
         <div className="absolute top-[-80px] right-[-100px] w-[500px] h-[500px] bg-[#FF3366]/10 rounded-full blur-3xl" />
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
@@ -19,12 +19,11 @@ export default function Homepage() {
               La plataforma gratuita para gestionar tu salón con estilo y cero complicaciones.
             </p>
             <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
-              <Button className="text-lg px-6 py-3 bg-[#FF3366] hover:bg-[#e52b5a] text-white">
-                Empieza Gratis
-              </Button>
-              <Button variant="outline" className="text-lg px-6 py-3 border-gray-300">
-                Explora Negocios
-              </Button>
+              <Link to={appRoutes.getOnboardingRoute()}>
+                <Button className="text-lg px-6 py-3 bg-[#FF3366] hover:bg-[#e52b5a] text-white">
+                  Empieza Gratis
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="flex-1">
@@ -107,9 +106,11 @@ export default function Homepage() {
       <section className="text-center py-20 px-6 bg-[#FF3366] text-white">
         <h2 className="text-3xl font-bold mb-4">Empieza con Maistro hoy mismo</h2>
         <p className="mb-6 text-lg">Sin tarjeta. Sin complicaciones. 100% gratis.</p>
-        <Button className="text-lg px-6 py-3 bg-white text-[#FF3366] hover:bg-gray-100">
-          Crear mi cuenta
-        </Button>
+        <Link to={appRoutes.getOnboardingRoute()}>
+          <Button className="text-lg px-6 py-3 bg-white text-[#FF3366] hover:bg-gray-100">
+            Crear mi cuenta
+          </Button>
+        </Link>
       </section>
 
       {/* Comparison */}
@@ -180,11 +181,12 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* Final CTA */}
       <section className="text-center py-16 px-6 bg-black text-white">
         <h2 className="text-3xl font-bold mb-4">Empieza hoy con Maistro</h2>
         <p className="mb-6">Sin tarjeta. Sin complicaciones. 100% gratis.</p>
-        <Button className="text-lg px-6 py-3">Crear mi cuenta</Button>
+        <Link to={appRoutes.getOnboardingRoute()}>
+          <Button className="text-lg px-6 py-3">Crear mi cuenta</Button>
+        </Link>
       </section>
     </div>
   );

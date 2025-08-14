@@ -1,15 +1,18 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 import { I18nLanguageConfig } from './i18.config';
+import { Link } from 'react-router';
+import { appRoutes } from '../appRoutes';
 
 interface Step1Props {
   resourceStrings: I18nLanguageConfig;
+  isSubmitted: boolean;
 }
 
 /**
  *  Success/Completion
  */
-const Step8: React.FC<Step1Props> = ({ resourceStrings }) => {
+const Step8: React.FC<Step1Props> = ({ resourceStrings, isSubmitted }) => {
   return (
     <div className="min-h-screen bg-[#FFF8F6] flex items-center justify-center">
       <div className="text-center max-w-md mx-auto px-6">
@@ -20,12 +23,13 @@ const Step8: React.FC<Step1Props> = ({ resourceStrings }) => {
         <h1 className="text-4xl font-bold text-gray-900 mb-4">{resourceStrings.step8.title}</h1>
         <p className="text-gray-600 mb-8">{resourceStrings.step8.description}</p>
 
-        <button
-          onClick={() => alert('Redirecting to dashboard...')}
-          className="bg-[#FF3366] text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors rounded-xl"
-        >
-          {resourceStrings.step8.ctaButton}
-        </button>
+        {isSubmitted ? (
+          <button className="bg-[#FF3366] text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors rounded-xl">
+            <Link to={appRoutes.getDashboard()}>{resourceStrings.step8.ctaButton}</Link>
+          </button>
+        ) : (
+          <div>Creando Perfil...</div>
+        )}
 
         <div className="mt-8 p-4 bg-white rounded-xl border border-gray-200">
           <h3 className="font-semibold text-gray-900 mb-2">
