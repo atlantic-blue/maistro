@@ -1,19 +1,18 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { createErrorResponse } from "../../utils/createError";
 import { DynamoDB } from "aws-sdk";
+import { UserProfile } from "../../types/user";
 
 const dynamoDB = new DynamoDB.DocumentClient();
 const USER_PROFILES_TABLE = process.env.USER_PROFILES_TABLE || '';
 
-export async function updateUserProfile(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-  const userId = event.pathParameters?.userId;
-
-  if (!userId || !event.body) {
+export async function updateUserProfile(userId: string, payload: UserProfile): Promise<APIGatewayProxyResult> {
+  if (!userId || !payload) {
     return createErrorResponse(400, 'Missing userId parameter or request body');
   }
 
   try {
-    const updateData = JSON.parse(event.body);
+    const updateData = payload;
     const timestamp = new Date().toISOString();
 
     // Prepare update expression
@@ -24,14 +23,34 @@ export async function updateUserProfile(event: APIGatewayProxyEvent): Promise<AP
 
     // Updatable profile fields
     const updatableFields = [
-      'CompanyName', 'Industry', 'CompanySize', 'Website', 'Country',
-      'OnboardingCompleted', 'OnboardingStep', 'MarketingOptIn'
+        'CompanyName',
+        'Industry',
+        'CompanySize',
+        'Country',
+        'OnboardingCompleted',
+        'OnboardingStep',
+        'MarketingOptIn',
+        'CreatedAt',
+        'UpdatedAt',
+        'BusinessName',
+        'Website',
+        'BusinessType',
+        'AccountType',
+        'TeamSize',
+        'Address',
+        'Phone',
+        'Description',
+        'Services',
+        'Features',
+        'HearAbout',
     ];
 
     updatableFields.forEach(field => {
       const lowerField = field.charAt(0).toLowerCase() + field.slice(1);
+      // @ts-ignore
       if (updateData[lowerField] !== undefined) {
         updateExpression += `, ${field} = :${field}`;
+        // @ts-ignore
         expressionAttributeValues[`:${field}`] = updateData[lowerField];
       }
     });

@@ -25,11 +25,16 @@ export async function createUser(user: MaistroUser): Promise<void> {
 }
 
 export async function createUserProfile(profile: UserProfile): Promise<void> {
+  const timestamp = new Date().toISOString();
+
   try {
     const params = {
       TableName: USER_PROFILES_TABLE,
-      Item: profile,
-      ConditionExpression: 'attribute_not_exists(UserId)'
+      Item: {
+        ...profile,
+        UpdatedAt: timestamp, // Always update the timestamp
+        CreatedAt: profile.CreatedAt || timestamp // Keep original CreatedAt if exists
+      }
     };
 
     await dynamoDB.put(params).promise();

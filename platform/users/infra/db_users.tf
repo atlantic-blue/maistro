@@ -15,27 +15,14 @@ resource "aws_dynamodb_table" "maistro_users" {
     type = "S"
   }
 
-  attribute {
-    name = "Email"
-    type = "S"
-  }
-
   # Global Secondary Index for querying by Cognito User ID
   global_secondary_index {
     name            = "CognitoUserId-index"
     hash_key        = "CognitoUserId"
-    read_capacity   = 1
-    write_capacity  = 1
     projection_type = "ALL"
-  }
 
-  # Global Secondary Index for querying by Email
-  global_secondary_index {
-    name            = "Email-index"
-    hash_key        = "Email"
     read_capacity   = 1
     write_capacity  = 1
-    projection_type = "ALL"
   }
 
   tags = local.tags
@@ -51,6 +38,15 @@ resource "aws_dynamodb_table" "maistro_user_profiles" {
   attribute {
     name = "UserId"
     type = "S"
+  }
+
+  global_secondary_index {
+    name            = "UserIdIndex"
+    hash_key        = "UserId"
+    projection_type = "ALL"
+
+    read_capacity  = 1
+    write_capacity = 1
   }
 
   tags = local.tags

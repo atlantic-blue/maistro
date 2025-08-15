@@ -29,7 +29,14 @@ export interface MaistroUser {
     socials: boolean;
     chats: boolean;
     academy: boolean;
+    bookings: boolean;
   };
+}
+
+export interface Service {
+  name: string;
+  duration: string;
+  price: number;
 }
 
 export interface UserProfile {
@@ -37,11 +44,21 @@ export interface UserProfile {
   CompanyName?: string;
   Industry?: string;
   CompanySize?: string;
-  Website?: string;
   Country?: string;
   OnboardingCompleted: boolean;
   OnboardingStep: number;
   MarketingOptIn: boolean;
   CreatedAt: string;
   UpdatedAt: string;
+  BusinessName: string;
+  Website: string;
+  BusinessType: string[];
+  AccountType: 'independent' | 'team' | string;
+  TeamSize: string;
+  Address: string;
+  Phone: string;
+  Description: string;
+  Services: Service[];
+  Features: string[];
+  HearAbout: string;
 }

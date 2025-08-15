@@ -60,6 +60,7 @@ export const handler = async (
           funnels: false,   // Free tier gets access to funnels
           socials: false,   // Social features require premium
           chats: false,
+          bookings: true,
         }
       };
 
@@ -70,7 +71,22 @@ export const handler = async (
         OnboardingStep: 0,
         MarketingOptIn: false,
         CreatedAt: timestamp,
-        UpdatedAt: timestamp
+        UpdatedAt: timestamp,
+        AccountType: "",
+        Address: "",
+        BusinessName: "",
+        BusinessType: [],
+        Description: "",
+        Features: [],
+        HearAbout: "",
+        Phone: "",
+        Services: [],
+        TeamSize: "",
+        Website: "",
+        CompanyName: "",
+        CompanySize: "",
+        Country: "",
+        Industry: "",
       };
 
       // Save user and profile to DynamoDB

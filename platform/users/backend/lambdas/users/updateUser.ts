@@ -27,22 +27,21 @@ export async function updateUser(
 
     // Updatable fields
     const updatableFields = [
-      'FirstName', 'LastName', 'DisplayName', 'Avatar', 'Status',
-      'SubscriptionTier', 'PhoneNumber', 'PhoneVerified', 'PreferredLanguage',
-      'Timezone', 'ProductAccess'
+      'FirstName',
+      'LastName',
+      'DisplayName',
+      'Avatar',
+      'PhoneNumber',
+      'PhoneVerified',
+      'PreferredLanguage',
+      'Timezone',
     ];
 
     updatableFields.forEach(field => {
       const lowerField = field.charAt(0).toLowerCase() + field.slice(1);
       if (updateData[lowerField] !== undefined) {
-        if (field === 'Status') {
-          updateExpression += ', #status = :status';
-          expressionAttributeNames['#status'] = 'Status';
-          expressionAttributeValues[':status'] = updateData[lowerField];
-        } else {
-          updateExpression += `, ${field} = :${field}`;
+        updateExpression += `, ${field} = :${field}`;
           expressionAttributeValues[`:${field}`] = updateData[lowerField];
-        }
       }
     });
 
