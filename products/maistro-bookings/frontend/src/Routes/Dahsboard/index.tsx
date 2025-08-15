@@ -23,7 +23,15 @@ const Dashboard: React.FC = () => {
   const { isAuthenticated, isLoading, user } = React.useContext(AuthContext);
 
   const [me, setMe] = useState<Partial<MaistroUser>>({
-    ProductAccess: {},
+    ProductAccess: {
+      academy: false,
+      bookings: false,
+      chats: false,
+      customers: false,
+      funnels: false,
+      socials: false,
+      websites: false,
+    },
   });
   const [meProfile, setMeProfile] = useState<Partial<UserProfile>>({
     BusinessType: [''],
@@ -52,6 +60,8 @@ const Dashboard: React.FC = () => {
     });
   }, [isAuthenticated, isLoading]);
 
+  const bizType = meProfile?.BusinessType && meProfile?.BusinessType[0].replace('-', ' ');
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header Section */}
@@ -61,10 +71,7 @@ const Dashboard: React.FC = () => {
             <h1 className="text-3xl font-bold text-primary mb-2">
               Welcome back, {me.FirstName}! 👋
             </h1>
-            <p className="text-gray-600">
-              Manage your bookings and grow your {meProfile?.BusinessType[0].replace('-', ' ')}{' '}
-              business
-            </p>
+            <p className="text-gray-600">Manage your bookings and grow your {bizType} business</p>
           </div>
         </div>
       </div>
@@ -168,7 +175,7 @@ const Dashboard: React.FC = () => {
               <div>
                 <h4 className="font-medium text-primary text-lg">{meProfile.BusinessName}</h4>
                 <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1">
-                  {meProfile.BusinessType[0].replace('-', ' ')}
+                  {bizType}
                 </span>
               </div>
 
@@ -249,7 +256,7 @@ const Dashboard: React.FC = () => {
       <div className="mt-8 bg-primary-white rounded-lg p-6 border border-gray-200 shadow-sm">
         <h3 className="text-lg font-semibold text-primary mb-4">Your Maistro Products</h3>
         <div className="flex flex-wrap gap-3">
-          {Object.entries(me.ProductAccess).map(([product, hasAccess]) => (
+          {Object.entries(me.ProductAccess || {}).map(([product, hasAccess]) => (
             <div
               key={product}
               className={`px-3 py-2 rounded-lg text-sm font-medium ${
