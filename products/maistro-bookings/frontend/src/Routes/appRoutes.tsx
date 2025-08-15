@@ -11,6 +11,8 @@ export enum Routes {
   BUSINESS_PROFILE = '/b/:businessProfile',
 
   DASHBOARD = '/dashboard',
+
+  BOOKINGS = '/bookings',
 }
 
 class AppRoutes {
@@ -36,6 +38,10 @@ class AppRoutes {
 
   getDashboard() {
     return `${Routes.DASHBOARD}`;
+  }
+
+  getBookings() {
+    return `${Routes.BOOKINGS}`;
   }
 }
 

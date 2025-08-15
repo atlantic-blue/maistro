@@ -1,0 +1,21 @@
+const Me = async (url: string, token: string) => {
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => response.json());
+};
+
+const MeProfile = async (url: string, token: string) => {
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => response.json());
+};
+
+export { Me, MeProfile };
