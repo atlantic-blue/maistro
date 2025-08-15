@@ -60,7 +60,7 @@ const Dashboard: React.FC = () => {
     });
   }, [isAuthenticated, isLoading]);
 
-  const bizType = meProfile?.BusinessType && meProfile?.BusinessType[0].replace('-', ' ');
+  const bizType = meProfile?.BusinessType && meProfile?.BusinessType[0]?.replace('-', ' ');
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
