@@ -1,3 +1,5 @@
+import { APIGatewayProxyResult } from 'aws-lambda';
+
 export function createErrorResponse(statusCode: number, message: string, headers?: any): APIGatewayProxyResult {
   return {
     statusCode,

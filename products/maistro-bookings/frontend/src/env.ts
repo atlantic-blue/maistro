@@ -1,6 +1,8 @@
 interface Env {
   api: {
     onboarding: string;
+    me: string;
+    meProfile: string;
   };
   auth: {
     baseUrl: string;
@@ -14,10 +16,13 @@ interface Env {
 
 const createEnv = (): Env => {
   const authBaseUrl = process.env.AUTH_DOMAIN || '';
+  const usersBaseUrl = 'https://maistro-platform-users-api-production.maistro.website/v1';
 
   return {
     api: {
-      onboarding: 'https://maistro-platform-users-api-production.maistro.website/v1/onboarding',
+      onboarding: `${usersBaseUrl}/onboarding`,
+      me: `${usersBaseUrl}/me`,
+      meProfile: `${usersBaseUrl}/me/profile`,
     },
 
     auth: {

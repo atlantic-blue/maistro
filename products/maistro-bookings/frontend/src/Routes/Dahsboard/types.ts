@@ -1,8 +1,9 @@
+/* eslint-disable */
 export enum SubscriptionTier {
-    FREE= 'FREE',
-    GROWTH = 'GROWTH',
-    PREMIUM = 'PREMIUM',
-    MAISTRO = 'MAISTRO',
+  FREE = 'FREE',
+  GROWTH = 'GROWTH',
+  PREMIUM = 'PREMIUM',
+  MAISTRO = 'MAISTRO',
 }
 
 export interface MaistroUser {
@@ -40,7 +41,7 @@ export interface Service {
 }
 
 export interface UserProfile {
-  UserId: MaistroUser["UserId"];
+  UserId: MaistroUser['UserId'];
   CompanyName?: string;
   Industry?: string;
   CompanySize?: string;

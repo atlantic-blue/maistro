@@ -7,11 +7,18 @@ module "platform_users_lambda_users" {
 
   lambda_name = "${module.platform_users_api.api_bucket.bucket}-users"
   route_keys = [
+    "POST /onboarding",
+
     "GET /users",
+
     "GET /users/{userId}",
-    "GET /users/{userId}/profile",
     "PUT /users/{userId}",
+
+    "GET /users/{userId}/profile",
     "PUT /users/{userId}/profile",
+
+    "GET /me",
+    "GET /me/profile",
   ]
   input_dir   = "${path.module}/../backend/dist/users"
   output_path = "${path.module}/lambdas/users.zip"
