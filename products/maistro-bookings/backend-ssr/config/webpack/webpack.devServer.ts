@@ -10,7 +10,7 @@ import { WebpackPaths } from './types'
 const createWebpackPaths = (root: string): WebpackPaths => {
     return {
         root,
-        src: path.resolve(root, 'src', 'devServer'),
+        src: path.resolve(root, 'src', 'index.server.dev'),
         build: path.resolve(root, 'dist-dev-server'),
     }
 }
@@ -42,7 +42,7 @@ const createWebpackConfig = (): Configuration => {
         },
         resolve: {
             plugins: [],
-            extensions: ['.tsx', '.ts', '.js', 'jsx'],
+            extensions: ['.tsx', '.ts', '.js', '.jsx'],
         },
         output: {
             libraryTarget: "commonjs2",

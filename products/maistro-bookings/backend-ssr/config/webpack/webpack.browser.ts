@@ -14,7 +14,7 @@ import createWebpackEnv from './utils/createWebpackEnv'
 const createWebpackPaths = (root: string): WebpackPaths => {
     return {
         root,
-        src: path.resolve(root, 'src', 'browser'),
+        src: path.resolve(root, 'src', 'index.browser'),
         build: path.resolve(root, 'dist', 'public'),
     }
 }
@@ -62,8 +62,24 @@ const createWebpackConfig = (args: WebpackArgs): Configuration => {
         module: {
             rules: [
                 jsRule,
-                cssRule,
                 urlRule,
+                {
+                    test: /\.scss$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        'postcss-loader',
+                        'sass-loader',
+                    ],
+                    },
+                    {
+                    test: /\.css$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        'postcss-loader',
+                    ],
+                },
             ],
         },
         plugins: [
@@ -75,16 +91,16 @@ const createWebpackConfig = (args: WebpackArgs): Configuration => {
             }) as unknown as WebpackPluginInstance,
 
             /**
-             * Add assets to dist
+             * Add public to dist
              */
             new CopyWebpackPlugin({
                 patterns: [
                     {
-                        from: path.join(paths.root, 'assets'),
-                        to: path.join(paths.root, 'dist', 'public', 'assets'),
+                        from: path.join(paths.root, 'public'),
+                        to: path.join(paths.root, 'dist', 'public'),
                     },
                 ],
-            }) as unknown as WebpackPluginInstance,,
+            }) as unknown as WebpackPluginInstance,
 
             /**
              * Extract CSS

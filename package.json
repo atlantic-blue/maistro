@@ -9,7 +9,8 @@
     "packages/frontend/*",
     "packages/backend/*",
     "packages/frontend/config/*",
-    "products/*/frontend"
+    "products/*/frontend",
+    "products/*/backend-ssr"
   ],
   "scripts": {
     "dev": "yarn workspaces foreach -Ap run dev",
