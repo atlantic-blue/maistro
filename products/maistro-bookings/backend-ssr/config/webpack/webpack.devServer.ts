@@ -42,7 +42,7 @@ const createWebpackConfig = (): Configuration => {
         },
         resolve: {
             plugins: [],
-            extensions: ['.tsx', '.ts', '.js', 'jsx'],
+            extensions: ['.tsx', '.ts', '.js', '.jsx'],
         },
         output: {
             libraryTarget: "commonjs2",

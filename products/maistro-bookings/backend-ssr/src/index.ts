@@ -1,7 +1,7 @@
 import { LambdaFunctionURLEvent, APIGatewayProxyResultV2 } from "aws-lambda";
 
 import assets from "../dist/public/stats.json"
-import App from "./app";
+import AppRoutes from './Routes/router';
 import serverSideRenderer from "./ssr/render";
 
 
@@ -14,7 +14,7 @@ const handler = async (
             headers: {
                 "Content-Type": "text/html",
             },
-            body: await serverSideRenderer(event, assets, App),
+            body: await serverSideRenderer(event, assets, AppRoutes),
         }
     } catch (error) {
         // Custom error handling for server-side errors

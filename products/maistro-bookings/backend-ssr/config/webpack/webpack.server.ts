@@ -1,10 +1,11 @@
 import * as path from 'path'
-import { Configuration } from 'webpack'
+import { Configuration, WebpackPluginInstance } from 'webpack'
 
 import jsRule from './rules/jsRule'
 import { serverSideCss } from './rules/cssRule'
 import urlRule from './rules/urlRule'
 import { WebpackPaths } from './types'
+import Dotenv from "dotenv-webpack"
 
 const createWebpackPaths = (root: string): WebpackPaths => {
     return {
@@ -39,6 +40,16 @@ const createWebpackConfig = (): Configuration => {
                 urlRule,
             ],
         },
+
+        plugins: [
+            /**
+             * .env
+             */
+            new Dotenv({
+                    path: path.join(paths.root, '.env'),
+            }) as unknown as WebpackPluginInstance,
+        ],
+
         resolve: {
             plugins: [],
             extensions: ['.tsx', '.ts', '.js', '.jsx'],

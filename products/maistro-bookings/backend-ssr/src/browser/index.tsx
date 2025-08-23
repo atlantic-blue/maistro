@@ -5,7 +5,7 @@ import {
 
 import { createRoot } from 'react-dom/client';
 
-import App from "../app";
+import AppRoutes from '../Routes/router';
 
 const container = document.getElementById('main') as HTMLElement;
 
@@ -13,6 +13,6 @@ const container = document.getElementById('main') as HTMLElement;
 const root = createRoot(container);
 root.render(
     <BrowserRouter>
-        <App />
+        <AppRoutes />
     </BrowserRouter>
 )

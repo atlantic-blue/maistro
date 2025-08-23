@@ -1,8 +1,7 @@
 {
-  "name": "maistro-bookings-backend",
+  "name": "@maistro/bookings-backend",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
   "scripts": {
     "build:server": "TS_NODE_PROJECT=tsconfig.json webpack --config ./config/webpack/webpack.server.ts",
     "build:dev-server": "TS_NODE_PROJECT=tsconfig.json webpack --config ./config/webpack/webpack.devServer.ts",
@@ -22,6 +21,7 @@
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
+    "@maistro/ui": "*",
     "@types/jest": "^30.0.0",
     "@types/react-helmet": "^6.1.11",
     "@types/webpack-stats-plugin": "^0.3.5",
