@@ -1,9 +1,9 @@
 import { PostAuthenticationTriggerEvent, Context, Callback } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { getUserByCognitoId } from './getUserByCognitoId';
-import { MaistroUser, SubscriptionTier, UserProfile } from '../../types/user';
+import { MaistroUser, SubscriptionTier } from '../../types/user';
 import { updateUserLastLogin } from './updateUserLogin';
-import { createUser, createUserProfile } from './createUser';
+import { createUser } from './createUser';
 import { triggerOnboardingFlow } from './triggerOnboarding';
 
 function generateUserId(): string {
@@ -64,35 +64,9 @@ export const handler = async (
         }
       };
 
-      // Create user profile
-      const userProfile: UserProfile = {
-        UserId: newUserId,
-        OnboardingCompleted: false,
-        OnboardingStep: 0,
-        MarketingOptIn: false,
-        CreatedAt: timestamp,
-        UpdatedAt: timestamp,
-        AccountType: "",
-        Address: "",
-        BusinessName: "",
-        BusinessType: [],
-        Description: "",
-        Features: [],
-        HearAbout: "",
-        Phone: "",
-        Services: [],
-        TeamSize: "",
-        Website: "",
-        CompanyName: "",
-        CompanySize: "",
-        Country: "",
-        Industry: "",
-      };
-
       // Save user and profile to DynamoDB
       await Promise.all([
         createUser(newUser),
-        createUserProfile(userProfile)
       ]);
 
       console.log(`Created new user: ${newUserId} for Cognito user: ${userName}`);

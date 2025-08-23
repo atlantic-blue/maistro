@@ -1,4 +1,6 @@
-const Me = async (url: string, token: string) => {
+import { MaistroUser, UserProfile } from "@/Routes/Dahsboard/types";
+
+const Me = async (url: string, token: string): Promise<MaistroUser> => {
   return fetch(url, {
     method: 'GET',
     headers: {
@@ -8,7 +10,7 @@ const Me = async (url: string, token: string) => {
   }).then((response) => response.json());
 };
 
-const MeProfile = async (url: string, token: string) => {
+const MeProfile = async (url: string, token: string): Promise<UserProfile> => {
   return fetch(url, {
     method: 'GET',
     headers: {
