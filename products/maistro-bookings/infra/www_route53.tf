@@ -1,19 +1,3 @@
-module "hosting" {
-  source = "../../../packages/infra/modules/hosting"
-  
-  bucket_name          = "${var.product_name}-hosting-${var.environment}"
-  domain_name = "${var.domain_name}"
-  zone_id = "${aws_route53_zone.www.zone_id}"
-
-  tags = merge(
-    "${local.tags}",
-    {
-      Product     = "${var.product_name}"
-      Environment = var.environment
-    }
-  )
-}
-
 resource "aws_route53_zone" "www" {
   name = var.domain_name
   tags = local.tags
@@ -31,6 +15,17 @@ resource "aws_route53domains_registered_domain" "www" {
   }
 
   tags = local.tags
+}
+
+resource "aws_route53_record" "www_record" {
+  zone_id = aws_route53_zone.www.id
+  name    = var.domain_name
+  type    = "A"
+  alias {
+    name                   = aws_cloudfront_distribution.www_lambda_ssr.domain_name
+    zone_id                = aws_cloudfront_distribution.www_lambda_ssr.hosted_zone_id
+    evaluate_target_health = false
+  }
 }
 
 /*
