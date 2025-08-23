@@ -1,4 +1,4 @@
-import { IconLogoSimple, INavItem } from '@maistro/ui';
+import { IconLogoSimple, NavItem } from '@maistro/ui';
 import { HomeIcon, LayoutIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { useContext, useState } from 'react';
@@ -12,7 +12,7 @@ interface HelmetProps {
   children: React.ReactNode;
 }
 
-const routesNavigation: INavItem[] = [
+const routesNavigation: NavItem[] = [
   {
     name: 'Panel',
     path: appRoutes.getDashboard(),

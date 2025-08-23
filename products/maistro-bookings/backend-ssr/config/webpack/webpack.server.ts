@@ -10,7 +10,7 @@ import Dotenv from "dotenv-webpack"
 const createWebpackPaths = (root: string): WebpackPaths => {
     return {
         root,
-        src: path.resolve(root, 'src', 'index'),
+        src: path.resolve(root, 'src', 'index.server'),
         build: path.resolve(root, 'dist-server'),
     }
 }

@@ -10,7 +10,7 @@ import { WebpackPaths } from './types'
 const createWebpackPaths = (root: string): WebpackPaths => {
     return {
         root,
-        src: path.resolve(root, 'src', 'devServer'),
+        src: path.resolve(root, 'src', 'index.server.dev'),
         build: path.resolve(root, 'dist-dev-server'),
     }
 }
