@@ -5,6 +5,11 @@ import { StaticRouter } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import Html from "./html";
+import { serverRouteLoader } from "./serverRoute";
+import { RouteData } from "../types/Route";
+
+const serialize = (obj: unknown) =>
+  JSON.stringify(obj).replace(/</g, "\\u003c").replace(/\u2028|\u2029/g, s => s === "\u2028" ? "\\u2028" : "\\u2029");
 
 interface Assets {
     scripts: string[]
@@ -16,12 +21,18 @@ const serverSideRenderer = async (
     assets: Assets,
     App: React.FC
 ) => {
-    const state = {
-        timestamp: Date.now()
+    const location = event.rawPath + (event.rawQueryString ? `?${event.rawQueryString}` : "");
+    
+    const { data: routeData, errors: routeErrors } = await serverRouteLoader(event, location)
+
+    const state: RouteData = {
+        timestamp: Date.now(),
+        routeData,
+        routeErrors,
     }
 
     const staticMarkup = renderToString(
-        <StaticRouter location={event.rawPath}>
+        <StaticRouter location={location}>
             <App />
         </StaticRouter>
     )
@@ -36,13 +47,13 @@ const serverSideRenderer = async (
         ${assets.styles.map(filename => `<link rel="stylesheet" href="/${filename}" />`).join('\n')}
     `
 
+    // Script's order matters
     const scripts = `
-        ${assets.scripts.map(filename => `<script src="/${filename}"></script>`).join('\n')}
         <script id="server-side-sate">
-            window.__STATE__ = ${JSON.stringify(state)};
+            window.__STATE__ = ${serialize(state)};
         </script>
+        ${assets.scripts.map(filename => `<script src="/${filename}"></script>`).join('\n')}
     `
-
     return Html({
         head,
         body: {
