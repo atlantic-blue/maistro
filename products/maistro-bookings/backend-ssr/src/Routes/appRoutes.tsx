@@ -1,4 +1,10 @@
 /* eslint-disable */
+
+export enum RouteName {
+  HOME= "HOME",
+  BUSINESS_PROFILE = "BUSINESS_PROFILE",
+}
+
 export enum Routes {
   HOME = '/*',
 

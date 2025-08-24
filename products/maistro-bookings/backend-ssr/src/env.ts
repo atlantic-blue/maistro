@@ -43,5 +43,4 @@ const createEnv = (): Env => {
 
 const env = createEnv()
 
-console.log(env)
 export default env;
