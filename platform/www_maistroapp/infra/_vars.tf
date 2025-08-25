@@ -1,0 +1,23 @@
+variable "aws_account" {
+  default = "atlantic-blue"
+}
+
+variable "aws_region" {
+  default = "us-east-1"
+}
+
+variable "environment" {
+  default = "production"
+}
+
+variable "platform_name" { 
+    default = "maistro-www"
+}
+
+variable "domain_name" {
+  default = "maistroapp.com"
+}
+
+variable "www_google_site_verification_token" {
+  type = string
+}
