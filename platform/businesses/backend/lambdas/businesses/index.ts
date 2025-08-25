@@ -1,16 +1,26 @@
 import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
-import { BusinessesProfileService } from "../../src/services/businesses.service";
+import { BusinessesProfileService, OnboardingFormData } from "../../src/services/businesses.service";
 import { BusinessesProfileRepository } from "../../src/repositories/businesses.repository";
+import BusinessesTransport from "../../src/transport/businesses.transport";
+import UsersService from "../../src/services/users.service";
+import UsersRepository from "../../src/repositories/users.repoistory";
 
 enum Routes {
-    BUSINESSES_PROFILE = 'businesses/{businessSlug}/profile'
+  BUSINESSES_ONBOARDING = '/businesses/onboarding',
+  BUSINESSES_PROFILE = '/businesses/{businessSlug}/profile'
 }
 
 const BUSINESSES_TABLE = process.env.BUSINESSES_TABLE || ""
+const USERS_TABLE = process.env.USERS_TABLE || ""
 
+const usersService = new UsersService(
+  new UsersRepository(USERS_TABLE)
+)
 const businessesService = new BusinessesProfileService(
     new BusinessesProfileRepository(BUSINESSES_TABLE)
 )
+
+const businessesTransport = new BusinessesTransport()
 
 export const handler: APIGatewayProxyHandler = async (event) => {
       console.log('Public Businesses Service API event:', JSON.stringify(event, null, 2));
@@ -34,7 +44,26 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     const path = event.resource;
 
     try {
-        
+      
+      if(method === "POST") {
+        if(path === Routes.BUSINESSES_ONBOARDING) {
+            const decodedToken = businessesTransport.getDecodedToken(event)
+            const user = await usersService.getUserByCognitoId(decodedToken.username)
+
+            const onboardingData: OnboardingFormData = JSON.parse(event.body || '');
+            const response = await businessesService.createBusinessProfile(onboardingData, user?.UserId || "")
+          
+            if(response) {
+              return {
+                      statusCode: 200,
+                      body: JSON.stringify(response)
+                  }
+            }
+
+          return createErrorResponse(500, 'Onboarding failed');
+        }
+      }
+
      if (method === "GET") {
         if(path === Routes.BUSINESSES_PROFILE) {
             const slug = event.pathParameters?.businessSlug;

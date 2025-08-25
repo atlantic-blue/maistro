@@ -29,3 +29,11 @@ variable "acm_certificate_arn" {
 variable "route53_zone_id" {
   type = string
 }
+
+variable "users_table_name" {
+  type = string
+}
+
+variable "users_table_arn" {
+  type = string
+}

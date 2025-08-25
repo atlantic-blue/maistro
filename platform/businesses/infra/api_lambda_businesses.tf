@@ -18,6 +18,7 @@ module "platform_businesses_lambda_businesses" {
   output_path = "${path.module}/lambdas/businesses.zip"
   lambda_env_variables = {
       BUSINESSES_TABLE         = aws_dynamodb_table.maistro_businesses.name
+      USERS_TABLE = var.users_table_name
   }
 
   tags = local.tags
@@ -40,6 +41,8 @@ resource "aws_iam_policy" "platform_businesses_lambda_businesses_dynamo" {
         Resource : [
           "${aws_dynamodb_table.maistro_businesses.arn}",
           "${aws_dynamodb_table.maistro_businesses.arn}/index/*",
+          "${var.users_table_arn}",
+          "${var.users_table_arn}/index/*",
         ]
       }
     ]

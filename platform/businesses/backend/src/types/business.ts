@@ -1,4 +1,30 @@
+export interface Service {
+  name: string;
+  duration: string;
+  price: number;
+}
+
 export interface BusinessProfile {
-    id: string
-    slug: string
+  BusinessId: string;
+  Slug: string;
+  UserId: string;
+ 
+  Industry?: string;
+  Country?: string;
+  OnboardingCompleted: boolean;
+  OnboardingStep: number;
+  MarketingOptIn: boolean;
+  CreatedAt: string;
+  UpdatedAt: string;
+  BusinessName: string;
+  Website: string;
+  BusinessType: string[];
+  AccountType: 'independent' | 'team' | string;
+  TeamSize: string;
+  Address: string;
+  Phone: string;
+  Description: string;
+  Services: Service[];
+  Features: string[];
+  HearAbout: string;
 }
