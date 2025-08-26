@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import Html from "./html";
 import { serverRouteLoader } from "./serverRoute";
 import { RouteData } from "../types/Route";
+import { RouteDataProvider } from "../State/DataRoute.context";
 
 const serialize = (obj: unknown) =>
   JSON.stringify(obj).replace(/</g, "\\u003c").replace(/\u2028|\u2029/g, s => s === "\u2028" ? "\\u2028" : "\\u2029");
@@ -32,9 +33,11 @@ const serverSideRenderer = async (
     }
 
     const staticMarkup = renderToString(
-        <StaticRouter location={location}>
-            <App />
-        </StaticRouter>
+        <RouteDataProvider data={state}>
+            <StaticRouter location={location}>
+                <App />
+            </StaticRouter>
+        </RouteDataProvider>
     )
 
     const helmet = Helmet.renderStatic();
