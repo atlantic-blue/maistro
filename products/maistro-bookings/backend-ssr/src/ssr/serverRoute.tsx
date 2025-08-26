@@ -82,10 +82,6 @@ export const serverRoutes: ServerRoute[] = [
     {
         id: RouteName.BUSINESS_PROFILE,
         path: Routes.BUSINESS_PROFILE,
-        load: async ({params}) => {
-            const businessProfile = params.businessProfile
-            const response = await businessProfilePrefetch(businessProfile)
-            return response
-        }
+        load: businessProfilePrefetch,
     }
 ]

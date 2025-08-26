@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 
 import { RouteData } from "../types/Route";
-import { RouteName } from "@/Routes/appRoutes";
+import { RouteName } from "../Routes/appRoutes";
 
 export const RouteDataContext = createContext<RouteData | null>(null);
 

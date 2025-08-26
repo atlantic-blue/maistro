@@ -1,14 +1,35 @@
-export interface IBusinessProfile {
-  BusinessId: string;
-  BusinessName: string;
+export interface Service {
+  name: string;
+  duration: string;
+  price: number;
+}
 
+export interface BusinessProfile {
+  BusinessId: string;
+  Slug: string;
+  UserId: string;
+ 
+  OnboardingCompleted: boolean;
+  Industry?: string;
+  Country?: string;
+  OnboardingStep: number;
+  MarketingOptIn: boolean;
+  CreatedAt: string;
+  UpdatedAt: string;
+  BusinessName: string;
+  Website?: string;
+  BusinessType: string[];
+  AccountType: 'independent' | 'team' | string;
+  TeamSize: string;
   Address: string;
   Phone?: string;
-  Services: Service[];
-  Website?: string;
-  Features: string[];
   Description: string;
+  Services: Service[];
+  Features: string[];
+  HearAbout: string;
+}
 
+export interface BusinessProfileExtended extends BusinessProfile {
   Rating?: number;
   ReviewCount?: number;
   OpenUntil?: string;
@@ -41,7 +62,7 @@ export interface Review {
 export interface NearbyVenue {
   id: string;
   name: string;
-  rating: string;
+  rating: number;
   location: string;
   image: string;
   category: string;

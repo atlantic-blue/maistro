@@ -1,5 +1,5 @@
 import env from "../env";
-import { BusinessProfile } from "../Routes/Dahsboard/types";
+import { BusinessProfile } from "../types/BusinessProfile";
 
 export const getBusinessProfileById = async (businessId: string): Promise<BusinessProfile> => {
   const url = `${env.api.businessById(businessId)}`

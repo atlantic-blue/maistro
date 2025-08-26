@@ -1,4 +1,4 @@
-import { OnboardingFormData } from '@/Routes/Onboarding/types';
+import { OnboardingFormData } from "../Routes/Onboarding/types";
 
 const onboardUser = async (url: string, token: string, onboadingData: OnboardingFormData) => {
   return fetch(url, {

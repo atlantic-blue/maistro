@@ -7,7 +7,7 @@ import env from '../env';
 import Login from './Login';
 import { appRoutes, Routes } from './appRoutes';
 import Homepage from './Home';
-import BusinessProfile from './BusinessProfile';
+import BusinessProfilePage from './BusinessProfile';
 import Onboarding from './Onboarding';
 import ProtectedRoute from './ProtectedRoute';
 import { AuthCallback } from './AuthCallback';
@@ -22,7 +22,7 @@ const Router: React.FC = () => {
     <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
         <Route path="*" element={<Homepage />} />
-        <Route path={Routes.BUSINESS_PROFILE} element={<BusinessProfile />} />
+        <Route path={Routes.BUSINESS_PROFILE} element={<BusinessProfilePage />} />
         <Route
           path={Routes.ONBOARDING}
           element={

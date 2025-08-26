@@ -17,8 +17,9 @@ import {
 
 import env from '../../env';
 import { Me } from '../../Api/Me';
-import { MaistroUser, BusinessProfile } from './types';
+import { MaistroUser } from './types';
 import { getBusinessProfileMe } from '../../Api/BusinessProfile';
+import { BusinessProfile } from '../../types/BusinessProfile';
 
 const Dashboard: React.FC = () => {
   const { isAuthenticated, isLoading, user } = React.useContext(AuthContext);
