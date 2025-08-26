@@ -39,7 +39,35 @@ export class BusinessesProfileService {
         return businessProfile
     }
 
-    async createBusinessProfile(
+    async getBusinessProfileByBusinessId(businessId?: string): Promise<BusinessProfile| null> {
+        if(!businessId) {
+            return null
+        }
+
+        const profile = await this.dbRepository.getBusinessProfileByBusinessId(businessId)
+        if(!profile) {
+            return null
+        }
+
+        const businessProfile = new BusinessProfileModel(profile)
+        return businessProfile
+    }
+
+    async getBusinessProfileByUserId(userId?: string): Promise<BusinessProfile| null> {
+        if(!userId) {
+            return null
+        }
+
+        const profile = await this.dbRepository.getBusinessProfileByUserId(userId)
+        if(!profile) {
+            return null
+        }
+
+        const businessProfile = new BusinessProfileModel(profile)
+        return businessProfile
+    }
+
+    async updateBusinessProfile(
         onboardingData: OnboardingFormData,
         userId: string
     ): Promise<BusinessProfile> {
@@ -67,6 +95,8 @@ export class BusinessesProfileService {
             Features: onboardingData.features,
             HearAbout: onboardingData.hearAbout,
         };
+
+        await this.dbRepository.updateBusinessProfile(businessProfile)
 
         return businessProfile
     }

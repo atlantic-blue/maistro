@@ -8,8 +8,6 @@ export class BusinessProfileModel implements BusinessProfile {
 
     public BusinessName: string
     public BusinessType: string[]
-    public CompanyName: string
-    public CompanySize: string
     public Country: string
     public CreatedAt: string
     public Description: string
@@ -26,8 +24,6 @@ export class BusinessProfileModel implements BusinessProfile {
     public OnboardingCompleted: boolean
     public OnboardingStep: number
 
-
-
     constructor(input: BusinessProfile) {
         this.Slug = input.Slug
         this.BusinessId = input.BusinessId
@@ -36,8 +32,6 @@ export class BusinessProfileModel implements BusinessProfile {
         this.BusinessId = input.BusinessId
         this.BusinessName = input.BusinessName
         this.BusinessType = input.BusinessType
-        this.CompanyName = input.CompanyName || "" 
-        this.CompanySize = input.CompanySize || "" 
         this.Country = input.Country || ""
         this.CreatedAt = input.CreatedAt
         this.Description = input.Description
@@ -47,7 +41,7 @@ export class BusinessProfileModel implements BusinessProfile {
         this.Website = input.Website
         this.UserId = input.UserId
         this.UpdatedAt = input.UpdatedAt
-        this.TeamSize = input.TeamSize
+        this.TeamSize = input.TeamSize || "1"
         this.Slug = input.Slug
         this.Services = input.Services
         this.Phone = input.Phone

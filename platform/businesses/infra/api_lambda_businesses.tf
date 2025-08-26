@@ -11,7 +11,10 @@ module "platform_businesses_lambda_businesses" {
 
     "GET /businesses",
 
-    "GET /businesses/{businessSlug}/profile",
+    "GET /businesses/slug/{businessSlug}/profile",
+    "GET /businesses/id/{businessId}/profile",
+    "GET /businesses/me/profile",
+
     "PUT /businesses/{businessId}/profile",
   ]
   input_dir   = "${path.module}/../backend/dist/businesses"

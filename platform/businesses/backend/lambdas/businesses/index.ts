@@ -7,7 +7,9 @@ import UsersRepository from "../../src/repositories/users.repoistory";
 
 enum Routes {
   BUSINESSES_ONBOARDING = '/businesses/onboarding',
-  BUSINESSES_PROFILE = '/businesses/{businessSlug}/profile'
+  BUSINESSES_PROFILE_BY_SLUG = '/businesses/slug/{businessSlug}/profile',
+  BUSINESSES_PROFILE_BY_ID = '/businesses/id/{businessId}/profile',
+  BUSINESSES_PROFILE_ME = '/businesses/me/profile'
 }
 
 const BUSINESSES_TABLE = process.env.BUSINESSES_TABLE || ""
@@ -51,7 +53,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             const user = await usersService.getUserByCognitoId(decodedToken.username)
 
             const onboardingData: OnboardingFormData = JSON.parse(event.body || '');
-            const response = await businessesService.createBusinessProfile(onboardingData, user?.UserId || "")
+            const response = await businessesService.updateBusinessProfile(onboardingData, user?.UserId || "")
           
             if(response) {
               return {
@@ -65,9 +67,36 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       }
 
      if (method === "GET") {
-        if(path === Routes.BUSINESSES_PROFILE) {
-            const slug = event.pathParameters?.businessSlug;
-            const response = await businessesService.getBusinessProfileBySlug(slug)
+        if(path === Routes.BUSINESSES_PROFILE_BY_SLUG) {
+            const businessSlug = event.pathParameters?.businessSlug;
+            const response = await businessesService.getBusinessProfileBySlug(businessSlug)
+            if (response) {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(response)
+                }
+            }
+
+            return createErrorResponse(404, 'User not found');
+        }
+
+        if(path === Routes.BUSINESSES_PROFILE_BY_ID) {
+            const businessId = event.pathParameters?.businessId;
+            const response = await businessesService.getBusinessProfileByBusinessId(businessId)
+            if (response) {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(response)
+                }
+            }
+
+            return createErrorResponse(404, 'User not found');
+        }
+
+        if(path === Routes.BUSINESSES_PROFILE_ME) {
+            const decodedToken = businessesTransport.getDecodedToken(event)
+            const user = await usersService.getUserByCognitoId(decodedToken.username)
+            const response = await businessesService.getBusinessProfileByUserId(user?.UserId)
             if (response) {
                 return {
                     statusCode: 200,
