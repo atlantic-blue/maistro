@@ -21,3 +21,11 @@ variable "domain_name" {
 variable "www_google_site_verification_token" {
   type = string
 }
+
+variable "route53_zone_id" {
+  type = string
+}
+
+variable "acm_certificate_arn" {
+  type = string
+}

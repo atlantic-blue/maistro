@@ -2,19 +2,136 @@ import React from 'react';
 import { Button, Card, Separator } from '@maistro/ui';
 import { MapPin, Clock, Star, Share2, Heart, ChevronRight } from 'lucide-react';
 
-import Header from '../../Components/Header';
-import GoogleMap from '../../Components/GoogleMap';
-import { IBusinessProfile } from '../../types/BusinessProfile';
-import { useRouteData } from '../../State/DataRoute.context';
-import { RouteName } from '../appRoutes';
+import Header from '@/Components/Header';
+import GoogleMap from '@/Components/GoogleMap';
+import { IBusinessProfile } from '@/types/BusinessProfile';
 
-const BusinessProfile: React.FC = () => {
-  const business = useRouteData<IBusinessProfile>(RouteName.BUSINESS_PROFILE)
+// Business Profile Interface
 
-  if (!business) {
-    return null
-  }
+// Default business data
+const defaultBusiness: IBusinessProfile = {
+  id: 'tan-on-1',
+  name: 'Tan On',
+  rating: 4.6,
+  reviewCount: 5682,
+  address: 'Uxbridge Road, London',
+  openUntil: '8:00 pm',
+  isOpen: true,
+  phone: '+44 20 1234 5678',
+  website: 'www.tanon.co.uk',
+  description:
+    'At Tan On, the focus is on creating a serene and stylish experience for every client, ensuring nails are not just well-groomed but beautifully adorned. From luxury shellac manicures to paraffin treatments, this pet-friendly, eco-conscious salon welcomes all.',
+  images: {
+    main: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=300&h=200&fit=crop',
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=300&fit=crop',
+    ],
+  },
+  services: [
+    {
+      id: '1',
+      title: 'Pedicure Treatments',
+      duration: '20 mins – 1h 30m',
+      price: 10,
+      category: 'Feet',
+    },
+    {
+      id: '2',
+      title: 'Ladies – Wash & Blow Dry',
+      duration: '30 mins – 1h 15m',
+      price: 20,
+      category: 'Hair',
+    },
+    {
+      id: '3',
+      title: 'Full Head Hair Colouring',
+      duration: '1h 5m – 1h 35m',
+      price: 45,
+      category: 'Hair',
+    },
+    {
+      id: '4',
+      title: 'Manicure Treatments',
+      duration: '15 mins – 1 hour',
+      price: 8,
+      category: 'Nails',
+    },
+  ],
+  reviews: [
+    {
+      id: '1',
+      customerName: 'Tika P',
+      date: '26 Jul 2025',
+      rating: 4,
+      comment: 'Great pedicure, quick and clean.',
+    },
+    {
+      id: '2',
+      customerName: 'Anonymous',
+      date: '10 Jun 2025',
+      rating: 5,
+      comment: 'Loved the manicure service.',
+    },
+    {
+      id: '3',
+      customerName: 'Anonymous',
+      date: '11 Jun 2025',
+      rating: 2,
+      comment: 'Not the best experience this time.',
+    },
+  ],
+  nearbyVenues: [
+    {
+      id: '1',
+      name: 'No1 Hair & Beauty',
+      rating: '4.7 (10,000+)',
+      location: "Shepherd's Bush",
+      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=300&fit=crop',
+      category: 'Hair Salon',
+    },
+    {
+      id: '2',
+      name: 'The Nailist',
+      rating: '4.9 (322)',
+      location: 'Hammersmith',
+      image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=300&h=200&fit=crop',
+      category: 'Nails',
+    },
+    {
+      id: '3',
+      name: 'Da Silva Hair & Beauty',
+      rating: '5.0 (253)',
+      location: 'Hammersmith',
+      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300&h=200&fit=crop',
+      category: 'Hair Salon',
+    },
+    {
+      id: '4',
+      name: 'Moda3',
+      rating: '4.6 (379)',
+      location: "Shepherd's Bush",
+      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop',
+      category: 'Hair Salon',
+    },
+  ],
+  openingHours: [
+    { day: 'Monday', hours: '10:00 am - 8:00 pm' },
+    { day: 'Tuesday', hours: '10:00 am - 8:00 pm' },
+    { day: 'Wednesday', hours: '10:00 am - 8:00 pm' },
+    { day: 'Thursday', hours: '10:00 am - 8:00 pm' },
+    { day: 'Friday', hours: '10:00 am - 8:00 pm' },
+    { day: 'Saturday', hours: '9:00 am - 7:00 pm' },
+    { day: 'Sunday', hours: '11:00 am - 6:00 pm' },
+  ],
+  features: ['Pet-friendly', 'Eco-conscious', 'Verified business'],
+};
 
+interface BusinessProfileProps {
+  business?: IBusinessProfile;
+}
+
+export default function BusinessProfile({ business = defaultBusiness }: BusinessProfileProps) {
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -34,7 +151,7 @@ const BusinessProfile: React.FC = () => {
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-4">
-                <h1 className="text-3xl font-bold text-gray-900">{business.BusinessName}</h1>
+                <h1 className="text-3xl font-bold text-gray-900">{business.name}</h1>
                 <div className="w-6 h-6 bg-[#FF3366] rounded-full flex items-center justify-center">
                   <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path
@@ -50,12 +167,12 @@ const BusinessProfile: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-[#FF3366]" />
                   <span className="font-medium text-[#FF3366]">
-                    Abierto hasta las {business.OpenUntil}
+                    Abierto hasta las {business.openUntil}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <MapPin className="w-4 h-4" />
-                  <span>{business.Address}</span>
+                  <span>{business.address}</span>
                 </div>
                 <button className="text-[#FF3366] hover:text-[#FF3366] font-medium">
                   Obtener direcciones
@@ -64,11 +181,11 @@ const BusinessProfile: React.FC = () => {
 
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1">
-                  {business.Rating && renderStars(business.Rating)}
-                  <span className="font-semibold ml-2 text-gray-900">{business.Rating}</span>
+                  {renderStars(business.rating)}
+                  <span className="font-semibold ml-2 text-gray-900">{business.rating}</span>
                 </div>
                 <span className="text-gray-500">
-                  ({business.ReviewCount && business.ReviewCount.toLocaleString()} reseñas)
+                  ({business.reviewCount.toLocaleString()} reseñas)
                 </span>
               </div>
             </div>
@@ -93,13 +210,13 @@ const BusinessProfile: React.FC = () => {
           <div className="hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-6 h-[500px]">
             <div className="lg:col-span-2 h-full">
               <img
-                src={business.Images && business.Images.Main}
+                src={business.images.main}
                 alt="Interior del Salón"
                 className="w-full h-full object-cover rounded-xl"
               />
             </div>
             <div className="grid grid-rows-2 gap-6 h-full">
-              {business.Images && business.Images.Gallery && business.Images.Gallery.map((image, index) => (
+              {business.images.gallery.map((image, index) => (
                 <img
                   key={index}
                   src={image}
@@ -114,12 +231,12 @@ const BusinessProfile: React.FC = () => {
           <div className="lg:hidden overflow-x-auto snap-x snap-mandatory flex space-x-4 px-4 pb-4">
             <div className="snap-center flex-shrink-0 w-[90%]">
               <img
-                src={business.Images && business.Images.Main}
+                src={business.images.main}
                 alt="Interior del Salón"
                 className="w-full h-72 object-cover rounded-xl"
               />
             </div>
-            {business.Images && business.Images.Gallery && business.Images.Gallery.map((image, index) => (
+            {business.images.gallery.map((image, index) => (
               <div key={index} className="snap-center flex-shrink-0 w-[90%]">
                 <img
                   src={image}
@@ -137,7 +254,7 @@ const BusinessProfile: React.FC = () => {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Servicios</h2>
           <div className="space-y-4">
-            {business.Services.map((service) => (
+            {business.services.map((service) => (
               <Card
                 key={service.id}
                 className="bg-white border border-gray-100 rounded-xl p-6 hover:shadow-md transition-all duration-200"
@@ -163,13 +280,13 @@ const BusinessProfile: React.FC = () => {
         <section className="grid lg:grid-cols-2 gap-12">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Acerca de</h2>
-            <p className="text-gray-600 mb-8 leading-relaxed">{business.Description}</p>
+            <p className="text-gray-600 mb-8 leading-relaxed">{business.description}</p>
 
             <div className="space-y-6">
               <div>
                 <h3 className="font-semibold text-gray-900 mb-4">Horarios de Atención</h3>
                 <div className="space-y-2">
-                  {business.OpeningHours && business.OpeningHours.slice(0, 3).map((hours) => (
+                  {business.openingHours.slice(0, 3).map((hours) => (
                     <div key={hours.day} className="flex justify-between py-1">
                       <span className="text-gray-600">{hours.day}</span>
                       <span className="text-gray-900 font-medium">{hours.hours}</span>
@@ -185,7 +302,7 @@ const BusinessProfile: React.FC = () => {
               <div>
                 <h3 className="font-semibold text-gray-900 mb-4">Características</h3>
                 <div className="flex flex-wrap gap-3">
-                  {business.Features.map((feature) => (
+                  {business.features.map((feature) => (
                     <span
                       key={feature}
                       className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
@@ -219,14 +336,14 @@ const BusinessProfile: React.FC = () => {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-gray-900">Reseñas</h2>
             <div className="flex items-center gap-3">
-              {business.Rating && renderStars(business.Rating)}
-              <span className="font-bold text-gray-900 ml-2">{business.Rating}</span>
-              <span className="text-gray-500">({business.ReviewCount && business.ReviewCount.toLocaleString()})</span>
+              {renderStars(business.rating)}
+              <span className="font-bold text-gray-900 ml-2">{business.rating}</span>
+              <span className="text-gray-500">({business.reviewCount.toLocaleString()})</span>
             </div>
           </div>
 
           <div className="space-y-6">
-            {business.Reviews && business.Reviews.map((review) => (
+            {business.reviews.map((review) => (
               <Card key={review.id} className="bg-white border border-gray-100 rounded-xl p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -260,7 +377,7 @@ const BusinessProfile: React.FC = () => {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Lugares cercanos</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {business.NearbyVenues && business.NearbyVenues.map((venue) => (
+            {business.nearbyVenues.map((venue) => (
               <Card
                 key={venue.id}
                 className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer group"
@@ -288,5 +405,3 @@ const BusinessProfile: React.FC = () => {
     </div>
   );
 }
-
-export default BusinessProfile

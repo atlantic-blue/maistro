@@ -1,25 +1,23 @@
 export interface IBusinessProfile {
-  BusinessId: string;
-  BusinessName: string;
-
-  Address: string;
-  Phone?: string;
-  Services: Service[];
-  Website?: string;
-  Features: string[];
-  Description: string;
-
-  Rating?: number;
-  ReviewCount?: number;
-  OpenUntil?: string;
-  IsOpen?: boolean;
-  Images?: {
-    Main?: string;
-    Gallery?: string[];
+  id: string;
+  name: string;
+  rating: number;
+  reviewCount: number;
+  address: string;
+  openUntil: string;
+  isOpen: boolean;
+  phone?: string;
+  website?: string;
+  description: string;
+  images: {
+    main: string;
+    gallery: string[];
   };
-  Reviews?: Review[];
-  NearbyVenues?: NearbyVenue[];
-  OpeningHours?: OpeningHours[];
+  services: Service[];
+  reviews: Review[];
+  nearbyVenues: NearbyVenue[];
+  openingHours: OpeningHours[];
+  features: string[];
 }
 
 export interface Service {

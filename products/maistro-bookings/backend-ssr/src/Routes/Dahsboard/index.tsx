@@ -16,8 +16,9 @@ import {
 } from 'lucide-react';
 
 import env from '../../env';
-import { Me, MeProfile } from '../../Api/Me';
-import { MaistroUser, UserProfile } from './types';
+import { Me } from '../../Api/Me';
+import { MaistroUser, BusinessProfile } from './types';
+import { getBusinessProfileMe } from '../../Api/BusinessProfile';
 
 const Dashboard: React.FC = () => {
   const { isAuthenticated, isLoading, user } = React.useContext(AuthContext);
@@ -33,7 +34,7 @@ const Dashboard: React.FC = () => {
       websites: false,
     },
   });
-  const [meProfile, setMeProfile] = useState<Partial<UserProfile>>({
+  const [meProfile, setBusinessProfile] = useState<Partial<BusinessProfile>>({
     BusinessType: [''],
     Services: [],
     Features: [],
@@ -51,8 +52,11 @@ const Dashboard: React.FC = () => {
       return;
     }
 
-    MeProfile(env.api.meProfile, user.getTokenAccess()).then((response) => {
-      setMeProfile(response);
+    getBusinessProfileMe(
+      env.api.businessMe,
+      user.getTokenAccess()
+    ).then((response) => {
+      setBusinessProfile(response);
     });
 
     Me(env.api.me, user.getTokenAccess()).then((response) => {

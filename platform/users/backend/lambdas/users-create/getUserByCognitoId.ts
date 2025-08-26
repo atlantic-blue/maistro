@@ -1,5 +1,5 @@
-import { MaistroUser } from "../../types/user";
 import { DynamoDB } from 'aws-sdk';
+import { MaistroUser } from "../../types/user";
 
 const dynamoDB = new DynamoDB.DocumentClient();
 const USERS_TABLE = process.env.USERS_TABLE || '';

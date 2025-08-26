@@ -102,7 +102,7 @@ resource "aws_cloudfront_distribution" "www_lambda_ssr" {
     cloudfront_default_certificate = false
     ssl_support_method             = "sni-only"
     minimum_protocol_version       = "TLSv1.1_2016"
-    acm_certificate_arn            = aws_acm_certificate.www_certificate.arn
+    acm_certificate_arn            = var.acm_certificate_arn
   }
 }
 

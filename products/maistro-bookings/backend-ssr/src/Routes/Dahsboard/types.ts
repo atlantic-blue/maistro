@@ -40,11 +40,12 @@ export interface Service {
   price: number;
 }
 
-export interface UserProfile {
-  UserId: MaistroUser['UserId'];
-  CompanyName?: string;
+export interface BusinessProfile {
+  BusinessId: string;
+  Slug: string;
+  UserId: string;
+ 
   Industry?: string;
-  CompanySize?: string;
   Country?: string;
   OnboardingCompleted: boolean;
   OnboardingStep: number;

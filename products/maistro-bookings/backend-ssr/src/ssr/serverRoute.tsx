@@ -46,25 +46,27 @@ export async function serverRouteLoader(event: LambdaFunctionURLEvent, location:
     const data: Record<string, unknown> = {};
     const errors: Record<string, string> = {};
 
-    await Promise.resolve(matches.map(async routeMatch => {
-        const route = routeMatch.route
-        if(!route.load) {
-            return
-        }
+    await Promise.allSettled(
+        matches.map(async routeMatch => {
+            const route = routeMatch.route
+            if(!route.load) {
+                return
+            }
 
-        try {
-            const value = await route.load({
-                    url,
-                    params: routeMatch.params as any,
-                    headers,
-                    cookies,
-                    event,
-        });
-        data[route.id] = value;
-        } catch (error: any) {
-            errors[route.id] = error?.message || "Loader failed";
+            try {
+                const value = await route.load({
+                        url,
+                        params: routeMatch.params as any,
+                        headers,
+                        cookies,
+                        event,
+            });
+            data[route.id] = value;
+            } catch (error: any) {
+                errors[route.id] = error?.message || "Loader failed";
+            }
         }
-    }))
+    ))
 
     return { 
         data, 
@@ -81,8 +83,8 @@ export const serverRoutes: ServerRoute[] = [
         id: RouteName.BUSINESS_PROFILE,
         path: Routes.BUSINESS_PROFILE,
         load: async ({params}) => {
-            console.log(params)
-            const response = await businessProfilePrefetch()
+            const businessProfile = params.businessProfile
+            const response = await businessProfilePrefetch(businessProfile)
             return response
         }
     }

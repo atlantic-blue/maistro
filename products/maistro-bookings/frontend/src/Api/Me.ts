@@ -1,4 +1,4 @@
-import { MaistroUser, UserProfile } from "@/Routes/Dahsboard/types";
+import { MaistroUser, UserProfile } from '@/Routes/Dahsboard/types';
 
 const Me = async (url: string, token: string): Promise<MaistroUser> => {
   return fetch(url, {
