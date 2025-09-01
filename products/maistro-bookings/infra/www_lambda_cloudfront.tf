@@ -41,9 +41,9 @@ resource "aws_cloudfront_distribution" "www_lambda_ssr" {
     }
 
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
+    min_ttl                = 60 * 1
+    default_ttl            = 60 * 2
+    max_ttl                = 60 * 5
     compress               = true
   }
 
@@ -62,9 +62,9 @@ resource "aws_cloudfront_distribution" "www_lambda_ssr" {
     }
 
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
+    min_ttl                = 60 * 10
+    default_ttl            = 60 * 10
+    max_ttl                = 60 * 10
     compress               = true
   }
 

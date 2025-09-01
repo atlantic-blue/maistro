@@ -15,5 +15,9 @@ variable "product_name" {
 }
 
 variable "domain_name" {
-  default = "customers.maistro.website"
+  default = "customer.maistroapp.com"
+}
+
+variable "route53_zone_id" {
+  type = string
 }

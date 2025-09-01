@@ -32,11 +32,11 @@ variable "callback_urls" {
     "http://localhost:3000/callback/",
     "https://maistro.website/callback/",
     "https://academy.maistro.website/callback/",
-    "https://customers.maistro.website/callback/",
     "https://funnels.maistro.website/callback/",
     "https://socials.maistro.website/callback/",
     "https://v2.maistro.website/callback/",
     "https://maistroapp.com/callback/",
+    "https://customer.maistroapp.com/callback/",
   ]
 }
 
@@ -46,11 +46,11 @@ variable "logout_urls" {
     "http://localhost:3000/logout/",
     "https://maistro.website/logout/",
     "https://academy.maistro.website/logout/",
-    "https://customers.maistro.website/logout/",
     "https://funnels.maistro.website/logout/",
     "https://socials.maistro.website/logout/",
     "https://v2.maistro.website/logout/",
     "https://maistroapp.com/logout/",
+    "https://customer.maistroapp.com/logout/",
   ]
 }
 

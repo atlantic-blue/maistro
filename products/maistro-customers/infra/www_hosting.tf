@@ -3,7 +3,7 @@ module "hosting" {
   
   bucket_name          = "${var.product_name}-hosting-${var.environment}"
   domain_name = "${var.domain_name}"
-  zone_id = "Z04277421F81SV5P9H2GC"
-
+  zone_id = "${var.route53_zone_id}"
+  
   tags = local.tags
 }

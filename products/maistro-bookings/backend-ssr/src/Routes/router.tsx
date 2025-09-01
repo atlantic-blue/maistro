@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router';
 import { AuthProvider } from '@maistro/auth';
+import {Theme} from '@maistro/ui'
 
 import env from '../env';
 
@@ -19,6 +20,11 @@ const Router: React.FC = () => {
   const language = 'es';
 
   return (
+    <Theme
+      accentColor='crimson'
+      scaling="100%"
+	    radius="full"
+      >
     <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
       <ReactRoutes>
         <Route path="*" element={<Homepage />} />
@@ -58,6 +64,7 @@ const Router: React.FC = () => {
         <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
       </ReactRoutes>
     </AuthProvider>
+    </Theme>
   );
 };
 
