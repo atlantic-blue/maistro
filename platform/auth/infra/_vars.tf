@@ -37,6 +37,7 @@ variable "callback_urls" {
     "https://v2.maistro.website/callback/",
     "https://maistroapp.com/callback/",
     "https://customer.maistroapp.com/callback/",
+    "https://business.maistroapp.com/callback/",
   ]
 }
 
@@ -51,6 +52,7 @@ variable "logout_urls" {
     "https://v2.maistro.website/logout/",
     "https://maistroapp.com/logout/",
     "https://customer.maistroapp.com/logout/",
+    "https://business.maistroapp.com/logout/",
   ]
 }
 

@@ -82,7 +82,7 @@ const Helmet: React.FC<HelmetProps> = (props) => {
   return (
     <ProtectedRoute>
       <Layout
-        productName="Customers"
+        productName="Business"
         accentColor="green"
         navigation={routesNavigation}
         logo={<IconLogoSimple />}
