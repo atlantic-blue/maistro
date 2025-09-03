@@ -1,15 +1,13 @@
 /* eslint-disable */
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router';
-import { AuthProvider } from '@maistro/auth';
+import { AuthCallback, AuthProvider, Login, ProtectedRoute } from '@maistro/auth';
 
 import env from '../env';
 import Helmet from '../Components/Helmet';
 
-import Login from './Login';
 import Dashboard from './Dashboard';
 import Customers from './Customers';
-import RedirectRoute from './RedirectRoute';
 import { appRoutes, Routes } from './appRoutes';
 import Customer from './Customer';
 
@@ -20,23 +18,20 @@ const Router: React.FC = () => {
         <Route
           path="*"
           element={
-            <Helmet>
-              <ReactRoutes>
-                <Route path={'/'} element={<Dashboard />} />
-                <Route path={Routes.CUSTOMERS} element={<Customers />} />
-                <Route path={Routes.CUSTOMER} element={<Customer />} />
-              </ReactRoutes>
-            </Helmet>
+            <ProtectedRoute>
+              <Helmet>
+                <ReactRoutes>
+                  <Route path={'/'} element={<Dashboard />} />
+                  <Route path={Routes.CUSTOMERS} element={<Customers />} />
+                  <Route path={Routes.CUSTOMER} element={<Customer />} />
+                </ReactRoutes>
+              </Helmet>
+            </ProtectedRoute>
           }
         />
         <Route
           path={Routes.AUTH_CALLBACK}
-          element={
-            <RedirectRoute navigateTo={appRoutes.getHomeRoute()}>
-              <div>Hello World!</div>
-            </RedirectRoute>
-          }
-        />
+          element={<AuthCallback />} />
         <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
       </ReactRoutes>
     </AuthProvider>
