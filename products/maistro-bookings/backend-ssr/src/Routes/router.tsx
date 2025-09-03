@@ -1,17 +1,15 @@
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router';
-import { AuthProvider } from '@maistro/auth';
+import { AuthCallback, AuthProvider, Login, ProtectedRoute } from '@maistro/auth';
 import {Theme} from '@maistro/ui'
 
 import env from '../env';
 
-import Login from './Login';
 import { appRoutes, Routes } from './appRoutes';
 import Homepage from './Home';
 import BusinessProfilePage from './BusinessProfile';
 import Onboarding from './Onboarding';
-import ProtectedRoute from './ProtectedRoute';
-import { AuthCallback } from './AuthCallback';
+
 import Dashboard from './Dahsboard';
 import Helmet from '../Components/Helmet';
 
