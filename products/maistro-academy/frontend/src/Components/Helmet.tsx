@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from 'react-router';
 
 import { AuthContext } from '@maistro/auth';
 import Layout from './Layout';
-import ProtectedRoute from '../Routes/ProtectedRoute';
 import { appRoutes } from '../Routes/appRoutes';
 
 interface HelmetProps {
@@ -67,7 +66,6 @@ const Helmet: React.FC<HelmetProps> = (props) => {
   };
 
   return (
-    <ProtectedRoute>
       <Layout
         productName="Academy"
         accentColor="amber"
@@ -88,7 +86,6 @@ const Helmet: React.FC<HelmetProps> = (props) => {
       >
         {props.children}
       </Layout>
-    </ProtectedRoute>
   );
 };
 

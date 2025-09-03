@@ -1,13 +1,11 @@
 /* eslint-disable */
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router';
-import { AuthProvider } from '@maistro/auth';
+import { AuthCallback, AuthProvider, Login, ProtectedRoute } from '@maistro/auth';
 
 import env from '../env';
 import Helmet from '../Components/Helmet';
 
-import Login from './Login';
-import RedirectRoute from './RedirectRoute';
 import { appRoutes, Routes } from './appRoutes';
 import Dashboard from './Dashboard';
 import CourseLayout from './CourseLayout';
@@ -21,6 +19,7 @@ const Router: React.FC = () => {
         <Route
           path="*"
           element={
+            <ProtectedRoute>
             <Helmet>
               <ReactRoutes>
                 <Route path="/" element={<Dashboard />} />
@@ -29,17 +28,13 @@ const Router: React.FC = () => {
                 <Route path={Routes.PAYMENTS} element={<Payments />} />
               </ReactRoutes>
             </Helmet>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path={Routes.AUTH_CALLBACK}
-          element={
-            <RedirectRoute navigateTo={appRoutes.getHomeRoute()}>
-              <div>Hello World!</div>
-            </RedirectRoute>
-          }
-        />
+          element={<AuthCallback />} />
         <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
       </ReactRoutes>
     </AuthProvider>
