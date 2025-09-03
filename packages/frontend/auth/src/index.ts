@@ -1,4 +1,10 @@
 export {
     AuthContext,
-    AuthProvider
+    AuthProvider,
 } from "./AuthContext"
+
+export {
+    ProtectedRoute,
+    AuthCallback,
+    Login,
+} from "./Routes"
