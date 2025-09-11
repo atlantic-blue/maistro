@@ -22,7 +22,7 @@ export interface DecodedToken {
 const IMAGES_TABLE = process.env.USERS_TABLE || '';
 const IMAGES_USAGE_TABLE = process.env.USER_PROFILES_TABLE || '';
 const S3_BUCKET = process.env.S3_BUCKET || '';
-const CLOUDFRONT_URL = process.env.CLOUDFRONT_URL || '';
+const HOSTING_DOMAIN_URL = process.env.HOSTING_DOMAIN_URL || '';
 const S3_UPLOAD_TIMEOUT =  300 // 5 minutes
 const S3_UPLOAD_SIZE_LIMIT = 5 * 1024 * 1024 // Max 5MB
 
@@ -30,7 +30,7 @@ const imageService = new ImagesService(
     new ImagesRepository(IMAGES_TABLE),
     new ImagesUsageRepository(IMAGES_USAGE_TABLE),
     {
-        CloudfrontUrl: CLOUDFRONT_URL,
+        HostingDomainUrl: HOSTING_DOMAIN_URL,
         S3Bucket: S3_BUCKET,
         SizeLimit: S3_UPLOAD_SIZE_LIMIT,
         Timeout: S3_UPLOAD_TIMEOUT,

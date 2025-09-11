@@ -11,7 +11,7 @@ const s3 = new S3();
 
 interface ImagesServiceConfig {
     S3Bucket: string
-    CloudfrontUrl: string
+    HostingDomainUrl: string
     Timeout: number
     SizeLimit: number
     Variants: {
@@ -63,7 +63,7 @@ class ImagesService {
                 OwnerId: input.OwnerId,
                 OwnerType: input.OwnerType
             },
-            this.config.CloudfrontUrl
+            this.config.HostingDomainUrl
         )
 
         const PresignedUrl = s3.createPresignedPost({
@@ -123,7 +123,7 @@ class ImagesService {
             ImageId,
             OwnerId,
             OwnerType,
-        }, this.config.CloudfrontUrl)
+        }, this.config.HostingDomainUrl)
 
         // 3) Save variants
         const put = (key: string, body: Buffer) =>

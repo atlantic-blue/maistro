@@ -18,7 +18,7 @@ module "platform_lambda_images" {
       IMAGES_TABLE         = aws_dynamodb_table.maistro_images.name
       IMAGES_USAGE_TABLE = aws_dynamodb_table.maistro_images_usage.name
       S3_BUCKET = module.hosting.www_bucket
-      CLOUDFRONT_URL = module.hosting.www_cloudfront_distribution
+      HOSTING_DOMAIN_URL = var.domain_name
   }
 
   tags = local.tags
