@@ -11,7 +11,7 @@ variable "environment" {
 }
 
 variable "product_name" {
-    default = "maistro-customer"
+  default = "maistro-customer"
 }
 
 variable "domain_name" {
