@@ -8,15 +8,15 @@ const doc = DynamoDBDocumentClient.from(dynamoDB)
 const QUOTA_BYTES_DEFAULT = 1e+9 * 2// 2GB
 
 class ImagesUsageRepository {
-    private tableName: string
+    private db: string
 
-    constructor(tableName: string) {
-        this.tableName = tableName
+    constructor(db: string) {
+        this.db = db
     }
 
     async updateQuota(ownerId: string, bytesQuota: number): Promise<void> {
         await doc.send(new UpdateCommand({
-            TableName: this.tableName,
+            TableName: this.db,
             Key: {OwnerId: ownerId },
             UpdateExpression: "SET BytesQuota = if_not_exists(BytesQuota, :z) + :d",
             ExpressionAttributeValues: { ":z": QUOTA_BYTES_DEFAULT, ":d": bytesQuota }
@@ -25,7 +25,7 @@ class ImagesUsageRepository {
 
     async updateUsage(ownerId: string, bytesUsed: number): Promise<void> {
         await doc.send(new UpdateCommand({
-            TableName: this.tableName,
+            TableName: this.db,
             Key: {OwnerId: ownerId },
             UpdateExpression: "SET BytesUsed = if_not_exists(BytesUsed, :z) + :d",
             ExpressionAttributeValues: { ":z": 0, ":d": bytesUsed }
@@ -34,7 +34,7 @@ class ImagesUsageRepository {
 
     async getUsage(ownerId: string): Promise<MaistroImageUsage> {
         const response = await doc.send(new GetCommand({
-            TableName: this.tableName,
+            TableName: this.db,
             Key: { OwnerId: ownerId }
         }))
 

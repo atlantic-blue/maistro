@@ -19,8 +19,8 @@ export interface DecodedToken {
   [key: string]: any;
 }
 
-const IMAGES_TABLE = process.env.USERS_TABLE || '';
-const IMAGES_USAGE_TABLE = process.env.USER_PROFILES_TABLE || '';
+const IMAGES_TABLE = process.env.IMAGES_TABLE || '';
+const IMAGES_USAGE_TABLE = process.env.IMAGES_USAGE_TABLE || '';
 const S3_BUCKET = process.env.S3_BUCKET || '';
 const HOSTING_DOMAIN_URL = process.env.HOSTING_DOMAIN_URL || '';
 const S3_UPLOAD_TIMEOUT =  300 // 5 minutes
@@ -59,7 +59,7 @@ const imageService = new ImagesService(
  * Main handler for images service API
  */
 export const handler: APIGatewayProxyHandler = async (event) => {
-      console.log('User Service API event:', JSON.stringify(event, null, 2));
+      console.log('Images Service API event:', JSON.stringify(event, null, 2));
 
   const corsHeaders = {
     'Content-Type': 'application/json',

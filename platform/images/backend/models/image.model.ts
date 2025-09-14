@@ -7,7 +7,7 @@ class ImageModel implements MaistroImage {
     public OwnerId: string;
     public OwnerType: "user" | "business";
     public ProcessedAt: string;
-    public SizesInBytes: { Optimized: number; Low: number; Medium: number; High: number; TotalBytes: number; };
+    public SizesInBytes: { Optimised: number; Low: number; Medium: number; High: number; TotalBytes: number; };
     public Status: "UPLOADING" | "READY";
     public Urls: { Optimized: string; Low: string; Medium: string; High: string; Original: string };
 

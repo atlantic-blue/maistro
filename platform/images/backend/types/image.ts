@@ -18,7 +18,7 @@ export interface MaistroImage {
     }
 
     SizesInBytes: {
-        Optimized: number,
+        Optimised: number,
         Low: number,
         Medium: number,
         High: number,

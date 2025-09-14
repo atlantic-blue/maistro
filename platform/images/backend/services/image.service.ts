@@ -1,7 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { S3 } from 'aws-sdk';
-// @ts-ignore
-import { ImagePool } from '@squoosh/lib';
+import { Jimp } from "jimp";
 
 import ImagesRepository from "../repositories/image";
 import ImagesUsageRepository from "../repositories/imageUsage";
@@ -56,6 +55,8 @@ class ImagesService {
      * - Writes "UPOLADING" state to db
      */
     async createPresignedUrl(input: Pick<MaistroImage, "ContentType" | "OwnerId" | "OwnerType">) {
+        console.log("createPresignedUrl")
+        console.log("Worksout future image URLs")
         const ImageId = uuid()
         const Urls = this.createImageUrls(
             {
@@ -66,19 +67,22 @@ class ImagesService {
             this.config.HostingDomainUrl
         )
 
+        console.log("Returns S3 presigned POST url")
         const PresignedUrl = s3.createPresignedPost({
                 Bucket: this.config.S3Bucket, 
                 Fields: {
-                    key: Urls.Original,
+                    Key: Urls.Original.replace(`${this.config.HostingDomainUrl}/`, ""),
                     'Content-Type': input.ContentType,
                 },
                 Conditions: [
+                    ['eq', '$Content-Type', input.ContentType],
                     ['content-length-range', 0, this.config.SizeLimit],
                 ],
                 Expires: this.config.Timeout,
             })
 
 
+        console.log("Writes `UPOLADING` state to db")
         await this.imagesRepository.createImagePlaceholder({
             ImageId,
             ContentType: input.ContentType,
@@ -95,10 +99,11 @@ class ImagesService {
 
     /**
      * @param key string
-     * resize rules for /users|business/<id>/originals/...
+     * resize rules for users|business/<id>/originals/...
      */
     public async resizeVariants(key: string) {
-        const match = key.match(/^(users|businesses)\/([^/]+)\/originals\/([^/]+)$/);
+        console.log("math", key)
+        const match = key.match(/^(users|businesses)\/([^/]+)\/([^/]+)\/([^/]+)$/);
         if(!match) {
             console.log("RESIZE OBJECT: invalid key", key)
             return
@@ -108,10 +113,10 @@ class ImagesService {
         const OwnerId   = match[2];
         const ImageId   = match[3];
 
-        // 1) Fetch original from s3
+        console.log("1) Fetch original from s3")
         const origBuf = await this.getObjectBuffer(this.config.S3Bucket, key);
 
-        // 2) Process Images
+        console.log("2) Process Images")
         const {
             lowVariant,
             mediumVariant,
@@ -125,28 +130,28 @@ class ImagesService {
             OwnerType,
         }, this.config.HostingDomainUrl)
 
-        // 3) Save variants
+        console.log("3) Save variants")
         const put = (key: string, body: Buffer) =>
             s3.putObject({
                 Bucket: this.config.S3Bucket,
                 Key: key,
                 Body: body,
-                ContentType: "image/webp",
+                ContentType: "image/png",
             }).promise();
 
         await Promise.all([
-            put(Urls.Low, lowVariant),
-            put(Urls.Medium, mediumVariant),
-            put(Urls.High, highVariant),
-            put(Urls.Optimized, optimisedVariant),
+            put(Urls.Low.replace(`${this.config.HostingDomainUrl}/`, ""), lowVariant),
+            put(Urls.Medium.replace(`${this.config.HostingDomainUrl}/`, ""), mediumVariant),
+            put(Urls.High.replace(`${this.config.HostingDomainUrl}/`, ""), highVariant),
+            put(Urls.Optimized.replace(`${this.config.HostingDomainUrl}/`, ""), optimisedVariant),
         ]);
 
-        // 4) Mark Image as processed
+        console.log("4) Mark Image as processed")
         const SizesInBytes: MaistroImage["SizesInBytes"] = {
             Low: lowVariant.byteLength,
             Medium: mediumVariant.byteLength,
             High: highVariant.byteLength,
-            Optimized: optimisedVariant.byteLength,
+            Optimised: optimisedVariant.byteLength,
             TotalBytes: (
                 optimisedVariant.byteLength + 
                 lowVariant.byteLength +
@@ -161,10 +166,10 @@ class ImagesService {
             SizesInBytes,
         })
 
-        // 5) Update User's usage
+        console.log("5) Update User's usage")
         await this.imagesUsageRepository.updateUsage(OwnerId, SizesInBytes.TotalBytes)
 
-        // 4) Delete raw original
+        console.log("6) Delete raw original")
         await s3.deleteObject({ Bucket: this.config.S3Bucket, Key: key }).promise();
 
         return {
@@ -191,30 +196,27 @@ class ImagesService {
     private createImageUrls(
         input: Pick<MaistroImage, "OwnerId" | "OwnerType" | "ImageId">,
         baseUrl: string,
-        extension: string = "webp",
+        extension: string = "png",
     ): MaistroImage["Urls"] {
         const owner = `${input.OwnerType === "user" ? "users" : "businesses"}`
         const url = `${baseUrl}/${owner}/${input.OwnerId}/${input.ImageId}`;
 
         return {
-            High: `${url}/high.${extension}`,
-            Low: `${url}/low.${extension}`,
-            Medium: `${url}/medium.${extension}`,
-            Optimized: `${url}/optimized.${extension}`,
+            High: `${url}/${this.config.Variants.high.width}px.${extension}`,
+            Low: `${url}/${this.config.Variants.low.width}px.${extension}`,
+            Medium: `${url}/${this.config.Variants.medium.width}px.${extension}`,
+            Optimized: `${url}/${this.config.Variants.optimised.width}px.${extension}`,
             Original: `${url}/original.bin`,
         }
     }
 
     private async createVariants(origBuf: Buffer) {
-        const pool = new ImagePool(1); // concurrency; keep low on Lambda
+        async function createVariant(width: number, quality: number): Promise<Buffer> {
+            const image = await Jimp.fromBuffer(origBuf);
+            image.resize({ w: width });
 
-        async function createVariant(width: number, quality: number) {
-            const img = pool.ingestImage(origBuf);
-            await img.decoded;
-            await img.preprocess({ resize: { width } });
-            await img.encode({ webp: { quality } });
-            const { binary } = await img.encodedWith.webp;
-            return Buffer.from(binary);
+            // Png export
+            return await image.getBuffer("image/png", { quality });
         }
 
         const [
@@ -229,7 +231,6 @@ class ImagesService {
             createVariant(this.config.Variants.optimised.width, this.config.Variants.optimised.quality)
         ]);
 
-        await pool.close();
         return {
             lowVariant,
             mediumVariant,

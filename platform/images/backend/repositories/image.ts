@@ -8,8 +8,8 @@ const doc = DynamoDBDocumentClient.from(dynamoDB);
 class ImagesRepository {
     private db: string
 
-    constructor(imagesTable: string) {
-        this.db = imagesTable
+    constructor(db: string) {
+        this.db = db
     }
 
     async createImagePlaceholder(input: Pick<MaistroImage, "ImageId" | "ContentType" | "OwnerId" | "OwnerType">): Promise<Partial<MaistroImage> | null> {
