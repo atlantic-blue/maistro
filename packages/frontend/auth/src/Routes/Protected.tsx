@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AuthContext } from '../AuthContext';
 
 interface ProtectedRouteProps {
@@ -6,15 +6,21 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
-  const { isAuthenticated, isLoading, logIn } = React.useContext(AuthContext);
+  const { isAuthenticated, isLoading, logIn, logOut, isLoggedOut } = React.useContext(AuthContext);
+
+  useEffect(() => {
+    if(isLoading) {
+      return 
+    }
+
+    if(!isAuthenticated || isLoggedOut) {
+      logOut().then(logIn)
+    }
+
+  }, [isAuthenticated, isLoading, logIn, logOut, isLoggedOut])
 
   if (isLoading) {
     return <div>Loading User....</div>;
-  }
-
-  if (!isAuthenticated && !isLoading) {
-    logIn();
-    return null;
   }
 
   return <>{props.children}</>;

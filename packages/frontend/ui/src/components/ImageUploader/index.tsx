@@ -50,9 +50,9 @@ export function MaistroImageUploader({
             state: "QUEUED",
             progress: 0,
         });
-
-        setItems((prev) => [...next, ...prev]);
     }
+
+    setItems((prev) => [...next, ...prev]);
   }
 
   const handleUpload = async (id: string) => {
@@ -116,8 +116,9 @@ export function MaistroImageUploader({
         xhr.onload = async () => {
             if (xhr.status >= 200 && xhr.status < 300) {
                 // S3 usually returns 204 for successful POST
-                setItems((cur) => updateItem(cur, id, { state: "PROCESSING", progress: 100, xhr: undefined, s3Key }));
-                // 3) Manually trigger resize in your API
+                setItems((item) => updateItem(item, id, { state: "DONE", progress: 100, xhr: undefined, s3Key }));
+
+                // 3) Manually trigger resize
                 const reponse = await resizeImage({
                     url: `${apiBaseUrl}/resize`,
                     key: `${ownerType === "user" ? "users" : "businesses"}/${ownerId}/${response.ImageId}/original.bin`,
@@ -157,7 +158,9 @@ export function MaistroImageUploader({
     });
   };
 
-  const clearDone = () => setItems((cur) => cur.filter((x) => x.state !== "DONE" && x.state !== "CANCELED"));
+  const clearDone = () => {
+    setItems([]);
+  }
 
   const totalPct = React.useMemo(() => {
     if (items.length === 0) {
@@ -173,7 +176,6 @@ export function MaistroImageUploader({
     return Math.round(sum / active.length);
   }, [items]);
 
-  // TODO fix flow, resizing works but UI doesn't reflect it
   return (
     <Theme appearance="light" accentColor="crimson" grayColor="sand" radius="large" scaling="100%">
       <Card
@@ -193,7 +195,7 @@ export function MaistroImageUploader({
               <Button variant="solid" onClick={() => inputRef.current?.click()} style={{ background: "#FF3366" }}>
                 Seleccionar archivos
               </Button>
-              <Button variant="soft" onClick={startAll}>Subir & procesar</Button>
+              <Button variant="soft" onClick={startAll}>Subir</Button>
               <Button variant="ghost" onClick={clearDone}>Limpiar</Button>
             </Flex>
           </Flex>
@@ -224,8 +226,8 @@ export function MaistroImageUploader({
         </Box>
 
         <Flex className="py-6" direction="column">
-            {items.map((it) => (
-              <ItemRow key={it.id} item={it} onCancel={() => cancelItem(it.id)} />
+            {items.map((item, index) => (
+              <ItemRow key={`${item.id}-${index}`} item={item} onCancel={() => cancelItem(item.id)} />
             ))}
             {items.length === 0 && (
               <Text className="py-3" color="gray">No hay archivos aún. Usa “Seleccionar archivos” o arrastra aquí.</Text>

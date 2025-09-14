@@ -15,17 +15,19 @@ interface Configuration extends WebpackConfiguration {
 
 const createConfig = ({
   dirname,
-  isProduction
-}: {dirname: string, isProduction: boolean}): Configuration => {
+  isProduction,
+  analyse
+}: {dirname: string, isProduction: boolean, analyse?: boolean}): Configuration => {
   const env = createWebpackEnv({
-    ANALYSE: false,
+    ANALYSE: analyse || false,
     NODE_ENV: isProduction ? "production" : "development"
   })
+
   const paths = createWebpackPaths(dirname)
   const plugins = createWebpackPlugins(env, paths)
 
   const config: Configuration = {
-    mode: isProduction ? 'production' : 'development',
+  mode: isProduction ? 'production' : 'development',
   entry: './src/index.tsx',
   output: {
     path: path.resolve(dirname, 'dist'),
@@ -44,8 +46,11 @@ const createConfig = ({
       {
         test: /\.scss$/,
         use: [
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: { importLoaders: 1 }, // make imports go through postcss
+          },
           'postcss-loader',
           'sass-loader',
         ],
@@ -53,8 +58,11 @@ const createConfig = ({
       {
         test: /\.css$/,
         use: [
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: { importLoaders: 1 }, // make imports go through postcss
+          },
           'postcss-loader',
         ],
       },
@@ -89,14 +97,12 @@ const createConfig = ({
   },
   }
 
-  if (isProduction) {
-    config.plugins?.push(
+  config.plugins?.push(
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash].css',
 
       })
     );
-  }
 
   return config
 };

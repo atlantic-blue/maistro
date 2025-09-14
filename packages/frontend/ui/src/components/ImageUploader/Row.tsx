@@ -31,7 +31,7 @@ export function ItemRow({ item, onCancel }: { item: UploadItem; onCancel: () => 
   const humanEta = item.etaSec ? `${item.etaSec}s` : "";
 
   return (
-    <Card className="my-3">
+    <Card className="mb-2">
       <Flex align="center" gap="3">
         <img
           src={item.previewUrl}
