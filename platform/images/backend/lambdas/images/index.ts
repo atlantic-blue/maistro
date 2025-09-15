@@ -10,6 +10,9 @@ import { MaistroImage } from '../../types/image';
 enum Routes{
     createSignedUrl = '/signedUrl',
     resize = '/resize',
+
+    getImages = '/images',
+    getUsage = '/usage'
 }
 
 export interface DecodedToken {
@@ -123,6 +126,46 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             return {
                  statusCode: 200,
                  body: JSON.stringify(response)
+            }
+        }
+     }
+
+     if(method === "GET") {
+        if (path == Routes.getImages) {
+            const params = event.queryStringParameters || {};
+
+            // TODO check that user in cognito belongs to ownerId, needs to bring in the user table
+            if (!params.OwnerId) {
+                return createErrorResponse(400, 'wrong params', corsHeaders);
+            }
+
+            const response = await imageService.getImages(
+                params.OwnerId,
+                Number(params.Limit) || 20,
+                params.Next
+            )
+
+            return {
+                statusCode: 200,
+                body: JSON.stringify(response)
+            }
+        }
+
+        if (path == Routes.getUsage) {
+            const params = event.queryStringParameters || {};
+
+            // TODO check that user in cognito belongs to ownerId, needs to bring in the user table
+            if (!params.OwnerId) {
+                return createErrorResponse(400, 'OwnerId is required', corsHeaders);
+            }
+
+            const response = await imageService.getImagesUsage(
+                params.OwnerId,
+            )
+
+            return {
+                statusCode: 200,
+                body: JSON.stringify(response)
             }
         }
      }

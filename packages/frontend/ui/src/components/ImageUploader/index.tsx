@@ -8,7 +8,10 @@ import { ItemRow } from "./Row";
 
 
 type Props = {
-  apiBaseUrl: string;      // e.g. https://images.maistro.app
+  urls: {
+    getPresignedUrl: string,
+    resize: string
+  }
   ownerType: OwnerType;    // "user" | "business"
   ownerId: string;         // current owner id
   maxFileMB?: number;      // default 5
@@ -16,7 +19,7 @@ type Props = {
 };
 
 export function MaistroImageUploader({
-  apiBaseUrl,
+  urls,
   ownerType,
   ownerId,
   maxFileMB = 5,
@@ -56,6 +59,23 @@ export function MaistroImageUploader({
   }
 
   const handleUpload = async (id: string) => {
+    const item = getItem(items, id);
+    if (!item) {
+        console.log("No Item found", id)
+        return 
+    };
+
+    if ([
+      "DONE",
+      "UPLOADING",
+      "PROCESSING",
+      "ERROR",
+      "CANCELED"
+    ].includes(item.state)) {
+      console.log(`Aborting Item ${item.id} | State: ${item.state}`)
+      return
+    }
+
     setItems((prev) => {
         return updateItem(
             prev,
@@ -63,16 +83,10 @@ export function MaistroImageUploader({
             { state: "SIGNING", progress: 0, message: "" })
     });
 
-    const item = getItem(items, id);
-    if (!item) {
-        console.log("No Item found", id)
-        return 
-    };
-
     try {
         // 1) Ask backend for presigned POST
         const response = await getPresignedUrl({
-            url: `${apiBaseUrl}/signedUrl`,
+            url: urls.getPresignedUrl,
             item,
             OwnerId: ownerId,
             OwnerType: ownerType,
@@ -120,7 +134,7 @@ export function MaistroImageUploader({
 
                 // 3) Manually trigger resize
                 const reponse = await resizeImage({
-                    url: `${apiBaseUrl}/resize`,
+                    url: urls.resize,
                     key: `${ownerType === "user" ? "users" : "businesses"}/${ownerId}/${response.ImageId}/original.bin`,
                     token,
                 }).catch((e) =>

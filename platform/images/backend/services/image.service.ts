@@ -4,7 +4,7 @@ import { Jimp } from "jimp";
 
 import ImagesRepository from "../repositories/image";
 import ImagesUsageRepository from "../repositories/imageUsage";
-import { MaistroImage } from "../types/image";
+import { MaistroImage, MaistroImageUsage } from "../types/image";
 
 const s3 = new S3();
 
@@ -176,6 +176,21 @@ class ImagesService {
             ImageId,
             Urls,
         }
+    }
+
+    public async getImages(ownerId: string, limit: number, next?: string) {
+        const response = await this.imagesRepository.getImagesByOwner(ownerId, limit, next)
+
+        return {
+            images: response.images,
+            next: response.next
+        }
+    }
+
+    public async getImagesUsage(ownerId: string): Promise<MaistroImageUsage> {
+        const response = await this.imagesUsageRepository.getUsage(ownerId)
+
+        return response
     }
 
     private async getObjectBuffer(Bucket: string, Key: string): Promise<Buffer> {

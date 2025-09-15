@@ -13,6 +13,7 @@
     "@aws-sdk/client-dynamodb": "^3.879.0",
     "@aws-sdk/lib-dynamodb": "^3.879.0",
     "@aws-sdk/s3-presigned-post": "^3.884.0",
+    "@aws-sdk/util-dynamodb": "^3.888.0",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/plugin-transform-modules-commonjs": "^7.27.1",

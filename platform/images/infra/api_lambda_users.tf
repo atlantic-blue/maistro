@@ -9,6 +9,9 @@ module "platform_lambda_images" {
   route_keys = [
     "POST /signedUrl",
     "POST /resize",
+
+    "GET /images",
+    "GET /usage",
   ]
 
   input_dir   = "${path.module}/../backend/dist/images"
@@ -20,6 +23,9 @@ module "platform_lambda_images" {
       S3_BUCKET = module.hosting.www_bucket
       HOSTING_DOMAIN_URL = var.domain_name
   }
+
+  lambda_timeout = 60 * 15 // 15 minutes
+  lambda_memory_size = 1024
 
   tags = local.tags
 }

@@ -1,6 +1,7 @@
 import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { MaistroImage } from '../types/image';
 import { DeleteCommand, DynamoDBDocumentClient, GetCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 
 const dynamoDB = new DynamoDBClient({});
 const doc = DynamoDBDocumentClient.from(dynamoDB);
@@ -31,6 +32,7 @@ class ImagesRepository {
 
             return item   
         } catch (error) {
+            console.log("createImagePlaceholder", JSON.stringify(input))
             throw error
         }
     }
@@ -43,11 +45,16 @@ class ImagesRepository {
                 TableName: this.db,
                 Key: { ImageId: input.ImageId },
                 UpdateExpression: [
-                    "SET Status = :ready",
+                    "SET #status = :ready",
                     "ProcessedAt = :ts",
-                    "Urls = :urls",
-                    "SizesInBytes = :sizes",
+                    "#urls = :urls",
+                    "#sizes = :sizes",
                 ].filter(Boolean).join(", "),
+                ExpressionAttributeNames: {
+                    "#status": "Status",          // <-- reserved word in dynamo, must alias
+                    "#urls": "Urls",          
+                    "#sizes": "SizesInBytes",
+                },
                 ExpressionAttributeValues: {
                     ":ready": "READY",
                     ":ts": new Date().toISOString(),
@@ -57,7 +64,8 @@ class ImagesRepository {
                 ConditionExpression: "attribute_not_exists(ProcessedAt)" // idempotency guard
             }))
         } catch (error) {
-            
+            console.log("updateImageProcessed", JSON.stringify(input))
+            throw error
         }
     }
 
@@ -79,10 +87,10 @@ class ImagesRepository {
 
     async getImagesByOwner(
         ownerId: string,
-        limit: 20,
+        limit: number,
         next?: string
     ): Promise<{
-        items: MaistroImage[],
+        images: MaistroImage[],
         next?: string
     }> {
         const ExclusiveStartKey = next ? JSON.parse(Buffer.from(next, "base64").toString("utf8")) : undefined;
@@ -100,8 +108,11 @@ class ImagesRepository {
             ExclusiveStartKey,
         }))
 
+        const images = (response.Items ?? []).map((av) => unmarshall(av)) as MaistroImage[];
+        images.sort((a, b) => new Date(b.CreatedAt).getTime() - new Date(a.CreatedAt).getTime());
+
         return {
-            items: (response.Items ?? []) as unknown as MaistroImage[],
+            images,
             next: response.LastEvaluatedKey ? Buffer.from(JSON.stringify(response.LastEvaluatedKey)).toString("base64") : undefined
         }
     }

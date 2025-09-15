@@ -37,3 +37,13 @@ variable "apigateway_execution_arn" {
 variable "apigateway_bucket_id" {
   type = string
 }
+
+variable "lambda_timeout" {
+  type = number
+  default = 60 * 5 // 5 minutes
+}
+
+variable "lambda_memory_size" {
+  type = number
+  default = 128 * 4
+}
