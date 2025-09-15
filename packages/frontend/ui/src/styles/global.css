@@ -4,17 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
-    --maistro-black: #000000;
-    --maistro-white: #FFFFFF;
-    --maistro-accent-pink: #FF6F7D;
-    --maistro-gray-light: #F5F5F5;
-    --maistro-gray-medium: #ADADAD;
-    --maistro-gray-dark: #444444;
-  }
-  
-  body {
-    font-family: 'Inter', sans-serif;
-  }
-  
+  --maistro-black: #000000;
+  --maistro-white: #ffffff;
+  --maistro-accent-pink: #ff6f7d;
+  --maistro-gray-light: #f5f5f5;
+  --maistro-gray-medium: #adadad;
+  --maistro-gray-dark: #444444;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
