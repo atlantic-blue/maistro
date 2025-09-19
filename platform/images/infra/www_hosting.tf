@@ -5,6 +5,12 @@ module "hosting" {
   domain_name =       "${var.domain_name}"
   zone_id = "${var.route53_zone_id}"
 
+  default_cache={
+    min_ttl: 300, # 5 minutes
+    default_ttl:  86400, # 1 day  
+    max_ttl: 31536000   # 1 year
+  }
+
   tags = merge(
     "${local.tags}",
     {

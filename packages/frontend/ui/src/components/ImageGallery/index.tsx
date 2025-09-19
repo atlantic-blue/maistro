@@ -1,32 +1,8 @@
 import * as React from 'react';
-import {
-  Theme,
-  Card,
-  Flex,
-  Box,
-  Button,
-  Text,
-  Callout,
-  Separator,
-  Avatar,
-  Dialog,
-  SegmentedControl,
-  Tooltip,
-  Badge,
-} from '@radix-ui/themes';
-import {
-  Image as ImageIcon,
-  Trash2,
-  ExternalLink,
-  Copy,
-  Download,
-  LayoutGrid,
-  List,
-  RefreshCw,
-} from 'lucide-react';
 import { MaistroImage } from './types';
 import { getImages } from './api';
-import { GridView } from './GridView';
+import { FeedView } from './FeedView';
+import { ViewerDialog } from './ViewerDialog';
 
 interface ImageGalleryProps {
   urls: {
@@ -37,7 +13,6 @@ interface ImageGalleryProps {
 }
 
 export const MaistroImageGallery = ({ urls, token, ownerId }: ImageGalleryProps) => {
-  const [mode, setMode] = React.useState<'grid' | 'feed'>('grid');
   const [images, setItmages] = React.useState<MaistroImage[]>([]);
   const [next, setNext] = React.useState<string | undefined>(undefined);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -45,7 +20,6 @@ export const MaistroImageGallery = ({ urls, token, ownerId }: ImageGalleryProps)
   const [selectedIndex, setSelectedIndex] = React.useState<number | null>(null);
   const sentinelRef = React.useRef<HTMLDivElement | null>(null);
   const [hardRefreshKey, setHardRefreshKey] = React.useState(0);
-  const [busyIds, setBusyIds] = React.useState<Record<string, boolean>>({}); // for delete spinners
 
   const load = React.useCallback(
     async (reset = false) => {
@@ -105,69 +79,29 @@ export const MaistroImageGallery = ({ urls, token, ownerId }: ImageGalleryProps)
     load(true);
   }, [hardRefreshKey]);
 
-  const refresh = () => setHardRefreshKey((k) => k + 1);
-
-  const onOpen = () => {};
   const onDelete = () => {};
+  const onOpen = (idx: number) => setSelectedIndex(idx);
+  const closeViewer = () => setSelectedIndex(null);
 
   return (
     <div className="min-h-screen bg-[#FFF8F6]">
-      <div className="mx-auto max-w-6xl px-4 py-6">
-        {/* Header */}
-        <Card className="!border !border-neutral-200 !shadow-md">
-          <Flex align="center" justify="between" className="p-4">
-            <Flex align="center" gap="3">
-              <Avatar fallback="M" size="3" />
-              <Box>
-                <Text size="5" weight="bold">
-                  Tu galería
-                </Text>
-                <Text size="2" color="gray">
-                  Social style · Maistro
-                </Text>
-              </Box>
-            </Flex>
-            <Flex align="center" gap="3">
-              <SegmentedControl.Root value={mode} onValueChange={(v) => setMode(v as any)}>
-                <SegmentedControl.Item value="grid">
-                  <LayoutGrid size={16} />
-                  &nbsp;Grid
-                </SegmentedControl.Item>
-                <SegmentedControl.Item value="feed">
-                  <List size={16} />
-                  &nbsp;Feed
-                </SegmentedControl.Item>
-              </SegmentedControl.Root>
-              <Button onClick={refresh} variant="soft">
-                <RefreshCw size={16} />
-                &nbsp;Actualizar
-              </Button>
-            </Flex>
-          </Flex>
+      <FeedView
+        images={images}
+        onDelete={onDelete}
+        onOpen={onOpen}
+        loading={loading}
+      />
 
-          {error && (
-            <Box className="px-4 pb-4">
-              <Callout.Root color="red">
-                <Callout.Text>{error}</Callout.Text>
-              </Callout.Root>
-            </Box>
-          )}
-        </Card>
+      <ViewerDialog
+        open={selectedIndex !== null}
+        onOpenChange={(o) => (o ? null : closeViewer())}
+        images={images}
+        index={selectedIndex ?? 0}
+        onIndexChange={setSelectedIndex}
+        />
 
-        <Separator my="4" />
-
-        <GridView images={images} onOpen={onOpen} onDelete={onDelete} busyIds={busyIds} />
-
-        {/* {mode === 'grid' ? (
-                    
-                    ) : (
-                    <FeedView items={images} onOpen={openAt} onDelete={onDelete} busyIds={busyIds} />
-                    )
-                } */}
-
-        {/* Sentinel for infinite scroll */}
-        <div ref={sentinelRef} className="h-12" />
-      </div>
+      {/* Sentinel for infinite scroll */}
+      <div ref={sentinelRef} className="h-12" />
     </div>
   );
 };

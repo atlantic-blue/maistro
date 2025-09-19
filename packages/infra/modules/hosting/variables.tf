@@ -18,3 +18,12 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable default_cache {
+  type = map(string)
+  default = {
+    min_ttl = 0
+    default_ttl = 0
+    max_ttl = 0
+  }
+}

@@ -32,9 +32,9 @@ resource "aws_cloudfront_distribution" "www" {
 
     viewer_protocol_policy = "redirect-to-https"
 
-    min_ttl     = 0
-    default_ttl = 0
-    max_ttl     = 0
+    min_ttl     = var.default_cache.min_ttl
+    default_ttl = var.default_cache.default_ttl
+    max_ttl     = var.default_cache.max_ttl
     compress    = true
   }
 
