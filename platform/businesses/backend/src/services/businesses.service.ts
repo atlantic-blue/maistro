@@ -33,6 +33,10 @@ export interface UpdateBusinessFormData {
     firstLine: string;
   };
   email: string;
+  images: {
+    main: string;
+    gallery: string[];
+  };
   description: string;
   services: Service[];
   features: string[];
@@ -118,6 +122,10 @@ export class BusinessesProfileService {
                 Country: "",
                 Postcode: "",
             },
+            Images: {
+                Main: "",
+                Gallery: [],
+            },
             Phone: onboardingData.phone,
             Description: onboardingData.description,
             Services: onboardingData.services,
@@ -176,6 +184,10 @@ export class BusinessesProfileService {
                 Postcode: data.addressDetails.postcode,
             },
             Email: data.email,
+            Images: {
+                Main: data.images.main,
+                Gallery: data.images.gallery,
+            },
         };
 
         await this.dbRepository.updateBusinessProfile(businessProfile)

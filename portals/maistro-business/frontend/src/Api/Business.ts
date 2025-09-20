@@ -49,6 +49,10 @@ export interface UpdateBusinessFormData {
     firstLine: string;
   };
   email: string;
+  images: {
+    main: string;
+    gallery: string[];
+  };
 }
 
 export const postBusinessUpdate = async (

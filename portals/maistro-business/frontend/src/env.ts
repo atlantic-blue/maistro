@@ -7,6 +7,11 @@ interface Env {
       businessById: (id: string) => string;
       postBusinessById: (id: string) => string;
     };
+    images: {
+      getImages: string;
+      resizeImages: string;
+      getPresignedUrl: string;
+    };
   };
   auth: {
     baseUrl: string;
@@ -21,6 +26,7 @@ interface Env {
 const createEnv = (): Env => {
   const authBaseUrl = process.env.AUTH_DOMAIN || '';
   const businessesBaseUrl = 'https://maistro-platform-businesses-api-production.maistroapp.com/v1';
+  const imagesBaseUrl = 'https://maistro-platform-images-api-production.maistroapp.com/v1';
 
   return {
     api: {
@@ -29,7 +35,12 @@ const createEnv = (): Env => {
         onboarding: `${businessesBaseUrl}/businesses/onboarding`,
         businessBySlug: (slug: string) => `${businessesBaseUrl}/businesses/slug/${slug}/profile`,
         businessById: (id: string) => `${businessesBaseUrl}/businesses/id/${id}/profile`,
-        postBusinessById: (id: string) => `${businessesBaseUrl}//businesses/${id}/profile`
+        postBusinessById: (id: string) => `${businessesBaseUrl}//businesses/${id}/profile`,
+      },
+      images: {
+        getImages: `${imagesBaseUrl}/images`,
+        resizeImages: `${imagesBaseUrl}/resize`,
+        getPresignedUrl: `${imagesBaseUrl}/signedUrl`,
       },
     },
     auth: {

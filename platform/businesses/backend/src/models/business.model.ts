@@ -25,6 +25,7 @@ export class BusinessProfileModel implements BusinessProfile {
     public OnboardingStep: number
     public AddressDetails: { City: string; Country: string; Postcode: string; FirstLine: string }
     public Email: string
+    public Images: { Main: string; Gallery: string[] }
 
     constructor(input: BusinessProfile) {
         this.Slug = input.Slug
@@ -33,6 +34,7 @@ export class BusinessProfileModel implements BusinessProfile {
         this.Address = input.Address
         this.AddressDetails = input.AddressDetails
         this.Email = input.Email
+        this.Images = input.Images
         this.BusinessId = input.BusinessId
         this.BusinessName = input.BusinessName
         this.BusinessType = input.BusinessType

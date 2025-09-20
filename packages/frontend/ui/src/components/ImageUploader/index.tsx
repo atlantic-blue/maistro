@@ -1,9 +1,8 @@
 import React from 'react';
-import { OwnerType, UploadItem } from './types';
+import { OwnerType, UploadItem, UploadUrlResponse } from './types';
 import { createErrorItem, getItem, updateItem, uuid } from './utils';
 import { getPresignedUrl, resizeImage } from './api';
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -12,7 +11,6 @@ import {
   Text,
   Callout,
   Progress,
-  Separator,
 } from '@radix-ui/themes';
 import { DropZone } from './Dropzone';
 import { ItemRow } from './Row';
@@ -26,9 +24,17 @@ type Props = {
   ownerId: string; // current owner id
   maxFileMB?: number; // default 5
   token: string;
+  emitUrls?: (urls: UploadUrlResponse["Urls"]) => void
 };
 
-export function MaistroImageUploader({ urls, ownerType, ownerId, maxFileMB = 5, token }: Props) {
+export function MaistroImageUploader({
+  token, 
+  urls,
+  ownerType,
+  ownerId,
+  maxFileMB = 5,
+  emitUrls
+}: Props) {
   const [items, setItems] = React.useState<UploadItem[]>([]);
   const [error, setError] = React.useState<string | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -145,6 +151,10 @@ export function MaistroImageUploader({ urls, ownerType, ownerId, maxFileMB = 5, 
           }).catch((e) =>
             setItems((cur) => updateItem(cur, id, { state: 'ERROR', message: e.message }))
           );
+
+          if(response && emitUrls) {
+            emitUrls(response.Urls)
+          }
         }
       };
 

@@ -43,8 +43,8 @@ const BusinessProfilePage: React.FC = () => {
     OpenUntil: undefined,
     IsOpen: undefined,
     Images: {
-      Main: '',
-      Gallery: [],
+      Main: businessData?.Images?.Main,
+      Gallery: businessData?.Images?.Gallery,
     },
     Reviews: undefined,
     NearbyVenues: undefined,

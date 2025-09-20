@@ -1,4 +1,13 @@
-import { Card, Flex, Tabs, Text, Separator, Select } from '@maistro/ui';
+import {
+  Card,
+  Flex,
+  Tabs,
+  Text,
+  Separator,
+  Select,
+  MaistroImageUploader,
+  Avatar,
+} from '@maistro/ui';
 import { BusinessProfile, Locale } from '../Businesses/types';
 import { businessPageDictionary, toolDescription } from './i18n';
 import {
@@ -16,12 +25,16 @@ import {
   ImageIcon,
   Settings,
 } from 'lucide-react';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@maistro/auth';
 import { getBusinessProfileById, postBusinessUpdate } from '@/Api/Business';
 import { useParams } from 'react-router';
 import { cx } from 'class-variance-authority';
 import GoogleMap from '@/Components/GoogleMap';
+import env from '@/env';
+import { getImages } from '@/Api/Images';
+import { MaistroImage } from '@/types';
+import ImageSelectorGrid from './ImageSelectorGrid';
 
 const profileIcons: Record<string, React.ReactNode> = {
   reviews: <Star className="h-5 w-5" />,
@@ -86,13 +99,23 @@ function LabeledInput({
   );
 }
 
+type ImageUrls = {
+  Optimised: string;
+  Low: string;
+  Medium: string;
+  High: string;
+  Original: string;
+};
+
 export function BusinessProfilePage({ language }: { language: Locale }) {
   const { businessId } = useParams();
   const { isAuthenticated, isLoading, user } = useContext(AuthContext);
   const [business, setBusiness] = useState<BusinessProfile | null>(null);
   const [isSavingData, setIsSavingData] = useState(false);
+  const [images, setImages] = useState<MaistroImage[]>([]);
+  const [isImagesLoading, setImagesLoading] = useState(false);
 
-  const setNestedField = (key: string, nested: string, value: string) => {
+  const setNestedField = (key: string, nested: string, value: string | string[]) => {
     setBusiness((biz) => {
       if (!biz) {
         return biz;
@@ -101,13 +124,13 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
       return {
         ...biz,
         [key]: {
-            // @ts-ignore
-            ...biz[key],
-            [nested]: value,
+          // @ts-ignore
+          ...biz[key],
+          [nested]: value,
         },
       };
     });
-  }
+  };
 
   const setField = <K extends keyof BusinessProfile>(key: K, value: BusinessProfile[K]) =>
     setBusiness((biz) => {
@@ -128,23 +151,51 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
     });
   }, [isAuthenticated, isLoading, user, businessId]);
 
+  const refresh = () => {
+    if (!business || !user) return;
+    setImagesLoading(true);
+    getImages({
+      Limit: 10,
+      OwnerId: business.BusinessId,
+      token: user.getTokenAccess(),
+      url: env.api.images.getImages,
+    })
+      .then((res) => setImages(res.images))
+      .finally(() => setImagesLoading(false));
+  };
+
+  const ownerId = business?.BusinessId ?? null;
+  useEffect(() => {
+    if (!ownerId || !user) return;
+
+    let cancelled = false;
+    setImagesLoading(true);
+    getImages({
+      Limit: 10,
+      OwnerId: ownerId,
+      token: user.getTokenAccess(),
+      url: env.api.images.getImages,
+    })
+      .then((res) => {
+        if (!cancelled) setImages(res.images);
+      })
+      .finally(() => {
+        if (!cancelled) setImagesLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ownerId]);
+
   const handleSave = async () => {
     if (!business || !user) {
       return;
     }
 
-    const clean: BusinessProfile = {
-      ...business,
-      Features: (business.Features || []).map((f) => `${f}`.trim()).filter(Boolean),
-      BusinessType: (business.BusinessType || []).map((t) => `${t}`.trim()).filter(Boolean),
-    };
-
     try {
       setIsSavingData(true);
-      await postBusinessUpdate(
-        user.getTokenAccess(), 
-        business.BusinessId,
-        {
+      await postBusinessUpdate(user.getTokenAccess(), business.BusinessId, {
         accountType: business.AccountType,
         address: business.Address,
         businessName: business.BusinessName,
@@ -157,12 +208,16 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
         teamSize: business.TeamSize,
         website: business.Website,
         addressDetails: {
-            city: business.AddressDetails.City,
-            country: business.AddressDetails.Country,
-            firstLine: business.AddressDetails.FirstLine,
-            postcode: business.AddressDetails.Postcode
+          city: business.AddressDetails.City,
+          country: business.AddressDetails.Country,
+          firstLine: business.AddressDetails.FirstLine,
+          postcode: business.AddressDetails.Postcode,
         },
-        email: business.Email
+        email: business.Email,
+        images: {
+          main: business?.Images?.Main,
+          gallery: business?.Images?.Gallery,
+        },
       });
     } catch (error) {
       console.log(error);
@@ -171,7 +226,7 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
     }
   };
 
-  if (!business || isLoading) {
+  if (!business || isLoading || !user) {
     return (
       <Card className="mb-3">
         <Flex align="center" justify="center" className="p-10" direction="column" gap="3">
@@ -218,7 +273,7 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
         <div className="rounded-2xl border border-neutral-200 bg-white p-5 lg:col-span-2">
           <h3 className="mb-3 text-base font-semibold text-neutral-900">{business.BusinessName}</h3>
           {business.Description ? (
-            <p className="text-sm text-neutral-700">{business.Description}</p>
+            <p className="text-sm text-neutral-700" style={{whiteSpace: "break-spaces"}}>{business.Description}</p>
           ) : (
             <p className="text-sm text-neutral-500 italic">—</p>
           )}
@@ -358,39 +413,45 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
                 onChange={(v) => setField('BusinessType', strToList(v))}
               />
 
-                <label className={cx('block')}>
-                <span className="mb-1 block text-xs font-medium text-neutral-700">Tipo de cuenta</span>
-                <Select.Root defaultValue={business.AccountType} onValueChange={value => {
-                            setField('AccountType', value)
-                        }}>
-                            <Select.Trigger />
-                                <Select.Content>
-                                    <Select.Group>
-                                        <Select.Item value="team">Equipo</Select.Item>
-                                        <Select.Item value="independent">Independiente</Select.Item>
-                                    </Select.Group>
-                                </Select.Content>
-                        </Select.Root>
-                </label>
-              
-              {business.AccountType === 'team' ? <LabeledInput
-                label={businessPageDictionary[language].fields.TeamSize}
-                value={String(business.TeamSize || '')}
-                onChange={(v) => setField('TeamSize', v)}
-              />: null}
-              
+              <label className={cx('block')}>
+                <span className="mb-1 block text-xs font-medium text-neutral-700">
+                  Tipo de cuenta
+                </span>
+                <Select.Root
+                  defaultValue={business.AccountType}
+                  onValueChange={(value) => {
+                    setField('AccountType', value);
+                  }}
+                >
+                  <Select.Trigger />
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="team">Equipo</Select.Item>
+                      <Select.Item value="independent">Independiente</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
+              </label>
+
+              {business.AccountType === 'team' ? (
+                <LabeledInput
+                  label={businessPageDictionary[language].fields.TeamSize}
+                  value={String(business.TeamSize || '')}
+                  onChange={(v) => setField('TeamSize', v)}
+                />
+              ) : null}
             </div>
 
-              <Separator my="3" size="4" />
+            <Separator my="3" size="4" />
 
             <Flex direction="column" gap="1">
-            <LabeledInput
+              <LabeledInput
                 label={businessPageDictionary[language].fields.AddressFirstLine}
                 value={business?.AddressDetails?.FirstLine || ''}
                 onChange={(v) => setNestedField('AddressDetails', 'FirstLine', v)}
               />
 
-            <LabeledInput
+              <LabeledInput
                 label={businessPageDictionary[language].fields.AddressCity}
                 value={business?.AddressDetails?.City || ''}
                 onChange={(v) => setNestedField('AddressDetails', 'City', v)}
@@ -410,14 +471,51 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
 
               <GoogleMap
                 address={{
-                    city: business?.AddressDetails?.City,
-                    country: business?.AddressDetails?.Country,
-                    firstLine: business?.AddressDetails?.FirstLine,
-                    postcode: business?.AddressDetails?.Postcode
+                  city: business?.AddressDetails?.City,
+                  country: business?.AddressDetails?.Country,
+                  firstLine: business?.AddressDetails?.FirstLine,
+                  postcode: business?.AddressDetails?.Postcode,
                 }}
-                zoom='15'
+                zoom="15"
               />
-              </Flex>
+            </Flex>
+
+            <ImageSelectorGrid
+              images={images}
+              selectedUrls={[business.Images?.Main, ...business.Images?.Gallery].filter(Boolean)}
+              onRefresh={refresh}
+              onChange={(selected) => {
+                const mainImage = selected[0];
+                const gallery = selected.slice(1);
+
+                console.log(mainImage, gallery);
+
+                setBusiness((biz) => {
+                  if (!biz) {
+                    return biz;
+                  }
+
+                  return {
+                    ...biz,
+                    Images: {
+                      Main: mainImage,
+                      Gallery: gallery,
+                    },
+                  };
+                });
+              }}
+            />
+
+            <MaistroImageUploader
+              urls={{
+                getPresignedUrl: env.api.images.getPresignedUrl,
+                resize: env.api.images.resizeImages,
+              }}
+              token={user.getTokenAccess()}
+              ownerId={business.BusinessId}
+              ownerType="business"
+              maxFileMB={5}
+            />
 
             <div className="mt-5">
               {isSavingData ? (

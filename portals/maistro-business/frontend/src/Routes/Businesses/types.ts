@@ -31,6 +31,10 @@ export interface BusinessProfile {
     FirstLine: string;
   };
   Email: string;
+  Images: {
+    Main: string;
+    Gallery: string[];
+  };
   Phone: string;
   Description: string;
   Services: Service[];
