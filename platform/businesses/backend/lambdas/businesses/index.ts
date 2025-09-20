@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
-import { BusinessesProfileService, OnboardingFormData } from "../../src/services/businesses.service";
+import { BusinessesProfileService, OnboardingFormData, UpdateBusinessFormData } from "../../src/services/businesses.service";
 import { BusinessesProfileRepository } from "../../src/repositories/businesses.repository";
 import BusinessesTransport from "../../src/transport/businesses.transport";
 import UsersService from "../../src/services/users.service";
@@ -7,6 +7,8 @@ import UsersRepository from "../../src/repositories/users.repoistory";
 
 enum Routes {
   BUSINESSES_ONBOARDING = '/businesses/onboarding',
+  POST_BUSINESSES_PROFILE_BY_ID = '/businesses/{businessId}/profile',
+
   BUSINESSES_PROFILE_BY_SLUG = '/businesses/slug/{businessSlug}/profile',
   BUSINESSES_PROFILE_BY_ID = '/businesses/id/{businessId}/profile',
   BUSINESSES_PROFILE_ME = '/businesses/me/profile'
@@ -53,7 +55,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             const user = await usersService.getUserByCognitoId(decodedToken.username)
 
             const onboardingData: OnboardingFormData = JSON.parse(event.body || '');
-            const response = await businessesService.updateBusinessProfile(onboardingData, user?.UserId || "")
+            const response = await businessesService.createBusinessProfile(onboardingData, user?.UserId || "", user?.Email || "")
           
             if(response) {
               return {
@@ -63,6 +65,29 @@ export const handler: APIGatewayProxyHandler = async (event) => {
             }
 
           return createErrorResponse(500, 'Onboarding failed');
+        }
+
+        if(path === Routes.POST_BUSINESSES_PROFILE_BY_ID) {
+            const decodedToken = businessesTransport.getDecodedToken(event)
+            const user = await usersService.getUserByCognitoId(decodedToken.username)
+            const businessId = event.pathParameters?.businessId;
+            const userId = user?.UserId
+
+            if (!businessId || !userId) {
+              return createErrorResponse(500, 'Profile update failed, userId or businessId missing');
+            }
+
+            const updateBusinessFormData: UpdateBusinessFormData = JSON.parse(event.body || '');
+            const response = await businessesService.updateBusinessProfile(updateBusinessFormData, businessId, userId)
+
+             if(response) {
+              return {
+                      statusCode: 200,
+                      body: JSON.stringify(response)
+                  }
+            }
+
+          return createErrorResponse(500, 'Profile update failed');
         }
       }
 

@@ -181,7 +181,7 @@ const Customers: React.FC = () => {
                     <DropdownMenu.Content>
                       <DropdownMenu.Item
                         onClick={() => {
-                          navigate(appRoutes.getCustomer(customer.id));
+                          // navigate(appRoutes.getCustomer(customer.id));
                         }}
                       >
                         View Details

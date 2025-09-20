@@ -8,6 +8,7 @@ module "platform_businesses_lambda_businesses" {
   lambda_name = "${module.platform_businesses_api.api_bucket.bucket}-businesses"
   route_keys = [
     "POST /businesses/onboarding",
+    "POST /businesses/{businessId}/profile",
 
     "GET /businesses",
 
@@ -15,7 +16,6 @@ module "platform_businesses_lambda_businesses" {
     "GET /businesses/id/{businessId}/profile",
     "GET /businesses/me/profile",
 
-    "PUT /businesses/{businessId}/profile",
   ]
   input_dir   = "${path.module}/../backend/dist/businesses"
   output_path = "${path.module}/lambdas/businesses.zip"

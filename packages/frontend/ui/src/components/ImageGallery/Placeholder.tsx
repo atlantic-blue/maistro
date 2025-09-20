@@ -1,3 +1,4 @@
+import React from "react"
 import { Text } from '@radix-ui/themes';
 import { Image as ImageIcon } from 'lucide-react';
 

@@ -25,21 +25,6 @@ const routesNavigation: NavItem[] = [
     icon: <HomeIcon />,
   },
   {
-    name: 'My Customers',
-    path: appRoutes.getCustomers(),
-    icon: <LayoutIcon />,
-  },
-  {
-    name: 'Analytics',
-    path: appRoutes.getAnalytics(),
-    icon: <BarChartIcon />,
-  },
-  {
-    name: 'Plugins',
-    path: appRoutes.getPlugins(),
-    icon: <PlusCircledIcon />,
-  },
-  {
     name: 'Settings',
     path: appRoutes.getSettings(),
     icon: <GearIcon />,
@@ -50,12 +35,6 @@ function getPageTitle(path: string): string {
   switch (path) {
     case appRoutes.getHomeRoute():
       return 'Dashboard';
-    case appRoutes.getCustomers():
-      return 'My Customers';
-    case appRoutes.getPlugins():
-      return 'My Plugins';
-    case appRoutes.getAnalytics():
-      return 'Analytics';
     case appRoutes.getSettings():
       return 'Settings';
     default:
@@ -75,30 +54,30 @@ const Helmet: React.FC<HelmetProps> = (props) => {
   };
 
   const handleOnSettings = () => {
-    navigate(appRoutes.getUserSettings());
+    // navigate(appRoutes.getUserSettings());
   };
 
   return (
-      <Layout
-        productName="Business"
-        accentColor="green"
-        navigation={routesNavigation}
-        logo={<IconLogoSimple />}
-        currentPath={location.pathname}
-        user={{
-          name: user?.getName() || '',
-          email: user?.getEmail() || '',
-          avatar: user?.getAvatar() || '',
-        }}
-        onLogout={logOut}
-        onNavigate={handleNavigate}
-        headerTitle={pageTitle}
-        notificationCount={3}
-        helpUrl="https://wa.me/573013239010"
-        onSettings={handleOnSettings}
-      >
-        {props.children}
-      </Layout>
+    <Layout
+      productName="Business"
+      accentColor="green"
+      navigation={routesNavigation}
+      logo={<IconLogoSimple />}
+      currentPath={location.pathname}
+      user={{
+        name: user?.getName() || '',
+        email: user?.getEmail() || '',
+        avatar: user?.getAvatar() || '',
+      }}
+      onLogout={logOut}
+      onNavigate={handleNavigate}
+      headerTitle={pageTitle}
+      notificationCount={3}
+      helpUrl="https://wa.me/573013239010"
+      onSettings={handleOnSettings}
+    >
+      {props.children}
+    </Layout>
   );
 };
 

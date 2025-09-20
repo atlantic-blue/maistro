@@ -23,12 +23,16 @@ export class BusinessProfileModel implements BusinessProfile {
     public MarketingOptIn: boolean
     public OnboardingCompleted: boolean
     public OnboardingStep: number
+    public AddressDetails: { City: string; Country: string; Postcode: string; FirstLine: string }
+    public Email: string
 
     constructor(input: BusinessProfile) {
         this.Slug = input.Slug
         this.BusinessId = input.BusinessId
         this.AccountType = input.AccountType
         this.Address = input.Address
+        this.AddressDetails = input.AddressDetails
+        this.Email = input.Email
         this.BusinessId = input.BusinessId
         this.BusinessName = input.BusinessName
         this.BusinessType = input.BusinessType

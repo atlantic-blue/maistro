@@ -72,7 +72,7 @@ export class BusinessesProfileRepository {
       }
     }
 
-    async getBusinessProfileByUserId(userId: string): Promise<BusinessProfile | null> {
+    async getBusinessProfileByUserId(userId: string): Promise<BusinessProfile[] | null> {
       try {
         const params = {
           TableName: this.db,
@@ -86,7 +86,7 @@ export class BusinessesProfileRepository {
         const result = await dynamoDB.query(params).promise();
         
         if (result.Items && result.Items.length > 0) {
-          return result.Items[0] as BusinessProfile;
+          return result.Items as BusinessProfile[];
         }
         
         return null;

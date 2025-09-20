@@ -1,3 +1,4 @@
+import React from "react"
 import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
 import { MaistroImage } from "./types";
 import { altFor, copyToClipboard, formatDate, pickLargeUrl } from "./utils";

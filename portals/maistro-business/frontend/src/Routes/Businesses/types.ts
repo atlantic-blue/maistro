@@ -1,3 +1,5 @@
+export type Locale = 'es' | 'en';
+
 export interface Service {
   name: string;
   duration: string;
@@ -8,7 +10,7 @@ export interface BusinessProfile {
   BusinessId: string;
   Slug: string;
   UserId: string;
- 
+
   Industry?: string;
   Country?: string;
   OnboardingCompleted: boolean;

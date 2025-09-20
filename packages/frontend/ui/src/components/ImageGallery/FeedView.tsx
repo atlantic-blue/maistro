@@ -1,3 +1,4 @@
+import React from "react"
 import { Badge, Text, Button, Card, Flex, Box } from '@radix-ui/themes';
 import { Image as ImageIcon, Ellipsis, Loader } from 'lucide-react';
 import { MaistroImage } from './types';

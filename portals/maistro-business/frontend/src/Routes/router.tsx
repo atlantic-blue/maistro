@@ -6,10 +6,9 @@ import { AuthCallback, AuthProvider, Login, ProtectedRoute } from '@maistro/auth
 import env from '../env';
 import Helmet from '../Components/Helmet';
 
-import Dashboard from './Dashboard';
-import Customers from './Customers';
 import { appRoutes, Routes } from './appRoutes';
-import Customer from './Customer';
+import { BusinessesPage } from './Businesses';
+import { BusinessProfilePage } from './Business';
 
 const Router: React.FC = () => {
   return (
@@ -21,17 +20,14 @@ const Router: React.FC = () => {
             <ProtectedRoute>
               <Helmet>
                 <ReactRoutes>
-                  <Route path={'/'} element={<Dashboard />} />
-                  <Route path={Routes.CUSTOMERS} element={<Customers />} />
-                  <Route path={Routes.CUSTOMER} element={<Customer />} />
+                  <Route path={Routes.HOME} element={<BusinessesPage language="es" />} />
+                  <Route path={Routes.BUSINESS} element={<BusinessProfilePage language="es" />} />
                 </ReactRoutes>
               </Helmet>
             </ProtectedRoute>
           }
         />
-        <Route
-          path={Routes.AUTH_CALLBACK}
-          element={<AuthCallback />} />
+        <Route path={Routes.AUTH_CALLBACK} element={<AuthCallback />} />
         <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
       </ReactRoutes>
     </AuthProvider>

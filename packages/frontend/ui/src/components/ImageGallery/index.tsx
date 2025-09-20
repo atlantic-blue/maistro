@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from "react"
 import { MaistroImage } from './types';
 import { getImages } from './api';
 import { FeedView } from './FeedView';
