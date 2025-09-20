@@ -8,7 +8,7 @@ export interface BusinessProfile {
   BusinessId: string;
   Slug: string;
   UserId: string;
- 
+
   OnboardingCompleted: boolean;
   Industry?: string;
   Country?: string;
@@ -29,6 +29,10 @@ export interface BusinessProfile {
     FirstLine: string;
   };
   Email: string;
+  Images: {
+    Main: string;
+    Gallery: string[];
+  };
   Phone?: string;
   Description: string;
   Services: Service[];
@@ -41,10 +45,6 @@ export interface BusinessProfileExtended extends BusinessProfile {
   ReviewCount?: number;
   OpenUntil?: string;
   IsOpen?: boolean;
-  Images?: {
-    Main?: string;
-    Gallery?: string[];
-  };
   Reviews?: Review[];
   NearbyVenues?: NearbyVenue[];
   OpeningHours?: OpeningHours[];

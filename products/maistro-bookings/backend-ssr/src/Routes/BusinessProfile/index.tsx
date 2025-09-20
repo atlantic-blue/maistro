@@ -14,41 +14,44 @@ import BusinessProfileReviews from './Components/Reviews';
 import BusinessProfileNearby from './Components/Nearby';
 
 const BusinessProfilePage: React.FC = () => {
-  const businessData = useRouteData<BusinessProfile>(RouteName.BUSINESS_PROFILE)
+  const businessData = useRouteData<BusinessProfile>(RouteName.BUSINESS_PROFILE);
 
   if (!businessData) {
-    return null
+    return null;
   }
 
   const business: BusinessProfileExtended = {
-      ...businessData,
-      BusinessId: businessData.BusinessId,
-      BusinessName: businessData.BusinessName ?? 'Negocio sin nombre',
-      Address: businessData.Address ?? 'Dirección no disponible',
-      AddressDetails: {
-        City: businessData.AddressDetails.City,
-        Country: businessData.AddressDetails.Country,
-        FirstLine: businessData.AddressDetails.FirstLine,
-        Postcode: businessData.AddressDetails.Postcode,
-      },
-      Email: businessData.Email,
-      Phone: businessData.Phone || undefined,
-      Services: Array.isArray(businessData.Services) ? businessData.Services : [],
-      Website: businessData.Website || undefined,
-      Features: Array.isArray(businessData.Features) ? businessData.Features : [],
-      Description: businessData.Description || 'Aún no hay descripción.',
-      // Enrichment-ready optional fields (start empty)
-      Rating: undefined,
-      ReviewCount: undefined,
-      OpenUntil: undefined,
-      IsOpen: undefined,
-      Images: undefined,
-      Reviews: undefined,
-      NearbyVenues: undefined,
-      OpeningHours: undefined
-  }
+    ...businessData,
+    BusinessId: businessData.BusinessId,
+    BusinessName: businessData.BusinessName ?? 'Negocio sin nombre',
+    Address: businessData.Address ?? 'Dirección no disponible',
+    AddressDetails: {
+      City: businessData.AddressDetails.City,
+      Country: businessData.AddressDetails.Country,
+      FirstLine: businessData.AddressDetails.FirstLine,
+      Postcode: businessData.AddressDetails.Postcode,
+    },
+    Email: businessData.Email,
+    Phone: businessData.Phone || undefined,
+    Services: Array.isArray(businessData.Services) ? businessData.Services : [],
+    Website: businessData.Website || undefined,
+    Features: Array.isArray(businessData.Features) ? businessData.Features : [],
+    Description: businessData.Description || 'Aún no hay descripción.',
+    // Enrichment-ready optional fields (start empty)
+    Rating: undefined,
+    ReviewCount: undefined,
+    OpenUntil: undefined,
+    IsOpen: undefined,
+    Images: {
+      Main: '',
+      Gallery: [],
+    },
+    Reviews: undefined,
+    NearbyVenues: undefined,
+    OpeningHours: undefined,
+  };
 
-  const gallery = business.Images?.Gallery ? business.Images?.Gallery : ["", "", "", ""]
+  const gallery = business.Images?.Gallery ? business.Images?.Gallery : ['', '', '', ''];
 
   return (
     <div className="bg-[#FFF8F6] text-black min-h-screen font-sans">
@@ -56,11 +59,13 @@ const BusinessProfilePage: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         {/* Header */}
-<section>
+        <section>
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-3">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{business.BusinessName}</h1>
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                  {business.BusinessName}
+                </h1>
                 {/* verified mark only when we decide so later */}
               </div>
 
@@ -77,12 +82,19 @@ const BusinessProfilePage: React.FC = () => {
                 {business.Address && (
                   <div className="flex items-center gap-2 text-gray-600">
                     <MapPin className="w-4 h-4" />
-                    <span className="truncate max-w-[60ch]">{business?.AddressDetails?.FirstLine}</span>
+                    <span className="truncate max-w-[60ch]">
+                      {business?.AddressDetails?.FirstLine}
+                    </span>
                   </div>
                 )}
 
                 {business.Website && (
-                  <a href={business.Website} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#FF3366] font-medium">
+                  <a
+                    href={business.Website}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 text-[#FF3366] font-medium"
+                  >
                     <Globe className="w-4 h-4" /> Sitio web
                   </a>
                 )}
@@ -91,7 +103,9 @@ const BusinessProfilePage: React.FC = () => {
               <div className="flex items-center gap-3">
                 <Stars rating={business.Rating} />
                 {typeof business.ReviewCount === 'number' && (
-                  <span className="text-gray-500">({business.ReviewCount.toLocaleString()} reseñas)</span>
+                  <span className="text-gray-500">
+                    ({business.ReviewCount.toLocaleString()} reseñas)
+                  </span>
                 )}
               </div>
             </div>
@@ -116,7 +130,12 @@ const BusinessProfilePage: React.FC = () => {
           {gallery.length > 0 && (
             <div className="hidden lg:grid grid-cols-4 gap-4">
               {gallery.slice(0, 4).map((src, i) => (
-                <Image key={i} src={src} name={`Galería ${i + 1}`} className="w-full h-36 object-cover rounded-xl" />
+                <Image
+                  key={i}
+                  src={src}
+                  name={`Galería ${i + 1}`}
+                  className="w-full h-36 object-cover rounded-xl"
+                />
               ))}
             </div>
           )}
@@ -125,7 +144,11 @@ const BusinessProfilePage: React.FC = () => {
             <div className="lg:hidden overflow-x-auto snap-x snap-mandatory flex space-x-3 pb-2">
               {gallery.slice(0, 6).map((src, i) => (
                 <div key={i} className="snap-center flex-shrink-0 w-[75%]">
-                  <Image src={src} name={`Galería ${i + 1}`} className="w-full h-40 object-cover rounded-xl" />
+                  <Image
+                    src={src}
+                    name={`Galería ${i + 1}`}
+                    className="w-full h-40 object-cover rounded-xl"
+                  />
                 </div>
               ))}
             </div>
@@ -144,6 +167,6 @@ const BusinessProfilePage: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
-export default BusinessProfilePage
+export default BusinessProfilePage;

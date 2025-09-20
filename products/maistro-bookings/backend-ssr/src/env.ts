@@ -4,9 +4,9 @@ interface Env {
     onboarding: string;
     me: string;
     meProfile: string;
-    businessMe: string
-    businessBySlug: (slug: string) => string
-    businessById: (id: string) => string
+    businessMe: string;
+    businessBySlug: (slug: string) => string;
+    businessById: (id: string) => string;
   };
   auth: {
     baseUrl: string;
@@ -22,11 +22,11 @@ const isBrowser = () => typeof window !== 'undefined';
 
 const createEnv = (): Env => {
   const authBaseUrl = process.env.AUTH_DOMAIN || '';
-  const businessesBaseUrl = 'https://maistro-platform-businesses-api-production.maistroapp.com/v1'
+  const businessesBaseUrl = 'https://maistro-platform-businesses-api-production.maistroapp.com/v1';
   const usersBaseUrl = 'https://maistro-platform-users-api-production.maistro.website/v1';
-  const business = 'https://'
+  const business = 'https://';
 
-  const appOrigin = isBrowser() ? window.location.origin : process.env.APP_ORIGIN ?? ""
+  const appOrigin = isBrowser() ? window.location.origin : (process.env.APP_ORIGIN ?? '');
 
   return {
     isBrowser,
@@ -50,6 +50,6 @@ const createEnv = (): Env => {
   };
 };
 
-const env = createEnv()
+const env = createEnv();
 
 export default env;

@@ -53,10 +53,7 @@ const Dashboard: React.FC = () => {
       return;
     }
 
-    getBusinessProfileMe(
-      env.api.businessMe,
-      user.getTokenAccess()
-    ).then((response) => {
+    getBusinessProfileMe(env.api.businessMe, user.getTokenAccess()).then((response) => {
       setBusinessProfile(response);
     });
 

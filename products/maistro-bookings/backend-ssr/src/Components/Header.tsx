@@ -11,7 +11,13 @@ export default function Header() {
           <div className="text-2xl font-bold text-black tracking-tight">maistro</div>
         </Link>
 
-        <Flex className="lg:flex items-center gap-3" direction="row" align="center" justify="center" gap="3">
+        <Flex
+          className="lg:flex items-center gap-3"
+          direction="row"
+          align="center"
+          justify="center"
+          gap="3"
+        >
           <Link to={appRoutes.getDashboard()}>
             <Button variant="ghost" className="text-sm font-medium text-black px-4 py-2">
               Ingresar

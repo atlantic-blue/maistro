@@ -1,21 +1,15 @@
 interface HtmlProps {
-    head: string;
-    body: {
-        main: string
-        scripts: string
-    }
-    htmlAttributes: string
-    bodyAttributes: string
+  head: string;
+  body: {
+    main: string;
+    scripts: string;
+  };
+  htmlAttributes: string;
+  bodyAttributes: string;
 }
 
-const Html = ({
-    htmlAttributes,
-    bodyAttributes,
-    head,
-    body,
-}: HtmlProps) => {
-    return (
-        `
+const Html = ({ htmlAttributes, bodyAttributes, head, body }: HtmlProps) => {
+  return `
         <!DOCTYPE html>
         <html ${htmlAttributes}>
 
@@ -51,10 +45,7 @@ const Html = ({
         </body>
 
         </html >
-    `
-    )
-}
+    `;
+};
 
-export {
-    Html as default
-}
+export { Html as default };

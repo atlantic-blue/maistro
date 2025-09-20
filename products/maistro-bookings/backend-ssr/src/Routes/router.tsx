@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router';
 import { AuthCallback, AuthProvider, Login, ProtectedRoute } from '@maistro/auth';
-import {Theme} from '@maistro/ui'
+import { Theme } from '@maistro/ui';
 
 import env from '../env';
 
@@ -18,50 +18,46 @@ const Router: React.FC = () => {
   const language = 'es';
 
   return (
-    <Theme
-      accentColor='crimson'
-      scaling="100%"
-	    radius="full"
-      >
-    <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
-      <ReactRoutes>
-        <Route path="*" element={<Homepage />} />
-        <Route path={Routes.BUSINESS_PROFILE} element={<BusinessProfilePage />} />
-        <Route
-          path={Routes.ONBOARDING}
-          element={
-            <ProtectedRoute>
-              <Onboarding language={language} />
-            </ProtectedRoute>
-          }
-        />
+    <Theme accentColor="crimson" scaling="100%" radius="full">
+      <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
+        <ReactRoutes>
+          <Route path="*" element={<Homepage />} />
+          <Route path={Routes.BUSINESS_PROFILE} element={<BusinessProfilePage />} />
+          <Route
+            path={Routes.ONBOARDING}
+            element={
+              <ProtectedRoute>
+                <Onboarding language={language} />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path={Routes.DASHBOARD}
-          element={
-            <ProtectedRoute>
-              <Helmet>
-                <Dashboard />
-              </Helmet>
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path={Routes.DASHBOARD}
+            element={
+              <ProtectedRoute>
+                <Helmet>
+                  <Dashboard />
+                </Helmet>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path={Routes.BOOKINGS}
-          element={
-            <ProtectedRoute>
-              <Helmet>
-                <div>Proximamente...</div>
-              </Helmet>
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path={Routes.BOOKINGS}
+            element={
+              <ProtectedRoute>
+                <Helmet>
+                  <div>Proximamente...</div>
+                </Helmet>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path={Routes.AUTH_CALLBACK} element={<AuthCallback />} />
-        <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
-      </ReactRoutes>
-    </AuthProvider>
+          <Route path={Routes.AUTH_CALLBACK} element={<AuthCallback />} />
+          <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
+        </ReactRoutes>
+      </AuthProvider>
     </Theme>
   );
 };

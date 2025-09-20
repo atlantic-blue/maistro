@@ -33,4 +33,3 @@ export interface MaistroUser {
     bookings: boolean;
   };
 }
-

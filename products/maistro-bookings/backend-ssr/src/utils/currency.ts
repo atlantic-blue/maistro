@@ -1,1 +1,2 @@
-export const formatPrice = (n: number) => `€${n.toLocaleString('es-ES', { maximumFractionDigits: 2 })}`;
+export const formatPrice = (n: number) =>
+  `€${n.toLocaleString('es-ES', { maximumFractionDigits: 2 })}`;

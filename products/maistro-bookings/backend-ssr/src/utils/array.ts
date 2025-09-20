@@ -1,1 +1,1 @@
-export const safeArray = <T,>(v?: T[]) => Array.isArray(v) ? v : [];
+export const safeArray = <T>(v?: T[]) => (Array.isArray(v) ? v : []);

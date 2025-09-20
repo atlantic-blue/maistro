@@ -24,9 +24,9 @@ const Step8: React.FC<Step1Props> = ({ resourceStrings, isSubmitted }) => {
 
         {isSubmitted ? (
           <button className="bg-[#FF3366] text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-800 transition-colors rounded-xl">
-            <Link to={
-              "https://customer.maistroapp.com/businesses"
-            }>{resourceStrings.step8.ctaButton}</Link>
+            <Link to={'https://customer.maistroapp.com/businesses'}>
+              {resourceStrings.step8.ctaButton}
+            </Link>
           </button>
         ) : (
           <div>Creando Perfil...</div>

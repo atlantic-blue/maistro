@@ -1,5 +1,5 @@
-import { MaistroUser } from "../Routes/Dahsboard/types";
-import { BusinessProfile } from "../types/BusinessProfile";
+import { MaistroUser } from '../Routes/Dahsboard/types';
+import { BusinessProfile } from '../types/BusinessProfile';
 
 const Me = async (url: string, token: string): Promise<MaistroUser> => {
   return fetch(url, {
