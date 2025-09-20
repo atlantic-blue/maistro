@@ -22,6 +22,13 @@ export interface BusinessProfile {
   AccountType: 'independent' | 'team' | string;
   TeamSize: string;
   Address: string;
+  AddressDetails: {
+    City: string;
+    Country: string;
+    Postcode: string;
+    FirstLine: string;
+  };
+  Email: string;
   Phone?: string;
   Description: string;
   Services: Service[];

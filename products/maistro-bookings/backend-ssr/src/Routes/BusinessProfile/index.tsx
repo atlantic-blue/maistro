@@ -3,7 +3,6 @@ import { Button, Card, Separator } from '@maistro/ui';
 import { MapPin, Clock, Star, Share2, Heart, ChevronRight, Globe } from 'lucide-react';
 
 import Header from '../../Components/Header';
-import GoogleMap from '../../Components/GoogleMap';
 import { useRouteData } from '../../State/DataRoute.context';
 import { RouteName } from '../appRoutes';
 import { BusinessProfile, BusinessProfileExtended } from '../../types/BusinessProfile';
@@ -26,6 +25,13 @@ const BusinessProfilePage: React.FC = () => {
       BusinessId: businessData.BusinessId,
       BusinessName: businessData.BusinessName ?? 'Negocio sin nombre',
       Address: businessData.Address ?? 'Dirección no disponible',
+      AddressDetails: {
+        City: businessData.AddressDetails.City,
+        Country: businessData.AddressDetails.Country,
+        FirstLine: businessData.AddressDetails.FirstLine,
+        Postcode: businessData.AddressDetails.Postcode,
+      },
+      Email: businessData.Email,
       Phone: businessData.Phone || undefined,
       Services: Array.isArray(businessData.Services) ? businessData.Services : [],
       Website: businessData.Website || undefined,
@@ -71,7 +77,7 @@ const BusinessProfilePage: React.FC = () => {
                 {business.Address && (
                   <div className="flex items-center gap-2 text-gray-600">
                     <MapPin className="w-4 h-4" />
-                    <span className="truncate max-w-[60ch]">{business.Address}</span>
+                    <span className="truncate max-w-[60ch]">{business?.AddressDetails?.FirstLine}</span>
                   </div>
                 )}
 

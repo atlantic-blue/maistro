@@ -2,7 +2,7 @@ import React from "react"
 import { BusinessProfileExtended } from "../../../types/BusinessProfile"
 import {ChevronRight, Globe, PhoneIcon} from "lucide-react"
 import GoogleMap from "../../../Components/GoogleMap";
-import { Button, Card } from "@maistro/ui";
+import { Button, Card, Flex } from "@maistro/ui";
 import { safeArray } from "../../../utils/array";
 
 const FeaturePill = ({ children }: { children: React.ReactNode }) => (
@@ -72,20 +72,21 @@ const BusinessProfileAbout = ({
 
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Ubicación</h2>
-            {business.Address ? (
-              <>
+            {business.AddressDetails ? (
+              <Flex direction="column" gap="3" justify="center">
                 <GoogleMap
                   address={{
-                    firstLine: business.Address,
-                    city: '',
-                    country: '',
-                    postcode: '',
+                    firstLine: business?.AddressDetails?.FirstLine,
+                    city: business?.AddressDetails?.City,
+                    country: business?.AddressDetails?.Country,
+                    postcode: business?.AddressDetails?.Postcode,
                   }}
+                  zoom="15"
                 />
                 <Button variant="outline" className="w-full border-gray-200 text-gray-700 py-3 mt-3">
                   Obtener direcciones
                 </Button>
-              </>
+              </Flex>
             ) : (
               <Card className="bg-white border border-gray-100 rounded-xl p-6">
                 <p className="text-gray-600">Dirección no disponible todavía.</p>
