@@ -10,6 +10,7 @@ export const businessPageDictionary = {
     open: 'Abrir',
     missing: 'Faltan estos campos para completar tu perfil:',
     toolLabels: {
+      academy: 'Academia',
       images: 'Imagenes',
       reviews: 'Reseñas',
       chats: 'Chats',
@@ -46,6 +47,7 @@ export const businessPageDictionary = {
     open: 'Open',
     missing: "You're missing these fields to complete your profile:",
     toolLabels: {
+      academy: 'Academy',
       images: 'Images',
       reviews: 'Reviews',
       chats: 'Chats',
@@ -76,19 +78,21 @@ export const businessPageDictionary = {
 
 export const toolDescription = {
   es: {
-    images: 'Guarda y comparte imagenes de tu negocio',
-    reviews: 'Gestiona y muestra reseñas para ganar confianza.',
-    chats: 'Conversa con tus clientes en tiempo real.',
-    emails: 'Envía campañas y boletines a tus contactos.',
-    bookings: 'Recibe y administra reservas fácilmente.',
-    website: 'Edita y publica tu sitio con plantillas Maistro.',
+    academy: 'Transforma tu talento en resultados reales. Aprende, crece y conecta con una comunidad que te impulsa al siguiente nivel',
+    images: 'Guarda y comparte imágenes irresistibles de tu negocio. Haz que tu marca hable por sí sola y conquiste con cada foto',
+    reviews: 'Convierte la confianza en tu mayor ventaja: gestiona y muestra reseñas que impulsan tus ventas.',
+    chats: 'Conecta sin barreras: conversa en tiempo real con tus clientes y crea relaciones duraderas.',
+    emails: 'Mantén viva la conexión: envía campañas y boletines que inspiran, informan y venden.',
+    bookings: 'Recibe y administra reservas sin estrés: haz que agendar contigo sea simple y rápido.',
+    website: 'Tu vitrina digital en minutos: edita y publica tu sitio con plantillas diseñadas para vender.',
   },
   en: {
-    images: 'Save and share images of your business',
-    reviews: 'Collect and showcase reviews to build trust.',
-    chats: 'Chat with your customers in real time.',
-    emails: 'Send campaigns and newsletters to your contacts.',
-    bookings: 'Accept and manage bookings with ease.',
-    website: 'Edit and publish your site with Maistro templates.',
+    academy: 'Turn your skills into real results. Learn, grow, and connect with a community that pushes you to the next level',
+    images: 'Save and share stunning images of your business. Let your brand speak for itself and win hearts with every shot',
+    reviews: 'Turn trust into your edge: manage and display reviews that drive sales.',
+    chats: 'Connect instantly: chat with your customers in real time and build lasting relationships.',
+    emails: 'Keep the connection alive: send campaigns and newsletters that inspire, inform, and sell.',
+    bookings: 'Manage bookings stress-free: make scheduling with you simple and fast.',
+    website: 'Your digital showcase in minutes: edit and publish your site with templates built to sell.',
   },
 } as const;

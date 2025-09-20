@@ -7,6 +7,9 @@ import {
   Select,
   MaistroImageUploader,
   Avatar,
+  Button,
+  Link,
+  Badge,
 } from '@maistro/ui';
 import { BusinessProfile, Locale } from '../Businesses/types';
 import { businessPageDictionary, toolDescription } from './i18n';
@@ -24,6 +27,7 @@ import {
   Store,
   ImageIcon,
   Settings,
+  Book
 } from 'lucide-react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@maistro/auth';
@@ -43,6 +47,7 @@ const profileIcons: Record<string, React.ReactNode> = {
   bookings: <Calendar className="h-5 w-5" />,
   website: <Globe className="h-5 w-5" />,
   images: <ImageIcon className="h-5 w-5" />,
+  academy: <Book className="h-5 w-5" />,
 };
 
 function LabeledTextarea({
@@ -99,14 +104,6 @@ function LabeledInput({
   );
 }
 
-type ImageUrls = {
-  Optimised: string;
-  Low: string;
-  Medium: string;
-  High: string;
-  Original: string;
-};
-
 export function BusinessProfilePage({ language }: { language: Locale }) {
   const { businessId } = useParams();
   const { isAuthenticated, isLoading, user } = useContext(AuthContext);
@@ -155,7 +152,7 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
     if (!business || !user) return;
     setImagesLoading(true);
     getImages({
-      Limit: 10,
+      Limit: 30,
       OwnerId: business.BusinessId,
       token: user.getTokenAccess(),
       url: env.api.images.getImages,
@@ -239,6 +236,11 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
 
   const publicUrl = `https://maistroapp.com/b/${business.Slug}`;
   const tools: { key: string; href: string; isLive: boolean }[] = [
+    {
+      key: 'academy',
+      href: `https://academy.maistro.website`,
+      isLive: true,
+    },
     {
       key: 'website',
       href: `https://website.maistroapp.com/b/${business.BusinessId}`,
@@ -343,7 +345,7 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
         {/* Overview */}
         <Tabs.Content value="products">
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {tools.map(({ key, href }) => {
+            {tools.map(({ key, href, isLive }) => {
               const toolInfo = (toolDescription[language] as any)[key];
               return (
                 <div
@@ -356,19 +358,24 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
                       {profileIcons[key]}
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-neutral-900">
+                      <Flex direction="row" align="center" justify="between">
+                        <div className="text-sm font-semibold text-neutral-900">
                         {businessPageDictionary[language].toolLabels[key]}
                       </div>
+                      <div>
+                      {isLive ? "" : <Badge>Proximamente</Badge>}
+                    </div>
+                      </Flex>
                       <p className="mt-1 text-sm text-neutral-600">{toolInfo}</p>
                       <div className="mt-3">
-                        <a
+                        <Link
                           href={href}
                           target="_blank"
                           className="inline-flex items-center gap-2 rounded-xl border border-neutral-200 px-3 py-1.5 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
                         >
                           {businessPageDictionary[language].open}
                           <ExternalLink className="h-4 w-4 opacity-70" />
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
