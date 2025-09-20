@@ -12,6 +12,7 @@ import BusinsessProfileServices from './Components/Services';
 import BusinessProfileAbout from './Components/About';
 import BusinessProfileReviews from './Components/Reviews';
 import BusinessProfileNearby from './Components/Nearby';
+import { BusinessGalleryHero } from './Components/ImageGallery';
 
 const BusinessProfilePage: React.FC = () => {
   const businessData = useRouteData<BusinessProfile>(RouteName.BUSINESS_PROFILE);
@@ -124,36 +125,12 @@ const BusinessProfilePage: React.FC = () => {
             </div>
           </div>
         </section>
-        <section className="space-y-4">
-          <Image src={business.Images?.Main} name={business.BusinessName} />
 
-          {gallery.length > 0 && (
-            <div className="hidden lg:grid grid-cols-4 gap-4">
-              {gallery.slice(0, 4).map((src, i) => (
-                <Image
-                  key={i}
-                  src={src}
-                  name={`Galería ${i + 1}`}
-                  className="w-full h-36 object-cover rounded-xl"
-                />
-              ))}
-            </div>
-          )}
-
-          {gallery.length > 0 && (
-            <div className="lg:hidden overflow-x-auto snap-x snap-mandatory flex space-x-3 pb-2">
-              {gallery.slice(0, 6).map((src, i) => (
-                <div key={i} className="snap-center flex-shrink-0 w-[75%]">
-                  <Image
-                    src={src}
-                    name={`Galería ${i + 1}`}
-                    className="w-full h-40 object-cover rounded-xl"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+        <BusinessGalleryHero
+          businessName={business.BusinessName}
+          gallery={business?.Images?.Gallery} 
+          main={business?.Images.Main}
+        />
 
         <Separator />
 

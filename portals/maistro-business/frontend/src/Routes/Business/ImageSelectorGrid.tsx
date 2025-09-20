@@ -246,7 +246,7 @@ export function ImageSelectorGrid({
                   onDragOver={onDragOver}
                   onDrop={onDropAt(i)}
                   className="group relative flex items-center gap-2 rounded-xl border border-neutral-200 bg-white p-2 pr-8"
-                  style={{width: "100%", justifyContent: "space-evenly"}}
+                  style={{ width: '100%', justifyContent: 'space-evenly' }}
                 >
                   <div className="grid h-12 w-12 place-items-center overflow-hidden rounded-lg bg-neutral-100">
                     {im ? (

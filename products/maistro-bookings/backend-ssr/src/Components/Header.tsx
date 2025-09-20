@@ -18,13 +18,13 @@ export default function Header() {
           justify="center"
           gap="3"
         >
-          <Link to={appRoutes.getDashboard()}>
+          <Link to={"https://customer.maistroapp.com"}>
             <Button variant="ghost" className="text-sm font-medium text-black px-4 py-2">
               Ingresar
             </Button>
           </Link>
 
-          <Link to={appRoutes.getOnboardingRoute()}>
+          <Link to={"https://customer.maistroapp.com/businesses/onboarding"}>
             <Button className="text-sm px-4 py-2 bg-black hover:bg-gray-900 text-white rounded-full">
               Crear cuenta
             </Button>

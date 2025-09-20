@@ -22,7 +22,7 @@ const BusinessProfileAbout = ({ business }: { business: BusinessProfileExtended 
     <section className="grid lg:grid-cols-2 gap-10">
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Acerca de</h2>
-        <p className="text-gray-700 leading-relaxed">{business.Description}</p>
+        <p className="text-gray-700 leading-relaxed" style={{whiteSpace: 'break-spaces'}}>{business.Description}</p>
 
         <div className="space-y-6 mt-8">
           {opening.length > 0 && (

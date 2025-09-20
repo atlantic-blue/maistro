@@ -208,10 +208,10 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
         teamSize: business.TeamSize,
         website: business.Website,
         addressDetails: {
-          city: business.AddressDetails.City,
-          country: business.AddressDetails.Country,
-          firstLine: business.AddressDetails.FirstLine,
-          postcode: business.AddressDetails.Postcode,
+          city: business?.AddressDetails?.City,
+          country: business?.AddressDetails?.Country,
+          firstLine: business?.AddressDetails?.FirstLine,
+          postcode: business?.AddressDetails?.Postcode,
         },
         email: business.Email,
         images: {
@@ -273,7 +273,9 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
         <div className="rounded-2xl border border-neutral-200 bg-white p-5 lg:col-span-2">
           <h3 className="mb-3 text-base font-semibold text-neutral-900">{business.BusinessName}</h3>
           {business.Description ? (
-            <p className="text-sm text-neutral-700" style={{whiteSpace: "break-spaces"}}>{business.Description}</p>
+            <p className="text-sm text-neutral-700" style={{ whiteSpace: 'break-spaces' }}>
+              {business.Description}
+            </p>
           ) : (
             <p className="text-sm text-neutral-500 italic">—</p>
           )}
@@ -482,7 +484,10 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
 
             <ImageSelectorGrid
               images={images}
-              selectedUrls={[business.Images?.Main, ...business.Images?.Gallery].filter(Boolean)}
+              selectedUrls={[
+                business?.Images?.Main,
+                ...(Array.isArray(business?.Images?.Gallery) ? business?.Images?.Gallery : []),
+              ].filter(Boolean)}
               onRefresh={refresh}
               onChange={(selected) => {
                 const mainImage = selected[0];
