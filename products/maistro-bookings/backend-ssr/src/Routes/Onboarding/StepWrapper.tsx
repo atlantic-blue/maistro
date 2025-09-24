@@ -1,7 +1,7 @@
-import React from 'react';
-import ProgressBar from '../../Components/ProgressBar';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { I18nLanguageConfig } from './i18.config';
+import React from "react";
+import ProgressBar from "../../Components/ProgressBar";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { I18nLanguageConfig } from "./i18.config";
 
 interface StepWrapperProps {
   children: React.ReactNode;
@@ -32,7 +32,10 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           {showBack && (
-            <button onClick={prevStep} className="p-2 hover:bg-white rounded-lg transition-colors">
+            <button
+              onClick={prevStep}
+              className="p-2 hover:bg-white rounded-lg transition-colors"
+            >
               <ChevronLeft className="w-5 h-5" />
             </button>
           )}
@@ -48,8 +51,8 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
                 disabled={!canContinue}
                 className={`px-6 py-2 rounded-lg flex items-center gap-2 transition-colors rounded-xl ${
                   canContinue
-                    ? 'bg-[#FF3366] text-white hover:bg-[#F66085]'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    ? "bg-[#FF3366] text-white hover:bg-[#F66085]"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               >
                 {currentStep === totalSteps - 1

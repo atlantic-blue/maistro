@@ -32,7 +32,7 @@ export interface NavItem {
 export interface LayoutProps {
   children: React.ReactNode;
   productName: string;
-  accentColor: 'blue' | 'orange' | 'green' | 'purple' | 'indigo' | 'red' | 'cyan';
+  accentColor: 'blue' | 'orange' | 'green' | 'purple' | 'indigo' | 'red' | 'cyan' | 'crimson';
   navigation: NavItem[];
   logo: React.ReactNode;
   currentPath: string; // Active path from the current product router
@@ -83,9 +83,9 @@ export const Layout: React.FC<LayoutProps> = ({
   return (
     <Theme
       accentColor={accentColor}
-      grayColor="auto"
+      grayColor="sand"
       scaling="100%"
-      radius="small"
+      radius="large"
       appearance="light"
     >
       <Flex className="h-screen overflow-hidden">

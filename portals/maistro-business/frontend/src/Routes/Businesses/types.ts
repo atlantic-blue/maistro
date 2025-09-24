@@ -1,3 +1,5 @@
+import { MaistroImage } from '@/types';
+
 export type Locale = 'es' | 'en';
 
 export interface Service {
@@ -32,8 +34,8 @@ export interface BusinessProfile {
   };
   Email: string;
   Images: {
-    Main: string;
-    Gallery: string[];
+    Main: MaistroImage;
+    Gallery: MaistroImage[];
   };
   Phone: string;
   Description: string;

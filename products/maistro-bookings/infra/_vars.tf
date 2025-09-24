@@ -10,8 +10,8 @@ variable "environment" {
   default = "production"
 }
 
-variable "product_name" { 
-    default = "maistro-bookings"
+variable "product_name" {
+  default = "maistro-bookings"
 }
 
 variable "domain_name" {

@@ -1,9 +1,9 @@
-import React from 'react';
-import { BusinessProfileExtended } from '../../../types/BusinessProfile';
-import { ChevronRight, Globe, PhoneIcon } from 'lucide-react';
-import GoogleMap from '../../../Components/GoogleMap';
-import { Button, Card, Flex } from '@maistro/ui';
-import { safeArray } from '../../../utils/array';
+import React from "react";
+import { BusinessProfileExtended } from "../../../types/BusinessProfile";
+import { ChevronRight, Globe, PhoneIcon } from "lucide-react";
+import GoogleMap from "../../../Components/GoogleMap";
+import { Button, Card, Flex } from "@maistro/ui";
+import { safeArray } from "../../../utils/array";
 
 const FeaturePill = ({ children }: { children: React.ReactNode }) => (
   <span className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
@@ -14,7 +14,11 @@ const FeaturePill = ({ children }: { children: React.ReactNode }) => (
 {
   /* ABOUT + HOURS + FEATURES + MAP (each only if present) */
 }
-const BusinessProfileAbout = ({ business }: { business: BusinessProfileExtended }) => {
+const BusinessProfileAbout = ({
+  business,
+}: {
+  business: BusinessProfileExtended;
+}) => {
   const opening = safeArray(business.OpeningHours);
   const features = safeArray(business.Features);
 
@@ -22,12 +26,19 @@ const BusinessProfileAbout = ({ business }: { business: BusinessProfileExtended 
     <section className="grid lg:grid-cols-2 gap-10">
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Acerca de</h2>
-        <p className="text-gray-700 leading-relaxed" style={{whiteSpace: 'break-spaces'}}>{business.Description}</p>
+        <p
+          className="text-gray-700 leading-relaxed"
+          style={{ whiteSpace: "break-spaces" }}
+        >
+          {business.Description}
+        </p>
 
         <div className="space-y-6 mt-8">
           {opening.length > 0 && (
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Horarios de Atención</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">
+                Horarios de Atención
+              </h3>
               <div className="space-y-1.5">
                 {opening.slice(0, 3).map((h) => (
                   <div key={h.day} className="flex justify-between text-sm">
@@ -46,7 +57,9 @@ const BusinessProfileAbout = ({ business }: { business: BusinessProfileExtended 
 
           {features.length > 0 && (
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Características</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">
+                Características
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {features.map((f) => (
                   <FeaturePill key={f}>{f}</FeaturePill>
@@ -68,7 +81,8 @@ const BusinessProfileAbout = ({ business }: { business: BusinessProfileExtended 
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 text-[#FF3366] font-medium"
               >
-                <Globe className="w-4 h-4" /> {business.Website.replace(/^https?:\/\//, '')}
+                <Globe className="w-4 h-4" />{" "}
+                {business.Website.replace(/^https?:\/\//, "")}
               </a>
             )}
           </div>
@@ -88,7 +102,10 @@ const BusinessProfileAbout = ({ business }: { business: BusinessProfileExtended 
               }}
               zoom="15"
             />
-            <Button variant="outline" className="w-full border-gray-200 text-gray-700 py-3 mt-3">
+            <Button
+              variant="outline"
+              className="w-full border-gray-200 text-gray-700 py-3 mt-3"
+            >
               Obtener direcciones
             </Button>
           </Flex>

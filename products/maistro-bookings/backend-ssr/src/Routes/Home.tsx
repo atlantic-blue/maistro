@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router';
-import { Button, Badge, Card, Box } from '@maistro/ui';
-import Header from '../Components/Header';
-import { appRoutes } from './appRoutes';
+import React from "react";
+import { Link } from "react-router";
+import { Button, Badge, Card, Box } from "@maistro/ui";
+import Header from "../Components/Header";
+import { appRoutes } from "./appRoutes";
 
 export default function Homepage() {
   return (
@@ -16,7 +16,8 @@ export default function Homepage() {
               Reserva. Gestiona. <span className="text-[#FF3366]">Crece.</span>
             </h1>
             <p className="text-xl text-gray-600 font-light mb-6 max-w-lg">
-              La plataforma gratuita para gestionar tu salón con estilo y cero complicaciones.
+              La plataforma gratuita para gestionar tu salón con estilo y cero
+              complicaciones.
             </p>
             <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
               <Link to={appRoutes.getOnboardingRoute()}>
@@ -45,25 +46,34 @@ export default function Homepage() {
           <div className="grid md:grid-cols-3 gap-8 text-left">
             <Card>
               <Box className="p-6">
-                <h3 className="text-xl font-semibold mb-2">✅ Reservas automáticas 24/7</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  ✅ Reservas automáticas 24/7
+                </h3>
                 <p className="text-gray-700">
-                  Tus clientes reservan sin interrupciones, incluso mientras duermes.
+                  Tus clientes reservan sin interrupciones, incluso mientras
+                  duermes.
                 </p>
               </Box>
             </Card>
             <Card>
               <Box className="p-6">
-                <h3 className="text-xl font-semibold mb-2">✅ WhatsApp & recordatorios</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  ✅ WhatsApp & recordatorios
+                </h3>
                 <p className="text-gray-700">
-                  Recordatorios automáticos que reducen ausencias y mejoran la experiencia.
+                  Recordatorios automáticos que reducen ausencias y mejoran la
+                  experiencia.
                 </p>
               </Box>
             </Card>
             <Card>
               <Box className="p-6">
-                <h3 className="text-xl font-semibold mb-2">✅ CRM de clientes</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  ✅ CRM de clientes
+                </h3>
                 <p className="text-gray-700">
-                  Conoce el historial de cada cliente y fideliza como nunca antes.
+                  Conoce el historial de cada cliente y fideliza como nunca
+                  antes.
                 </p>
               </Box>
             </Card>
@@ -84,13 +94,17 @@ export default function Homepage() {
             </Card>
             <Card className="bg-white border border-gray-200 shadow-sm">
               <Box className="p-6">
-                <h3 className="font-bold text-xl mb-2">2. Configura tus servicios</h3>
+                <h3 className="font-bold text-xl mb-2">
+                  2. Configura tus servicios
+                </h3>
                 <p>Personaliza horarios, precios y redes sociales.</p>
               </Box>
             </Card>
             <Card className="bg-white border border-gray-200 shadow-sm">
               <Box className="p-6">
-                <h3 className="font-bold text-xl mb-2">3. Comparte tu enlace</h3>
+                <h3 className="font-bold text-xl mb-2">
+                  3. Comparte tu enlace
+                </h3>
                 <p>Empieza a recibir reservas por WhatsApp, Instagram y más.</p>
               </Box>
             </Card>
@@ -104,8 +118,12 @@ export default function Homepage() {
 
       {/* Final CTA */}
       <section className="text-center py-20 px-6 bg-[#FF3366] text-white">
-        <h2 className="text-3xl font-bold mb-4">Empieza con Maistro hoy mismo</h2>
-        <p className="mb-6 text-lg">Sin tarjeta. Sin complicaciones. 100% gratis.</p>
+        <h2 className="text-3xl font-bold mb-4">
+          Empieza con Maistro hoy mismo
+        </h2>
+        <p className="mb-6 text-lg">
+          Sin tarjeta. Sin complicaciones. 100% gratis.
+        </p>
         <Link to={appRoutes.getOnboardingRoute()}>
           <Button className="text-lg px-6 py-3 bg-white text-[#FF3366] hover:bg-gray-100">
             Crear mi cuenta
@@ -115,7 +133,9 @@ export default function Homepage() {
 
       {/* Comparison */}
       <section className="bg-white px-6 py-16 max-w-5xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-8">Maistro vs. Booksy & Fresha</h2>
+        <h2 className="text-3xl font-bold text-center mb-8">
+          Maistro vs. Booksy & Fresha
+        </h2>
         <div className="overflow-auto">
           <table className="min-w-full text-left border-collapse">
             <thead>

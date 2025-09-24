@@ -1,7 +1,7 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext } from "react";
 
-import { RouteData } from '../types/Route';
-import { RouteName } from '../Routes/appRoutes';
+import { RouteData } from "../types/Route";
+import { RouteName } from "../Routes/appRoutes";
 
 export const RouteDataContext = createContext<RouteData | null>(null);
 
@@ -9,7 +9,11 @@ export const RouteDataProvider: React.FC<{
   data: RouteData;
   children: React.ReactNode;
 }> = ({ data, children }) => {
-  return <RouteDataContext.Provider value={data}>{children}</RouteDataContext.Provider>;
+  return (
+    <RouteDataContext.Provider value={data}>
+      {children}
+    </RouteDataContext.Provider>
+  );
 };
 
 export function useRouteData<I>(route: RouteName) {

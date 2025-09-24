@@ -1,28 +1,42 @@
-import React from 'react';
-import { Route, Routes as ReactRoutes } from 'react-router';
-import { AuthCallback, AuthProvider, Login, ProtectedRoute } from '@maistro/auth';
-import { Theme } from '@maistro/ui';
+import React from "react";
+import { Route, Routes as ReactRoutes } from "react-router";
+import {
+  AuthCallback,
+  AuthProvider,
+  Login,
+  ProtectedRoute,
+} from "@maistro/auth";
+import { Theme } from "@maistro/ui";
 
-import env from '../env';
+import env from "../env";
 
-import { appRoutes, Routes } from './appRoutes';
-import Homepage from './Home';
-import BusinessProfilePage from './BusinessProfile';
-import Onboarding from './Onboarding';
+import { appRoutes, Routes } from "./appRoutes";
+import Homepage from "./Home";
+import BusinessProfilePage from "./BusinessProfile";
+import Onboarding from "./Onboarding";
 
-import Dashboard from './Dahsboard';
-import Helmet from '../Components/Helmet';
+import Dashboard from "./Dahsboard";
+import Helmet from "../Components/Helmet";
 
 const Router: React.FC = () => {
   // TODO implement multiple languages
-  const language = 'es';
+  const language = "es";
 
   return (
-    <Theme accentColor="crimson" scaling="100%" radius="full">
+    <Theme
+      appearance="light"
+      accentColor="crimson"
+      grayColor="sand"
+      radius="large"
+      scaling="100%"
+    >
       <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
         <ReactRoutes>
           <Route path="*" element={<Homepage />} />
-          <Route path={Routes.BUSINESS_PROFILE} element={<BusinessProfilePage />} />
+          <Route
+            path={Routes.BUSINESS_PROFILE}
+            element={<BusinessProfilePage />}
+          />
           <Route
             path={Routes.ONBOARDING}
             element={

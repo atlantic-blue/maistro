@@ -1,12 +1,12 @@
-import { IconLogoSimple, NavItem } from '@maistro/ui';
-import { HomeIcon, LayoutIcon } from '@radix-ui/react-icons';
-import React from 'react';
-import { useContext, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { IconLogoSimple, NavItem } from "@maistro/ui";
+import { HomeIcon, LayoutIcon } from "@radix-ui/react-icons";
+import React from "react";
+import { useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 
-import { AuthContext } from '@maistro/auth';
-import Layout from './Layout';
-import { appRoutes } from '../Routes/appRoutes';
+import { AuthContext } from "@maistro/auth";
+import Layout from "./Layout";
+import { appRoutes } from "../Routes/appRoutes";
 
 interface HelmetProps {
   children: React.ReactNode;
@@ -14,12 +14,12 @@ interface HelmetProps {
 
 const routesNavigation: NavItem[] = [
   {
-    name: 'Panel',
+    name: "Panel",
     path: appRoutes.getDashboard(),
     icon: <HomeIcon />,
   },
   {
-    name: 'Mis Reservas',
+    name: "Mis Reservas",
     path: appRoutes.getBookings(),
     icon: <LayoutIcon />,
   },
@@ -28,11 +28,11 @@ const routesNavigation: NavItem[] = [
 function getPageTitle(path: string): string {
   switch (path) {
     case appRoutes.getDashboard():
-      return 'Panel';
+      return "Panel";
     case appRoutes.getBookings():
-      return 'Mis Reservas';
+      return "Mis Reservas";
     default:
-      return 'Dashboard';
+      return "Dashboard";
   }
 }
 
@@ -59,9 +59,9 @@ const Helmet: React.FC<HelmetProps> = (props) => {
       logo={<IconLogoSimple />}
       currentPath={location.pathname}
       user={{
-        name: user?.getName() || '',
-        email: user?.getEmail() || '',
-        avatar: user?.getAvatar() || '',
+        name: user?.getName() || "",
+        email: user?.getEmail() || "",
+        avatar: user?.getAvatar() || "",
       }}
       onLogout={logOut}
       onNavigate={handleNavigate}

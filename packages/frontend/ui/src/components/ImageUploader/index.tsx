@@ -2,16 +2,7 @@ import React from 'react';
 import { OwnerType, UploadItem, UploadUrlResponse } from './types';
 import { createErrorItem, getItem, updateItem, uuid } from './utils';
 import { getPresignedUrl, resizeImage } from './api';
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  Theme,
-  Text,
-  Callout,
-  Progress,
-} from '@radix-ui/themes';
+import { Box, Button, Card, Flex, Theme, Text, Callout, Progress, Badge } from '@radix-ui/themes';
 import { DropZone } from './Dropzone';
 import { ItemRow } from './Row';
 
@@ -24,20 +15,21 @@ type Props = {
   ownerId: string; // current owner id
   maxFileMB?: number; // default 5
   token: string;
-  emitUrls?: (urls: UploadUrlResponse["Urls"]) => void
+  onComplete?: (urls: UploadUrlResponse['Urls']) => void;
 };
 
 export function MaistroImageUploader({
-  token, 
+  token,
   urls,
   ownerType,
   ownerId,
   maxFileMB = 5,
-  emitUrls
+  onComplete,
 }: Props) {
   const [items, setItems] = React.useState<UploadItem[]>([]);
   const [error, setError] = React.useState<string | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const [isProcessing, setIsProcessing] = React.useState(false);
 
   const MAX_BYTES = maxFileMB * 1024 * 1024;
 
@@ -143,17 +135,24 @@ export function MaistroImageUploader({
             updateItem(item, id, { state: 'DONE', progress: 100, xhr: undefined, s3Key })
           );
 
-          // 3) Manually trigger resize
-          const reponse = await resizeImage({
-            url: urls.resize,
-            key: `${ownerType === 'user' ? 'users' : 'businesses'}/${ownerId}/${response.ImageId}/original.bin`,
-            token,
-          }).catch((e) =>
-            setItems((cur) => updateItem(cur, id, { state: 'ERROR', message: e.message }))
-          );
+          try {
+            // 3) Manually trigger resize
+            setIsProcessing(true);
+            const reponse = await resizeImage({
+              url: urls.resize,
+              key: `${ownerType === 'user' ? 'users' : 'businesses'}/${ownerId}/${response.ImageId}/original.bin`,
+              token,
+            }).catch((e) =>
+              setItems((cur) => updateItem(cur, id, { state: 'ERROR', message: e.message }))
+            );
 
-          if(response && emitUrls) {
-            emitUrls(response.Urls)
+            if (response && onComplete) {
+              onComplete(response.Urls);
+            }
+          } catch (error) {
+            console.error(error);
+          } finally {
+            setIsProcessing(false);
           }
         }
       };
@@ -238,7 +237,7 @@ export function MaistroImageUploader({
                 Hasta {maxFileMB} MB por archivo · Formatos: cualquier imagen
               </Text>
             </Flex>
-            <Flex gap="4" className="mb-5" align="center">
+            <Flex gap="4" className="mb-5" align="center" wrap="wrap" justify="center">
               <Button
                 variant="solid"
                 onClick={() => inputRef.current?.click()}
@@ -249,12 +248,18 @@ export function MaistroImageUploader({
               <Button variant="soft" onClick={startAll}>
                 Subir
               </Button>
-              <Button variant="ghost" onClick={clearDone}>
+              <Button variant="outline" onClick={clearDone}>
                 Limpiar
               </Button>
             </Flex>
           </Flex>
         </Flex>
+
+        {isProcessing ? (
+          <Flex align="center" justify="center">
+            <Badge color="bronze">Processando imagenes...</Badge>
+          </Flex>
+        ) : null}
 
         <input
           ref={inputRef}

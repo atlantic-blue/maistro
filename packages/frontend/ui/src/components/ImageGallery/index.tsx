@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import { MaistroImage } from './types';
 import { getImages } from './api';
 import { FeedView } from './FeedView';
@@ -85,12 +85,7 @@ export const MaistroImageGallery = ({ urls, token, ownerId }: ImageGalleryProps)
 
   return (
     <div className="min-h-screen bg-[#FFF8F6]">
-      <FeedView
-        images={images}
-        onDelete={onDelete}
-        onOpen={onOpen}
-        loading={loading}
-      />
+      <FeedView images={images} onDelete={onDelete} onOpen={onOpen} loading={loading} />
 
       <ViewerDialog
         open={selectedIndex !== null}
@@ -98,7 +93,7 @@ export const MaistroImageGallery = ({ urls, token, ownerId }: ImageGalleryProps)
         images={images}
         index={selectedIndex ?? 0}
         onIndexChange={setSelectedIndex}
-        />
+      />
 
       {/* Sentinel for infinite scroll */}
       <div ref={sentinelRef} className="h-12" />

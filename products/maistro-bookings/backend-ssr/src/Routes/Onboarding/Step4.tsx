@@ -1,7 +1,7 @@
-import React from 'react';
-import StepWrapper from './StepWrapper';
-import { OnboardingFormData } from './types';
-import { I18nLanguageConfig } from './i18.config';
+import React from "react";
+import StepWrapper from "./StepWrapper";
+import { OnboardingFormData } from "./types";
+import { I18nLanguageConfig } from "./i18.config";
 
 interface Step1Props {
   formData: OnboardingFormData;
@@ -35,8 +35,12 @@ const Step4: React.FC<Step1Props> = ({
       resourceStrings={resourceStrings}
     >
       <div>
-        <p className="text-gray-500 mb-4">{resourceStrings.common.accountSetup}</p>
-        <h1 className="text-4xl font-bold text-gray-900 mb-12">{resourceStrings.step4.title}</h1>
+        <p className="text-gray-500 mb-4">
+          {resourceStrings.common.accountSetup}
+        </p>
+        <h1 className="text-4xl font-bold text-gray-900 mb-12">
+          {resourceStrings.step4.title}
+        </h1>
 
         <div className="space-y-4 max-w-md mx-auto">
           {resourceStrings.step4.teamSizes.map((size: string) => (
@@ -45,8 +49,8 @@ const Step4: React.FC<Step1Props> = ({
               onClick={() => updateFormData({ teamSize: size })}
               className={`w-full p-4 rounded-xl border-2 text-left transition-all duration-200 ${
                 formData.teamSize === size
-                  ? 'border-[#FF3366] bg-[#FF3366]/5'
-                  : 'border-gray-200 hover:border-gray-300 bg-white'
+                  ? "border-[#FF3366] bg-[#FF3366]/5"
+                  : "border-gray-200 hover:border-gray-300 bg-white"
               }`}
             >
               {size}

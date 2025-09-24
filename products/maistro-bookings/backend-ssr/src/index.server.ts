@@ -1,15 +1,17 @@
-import { LambdaFunctionURLEvent, APIGatewayProxyResultV2 } from 'aws-lambda';
+import { LambdaFunctionURLEvent, APIGatewayProxyResultV2 } from "aws-lambda";
 
-import AppRoutes from './Routes/router';
-import serverSideRenderer from './ssr/render';
+import AppRoutes from "./Routes/router";
+import serverSideRenderer from "./ssr/render";
 
-const handler = async (event: LambdaFunctionURLEvent): Promise<APIGatewayProxyResultV2> => {
-  const assets = (await import('../dist/public/stats.json')).default;
+const handler = async (
+  event: LambdaFunctionURLEvent,
+): Promise<APIGatewayProxyResultV2> => {
+  const assets = (await import("../dist/public/stats.json")).default;
   try {
     return {
       statusCode: 200,
       headers: {
-        'Content-Type': 'text/html',
+        "Content-Type": "text/html",
       },
       body: await serverSideRenderer(event, assets, AppRoutes),
     };
@@ -19,7 +21,7 @@ const handler = async (event: LambdaFunctionURLEvent): Promise<APIGatewayProxyRe
     return {
       statusCode: 500,
       headers: {
-        'Content-Type': 'text/html',
+        "Content-Type": "text/html",
       },
       body: `<html><body>${error?.toString()}</body></html>`,
     };

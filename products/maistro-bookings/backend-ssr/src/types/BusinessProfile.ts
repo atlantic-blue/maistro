@@ -4,6 +4,37 @@ export interface Service {
   price: number;
 }
 
+export interface MaistroImage {
+  OwnerType: "user" | "business";
+  OwnerId: string;
+  ImageId: string;
+  /**
+   * 'image/jpeg'
+   * 'image/png'
+   */
+  ContentType: string;
+  Status: "UPLOADING" | "READY";
+
+  Urls: {
+    Optimized: string;
+    Low: string;
+    Medium: string;
+    High: string;
+    Original: string;
+  };
+
+  SizesInBytes: {
+    Optimised: number;
+    Low: number;
+    Medium: number;
+    High: number;
+    TotalBytes: number;
+  };
+
+  CreatedAt: string;
+  ProcessedAt: string;
+}
+
 export interface BusinessProfile {
   BusinessId: string;
   Slug: string;
@@ -19,7 +50,7 @@ export interface BusinessProfile {
   BusinessName: string;
   Website?: string;
   BusinessType: string[];
-  AccountType: 'independent' | 'team' | string;
+  AccountType: "independent" | "team" | string;
   TeamSize: string;
   Address: string;
   AddressDetails: {
@@ -30,8 +61,8 @@ export interface BusinessProfile {
   };
   Email: string;
   Images: {
-    Main: string;
-    Gallery: string[];
+    Main: MaistroImage;
+    Gallery: MaistroImage[];
   };
   Phone?: string;
   Description: string;

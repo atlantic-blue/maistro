@@ -1,43 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { OnboardingFormData } from './types';
-import i18nConfig from './i18.config';
-import Step1 from './Step1';
-import Step2 from './Step2';
-import Step3 from './Step3';
-import Step4 from './Step4';
-import Step5 from './Step5';
-import Step6 from './Step6';
-import Step7 from './Step7';
-import Step8 from './Step8';
-import { AuthContext } from '@maistro/auth';
-import env from '../../env';
-import onboardUser from '../../Api/Onboarding';
+import React, { useEffect, useState } from "react";
+import { OnboardingFormData } from "./types";
+import i18nConfig from "./i18.config";
+import Step1 from "./Step1";
+import Step2 from "./Step2";
+import Step3 from "./Step3";
+import Step4 from "./Step4";
+import Step5 from "./Step5";
+import Step6 from "./Step6";
+import Step7 from "./Step7";
+import Step8 from "./Step8";
+import { AuthContext } from "@maistro/auth";
+import env from "../../env";
+import onboardUser from "../../Api/Onboarding";
 
 interface OnboardingProps {
-  language: 'en' | 'es' | 'fr';
+  language: "en" | "es" | "fr";
 }
 
 const Onboarding: React.FC<OnboardingProps> = (props): React.ReactNode => {
   const { isAuthenticated, isLoading, user } = React.useContext(AuthContext);
 
-  const [language] = useState<OnboardingProps['language']>(props.language);
+  const [language] = useState<OnboardingProps["language"]>(props.language);
   const resourceStrings = i18nConfig[language];
   const totalSteps: number = 8;
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [formData, setFormData] = useState<OnboardingFormData>({
-    businessName: '',
-    website: '',
+    businessName: "",
+    website: "",
     businessType: [],
-    accountType: '',
-    teamSize: '',
-    address: '',
-    phone: '',
-    description: '',
+    accountType: "",
+    teamSize: "",
+    address: "",
+    phone: "",
+    description: "",
     services: [],
     features: [],
-    hearAbout: '',
+    hearAbout: "",
   });
 
   const processOnboardUser = async () => {
@@ -70,7 +70,7 @@ const Onboarding: React.FC<OnboardingProps> = (props): React.ReactNode => {
   const nextStep = (): void => {
     if (currentStep < totalSteps - 1) {
       // Skip team size step if independent
-      if (currentStep === 2 && formData.accountType === 'independent') {
+      if (currentStep === 2 && formData.accountType === "independent") {
         setCurrentStep(currentStep + 2);
       } else {
         setCurrentStep(currentStep + 1);
@@ -81,7 +81,7 @@ const Onboarding: React.FC<OnboardingProps> = (props): React.ReactNode => {
   const prevStep = (): void => {
     if (currentStep > 0) {
       // Skip team size step if independent
-      if (currentStep === 4 && formData.accountType === 'independent') {
+      if (currentStep === 4 && formData.accountType === "independent") {
         setCurrentStep(currentStep - 2);
       } else {
         setCurrentStep(currentStep - 1);
@@ -175,7 +175,9 @@ const Onboarding: React.FC<OnboardingProps> = (props): React.ReactNode => {
         />
       );
     case 7:
-      return <Step8 resourceStrings={resourceStrings} isSubmitted={isSubmitted} />;
+      return (
+        <Step8 resourceStrings={resourceStrings} isSubmitted={isSubmitted} />
+      );
 
     default:
       return null;

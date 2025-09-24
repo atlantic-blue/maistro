@@ -2,44 +2,61 @@ import React, { useMemo, useState, useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 import ImagePlaceHolder from "./ImagePlaceHolder";
+import Image from "./Image";
+import { MaistroImage } from "../../../types/BusinessProfile";
 
 type Locale = "es" | "en";
 
 export type GalleryHeroProps = {
-  main?: string | null;
-  gallery?: string[];
+  main?: MaistroImage | null;
+  gallery: (MaistroImage | null)[];
   businessName: string;
   locale?: Locale; // "es" por defecto
   className?: string;
 };
 
 const galleryDict = {
-  es: { open: "Ampliar imagen", close: "Cerrar", next: "Siguiente", prev: "Anterior" },
+  es: {
+    open: "Ampliar imagen",
+    close: "Cerrar",
+    next: "Siguiente",
+    prev: "Anterior",
+  },
   en: { open: "Expand image", close: "Close", next: "Next", prev: "Previous" },
 } as const;
 
-const cx = (...xs: Array<string | false | null | undefined>) => xs.filter(Boolean).join(" ");
-const toAbs = (u?: string | null) => (!u ? "" : /^https?:\/\//i.test(u) ? u : `https://${u}`);
+const cx = (...xs: Array<string | false | null | undefined>) =>
+  xs.filter(Boolean).join(" ");
 
-export function BusinessGalleryHero({ main, gallery = [], businessName, locale = "es", className }: GalleryHeroProps) {
+export function BusinessGalleryHero({
+  main,
+  gallery = [],
+  businessName,
+  locale = "es",
+  className,
+}: GalleryHeroProps) {
   const t = galleryDict[locale];
 
-  // principal + galería, sin duplicados y absolutas
+  // Normalized list of all images
   const images = useMemo(() => {
-    const raw = [main, ...gallery].filter(Boolean) as string[];
-    const uniq: string[] = [];
-    for (const u of raw) {
-      const abs = toAbs(u);
-      if (abs && !uniq.includes(abs)) uniq.push(abs);
-    }
-    return uniq;
+    const all = [main, ...gallery].filter(Boolean) as MaistroImage[];
+    const seen = new Set<string>();
+    const unique = all.filter((img) => {
+      const key = img.Urls.Medium;
+      if (!seen.has(key)) {
+        seen.add(key);
+        return true;
+      }
+      return false;
+    });
+    return unique;
   }, [main, gallery]);
 
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
   const has = images.length > 0;
-  const heroSrc = has ? images[0] : "";
+  const heroSrc = has ? images[0] : null;
 
   const openAt = (i: number) => {
     setIndex(i);
@@ -67,8 +84,8 @@ export function BusinessGalleryHero({ main, gallery = [], businessName, locale =
           aria-label={t.open}
           className="group relative block w-full overflow-hidden rounded-2xl"
         >
-          <img
-            src={heroSrc}
+          <Image
+            variants={heroSrc}
             alt={businessName}
             className="h-[38vh] w-full rounded-2xl object-cover sm:h-[48vh] lg:h-[56vh]"
           />
@@ -86,14 +103,18 @@ export function BusinessGalleryHero({ main, gallery = [], businessName, locale =
         <>
           {/* Desktop */}
           <div className="hidden lg:grid grid-cols-4 gap-4">
-            {images.slice(1, 5).map((src, i) => (
+            {images.slice(1, 5).map((image, i) => (
               <button
-                key={src}
+                key={image.Urls.Optimized}
                 type="button"
                 onClick={() => openAt(i + 1)}
                 className="group relative block w-full overflow-hidden rounded-xl"
               >
-                <img src={src} alt={`${businessName} — Galería ${i + 1}`} className="h-36 w-full rounded-xl object-cover" />
+                <Image
+                  variants={image}
+                  alt={`${businessName} — Galería ${i + 1}`}
+                  className="h-36 w-full rounded-xl object-cover"
+                />
                 <div className="pointer-events-none absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
               </button>
             ))}
@@ -101,15 +122,25 @@ export function BusinessGalleryHero({ main, gallery = [], businessName, locale =
 
           {/* Móvil */}
           <div className="lg:hidden relative">
-            <div className="overflow-x-auto snap-x snap-mandatory flex space-x-3 pb-2" ref={railRef}>
-              {images.slice(1, 7).map((src, i) => (
-                <div key={src} className="snap-center flex-shrink-0 w-[75%]">
+            <div
+              className="overflow-x-auto snap-x snap-mandatory flex space-x-3 pb-2"
+              ref={railRef}
+            >
+              {images.slice(1, 7).map((image, i) => (
+                <div
+                  key={image.Urls.Optimized}
+                  className="snap-center flex-shrink-0 w-[75%]"
+                >
                   <button
                     type="button"
                     onClick={() => openAt(i + 1)}
                     className="group relative block w-full overflow-hidden rounded-xl"
                   >
-                    <img src={src} alt={`${businessName} — Galería ${i + 1}`} className="h-40 w-full rounded-xl object-cover" />
+                    <Image
+                      variants={image}
+                      alt={`${businessName} — Galería ${i + 1}`}
+                      className="h-40 w-full rounded-xl object-cover"
+                    />
                     <div className="pointer-events-none absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
                   </button>
                 </div>
@@ -136,12 +167,12 @@ export function BusinessGalleryHero({ main, gallery = [], businessName, locale =
             </div>
           </div>
         </>
-      ): (
+      ) : (
         <div className="hidden lg:grid grid-cols-4 gap-4">
-            <ImagePlaceHolder name="G1" />
-            <ImagePlaceHolder name="G2" />
-            <ImagePlaceHolder name="G3" />
-            <ImagePlaceHolder name="G4" />
+          <ImagePlaceHolder name="G1" />
+          <ImagePlaceHolder name="G2" />
+          <ImagePlaceHolder name="G3" />
+          <ImagePlaceHolder name="G4" />
         </div>
       )}
 
@@ -151,8 +182,8 @@ export function BusinessGalleryHero({ main, gallery = [], businessName, locale =
           <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
           <Dialog.Content className="fixed inset-0 z-50 grid place-items-center p-4">
             <div className="relative w-full max-w-5xl">
-              <img
-                src={images[index]}
+              <Image
+                variants={images[index]}
                 alt={`${businessName} — ${index + 1}/${images.length}`}
                 className="max-h-[80vh] w-full rounded-xl object-contain shadow-2xl"
               />

@@ -36,7 +36,7 @@ resource "aws_s3_bucket_acl" "www_lambda_ssr" {
 
 resource "aws_s3_bucket" "www_lambda_ssr" {
   bucket = local.www_lambda_ssr_bucket_name
-  tags = local.tags
+  tags   = local.tags
 }
 
 output "www_lambda_ssr_bucket" {

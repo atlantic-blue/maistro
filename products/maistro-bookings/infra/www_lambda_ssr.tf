@@ -46,7 +46,7 @@ resource "aws_iam_role_policy_attachment" "www_lambda_ssr" {
 
 # Archive lambda function
 data "archive_file" "www_lambda_ssr" {
-  type        = "zip"
+  type = "zip"
   # The output directory of the lambda
   source_dir  = "${path.module}/../backend-ssr/dist-server"
   output_path = "${path.module}/lambdas/server-side-render.zip"
@@ -62,7 +62,7 @@ resource "aws_lambda_function" "www_lambda_ssr" {
   role             = aws_iam_role.www_lambda_ssr.arn
   source_code_hash = data.archive_file.www_lambda_ssr.output_base64sha256
 
-  timeout     = 60 * 5 // 5 minutes
+  timeout = 60 * 5 // 5 minutes
   #   memory_size = 128 * 4
 
   environment {

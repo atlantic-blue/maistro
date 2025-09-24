@@ -1,5 +1,6 @@
 import env from '@/env';
 import { BusinessProfile } from '@/Routes/Businesses/types';
+import { MaistroImage } from '@/types';
 
 export const getBusinessProfileById = async (businessId: string): Promise<BusinessProfile> => {
   const url = `${env.api.businesses.businessById(businessId)}`;
@@ -50,8 +51,8 @@ export interface UpdateBusinessFormData {
   };
   email: string;
   images: {
-    main: string;
-    gallery: string[];
+    main: MaistroImage;
+    gallery: MaistroImage[];
   };
 }
 

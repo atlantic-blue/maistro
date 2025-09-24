@@ -1,7 +1,7 @@
-import { RouteName, Routes } from '../Routes/appRoutes';
-import { matchRoutes } from 'react-router';
-import { LambdaFunctionURLEvent } from 'aws-lambda';
-import { businessProfilePrefetch } from '../Routes/BusinessProfile/prefetch';
+import { RouteName, Routes } from "../Routes/appRoutes";
+import { matchRoutes } from "react-router";
+import { LambdaFunctionURLEvent } from "aws-lambda";
+import { businessProfilePrefetch } from "../Routes/BusinessProfile/prefetch";
 
 export interface LoaderArgs {
   url: URL;
@@ -18,25 +18,33 @@ export interface ServerRoute {
   load?: (args: LoaderArgs) => Promise<unknown>;
 }
 
-const parseCookies = (cookieHeader = '') =>
+const parseCookies = (cookieHeader = "") =>
   Object.fromEntries(
     cookieHeader
-      .split(';')
+      .split(";")
       .map((c) => {
-        const i = c.indexOf('=');
-        if (i < 0) return [c.trim(), ''];
+        const i = c.indexOf("=");
+        if (i < 0) return [c.trim(), ""];
         return [c.slice(0, i).trim(), decodeURIComponent(c.slice(i + 1))];
       })
-      .filter(Boolean)
+      .filter(Boolean),
   );
 
-export async function serverRouteLoader(event: LambdaFunctionURLEvent, location: string) {
+export async function serverRouteLoader(
+  event: LambdaFunctionURLEvent,
+  location: string,
+) {
   const headers = Object.fromEntries(
-    Object.entries(event.headers || {}).map(([k, v]) => [k.toLowerCase(), v || ''])
+    Object.entries(event.headers || {}).map(([k, v]) => [
+      k.toLowerCase(),
+      v || "",
+    ]),
   );
 
   const cookies = parseCookies(headers.cookie);
-  const url = new URL(`${headers['x-forwarded-proto'] || 'https'}://${headers.host}${location}`);
+  const url = new URL(
+    `${headers["x-forwarded-proto"] || "https"}://${headers.host}${location}`,
+  );
 
   const matches = matchRoutes<ServerRoute>(serverRoutes, location) || [];
 
@@ -60,9 +68,9 @@ export async function serverRouteLoader(event: LambdaFunctionURLEvent, location:
         });
         data[route.id] = value;
       } catch (error: any) {
-        errors[route.id] = error?.message || 'Loader failed';
+        errors[route.id] = error?.message || "Loader failed";
       }
-    })
+    }),
   );
 
   return {

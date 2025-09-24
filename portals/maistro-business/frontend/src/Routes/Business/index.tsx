@@ -27,7 +27,7 @@ import {
   Store,
   ImageIcon,
   Settings,
-  Book
+  Book,
 } from 'lucide-react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@maistro/auth';
@@ -39,6 +39,7 @@ import env from '@/env';
 import { getImages } from '@/Api/Images';
 import { MaistroImage } from '@/types';
 import ImageSelectorGrid from './ImageSelectorGrid';
+import ImageViewUploader from './ImageViewUploader';
 
 const profileIcons: Record<string, React.ReactNode> = {
   reviews: <Star className="h-5 w-5" />,
@@ -147,19 +148,6 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
       setBusiness(biz);
     });
   }, [isAuthenticated, isLoading, user, businessId]);
-
-  const refresh = () => {
-    if (!business || !user) return;
-    setImagesLoading(true);
-    getImages({
-      Limit: 30,
-      OwnerId: business.BusinessId,
-      token: user.getTokenAccess(),
-      url: env.api.images.getImages,
-    })
-      .then((res) => setImages(res.images))
-      .finally(() => setImagesLoading(false));
-  };
 
   const ownerId = business?.BusinessId ?? null;
   useEffect(() => {
@@ -360,11 +348,9 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
                     <div>
                       <Flex direction="row" align="center" justify="between">
                         <div className="text-sm font-semibold text-neutral-900">
-                        {businessPageDictionary[language].toolLabels[key]}
-                      </div>
-                      <div>
-                      {isLive ? "" : <Badge>Proximamente</Badge>}
-                    </div>
+                          {businessPageDictionary[language].toolLabels[key]}
+                        </div>
+                        <div>{isLive ? '' : <Badge>Proximamente</Badge>}</div>
                       </Flex>
                       <p className="mt-1 text-sm text-neutral-600">{toolInfo}</p>
                       <div className="mt-3">
@@ -489,18 +475,11 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
               />
             </Flex>
 
-            <ImageSelectorGrid
-              images={images}
-              selectedUrls={[
-                business?.Images?.Main,
-                ...(Array.isArray(business?.Images?.Gallery) ? business?.Images?.Gallery : []),
-              ].filter(Boolean)}
-              onRefresh={refresh}
+            <ImageViewUploader
+              business={business}
               onChange={(selected) => {
                 const mainImage = selected[0];
                 const gallery = selected.slice(1);
-
-                console.log(mainImage, gallery);
 
                 setBusiness((biz) => {
                   if (!biz) {
@@ -516,17 +495,6 @@ export function BusinessProfilePage({ language }: { language: Locale }) {
                   };
                 });
               }}
-            />
-
-            <MaistroImageUploader
-              urls={{
-                getPresignedUrl: env.api.images.getPresignedUrl,
-                resize: env.api.images.resizeImages,
-              }}
-              token={user.getTokenAccess()}
-              ownerId={business.BusinessId}
-              ownerType="business"
-              maxFileMB={5}
             />
 
             <div className="mt-5">

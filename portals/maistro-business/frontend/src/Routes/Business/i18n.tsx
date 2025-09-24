@@ -78,21 +78,32 @@ export const businessPageDictionary = {
 
 export const toolDescription = {
   es: {
-    academy: 'Transforma tu talento en resultados reales. Aprende, crece y conecta con una comunidad que te impulsa al siguiente nivel',
-    images: 'Guarda y comparte imágenes irresistibles de tu negocio. Haz que tu marca hable por sí sola y conquiste con cada foto',
-    reviews: 'Convierte la confianza en tu mayor ventaja: gestiona y muestra reseñas que impulsan tus ventas.',
-    chats: 'Conecta sin barreras: conversa en tiempo real con tus clientes y crea relaciones duraderas.',
+    academy:
+      'Transforma tu talento en resultados reales. Aprende, crece y conecta con una comunidad que te impulsa al siguiente nivel',
+    images:
+      'Guarda y comparte imágenes irresistibles de tu negocio. Haz que tu marca hable por sí sola y conquiste con cada foto',
+    reviews:
+      'Convierte la confianza en tu mayor ventaja: gestiona y muestra reseñas que impulsan tus ventas.',
+    chats:
+      'Conecta sin barreras: conversa en tiempo real con tus clientes y crea relaciones duraderas.',
     emails: 'Mantén viva la conexión: envía campañas y boletines que inspiran, informan y venden.',
-    bookings: 'Recibe y administra reservas sin estrés: haz que agendar contigo sea simple y rápido.',
-    website: 'Tu vitrina digital en minutos: edita y publica tu sitio con plantillas diseñadas para vender.',
+    bookings:
+      'Recibe y administra reservas sin estrés: haz que agendar contigo sea simple y rápido.',
+    website:
+      'Tu vitrina digital en minutos: edita y publica tu sitio con plantillas diseñadas para vender.',
   },
   en: {
-    academy: 'Turn your skills into real results. Learn, grow, and connect with a community that pushes you to the next level',
-    images: 'Save and share stunning images of your business. Let your brand speak for itself and win hearts with every shot',
+    academy:
+      'Turn your skills into real results. Learn, grow, and connect with a community that pushes you to the next level',
+    images:
+      'Save and share stunning images of your business. Let your brand speak for itself and win hearts with every shot',
     reviews: 'Turn trust into your edge: manage and display reviews that drive sales.',
-    chats: 'Connect instantly: chat with your customers in real time and build lasting relationships.',
-    emails: 'Keep the connection alive: send campaigns and newsletters that inspire, inform, and sell.',
+    chats:
+      'Connect instantly: chat with your customers in real time and build lasting relationships.',
+    emails:
+      'Keep the connection alive: send campaigns and newsletters that inspire, inform, and sell.',
     bookings: 'Manage bookings stress-free: make scheduling with you simple and fast.',
-    website: 'Your digital showcase in minutes: edit and publish your site with templates built to sell.',
+    website:
+      'Your digital showcase in minutes: edit and publish your site with templates built to sell.',
   },
 } as const;

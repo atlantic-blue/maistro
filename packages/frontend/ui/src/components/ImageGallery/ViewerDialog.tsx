@@ -1,16 +1,9 @@
-import React from "react"
-import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
-import { MaistroImage } from "./types";
-import { altFor, copyToClipboard, formatDate, pickLargeUrl } from "./utils";
-import { Placeholder } from "./Placeholder";
-import {
-  ExternalLink,
-  Copy,
-  Download,
-  CircleX,
-  ArrowBigLeft,
-  ArrowBigRight,
-} from 'lucide-react';
+import React from 'react';
+import { Button, Dialog, Flex, Text } from '@radix-ui/themes';
+import { MaistroImage } from './types';
+import { altFor, copyToClipboard, formatDate, pickLargeUrl } from './utils';
+import { Placeholder } from './Placeholder';
+import { ExternalLink, Copy, Download, CircleX, ArrowBigLeft, ArrowBigRight } from 'lucide-react';
 
 export function ViewerDialog({
   open,
@@ -39,17 +32,17 @@ export function ViewerDialog({
         {current ? (
           <Flex direction="column" gap="3">
             <Flex gap="3" justify="between">
-            <Flex align="center" justify="between">
-              <Text size="1" color="gray">
-                {formatDate(current.CreatedAt)}
-              </Text>
+              <Flex align="center" justify="between">
+                <Text size="1" color="gray">
+                  {formatDate(current.CreatedAt)}
+                </Text>
+              </Flex>
+              <Dialog.Close>
+                <Button variant="soft" color="gray">
+                  <CircleX />
+                </Button>
+              </Dialog.Close>
             </Flex>
-			<Dialog.Close>
-				<Button variant="soft" color="gray">
-					<CircleX />
-				</Button>
-			</Dialog.Close>
-		</Flex>
             {pickLargeUrl(current) ? (
               <div className="bg-black/80 rounded-xl overflow-hidden">
                 <img
@@ -84,7 +77,9 @@ export function ViewerDialog({
                 {current.Urls?.Optimized && (
                   <Button
                     size="1"
-                    variant="soft" onClick={() => copyToClipboard(`https://${current.Urls!.Optimized}`!)}>
+                    variant="soft"
+                    onClick={() => copyToClipboard(`https://${current.Urls!.Optimized}`!)}
+                  >
                     <Copy size={16} />
                     &nbsp;Copiar link
                   </Button>
@@ -93,12 +88,12 @@ export function ViewerDialog({
             </Flex>
 
             <Flex gap="2" justify="between">
-                <Button size="1" variant="soft" disabled={!hasPrev} onClick={onPrev}>
-                  <ArrowBigLeft />
-                </Button>
-                <Button size="1" variant="soft" disabled={!hasNext} onClick={onNext}>
-                  <ArrowBigRight />
-                </Button>
+              <Button size="1" variant="soft" disabled={!hasPrev} onClick={onPrev}>
+                <ArrowBigLeft />
+              </Button>
+              <Button size="1" variant="soft" disabled={!hasNext} onClick={onNext}>
+                <ArrowBigRight />
+              </Button>
             </Flex>
           </Flex>
         ) : (

@@ -60,7 +60,7 @@ const Helmet: React.FC<HelmetProps> = (props) => {
   return (
     <Layout
       productName="Business"
-      accentColor="green"
+      accentColor="crimson"
       navigation={routesNavigation}
       logo={<IconLogoSimple />}
       currentPath={location.pathname}

@@ -1,38 +1,42 @@
-import env from '../env';
-import { BusinessProfile } from '../types/BusinessProfile';
+import env from "../env";
+import { BusinessProfile } from "../types/BusinessProfile";
 
-export const getBusinessProfileById = async (businessId: string): Promise<BusinessProfile> => {
+export const getBusinessProfileById = async (
+  businessId: string,
+): Promise<BusinessProfile> => {
   const url = `${env.api.businessById(businessId)}`;
 
   return fetch(url, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   }).then((response) => response.json());
 };
 
-export const getBusinessProfileBySlug = async (slug: string): Promise<BusinessProfile> => {
+export const getBusinessProfileBySlug = async (
+  slug: string,
+): Promise<BusinessProfile> => {
   const url = `${env.api.businessBySlug(slug)}`;
 
   return fetch(url, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   }).then((response) => response.json());
 };
 
 export const getBusinessProfileMe = async (
   slug: string,
-  token: string
+  token: string,
 ): Promise<BusinessProfile> => {
   const url = `${env.api.businessMe}`;
 
   return fetch(url, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   }).then((response) => response.json());

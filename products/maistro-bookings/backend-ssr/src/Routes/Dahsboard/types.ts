@@ -1,9 +1,9 @@
 /* eslint-disable */
 export enum SubscriptionTier {
-  FREE = 'FREE',
-  GROWTH = 'GROWTH',
-  PREMIUM = 'PREMIUM',
-  MAISTRO = 'MAISTRO',
+  FREE = "FREE",
+  GROWTH = "GROWTH",
+  PREMIUM = "PREMIUM",
+  MAISTRO = "MAISTRO",
 }
 
 export interface MaistroUser {
@@ -16,7 +16,7 @@ export interface MaistroUser {
   CreatedAt: string;
   UpdatedAt: string;
   LastLoginAt: string;
-  Status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+  Status: "ACTIVE" | "INACTIVE" | "SUSPENDED";
   SubscriptionTier: SubscriptionTier;
   EmailVerified: boolean;
   PhoneNumber?: string;

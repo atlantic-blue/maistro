@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Flex,
@@ -11,7 +11,7 @@ import {
   ScrollArea,
   Tooltip,
   Theme,
-} from '@radix-ui/themes';
+} from "@radix-ui/themes";
 import {
   HamburgerMenuIcon,
   Cross1Icon,
@@ -20,7 +20,7 @@ import {
   ExitIcon,
   BellIcon,
   QuestionMarkCircledIcon,
-} from '@radix-ui/react-icons';
+} from "@radix-ui/react-icons";
 
 export interface NavItem {
   name: string;
@@ -32,7 +32,14 @@ export interface NavItem {
 export interface LayoutProps {
   children: React.ReactNode;
   productName: string;
-  accentColor: 'blue' | 'orange' | 'green' | 'purple' | 'indigo' | 'red' | 'cyan';
+  accentColor:
+    | "blue"
+    | "orange"
+    | "green"
+    | "purple"
+    | "indigo"
+    | "red"
+    | "cyan";
   navigation: NavItem[];
   logo: React.ReactNode;
   currentPath: string; // Active path from the current product router
@@ -102,7 +109,7 @@ export const Layout: React.FC<LayoutProps> = ({
           className={`
               fixed inset-y-0 left-0 z-30 w-64 transform bg-white border-r border-gray-200 
               transition-transform duration-300 ease-in-out lg:static lg:translate-x-0
-              ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+              ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
             `}
         >
           {/* Sidebar Header with Logo */}
@@ -116,7 +123,11 @@ export const Layout: React.FC<LayoutProps> = ({
                 Maistro {productName}
               </Text>
             </Flex>
-            <Button variant="ghost" onClick={() => setSidebarOpen(false)} className="lg:hidden">
+            <Button
+              variant="ghost"
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden"
+            >
               <Cross1Icon />
             </Button>
           </Flex>
@@ -132,7 +143,7 @@ export const Layout: React.FC<LayoutProps> = ({
                       ${
                         isActive(item.path)
                           ? `bg-${accentColor}-100 text-${accentColor}-900`
-                          : 'text-gray-700 hover:bg-gray-100'
+                          : "text-gray-700 hover:bg-gray-100"
                       }
                       transition-colors
                     `}
@@ -142,12 +153,19 @@ export const Layout: React.FC<LayoutProps> = ({
                 >
                   {item.icon && (
                     <Box
-                      className={isActive(item.path) ? `text-${accentColor}-900` : 'text-gray-500'}
+                      className={
+                        isActive(item.path)
+                          ? `text-${accentColor}-900`
+                          : "text-gray-500"
+                      }
                     >
                       {item.icon}
                     </Box>
                   )}
-                  <Text size="2" weight={isActive(item.path) ? 'medium' : 'regular'}>
+                  <Text
+                    size="2"
+                    weight={isActive(item.path) ? "medium" : "regular"}
+                  >
                     {item.name}
                   </Text>
 
@@ -159,7 +177,7 @@ export const Layout: React.FC<LayoutProps> = ({
                         ${
                           isActive(item.path)
                             ? `bg-${accentColor}-200 text-${accentColor}-900`
-                            : 'bg-gray-200 text-gray-700'
+                            : "bg-gray-200 text-gray-700"
                         }
                       `}
                     >
@@ -177,7 +195,7 @@ export const Layout: React.FC<LayoutProps> = ({
                   className="rounded-md px-3 py-2 cursor-pointer hover:bg-gray-100"
                   align="center"
                   gap="2"
-                  onClick={() => window.open(helpUrl, '_blank')}
+                  onClick={() => window.open(helpUrl, "_blank")}
                 >
                   <QuestionMarkCircledIcon className="text-gray-500" />
                   <Text size="2">Help & Documentation</Text>
@@ -194,13 +212,17 @@ export const Layout: React.FC<LayoutProps> = ({
             <Flex className="h-16 px-4" justify="between" align="center">
               <Flex align="center" gap="4">
                 {/* Mobile menu button */}
-                <Button variant="ghost" onClick={() => setSidebarOpen(true)} className="lg:hidden">
+                <Button
+                  variant="ghost"
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden"
+                >
                   <HamburgerMenuIcon />
                 </Button>
 
                 {/* Header title */}
                 <Text weight="bold" size="3">
-                  {headerTitle || 'Dashboard'}
+                  {headerTitle || "Dashboard"}
                 </Text>
               </Flex>
 
@@ -218,7 +240,7 @@ export const Layout: React.FC<LayoutProps> = ({
                             flex items-center justify-center
                           `}
                         >
-                          {notificationCount > 9 ? '9+' : notificationCount}
+                          {notificationCount > 9 ? "9+" : notificationCount}
                         </Box>
                       )}
                     </Box>
@@ -236,7 +258,11 @@ export const Layout: React.FC<LayoutProps> = ({
                           radius="full"
                           size="2"
                         />
-                        <Text size="2" weight="medium" className="hidden sm:block">
+                        <Text
+                          size="2"
+                          weight="medium"
+                          className="hidden sm:block"
+                        >
                           {user.name}
                         </Text>
                         <ChevronDownIcon />

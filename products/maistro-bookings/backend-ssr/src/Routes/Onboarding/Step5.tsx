@@ -1,7 +1,7 @@
-import React from 'react';
-import StepWrapper from './StepWrapper';
-import { OnboardingFormData } from './types';
-import { I18nLanguageConfig } from './i18.config';
+import React from "react";
+import StepWrapper from "./StepWrapper";
+import { OnboardingFormData } from "./types";
+import { I18nLanguageConfig } from "./i18.config";
 
 interface Step1Props {
   formData: OnboardingFormData;
@@ -35,9 +35,15 @@ const Step5: React.FC<Step1Props> = ({
       resourceStrings={resourceStrings}
     >
       <div>
-        <p className="text-gray-500 mb-4">{resourceStrings.common.accountSetup}</p>
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">{resourceStrings.step5.title}</h1>
-        <p className="text-gray-600 mb-8">{resourceStrings.step5.description}</p>
+        <p className="text-gray-500 mb-4">
+          {resourceStrings.common.accountSetup}
+        </p>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          {resourceStrings.step5.title}
+        </h1>
+        <p className="text-gray-600 mb-8">
+          {resourceStrings.step5.description}
+        </p>
 
         <div className="space-y-6 max-w-md mx-auto">
           <div>

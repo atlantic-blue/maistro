@@ -1,24 +1,24 @@
 /* eslint-disable */
 
 export enum RouteName {
-  HOME = 'HOME',
-  BUSINESS_PROFILE = 'BUSINESS_PROFILE',
+  HOME = "HOME",
+  BUSINESS_PROFILE = "BUSINESS_PROFILE",
 }
 
 export enum Routes {
-  HOME = '/*',
+  HOME = "/*",
 
-  AUTHZ_LOGIN = '/login',
-  AUTHZ_LOGOUT = '/logout',
-  AUTH_CALLBACK = '/callback',
+  AUTHZ_LOGIN = "/login",
+  AUTHZ_LOGOUT = "/logout",
+  AUTH_CALLBACK = "/callback",
 
-  ONBOARDING = '/onboarding',
+  ONBOARDING = "/onboarding",
 
-  BUSINESS_PROFILE = '/b/:businessProfile',
+  BUSINESS_PROFILE = "/b/:businessProfile",
 
-  DASHBOARD = '/dashboard',
+  DASHBOARD = "/dashboard",
 
-  BOOKINGS = '/bookings',
+  BOOKINGS = "/bookings",
 }
 
 class AppRoutes {

@@ -3,22 +3,23 @@ import { cx } from 'class-variance-authority';
 import { Check, RotateCw } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import { Locale } from '../Businesses/types';
+import { normalizeMaistroImages } from './utils';
+import { Button, Flex } from '@maistro/ui';
 
 type Props = {
   images: MaistroImage[];
   onRefresh?: () => void;
   loading?: boolean;
   locale?: Locale;
-  selectedUrls?: string[]; // controlled (optional)
-  onChange?: (urls: string[]) => void; // fires on select/clear/reorder/remove
-  quality?: keyof MaistroImage['Urls'] | 'Low';
+  selectedImages?: MaistroImage[]; // controlled (optional)
+  onChange?: (images: MaistroImage[]) => void; // fires on select/clear/reorder/remove
   className?: string;
   showSelectedTray?: boolean; // default true
 };
 
 const dict = {
   es: {
-    refresh: 'Actualizar',
+    refresh: 'Actualizar Imagenes',
     selected: (n: number) => `${n} seleccionadas`,
     selectAll: 'Seleccionar todo',
     clear: 'Limpiar',
@@ -30,7 +31,7 @@ const dict = {
     moveRight: 'Mover a la derecha',
   },
   en: {
-    refresh: 'Refresh',
+    refresh: 'Refresh Images',
     selected: (n: number) => `${n} selected`,
     selectAll: 'Select all',
     clear: 'Clear',
@@ -59,9 +60,8 @@ export function ImageSelectorGrid({
   onRefresh,
   loading = false,
   locale = 'es',
-  selectedUrls: controlledSelected,
+  selectedImages,
   onChange,
-  quality = 'High',
   className,
   showSelectedTray = true,
 }: Props) {
@@ -70,39 +70,25 @@ export function ImageSelectorGrid({
   // READY only
   const ready = useMemo(() => images.filter((im) => im.Status === 'READY'), [images]);
 
-  const urlFor = (im: MaistroImage) => {
-    const u = im.Urls?.[quality] || im.Urls?.High || im.Urls?.Medium || im.Urls?.Low || '';
-    return toAbsolute(u);
-  };
-
-  // url -> image map (for tray thumbs)
-  const byUrl = useMemo(() => {
-    const map = new Map<string, MaistroImage>();
-    for (const im of ready) {
-      const u = urlFor(im);
-      if (u) map.set(u, im);
-    }
-    return map;
-  }, [ready, quality]); // quality impacts chosen URL
-
   // Controlled / uncontrolled selection, preserving ORDER
-  const [internal, setInternal] = useState<string[]>(controlledSelected || []);
-  const selected = controlledSelected ?? internal;
+  const [internal, setInternal] = useState<MaistroImage[]>(
+    normalizeMaistroImages(selectedImages || []) as any
+  );
+  const selected = selectedImages ?? internal;
 
-  const setSelected = (next: string[]) => {
-    if (controlledSelected === undefined) setInternal(next);
+  const setSelected = (next: MaistroImage[]) => {
+    if (selectedImages === undefined) setInternal(next);
     onChange?.(next);
   };
 
   const toggle = (im: MaistroImage) => {
-    const url = urlFor(im);
-    if (!url) return;
-    setSelected(selected.includes(url) ? selected.filter((u) => u !== url) : [...selected, url]); // append to keep order
+    const isSelected = selected.find((i) => i.ImageId === im.ImageId);
+    setSelected(isSelected ? selected.filter((i) => im.ImageId !== i.ImageId) : [...selected, im]);
   };
 
   const selectAll = () => {
     // keep current order and append any missing by grid order
-    const gridOrder = ready.map(urlFor).filter(Boolean) as string[];
+    const gridOrder = ready;
     const missing = gridOrder.filter((u) => !selected.includes(u));
     setSelected([...selected, ...missing]);
   };
@@ -135,10 +121,12 @@ export function ImageSelectorGrid({
   return (
     <div className={cx('rounded-2xl border border-neutral-200 bg-white p-4', className)}>
       {/* Toolbar */}
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <button
+
+      <Flex gap="2" className="mb-5" align="center" wrap="wrap" justify="center">
+        <Button
           onClick={onRefresh}
           disabled={!onRefresh || loading}
+          variant="outline"
           className={cx(
             'inline-flex items-center gap-2 rounded-xl border border-neutral-200 px-3 py-1.5 text-sm font-medium',
             loading ? 'opacity-60' : 'hover:bg-neutral-50'
@@ -146,26 +134,16 @@ export function ImageSelectorGrid({
         >
           <RotateCw className={cx('h-4 w-4', loading && 'animate-spin')} />
           {t.refresh}
-        </button>
+        </Button>
 
-        <div className="ml-auto flex items-center gap-2 text-sm text-neutral-700">
-          <span className="rounded-full bg-neutral-100 px-2 py-1 text-xs font-medium">
-            {t.selected(selected.length)}
-          </span>
-          <button
-            onClick={selectAll}
-            className="rounded-lg px-2 py-1 text-xs font-medium text-neutral-700 hover:bg-neutral-100"
-          >
-            {t.selectAll}
-          </button>
-          <button
-            onClick={clear}
-            className="rounded-lg px-2 py-1 text-xs font-medium text-neutral-700 hover:bg-neutral-100"
-          >
-            {t.clear}
-          </button>
-        </div>
-      </div>
+        <Button variant="solid">{t.selected(selected.length)}</Button>
+        <Button variant="soft" onClick={selectAll}>
+          {t.selectAll}
+        </Button>
+        <Button variant="outline" onClick={clear}>
+          {t.clear}
+        </Button>
+      </Flex>
 
       {/* Grid */}
       {loading ? (
@@ -176,18 +154,17 @@ export function ImageSelectorGrid({
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6">
-          {ready.map((im) => {
-            const url = urlFor(im);
-            const idx = url ? selected.indexOf(url) : -1;
+          {ready.map((image) => {
+            const idx = selected.findIndex((i) => i.ImageId === image.ImageId) ?? -1;
             const isSel = idx >= 0;
             return (
               <div
-                key={im.ImageId}
+                key={image.ImageId}
                 role="button"
                 tabIndex={0}
                 aria-pressed={isSel}
-                onClick={() => toggle(im)}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggle(im)}
+                onClick={() => toggle(image)}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggle(image)}
                 className={cx(
                   'relative aspect-square w-full cursor-pointer overflow-hidden rounded-xl border transition',
                   isSel
@@ -195,8 +172,12 @@ export function ImageSelectorGrid({
                     : 'border-neutral-200 hover:border-neutral-300'
                 )}
               >
-                {url ? (
-                  <img src={url} alt="business" className="h-full w-full object-cover" />
+                {image.Urls.Low ? (
+                  <img
+                    src={toAbsolute(image.Urls.Low)}
+                    alt="business"
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
                   <div className="grid h-full w-full place-items-center bg-neutral-100 text-xs text-neutral-500">
                     {t.noUrl}
@@ -236,11 +217,10 @@ export function ImageSelectorGrid({
         <div className="mt-4">
           <div className="mb-2 text-xs font-medium text-neutral-700">{t.selectedTray}</div>
           <div className="flex flex-wrap gap-3">
-            {selected.map((u, i) => {
-              const im = byUrl.get(u);
+            {selected.map((image, i) => {
               return (
                 <div
-                  key={u}
+                  key={image.ImageId}
                   draggable
                   onDragStart={onDragStart(i)}
                   onDragOver={onDragOver}
@@ -249,9 +229,9 @@ export function ImageSelectorGrid({
                   style={{ width: '100%', justifyContent: 'space-evenly' }}
                 >
                   <div className="grid h-12 w-12 place-items-center overflow-hidden rounded-lg bg-neutral-100">
-                    {im ? (
+                    {image.Urls.Low ? (
                       <img
-                        src={u}
+                        src={toAbsolute(image.Urls.Low)}
                         alt={`selected-${i + 1}`}
                         className="h-full w-full object-cover"
                       />

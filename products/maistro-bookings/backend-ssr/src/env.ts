@@ -18,15 +18,19 @@ interface Env {
   };
 }
 
-const isBrowser = () => typeof window !== 'undefined';
+const isBrowser = () => typeof window !== "undefined";
 
 const createEnv = (): Env => {
-  const authBaseUrl = process.env.AUTH_DOMAIN || '';
-  const businessesBaseUrl = 'https://maistro-platform-businesses-api-production.maistroapp.com/v1';
-  const usersBaseUrl = 'https://maistro-platform-users-api-production.maistro.website/v1';
-  const business = 'https://';
+  const authBaseUrl = process.env.AUTH_DOMAIN || "";
+  const businessesBaseUrl =
+    "https://maistro-platform-businesses-api-production.maistroapp.com/v1";
+  const usersBaseUrl =
+    "https://maistro-platform-users-api-production.maistro.website/v1";
+  const business = "https://";
 
-  const appOrigin = isBrowser() ? window.location.origin : (process.env.APP_ORIGIN ?? '');
+  const appOrigin = isBrowser()
+    ? window.location.origin
+    : (process.env.APP_ORIGIN ?? "");
 
   return {
     isBrowser,
@@ -35,8 +39,10 @@ const createEnv = (): Env => {
       me: `${usersBaseUrl}/me`,
       meProfile: `${usersBaseUrl}/me/profile`,
       businessMe: `${businessesBaseUrl}/businesses/me/profile`,
-      businessBySlug: (slug: string) => `${businessesBaseUrl}/businesses/slug/${slug}/profile`,
-      businessById: (id: string) => `${businessesBaseUrl}/businesses/id/${id}/profile`,
+      businessBySlug: (slug: string) =>
+        `${businessesBaseUrl}/businesses/slug/${slug}/profile`,
+      businessById: (id: string) =>
+        `${businessesBaseUrl}/businesses/id/${id}/profile`,
     },
 
     auth: {
@@ -44,8 +50,8 @@ const createEnv = (): Env => {
       logInUrl: `${authBaseUrl}/login`,
       logOutUrl: `${authBaseUrl}/logout`,
       callbackUrl: `${appOrigin}/callback/`,
-      clientId: process.env.AUTH_CLIENT_ID || '',
-      clientSecret: process.env.AUTH_CLIENT_SECRET || '',
+      clientId: process.env.AUTH_CLIENT_ID || "",
+      clientSecret: process.env.AUTH_CLIENT_SECRET || "",
     },
   };
 };

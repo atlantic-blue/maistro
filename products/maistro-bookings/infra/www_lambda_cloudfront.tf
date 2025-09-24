@@ -41,9 +41,9 @@ resource "aws_cloudfront_distribution" "www_lambda_ssr" {
     }
 
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 60 * 1
-    default_ttl            = 60 * 2
-    max_ttl                = 60 * 5
+    min_ttl                = 60 * 5  # 5 minutes
+    default_ttl            = 60 * 15 # 15 minutes
+    max_ttl                = 60 * 60 # 1 hour
     compress               = true
   }
 
@@ -93,9 +93,9 @@ resource "aws_cloudfront_distribution" "www_lambda_ssr" {
 
   tags = local.tags
 
-    aliases = [
-      var.domain_name
-    ]
+  aliases = [
+    var.domain_name
+  ]
 
   viewer_certificate {
     # cloudfront_default_certificate = true

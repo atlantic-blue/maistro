@@ -1,21 +1,75 @@
-import React from 'react';
-import { Button, Card, Separator } from '@maistro/ui';
-import { MapPin, Clock, Star, Share2, Heart, ChevronRight, Globe } from 'lucide-react';
+import React from "react";
+import { Button, Card, Separator } from "@maistro/ui";
+import {
+  MapPin,
+  Clock,
+  Star,
+  Share2,
+  Heart,
+  ChevronRight,
+  Globe,
+} from "lucide-react";
 
-import Header from '../../Components/Header';
-import { useRouteData } from '../../State/DataRoute.context';
-import { RouteName } from '../appRoutes';
-import { BusinessProfile, BusinessProfileExtended } from '../../types/BusinessProfile';
-import Stars from './Components/Stars';
-import Image from './Components/ImageHero';
-import BusinsessProfileServices from './Components/Services';
-import BusinessProfileAbout from './Components/About';
-import BusinessProfileReviews from './Components/Reviews';
-import BusinessProfileNearby from './Components/Nearby';
-import { BusinessGalleryHero } from './Components/ImageGallery';
+import Header from "../../Components/Header";
+import { useRouteData } from "../../State/DataRoute.context";
+import { RouteName } from "../appRoutes";
+import {
+  BusinessProfile,
+  BusinessProfileExtended,
+  MaistroImage,
+} from "../../types/BusinessProfile";
+import Stars from "./Components/Stars";
+import BusinsessProfileServices from "./Components/Services";
+import BusinessProfileAbout from "./Components/About";
+import BusinessProfileReviews from "./Components/Reviews";
+import BusinessProfileNearby from "./Components/Nearby";
+import { BusinessGalleryHero } from "./Components/ImageGallery";
+
+type MaybeMaistroImage = string | null | undefined | MaistroImage;
+
+const isMaistroImage = (v: MaybeMaistroImage): v is MaistroImage => {
+  return typeof v === "object" && v !== null && "Urls" in v;
+};
+
+const normalizeMaistroImages = (
+  v: MaybeMaistroImage[],
+): (MaistroImage | null)[] => {
+  return v.map(normalizeMaistroImage);
+};
+
+const normalizeMaistroImage = (v: MaybeMaistroImage): MaistroImage | null => {
+  if (!v) return null;
+  if (isMaistroImage(v)) return v;
+  // Assume legacy string — return as all variants
+  return {
+    Urls: {
+      Original: v,
+      Low: v,
+      Medium: v,
+      High: v,
+      Optimized: v,
+    },
+    ContentType: "",
+    CreatedAt: "",
+    ImageId: "",
+    OwnerId: "",
+    OwnerType: "business",
+    ProcessedAt: "",
+    SizesInBytes: {
+      High: 0,
+      Low: 0,
+      Medium: 0,
+      Optimised: 0,
+      TotalBytes: 0,
+    },
+    Status: "READY",
+  };
+};
 
 const BusinessProfilePage: React.FC = () => {
-  const businessData = useRouteData<BusinessProfile>(RouteName.BUSINESS_PROFILE);
+  const businessData = useRouteData<BusinessProfile>(
+    RouteName.BUSINESS_PROFILE,
+  );
 
   if (!businessData) {
     return null;
@@ -24,8 +78,8 @@ const BusinessProfilePage: React.FC = () => {
   const business: BusinessProfileExtended = {
     ...businessData,
     BusinessId: businessData.BusinessId,
-    BusinessName: businessData.BusinessName ?? 'Negocio sin nombre',
-    Address: businessData.Address ?? 'Dirección no disponible',
+    BusinessName: businessData.BusinessName ?? "Negocio sin nombre",
+    Address: businessData.Address ?? "Dirección no disponible",
     AddressDetails: {
       City: businessData.AddressDetails.City,
       Country: businessData.AddressDetails.Country,
@@ -37,7 +91,7 @@ const BusinessProfilePage: React.FC = () => {
     Services: Array.isArray(businessData.Services) ? businessData.Services : [],
     Website: businessData.Website || undefined,
     Features: Array.isArray(businessData.Features) ? businessData.Features : [],
-    Description: businessData.Description || 'Aún no hay descripción.',
+    Description: businessData.Description || "Aún no hay descripción.",
     // Enrichment-ready optional fields (start empty)
     Rating: undefined,
     ReviewCount: undefined,
@@ -52,7 +106,9 @@ const BusinessProfilePage: React.FC = () => {
     OpeningHours: undefined,
   };
 
-  const gallery = business.Images?.Gallery ? business.Images?.Gallery : ['', '', '', ''];
+  const gallery = business.Images?.Gallery
+    ? business.Images?.Gallery
+    : ["", "", "", ""];
 
   return (
     <div className="bg-[#FFF8F6] text-black min-h-screen font-sans">
@@ -71,7 +127,7 @@ const BusinessProfilePage: React.FC = () => {
               </div>
 
               <div className="flex flex-wrap items-center gap-4 text-sm mb-3">
-                {typeof business.OpenUntil === 'string' && (
+                {typeof business.OpenUntil === "string" && (
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-[#FF3366]" />
                     <span className="font-medium text-[#FF3366]">
@@ -103,7 +159,7 @@ const BusinessProfilePage: React.FC = () => {
 
               <div className="flex items-center gap-3">
                 <Stars rating={business.Rating} />
-                {typeof business.ReviewCount === 'number' && (
+                {typeof business.ReviewCount === "number" && (
                   <span className="text-gray-500">
                     ({business.ReviewCount.toLocaleString()} reseñas)
                   </span>
@@ -112,11 +168,17 @@ const BusinessProfilePage: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <Button variant="outline" className="border-gray-200 text-gray-700">
+              <Button
+                variant="outline"
+                className="border-gray-200 text-gray-700"
+              >
                 <Share2 className="w-4 h-4 mr-2" />
                 Compartir
               </Button>
-              <Button variant="outline" className="border-gray-200  text-gray-700">
+              <Button
+                variant="outline"
+                className="border-gray-200  text-gray-700"
+              >
                 <Heart className="w-4 h-4" />
               </Button>
               <Button className="bg-[#FF3366] hover:bg-[#D94A6A] text-white px-7 py-3">
@@ -128,8 +190,8 @@ const BusinessProfilePage: React.FC = () => {
 
         <BusinessGalleryHero
           businessName={business.BusinessName}
-          gallery={business?.Images?.Gallery} 
-          main={business?.Images.Main}
+          main={normalizeMaistroImage(business?.Images?.Main)}
+          gallery={normalizeMaistroImages(business?.Images?.Gallery)}
         />
 
         <Separator />

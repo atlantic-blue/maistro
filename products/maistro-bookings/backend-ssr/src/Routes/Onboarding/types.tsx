@@ -8,7 +8,7 @@ export interface OnboardingFormData {
   businessName: string;
   website: string;
   businessType: string[];
-  accountType: 'independent' | 'team' | '';
+  accountType: "independent" | "team" | "";
   teamSize: string;
   address: string;
   phone: string;
