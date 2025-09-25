@@ -16,13 +16,13 @@ export default function Homepage() {
               Reserva. Gestiona. <span className="text-[#FF3366]">Crece.</span>
             </h1>
             <p className="text-xl text-gray-600 font-light mb-6 max-w-lg">
-              La plataforma gratuita para gestionar tu salón con estilo y cero
+              La plataforma que transforma tu salón con estilo y cero
               complicaciones.
             </p>
             <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
               <Link to={appRoutes.getOnboardingRoute()}>
                 <Button className="text-lg px-6 py-3 bg-[#FF3366] hover:bg-[#e52b5a] text-white">
-                  Empieza Gratis
+                  Crear mi cuenta
                 </Button>
               </Link>
             </div>
@@ -89,7 +89,7 @@ export default function Homepage() {
             <Card className="bg-white border border-gray-200 shadow-sm">
               <Box className="p-6">
                 <h3 className="font-bold text-xl mb-2">1. Crea tu cuenta</h3>
-                <p>Regístrate gratis y accede al panel de control.</p>
+                <p>Entra al panel de control en segundos.</p>
               </Box>
             </Card>
             <Card className="bg-white border border-gray-200 shadow-sm">
@@ -113,7 +113,7 @@ export default function Homepage() {
       </section>
 
       <section className="py-6 text-center text-gray-500 text-sm">
-        <p>Confiado por +1.200 salones en Colombia 🇨🇴</p>
+        <p>Confiado por una gran red de emprendedores en Colombia 🇨🇴</p>
       </section>
 
       {/* Final CTA */}
@@ -121,11 +121,9 @@ export default function Homepage() {
         <h2 className="text-3xl font-bold mb-4">
           Empieza con Maistro hoy mismo
         </h2>
-        <p className="mb-6 text-lg">
-          Sin tarjeta. Sin complicaciones. 100% gratis.
-        </p>
+        <p className="mb-6 text-lg">Sin tarjeta. Sin complicaciones.</p>
         <Link to={appRoutes.getOnboardingRoute()}>
-          <Button className="text-lg px-6 py-3 bg-white text-[#FF3366] hover:bg-gray-100">
+          <Button className="text-lg px-6 py-3 bg-white text-[#FF3366]">
             Crear mi cuenta
           </Button>
         </Link>
@@ -148,7 +146,7 @@ export default function Homepage() {
             </thead>
             <tbody>
               <tr className="border-b">
-                <td className="py-2 px-4">Sitio web gratis</td>
+                <td className="py-2 px-4">Sitio web</td>
                 <td className="py-2 px-4">✅</td>
                 <td className="py-2 px-4">❌</td>
                 <td className="py-2 px-4">❌</td>
@@ -203,7 +201,7 @@ export default function Homepage() {
 
       <section className="text-center py-16 px-6 bg-black text-white">
         <h2 className="text-3xl font-bold mb-4">Empieza hoy con Maistro</h2>
-        <p className="mb-6">Sin tarjeta. Sin complicaciones. 100% gratis.</p>
+        <p className="mb-6">Sin tarjeta. Sin complicaciones.</p>
         <Link to={appRoutes.getOnboardingRoute()}>
           <Button className="text-lg px-6 py-3">Crear mi cuenta</Button>
         </Link>

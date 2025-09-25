@@ -103,7 +103,7 @@ export function BusinessGalleryHero({
         <>
           {/* Desktop */}
           <div className="hidden lg:grid grid-cols-4 gap-4">
-            {images.slice(1, 5).map((image, i) => (
+            {images.slice(1, 20).map((image, i) => (
               <button
                 key={image.Urls.Optimized}
                 type="button"
@@ -126,7 +126,7 @@ export function BusinessGalleryHero({
               className="overflow-x-auto snap-x snap-mandatory flex space-x-3 pb-2"
               ref={railRef}
             >
-              {images.slice(1, 7).map((image, i) => (
+              {images.slice(1, 20).map((image, i) => (
                 <div
                   key={image.Urls.Optimized}
                   className="snap-center flex-shrink-0 w-[75%]"

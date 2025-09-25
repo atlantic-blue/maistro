@@ -157,18 +157,18 @@ const BusinessProfilePage: React.FC = () => {
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
+              {/* <div className="flex items-center gap-3">
                 <Stars rating={business.Rating} />
                 {typeof business.ReviewCount === "number" && (
                   <span className="text-gray-500">
                     ({business.ReviewCount.toLocaleString()} reseñas)
                   </span>
                 )}
-              </div>
+              </div> */}
             </div>
 
             <div className="flex items-center gap-3">
-              <Button
+              {/* <Button
                 variant="outline"
                 className="border-gray-200 text-gray-700"
               >
@@ -180,10 +180,10 @@ const BusinessProfilePage: React.FC = () => {
                 className="border-gray-200  text-gray-700"
               >
                 <Heart className="w-4 h-4" />
-              </Button>
-              <Button className="bg-[#FF3366] hover:bg-[#D94A6A] text-white px-7 py-3">
+              </Button> */}
+              {/* <Button className="bg-[#FF3366] hover:bg-[#D94A6A] text-white px-7 py-3">
                 Reservar
-              </Button>
+              </Button> */}
             </div>
           </div>
         </section>
@@ -196,13 +196,13 @@ const BusinessProfilePage: React.FC = () => {
 
         <Separator />
 
-        <BusinsessProfileServices services={business.Services} />
+        {/* <BusinsessProfileServices services={business.Services} />  // TODO */}
 
         <BusinessProfileAbout business={business} />
 
-        <BusinessProfileReviews business={business} />
+        {/* <BusinessProfileReviews business={business} /> */}
 
-        <BusinessProfileNearby business={business} />
+        {/* <BusinessProfileNearby business={business} /> */}
       </div>
     </div>
   );

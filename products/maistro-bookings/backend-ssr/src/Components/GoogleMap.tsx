@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@maistro/ui";
+import { Box, Button, Link } from "@maistro/ui";
 
 interface MapProps {
   zoom?: string;

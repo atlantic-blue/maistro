@@ -102,12 +102,6 @@ const BusinessProfileAbout = ({
               }}
               zoom="15"
             />
-            <Button
-              variant="outline"
-              className="w-full border-gray-200 text-gray-700 py-3 mt-3"
-            >
-              Obtener direcciones
-            </Button>
           </Flex>
         ) : (
           <Card className="bg-white border border-gray-100 rounded-xl p-6">
