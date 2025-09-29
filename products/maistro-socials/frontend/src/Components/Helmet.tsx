@@ -73,26 +73,26 @@ const Helmet: React.FC<HelmetProps> = (props) => {
   };
 
   return (
-      <Layout
-        productName="Socials"
-        accentColor="purple"
-        navigation={routesNavigation}
-        logo={<IconLogoSimple />}
-        currentPath={location.pathname}
-        user={{
-          name: user?.getName() || '',
-          email: user?.getEmail() || '',
-          avatar: user?.getAvatar() || '',
-        }}
-        onLogout={logOut}
-        onNavigate={handleNavigate}
-        headerTitle={pageTitle}
-        notificationCount={3}
-        helpUrl="https://help.maistro.websites"
-        onSettings={handleOnSettings}
-      >
-        {props.children}
-      </Layout>
+    <Layout
+      productName="Socials"
+      accentColor="purple"
+      navigation={routesNavigation}
+      logo={<IconLogoSimple />}
+      currentPath={location.pathname}
+      user={{
+        name: user?.getName() || '',
+        email: user?.getEmail() || '',
+        avatar: user?.getAvatar() || '',
+      }}
+      onLogout={logOut}
+      onNavigate={handleNavigate}
+      headerTitle={pageTitle}
+      notificationCount={3}
+      helpUrl="https://help.maistro.websites"
+      onSettings={handleOnSettings}
+    >
+      {props.children}
+    </Layout>
   );
 };
 

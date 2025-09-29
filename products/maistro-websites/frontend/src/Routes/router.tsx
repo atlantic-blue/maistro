@@ -16,16 +16,13 @@ const Router: React.FC = () => {
           path={Routes.HOME}
           element={
             <ProtectedRoute>
-            <Helmet>
-              <div>Hello World!</div>
-            </Helmet>
+              <Helmet>
+                <div>Hello World!</div>
+              </Helmet>
             </ProtectedRoute>
           }
         />
-        <Route
-          path={Routes.AUTH_CALLBACK}
-          element={<AuthCallback />}
-        />
+        <Route path={Routes.AUTH_CALLBACK} element={<AuthCallback />} />
         <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
       </ReactRoutes>
     </AuthProvider>

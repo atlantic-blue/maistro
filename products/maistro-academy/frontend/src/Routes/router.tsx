@@ -20,21 +20,19 @@ const Router: React.FC = () => {
           path="*"
           element={
             <ProtectedRoute>
-            <Helmet>
-              <ReactRoutes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/courses/:courseId" element={<CourseLayout />} />
-                <Route path="/courses/:courseId/:moduleId" element={<ModuleLayout />} />
-                <Route path={Routes.PAYMENTS} element={<Payments />} />
-              </ReactRoutes>
-            </Helmet>
+              <Helmet>
+                <ReactRoutes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/courses/:courseId" element={<CourseLayout />} />
+                  <Route path="/courses/:courseId/:moduleId" element={<ModuleLayout />} />
+                  <Route path={Routes.PAYMENTS} element={<Payments />} />
+                </ReactRoutes>
+              </Helmet>
             </ProtectedRoute>
           }
         />
 
-        <Route
-          path={Routes.AUTH_CALLBACK}
-          element={<AuthCallback />} />
+        <Route path={Routes.AUTH_CALLBACK} element={<AuthCallback />} />
         <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />
       </ReactRoutes>
     </AuthProvider>

@@ -66,26 +66,26 @@ const Helmet: React.FC<HelmetProps> = (props) => {
   };
 
   return (
-      <Layout
-        productName="Academy"
-        accentColor="amber"
-        navigation={routesNavigation}
-        logo={<IconLogoSimple />}
-        currentPath={location.pathname}
-        user={{
-          name: user?.getName() || '',
-          email: user?.getEmail() || '',
-          avatar: user?.getAvatar() || '',
-        }}
-        onLogout={logOut}
-        onNavigate={handleNavigate}
-        headerTitle={pageTitle}
-        notificationCount={3}
-        helpUrl="https://wa.me/573013239010"
-        onSettings={handleOnSettings}
-      >
-        {props.children}
-      </Layout>
+    <Layout
+      productName="Academy"
+      accentColor="amber"
+      navigation={routesNavigation}
+      logo={<IconLogoSimple />}
+      currentPath={location.pathname}
+      user={{
+        name: user?.getName() || '',
+        email: user?.getEmail() || '',
+        avatar: user?.getAvatar() || '',
+      }}
+      onLogout={logOut}
+      onNavigate={handleNavigate}
+      headerTitle={pageTitle}
+      notificationCount={3}
+      helpUrl="https://wa.me/573013239010"
+      onSettings={handleOnSettings}
+    >
+      {props.children}
+    </Layout>
   );
 };
 
