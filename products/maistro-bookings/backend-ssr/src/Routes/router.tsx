@@ -17,6 +17,8 @@ import Onboarding from "./Onboarding";
 
 import Dashboard from "./Dahsboard";
 import Helmet from "../Components/Helmet";
+import MaistroSubscriptionLanding from "./Subscription";
+import MaistroEventSep2025 from "./Events/270925";
 
 const Router: React.FC = () => {
   // TODO implement multiple languages
@@ -67,6 +69,21 @@ const Router: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path={Routes.SUBSCRIPTION}
+            element={
+                <MaistroSubscriptionLanding />
+              }
+            />
+
+
+          <Route
+            path={Routes.EVENTS}
+            element={
+                <MaistroEventSep2025 />
+              }
+            />
 
           <Route path={Routes.AUTH_CALLBACK} element={<AuthCallback />} />
           <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />

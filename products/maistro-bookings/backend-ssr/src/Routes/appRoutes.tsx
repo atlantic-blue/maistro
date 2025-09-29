@@ -3,6 +3,7 @@
 export enum RouteName {
   HOME = "HOME",
   BUSINESS_PROFILE = "BUSINESS_PROFILE",
+  SUBSCRIPTION = "SUBSCRIPTION",
 }
 
 export enum Routes {
@@ -19,6 +20,9 @@ export enum Routes {
   DASHBOARD = "/dashboard",
 
   BOOKINGS = "/bookings",
+
+  SUBSCRIPTION = "/subscription",
+  EVENTS = "/events/:eventId"
 }
 
 class AppRoutes {
@@ -48,6 +52,14 @@ class AppRoutes {
 
   getBookings() {
     return `${Routes.BOOKINGS}`;
+  }
+
+  getSubscription() {
+    return `${Routes.SUBSCRIPTION}`
+  }
+
+  getEvent(eventId: string) {
+    return `events/${eventId}`
   }
 }
 

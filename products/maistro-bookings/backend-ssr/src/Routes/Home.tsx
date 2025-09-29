@@ -16,7 +16,7 @@ export default function Homepage() {
               Reserva. Gestiona. <span className="text-[#FF3366]">Crece.</span>
             </h1>
             <p className="text-xl text-gray-600 font-light mb-6 max-w-lg">
-              La plataforma que transforma tu salón con estilo y cero
+              La plataforma que transforma tu negocio con estilo y cero
               complicaciones.
             </p>
             <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
