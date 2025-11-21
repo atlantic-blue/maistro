@@ -47,7 +47,7 @@ const Step4: React.FC<Step1Props> = ({
             <button
               key={size}
               onClick={() => updateFormData({ teamSize: size })}
-              className={`w-full p-4 rounded-xl border-2 text-left transition-all duration-200 ${
+              className={`w-full p-4 rounded-xl border text-left transition-all duration-200 ${
                 formData.teamSize === size
                   ? "border-[#FF3366] bg-[#FF3366]/5"
                   : "border-gray-200 hover:border-gray-300 bg-white"

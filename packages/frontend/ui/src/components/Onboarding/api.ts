@@ -1,4 +1,4 @@
-import { OnboardingFormData } from "../Routes/Onboarding/types";
+import { OnboardingFormData } from "./types";
 
 const onboardUser = async (
   url: string,

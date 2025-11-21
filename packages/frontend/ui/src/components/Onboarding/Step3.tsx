@@ -49,7 +49,7 @@ const Step3: React.FC<Step1Props> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
           <button
             onClick={() => updateFormData({ accountType: "independent" })}
-            className={`p-8 rounded-xl border-2 transition-all duration-200 ${
+            className={`p-8 rounded-xl border transition-all duration-200 ${
               formData.accountType === "independent"
                 ? "border-[#FF3366] bg-[#FF3366]/5"
                 : "border-gray-200 hover:border-gray-300 bg-white"
@@ -63,7 +63,7 @@ const Step3: React.FC<Step1Props> = ({
 
           <button
             onClick={() => updateFormData({ accountType: "team" })}
-            className={`p-8 rounded-xl border-2 transition-all duration-200 ${
+            className={`p-8 rounded-xl border transition-all duration-200 ${
               formData.accountType === "team"
                 ? "border-[#FF3366] bg-[#FF3366]/5"
                 : "border-gray-200 hover:border-gray-300 bg-white"

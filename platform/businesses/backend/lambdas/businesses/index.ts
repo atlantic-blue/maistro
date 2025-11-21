@@ -121,7 +121,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         if(path === Routes.BUSINESSES_PROFILE_ME) {
             const decodedToken = businessesTransport.getDecodedToken(event)
             const user = await usersService.getUserByCognitoId(decodedToken.username)
+            console.log("User Found:", JSON.stringify(user))
             const response = await businessesService.getBusinessProfileByUserId(user?.UserId)
+            console.log(`Business Me: ${JSON.stringify(response)}`)
+
             if (response) {
                 return {
                     statusCode: 200,

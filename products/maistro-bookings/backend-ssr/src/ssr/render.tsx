@@ -47,12 +47,10 @@ const serverSideRenderer = async (
   );
 
   const helmet = Helmet.renderStatic();
-
   const head = `
-        ${helmet.title.toString()}
+        ${helmet.title.toString() || '<title>Maistro Bookings</title>'}
         ${helmet.meta.toString()}
         ${helmet.link.toString()}
-
         ${assets.styles.map((filename) => `<link rel="stylesheet" href="/${filename}" />`).join("\n")}
     `;
 

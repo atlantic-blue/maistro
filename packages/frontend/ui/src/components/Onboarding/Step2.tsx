@@ -1,5 +1,5 @@
 import React from "react";
-import { Scissors, Sparkles, Dumbbell, Heart, PawPrint } from "lucide-react";
+import { Scissors, Sparkles, Dumbbell, Heart, Cake } from "lucide-react";
 
 import StepWrapper from "./StepWrapper";
 import { OnboardingFormData } from "./types";
@@ -12,18 +12,11 @@ interface BusinessCategory {
 }
 
 const businessCategories: BusinessCategory[] = [
-  { id: "hair-salon", name: "Hair Salon", icon: Scissors },
-  { id: "spa", name: "Spa", icon: Sparkles },
-  { id: "barbershop", name: "Barbershop", icon: Scissors },
-  { id: "beauty-clinic", name: "Beauty Clinic", icon: Heart },
-  { id: "fitness-studio", name: "Fitness Studio", icon: Dumbbell },
-  { id: "medical-spa", name: "Medical Spa", icon: Sparkles },
-  { id: "nails", name: "Nails", icon: Heart },
-  { id: "eyebrows-lashes", name: "Eyebrows & Lashes", icon: Heart },
-  { id: "massage", name: "Massage", icon: Sparkles },
-  { id: "waxing", name: "Waxing Salon", icon: Heart },
-  { id: "tanning", name: "Tanning Studio", icon: Heart },
-  { id: "pet-grooming", name: "Pet Grooming", icon: PawPrint },
+  { id: "fashion", name: "Hair Salon", icon: Scissors },
+  { id: "wellness", name: "Spa", icon: Heart },
+  { id: "gastronomy", name: "Barbershop", icon: Cake },
+  { id: "sports", name: "Beauty Clinic", icon: Dumbbell },
+  { id: "other", name: "Fitness Studio", icon: Sparkles },
 ];
 
 interface Step1Props {
@@ -84,7 +77,7 @@ const Step2: React.FC<Step1Props> = ({
                 onClick={() =>
                   updateFormData({ businessType: updatedBusinessType })
                 }
-                className={`p-6 rounded-xl border-2 transition-all duration-200 text-left ${
+                className={`p-6 rounded-xl border transition-all duration-200 text-left ${
                   isSelected
                     ? "border-[#FF3366] bg-[#FF3366]/5"
                     : "border-gray-200 hover:border-gray-300 bg-white"

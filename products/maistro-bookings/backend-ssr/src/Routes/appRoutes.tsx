@@ -2,6 +2,7 @@
 
 export enum RouteName {
   HOME = "HOME",
+  BUSINESS_PROFILES = "BUSINESS_PROFILES",
   BUSINESS_PROFILE = "BUSINESS_PROFILE",
   SUBSCRIPTION = "SUBSCRIPTION",
 }
@@ -15,6 +16,8 @@ export enum Routes {
 
   ONBOARDING = "/onboarding",
 
+  BUSINESS_PROFILES = "/b",
+
   BUSINESS_PROFILE = "/b/:businessProfile",
 
   DASHBOARD = "/dashboard",
@@ -22,7 +25,9 @@ export enum Routes {
   BOOKINGS = "/bookings",
 
   SUBSCRIPTION = "/subscription",
-  EVENTS = "/events/:eventId"
+
+  EVENTS_2025_SEPTEMBER = "/events/2025-09-27",
+  EVENTS_2025_OCTOBER = "/events/2025-10-25"
 }
 
 class AppRoutes {
@@ -40,6 +45,10 @@ class AppRoutes {
 
   getOnboardingRoute() {
     return `${Routes.ONBOARDING}`;
+  }
+
+  getBusinessProfiles(pagination?: string) {
+    return `/b${pagination ? `?pagination=${pagination}` : ""}`;
   }
 
   getBusinessProfile(businessProfile: string) {

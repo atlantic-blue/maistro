@@ -1,14 +1,11 @@
 import React from "react";
-import { Button, Card, Separator } from "@maistro/ui";
+import { Separator } from "@maistro/ui";
 import {
   MapPin,
   Clock,
-  Star,
-  Share2,
-  Heart,
-  ChevronRight,
   Globe,
 } from "lucide-react";
+import { Helmet } from "react-helmet";
 
 import Header from "../../Components/Header";
 import { useRouteData } from "../../State/DataRoute.context";
@@ -24,6 +21,9 @@ import BusinessProfileAbout from "./Components/About";
 import BusinessProfileReviews from "./Components/Reviews";
 import BusinessProfileNearby from "./Components/Nearby";
 import { BusinessGalleryHero } from "./Components/ImageGallery";
+import { useLocation } from "react-router";
+import { getBusinessProfileBySlug } from "../../Api/BusinessProfile";
+import env from "../../env";
 
 type MaybeMaistroImage = string | null | undefined | MaistroImage;
 
@@ -32,9 +32,9 @@ const isMaistroImage = (v: MaybeMaistroImage): v is MaistroImage => {
 };
 
 const normalizeMaistroImages = (
-  v: MaybeMaistroImage[],
+  v?: MaybeMaistroImage[],
 ): (MaistroImage | null)[] => {
-  return v.map(normalizeMaistroImage);
+  return v?.map(normalizeMaistroImage) || [];
 };
 
 const normalizeMaistroImage = (v: MaybeMaistroImage): MaistroImage | null => {
@@ -67,9 +67,30 @@ const normalizeMaistroImage = (v: MaybeMaistroImage): MaistroImage | null => {
 };
 
 const BusinessProfilePage: React.FC = () => {
-  const businessData = useRouteData<BusinessProfile>(
+  const routeData = useRouteData<BusinessProfile>(
     RouteName.BUSINESS_PROFILE,
   );
+  const location = useLocation();
+  const [businessData, setBusinessesData] = React.useState<BusinessProfile | undefined>(routeData);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getBusinessProfileBySlug(location.pathname.replace("/b/", ""))
+        setBusinessesData(data)
+      } catch (error) {
+        console.error("Failed to fetch business", error)
+      }
+    }
+    if (!businessData) {
+      fetchData()
+    }
+  }, [location.pathname])
+
+
+  if (!businessData && !routeData) {
+    return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
+  }
 
   if (!businessData) {
     return null;
@@ -110,54 +131,79 @@ const BusinessProfilePage: React.FC = () => {
     ? business.Images?.Gallery
     : ["", "", "", ""];
 
+  const canonicalUrl = `${env.appOrigin}/b/${business.Slug}`;
+  const title = `${business.BusinessName} | Maistro`;
+  const description = business.Description || `Reserva tu cita en ${business.BusinessName} con Maistro.`;
+  const image = business.Images?.Main?.Urls?.Medium || business.Images?.Gallery?.[0]?.Urls?.Medium;
+
   return (
-    <div className="bg-[#FFF8F6] text-black min-h-screen font-sans">
-      <Header />
+    <>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonicalUrl} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
-        {/* Header */}
-        <section>
-          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-3">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                  {business.BusinessName}
-                </h1>
-                {/* verified mark only when we decide so later */}
-              </div>
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="business.business" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        {image && <meta property="og:image" content={image} />}
 
-              <div className="flex flex-wrap items-center gap-4 text-sm mb-3">
-                {typeof business.OpenUntil === "string" && (
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-[#FF3366]" />
-                    <span className="font-medium text-[#FF3366]">
-                      Abierto hasta las {business.OpenUntil}
-                    </span>
-                  </div>
-                )}
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={canonicalUrl} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        {image && <meta property="twitter:image" content={image} />}
+      </Helmet>
+      <div className="bg-[#FFF8F6] text-black min-h-screen font-sans">
+        <Header />
 
-                {business.Address && (
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <MapPin className="w-4 h-4" />
-                    <span className="truncate max-w-[60ch]">
-                      {business?.AddressDetails?.FirstLine}
-                    </span>
-                  </div>
-                )}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+          {/* Header */}
+          <section>
+            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-3">
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                    {business.BusinessName}
+                  </h1>
+                  {/* verified mark only when we decide so later */}
+                </div>
 
-                {business.Website && (
-                  <a
-                    href={business.Website}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 text-[#FF3366] font-medium"
-                  >
-                    <Globe className="w-4 h-4" /> Sitio web
-                  </a>
-                )}
-              </div>
+                <div className="flex flex-wrap items-center gap-4 text-sm mb-3">
+                  {typeof business.OpenUntil === "string" && (
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-[#FF3366]" />
+                      <span className="font-medium text-[#FF3366]">
+                        Abierto hasta las {business.OpenUntil}
+                      </span>
+                    </div>
+                  )}
 
-              {/* <div className="flex items-center gap-3">
+                  {business.Address && (
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <MapPin className="w-4 h-4" />
+                      <span className="truncate max-w-[60ch]">
+                        {business?.AddressDetails?.FirstLine}
+                      </span>
+                    </div>
+                  )}
+
+                  {business.Website && (
+                    <a
+                      href={business.Website}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 text-[#FF3366] font-medium"
+                    >
+                      <Globe className="w-4 h-4" /> Sitio web
+                    </a>
+                  )}
+                </div>
+
+                {/* <div className="flex items-center gap-3">
                 <Stars rating={business.Rating} />
                 {typeof business.ReviewCount === "number" && (
                   <span className="text-gray-500">
@@ -165,10 +211,10 @@ const BusinessProfilePage: React.FC = () => {
                   </span>
                 )}
               </div> */}
-            </div>
+              </div>
 
-            <div className="flex items-center gap-3">
-              {/* <Button
+              <div className="flex items-center gap-3">
+                {/* <Button
                 variant="outline"
                 className="border-gray-200 text-gray-700"
               >
@@ -181,30 +227,31 @@ const BusinessProfilePage: React.FC = () => {
               >
                 <Heart className="w-4 h-4" />
               </Button> */}
-              {/* <Button className="bg-[#FF3366] hover:bg-[#D94A6A] text-white px-7 py-3">
+                {/* <Button className="bg-[#FF3366] hover:bg-[#D94A6A] text-white px-7 py-3">
                 Reservar
               </Button> */}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <BusinessGalleryHero
-          businessName={business.BusinessName}
-          main={normalizeMaistroImage(business?.Images?.Main)}
-          gallery={normalizeMaistroImages(business?.Images?.Gallery)}
-        />
+          <BusinessGalleryHero
+            businessName={business.BusinessName}
+            main={normalizeMaistroImage(business?.Images?.Main)}
+            gallery={normalizeMaistroImages(business?.Images?.Gallery)}
+          />
 
-        <Separator />
+          <Separator />
 
-        {/* <BusinsessProfileServices services={business.Services} />  // TODO */}
+          {/* <BusinsessProfileServices services={business.Services} />  // TODO */}
 
-        <BusinessProfileAbout business={business} />
+          <BusinessProfileAbout business={business} />
 
-        {/* <BusinessProfileReviews business={business} /> */}
+          {/* <BusinessProfileReviews business={business} /> */}
 
-        {/* <BusinessProfileNearby business={business} /> */}
+          {/* <BusinessProfileNearby business={business} /> */}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

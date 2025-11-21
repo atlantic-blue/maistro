@@ -136,7 +136,7 @@ const Step6: React.FC<Step1Props> = ({
                     });
                   }
                 }}
-                className={`p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                className={`p-6 rounded-xl border cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? "border-[#FF3366] bg-[#FF3366]/5"
                     : "border-gray-200 hover:border-gray-300 bg-white"
@@ -218,7 +218,7 @@ const Step6: React.FC<Step1Props> = ({
 
           <button
             onClick={handleAddCustomField}
-            className="w-full p-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-gray-400 transition-colors"
+            className="w-full p-4 border border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-gray-400 transition-colors"
           >
             {resourceStrings.step6.addCustomService || "Add Custom Service"}
           </button>

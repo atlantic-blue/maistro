@@ -1,15 +1,15 @@
 interface HtmlProps {
-  head: string;
-  body: {
-    main: string;
-    scripts: string;
-  };
-  htmlAttributes: string;
-  bodyAttributes: string;
+    head: string;
+    body: {
+        main: string;
+        scripts: string;
+    };
+    htmlAttributes: string;
+    bodyAttributes: string;
 }
 
 const Html = ({ htmlAttributes, bodyAttributes, head, body }: HtmlProps) => {
-  return `
+    return `
         <!DOCTYPE html>
         <html ${htmlAttributes}>
 
@@ -18,10 +18,8 @@ const Html = ({ htmlAttributes, bodyAttributes, head, body }: HtmlProps) => {
             <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
             <link rel="icon" type="image/x-icon" href="/public/favicon.png">
-            <title>Maistro Bookings</title>
-            <meta name="description" content="We are a team of passionate individuals dedicated to providing innovative solutions. © 2024 Maistro Ai. All rights reserved.">
-            <meta name="keywords" content="website site, website design website, website builder, web builder, website builder sites, website builder site, websitebuilder site, free site maker, free websites to make a website, free website creation sites, free website to make a website">
-            <meta name="author" content="Atlantic Blue Solutions UK">
+            <meta name="author" content="Maistro via Atlantic Blue Solutions UK">
+            ${head}
 
             <!-- Google tag (gtag.js) -->
             <script async
@@ -60,8 +58,6 @@ const Html = ({ htmlAttributes, bodyAttributes, head, body }: HtmlProps) => {
                     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
                 })(window, document, "clarity", "script", "s1xds7d0te");
             </script>
-            <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
-            ${head}
         </head>
 
         <body ${bodyAttributes}>

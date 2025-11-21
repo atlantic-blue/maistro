@@ -36,10 +36,12 @@ export const handler = async (
 
     if (existingUser) {
       // User exists, update last login time
+      console.log(`User exists: ${existingUser.UserId}`)
       await updateUserLastLogin(existingUser.UserId, timestamp);
     } else {
       // New user, create user record
       const newUserId = generateUserId();
+      console.log(`New user, create user record: ${newUserId} for Cognito user: ${userName}`);
       
       const newUser: MaistroUser = {
         UserId: newUserId,

@@ -66,7 +66,7 @@ const Step7: React.FC<Step1Props> = ({
                     });
                   }
                 }}
-                className={`flex items-center justify-around p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                className={`flex items-center justify-around p-4 rounded-xl border transition-all duration-200 text-left ${
                   isSelected
                     ? "border-[#FF3366] bg-[#FF3366]/5"
                     : "border-gray-200 hover:border-gray-300 bg-white"

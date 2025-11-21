@@ -9,7 +9,7 @@ type Locale = "es" | "en";
 
 export type GalleryHeroProps = {
   main?: MaistroImage | null;
-  gallery: (MaistroImage | null)[];
+  gallery?: (MaistroImage | null)[];
   businessName: string;
   locale?: Locale; // "es" por defecto
   className?: string;

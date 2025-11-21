@@ -23,6 +23,25 @@ enum Routes {
     meProfile = '/me/profile',
 }
 
+/**
+ {
+  "sub": "uuid",
+  "cognito:groups": [
+    "us-east-1_HMWtdPXrX_Google"
+  ],
+  "iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_xxxx",
+  "version": 2,
+  "client_id": "dumyy",
+  "origin_jti": "uuid",
+  "token_use": "access",
+  "scope": "openid profile email",
+  "auth_time": 1759717698,
+  "exp": 1759721298,
+  "iat": 1759717699,
+  "jti": "uuid-2",
+  "username": "Google_xxxx"
+}
+ */
 export interface DecodedToken {
   sub: string;
   email: string;

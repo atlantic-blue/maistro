@@ -7,6 +7,7 @@ interface Env {
     businessMe: string;
     businessBySlug: (slug: string) => string;
     businessById: (id: string) => string;
+    businesses: string
   };
   auth: {
     baseUrl: string;
@@ -16,6 +17,7 @@ interface Env {
     clientId: string;
     clientSecret: string;
   };
+  appOrigin: string;
 }
 
 const isBrowser = () => typeof window !== "undefined";
@@ -35,9 +37,11 @@ const createEnv = (): Env => {
   return {
     isBrowser,
     api: {
-      onboarding: `${businessesBaseUrl}/businesses/onboarding`,
       me: `${usersBaseUrl}/me`,
       meProfile: `${usersBaseUrl}/me/profile`,
+
+      businesses: `${businessesBaseUrl}/businesses`,
+      onboarding: `${businessesBaseUrl}/businesses/onboarding`,
       businessMe: `${businessesBaseUrl}/businesses/me/profile`,
       businessBySlug: (slug: string) =>
         `${businessesBaseUrl}/businesses/slug/${slug}/profile`,
@@ -53,6 +57,7 @@ const createEnv = (): Env => {
       clientId: process.env.AUTH_CLIENT_ID || "",
       clientSecret: process.env.AUTH_CLIENT_SECRET || "",
     },
+    appOrigin,
   };
 };
 

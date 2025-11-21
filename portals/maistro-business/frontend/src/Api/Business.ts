@@ -22,7 +22,14 @@ export const BusinessMe = async (token: string): Promise<BusinessProfile[]> => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-  }).then((response) => response.json());
+  }).then((response) => {
+    // TODO alert to main app
+    if (!response.ok) {
+      return []
+    }
+
+    return response.json()
+  });
 };
 
 export interface Service {

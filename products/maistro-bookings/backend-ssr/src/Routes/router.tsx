@@ -18,7 +18,9 @@ import Onboarding from "./Onboarding";
 import Dashboard from "./Dahsboard";
 import Helmet from "../Components/Helmet";
 import MaistroSubscriptionLanding from "./Subscription";
-import MaistroEventSep2025 from "./Events/270925";
+import MaistroEventSep2025 from "./Events/2025-09-27";
+import MaistroEventOct2025 from "./Events/2025-10-25";
+import BusinessProfilesPage from "./BusinessProfiles";
 
 const Router: React.FC = () => {
   // TODO implement multiple languages
@@ -35,6 +37,10 @@ const Router: React.FC = () => {
       <AuthProvider authCallbackPath={Routes.AUTH_CALLBACK} {...env.auth}>
         <ReactRoutes>
           <Route path="*" element={<Homepage />} />
+          <Route
+            path={Routes.BUSINESS_PROFILES}
+            element={<BusinessProfilesPage />}
+          />
           <Route
             path={Routes.BUSINESS_PROFILE}
             element={<BusinessProfilePage />}
@@ -73,17 +79,24 @@ const Router: React.FC = () => {
           <Route
             path={Routes.SUBSCRIPTION}
             element={
-                <MaistroSubscriptionLanding />
-              }
-            />
+              <MaistroSubscriptionLanding />
+            }
+          />
 
 
           <Route
-            path={Routes.EVENTS}
+            path={Routes.EVENTS_2025_SEPTEMBER}
             element={
-                <MaistroEventSep2025 />
-              }
-            />
+              <MaistroEventSep2025 />
+            }
+          />
+
+          <Route
+            path={Routes.EVENTS_2025_OCTOBER}
+            element={
+              <MaistroEventOct2025 />
+            }
+          />
 
           <Route path={Routes.AUTH_CALLBACK} element={<AuthCallback />} />
           <Route path={Routes.AUTHZ_LOGIN} element={<Login />} />

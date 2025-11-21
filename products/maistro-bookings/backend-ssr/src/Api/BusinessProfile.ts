@@ -1,6 +1,25 @@
 import env from "../env";
 import { BusinessProfile } from "../types/BusinessProfile";
 
+export const getBusinessProfiles = async(pagination: string | null): Promise<Promise<{
+    items: BusinessProfile[];
+    lastEvaluatedKey?: any;
+}>> => {
+
+  const url = new URL(env.api.businesses);
+  if(pagination) {
+    url.searchParams.append("pagination", pagination)
+  }
+
+  console.log({url})
+  return fetch(url.toString(), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response) => response.json());
+}
+
 export const getBusinessProfileById = async (
   businessId: string,
 ): Promise<BusinessProfile> => {

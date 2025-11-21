@@ -1,5 +1,5 @@
 import React from "react";
-import ProgressBar from "../../Components/ProgressBar";
+import ProgressBar from "../ProgressBar";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { I18nLanguageConfig } from "./i18.config";
 
@@ -29,8 +29,12 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
   <div className="min-h-screen bg-[#FFF8F6] flex flex-col">
     <div className="p-6">
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+      <div className="max-w-2xl mx-auto" style={{position: "relative"}}>
+        <div style={{marginBottom: "100px"}}>
+        {children}
+        </div>
+
+        <div className="flex items-center justify-between mb-8" style={{position: "fixed", padding: "20px", bottom: "0", left: "0", right: "0", backgroundColor: "#e8e8e8", marginBottom: "0"}}>
           {showBack && (
             <button
               onClick={prevStep}
@@ -63,7 +67,6 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
             )}
           </div>
         </div>
-        {children}
       </div>
     </div>
   </div>

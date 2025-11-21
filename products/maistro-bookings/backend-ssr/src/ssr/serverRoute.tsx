@@ -2,6 +2,7 @@ import { RouteName, Routes } from "../Routes/appRoutes";
 import { matchRoutes } from "react-router";
 import { LambdaFunctionURLEvent } from "aws-lambda";
 import { businessProfilePrefetch } from "../Routes/BusinessProfile/prefetch";
+import { businessProfilesPrefetch } from "../Routes/BusinessProfiles/prefetch";
 
 export interface LoaderArgs {
   url: URL;
@@ -88,5 +89,10 @@ export const serverRoutes: ServerRoute[] = [
     id: RouteName.BUSINESS_PROFILE,
     path: Routes.BUSINESS_PROFILE,
     load: businessProfilePrefetch,
+  },
+  {
+    id: RouteName.BUSINESS_PROFILES,
+    path: Routes.BUSINESS_PROFILES,
+    load: businessProfilesPrefetch,
   },
 ];

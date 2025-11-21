@@ -92,6 +92,15 @@ export class BusinessesProfileService {
         return businessProfiles
     }
 
+    async getAllBusinesses(limit: number = 10, lastEvaluatedKey?: any): Promise<{ items: BusinessProfile[], lastEvaluatedKey?: any }> {
+        const result = await this.dbRepository.getAllBusinesses(limit, lastEvaluatedKey);
+        
+        return {
+            items: result.items.map(profile => new BusinessProfileModel(profile)),
+            lastEvaluatedKey: result.lastEvaluatedKey
+        };
+    }
+
     async createBusinessProfile(
         onboardingData: OnboardingFormData,
         userId: string,

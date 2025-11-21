@@ -4,95 +4,115 @@ import { BusinessProfile } from '../types/business';
 const dynamoDB = new DynamoDB.DocumentClient();
 
 export class BusinessesProfileRepository {
-    private db: string
+  private db: string
 
-    constructor(dynamotable: string) {
-        this.db = dynamotable
-    }
+  constructor(dynamotable: string) {
+    this.db = dynamotable
+  }
 
-    async updateBusinessProfile(businessProfile: BusinessProfile): Promise<void> {
-      try {
-        const params = {
-          TableName: this.db,
-          Item: businessProfile,
-        };
-
-         await dynamoDB.put(params).promise();
-      } catch (error) {
-        console.error('Error createing businessProfile:', error);
-        throw error;
-      }
-    }
-
-    async getBusinessProfileBySlug(slug: string): Promise<BusinessProfile | null> {
+  async updateBusinessProfile(businessProfile: BusinessProfile): Promise<void> {
     try {
-        const params = {
-          TableName: this.db,
-          IndexName: 'Slug-index',
-          KeyConditionExpression: 'Slug = :slug',
-          ExpressionAttributeValues: {
-            ':slug': slug
-          }
-        };
-    
-        const result = await dynamoDB.query(params).promise();
-        
-        if (result.Items && result.Items.length > 0) {
-          return result.Items[0] as BusinessProfile;
-        }
-        
-        return null;
-      } catch (error) {
-        console.error('Error querying business by Slug:', error);
-        throw error;
-      }
-    }
+      const params = {
+        TableName: this.db,
+        Item: businessProfile,
+      };
 
-    async getBusinessProfileByBusinessId(businessId: string): Promise<BusinessProfile | null> {
-      try {
-        const params = {
-          TableName: this.db,
-          IndexName: 'BusinessId-index',
-          KeyConditionExpression: 'BusinessId = :businessId',
-          ExpressionAttributeValues: {
-            ':businessId': businessId
-          }
-        };
-    
-        const result = await dynamoDB.query(params).promise();
-        
-        if (result.Items && result.Items.length > 0) {
-          return result.Items[0] as BusinessProfile;
-        }
-        
-        return null;
-      } catch (error) {
-        console.error('Error querying business by businessId:', error);
-        throw error;
-      }
+      await dynamoDB.put(params).promise();
+    } catch (error) {
+      console.error('Error createing businessProfile:', error);
+      throw error;
     }
+  }
 
-    async getBusinessProfileByUserId(userId: string): Promise<BusinessProfile[] | null> {
-      try {
-        const params = {
-          TableName: this.db,
-          IndexName: 'UserId-index',
-          KeyConditionExpression: 'UserId = :userId',
-          ExpressionAttributeValues: {
-            ':userId': userId
-          }
-        };
-    
-        const result = await dynamoDB.query(params).promise();
-        
-        if (result.Items && result.Items.length > 0) {
-          return result.Items as BusinessProfile[];
+  async getBusinessProfileBySlug(slug: string): Promise<BusinessProfile | null> {
+    try {
+      const params = {
+        TableName: this.db,
+        IndexName: 'Slug-index',
+        KeyConditionExpression: 'Slug = :slug',
+        ExpressionAttributeValues: {
+          ':slug': slug
         }
-        
-        return null;
-      } catch (error) {
-        console.error('Error querying business by userId:', error);
-        throw error;
+      };
+
+      const result = await dynamoDB.query(params).promise();
+
+      if (result.Items && result.Items.length > 0) {
+        return result.Items[0] as BusinessProfile;
       }
+
+      return null;
+    } catch (error) {
+      console.error('Error querying business by Slug:', error);
+      throw error;
     }
+  }
+
+  async getBusinessProfileByBusinessId(businessId: string): Promise<BusinessProfile | null> {
+    try {
+      const params = {
+        TableName: this.db,
+        IndexName: 'BusinessId-index',
+        KeyConditionExpression: 'BusinessId = :businessId',
+        ExpressionAttributeValues: {
+          ':businessId': businessId
+        }
+      };
+
+      const result = await dynamoDB.query(params).promise();
+
+      if (result.Items && result.Items.length > 0) {
+        return result.Items[0] as BusinessProfile;
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error querying business by businessId:', error);
+      throw error;
+    }
+  }
+
+  async getBusinessProfileByUserId(userId: string): Promise<BusinessProfile[] | null> {
+    try {
+      const params = {
+        TableName: this.db,
+        IndexName: 'UserId-index',
+        KeyConditionExpression: 'UserId = :userId',
+        ExpressionAttributeValues: {
+          ':userId': userId
+        }
+      };
+
+      const result = await dynamoDB.query(params).promise();
+
+      if (result.Items && result.Items.length > 0) {
+        return result.Items as BusinessProfile[];
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error querying business by userId:', error);
+      throw error;
+    }
+  }
+
+  async getAllBusinesses(limit: number = 25, lastEvaluatedKey?: any): Promise<{ items: BusinessProfile[], lastEvaluatedKey?: any }> {
+    try {
+      const params: DynamoDB.DocumentClient.ScanInput = {
+        TableName: this.db,
+        Limit: limit,
+        ExclusiveStartKey: lastEvaluatedKey
+      };
+
+      const result = await dynamoDB.scan(params).promise();
+
+      return {
+        items: (result.Items as BusinessProfile[]) || [],
+        lastEvaluatedKey: result.LastEvaluatedKey
+      };
+    } catch (error) {
+      console.error('Error scanning all businesses:', error);
+      throw error;
+    }
+  }
 }
